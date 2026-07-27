@@ -1,1 +1,6 @@
 .superpowers/
+node_modules
+dist
+.wrangler
+*.log
+data-pipeline/downloads/

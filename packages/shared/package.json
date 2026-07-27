@@ -1,0 +1,11 @@
+{
+  "name": "@buffer-zones/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "geojson": "^0.5.0"
+  }
+}
