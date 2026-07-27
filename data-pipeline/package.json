@@ -1,0 +1,19 @@
+{
+  "name": "buffer-zones-data-pipeline",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "run": "tsx src/run.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@turf/turf": "^7.1.0",
+    "shapefile": "^0.6.6"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.14",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
