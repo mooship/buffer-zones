@@ -67,9 +67,42 @@ export function normalizeBoundaries(
 }
 
 /**
+ * Pure transform: filters a national sub-place FeatureCollection down to
+ * City of Tshwane records only (matching on the shapefile's MN_CODE
+ * municipality field) and remaps each feature's properties to the
+ * RawSubPlaceProperties shape. Contains no I/O, so it can be unit tested
+ * against a small in-memory fixture without touching the network.
+ */
+export function filterTshwaneFeatures(
+  collection: FeatureCollection,
+): FeatureCollection {
+  const features: Feature[] = collection.features
+    .filter(
+      (feature) =>
+        (feature.properties as Record<string, unknown> | null)?.MN_CODE ===
+        TSHWANE_MUNICIPALITY_CODE,
+    )
+    .map((feature) => {
+      const rawProps = feature.properties as Record<string, unknown> | null;
+      const properties: RawSubPlaceProperties = {
+        SP_CODE: String(rawProps?.SP_CODE),
+        SP_NAME: String(rawProps?.SP_NAME),
+        // The Stats SA sub-place shapefile does not carry a population
+        // field; population is left undefined for real fetches and is
+        // only populated by other, richer sources in tests.
+      };
+      return { ...feature, properties };
+    });
+
+  return { ...collection, features };
+}
+
+/**
  * Extracts the sub-place shapefile pair (.shp/.dbf) from the zip archive and
  * converts it to a GeoJSON FeatureCollection, filtered down to City of
- * Tshwane sub-places only.
+ * Tshwane sub-places only. I/O-bound (zip extraction + shapefile parsing);
+ * the filtering logic itself lives in the pure, separately-tested
+ * `filterTshwaneFeatures`.
  */
 export async function convertShapefileToGeoJSON(
   zipBuffer: Buffer,
@@ -92,25 +125,7 @@ export async function convertShapefileToGeoJSON(
     dbfBuffer,
   );
 
-  const features: Feature[] = collection.features
-    .filter(
-      (feature) =>
-        (feature.properties as Record<string, unknown> | null)?.MN_CODE ===
-        TSHWANE_MUNICIPALITY_CODE,
-    )
-    .map((feature) => {
-      const rawProps = feature.properties as Record<string, unknown> | null;
-      const properties: RawSubPlaceProperties = {
-        SP_CODE: String(rawProps?.SP_CODE),
-        SP_NAME: String(rawProps?.SP_NAME),
-        // The Stats SA sub-place shapefile does not carry a population
-        // field; population is left undefined for real fetches and is
-        // only populated by other, richer sources in tests.
-      };
-      return { ...feature, properties };
-    });
-
-  return { ...collection, features };
+  return filterTshwaneFeatures(collection);
 }
 
 export async function fetchTshwaneBoundaries(): Promise<FeatureCollection> {
