@@ -21,9 +21,9 @@ function sleep(ms: number): Promise<void> {
 
 async function fetchTable(
   origins: LatLon[],
-  destinations: JobCenter[],
+  destinations: readonly JobCenter[],
   attempt = 1,
-): Promise<number[][]> {
+): Promise<(number | null)[][]> {
   const coords = [...origins, ...destinations]
     .map((c) => `${c.lon},${c.lat}`)
     .join(";");
@@ -43,7 +43,7 @@ async function fetchTable(
   }
   const body = (await response.json()) as {
     code: string;
-    durations: number[][];
+    durations: (number | null)[][];
   };
   if (body.code !== "Ok") {
     throw new Error(`OSRM table returned code ${body.code}`);
@@ -52,8 +52,8 @@ async function fetchTable(
 }
 
 function pickNearest(
-  row: number[],
-  destinations: JobCenter[],
+  row: (number | null)[],
+  destinations: readonly JobCenter[],
 ): NearestJobCenterResult {
   let bestIndex = -1;
   let bestSeconds = Number.POSITIVE_INFINITY;
@@ -71,6 +71,10 @@ function pickNearest(
   }
 
   const destination = destinations[bestIndex];
+  if (!destination) {
+    return { minutes: null, jobCenterId: null, jobCenterName: null };
+  }
+
   return {
     minutes: Math.round((bestSeconds / 60) * 100) / 100,
     jobCenterId: destination.id,
@@ -80,7 +84,7 @@ function pickNearest(
 
 export async function getNearestJobCenter(
   origins: LatLon[],
-  destinations: JobCenter[],
+  destinations: readonly JobCenter[],
 ): Promise<NearestJobCenterResult[]> {
   const results: NearestJobCenterResult[] = [];
 
