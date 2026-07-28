@@ -13,6 +13,7 @@ import {
   fetchGautrainRail,
   normalizeGautrainOverpass,
 } from "./adapters/gautrain";
+import { fetchPrasaRail, normalizePrasaOverpass } from "./adapters/prasa";
 import { fetchUnemploymentData } from "./adapters/unemployment";
 import { JOB_CENTERS } from "./constants/jobCenters";
 import { writeGeoJsonFile } from "./export";
@@ -57,6 +58,10 @@ async function main() {
   console.log("Fetching Gautrain rail via Overpass...");
   const gautrain = normalizeGautrainOverpass(await fetchGautrainRail());
   await writeGeoJsonFile(resolve(OUTPUT_DIR, "gautrain.v1.geojson"), gautrain);
+
+  console.log("Fetching PRASA rail via Overpass...");
+  const prasa = normalizePrasaOverpass(await fetchPrasaRail());
+  await writeGeoJsonFile(resolve(OUTPUT_DIR, "prasa.v1.geojson"), prasa);
 
   console.log("Fetching A Re Yeng routes...");
   const rawAReYeng = await fetchAReYengRoutes();
