@@ -45,8 +45,12 @@ interface RawAReYengProperties {
 }
 
 function resolveId(props: RawAReYengProperties): string {
-  if (props.ROUTE_ID !== undefined) return props.ROUTE_ID;
-  if (props.OBJECTID !== undefined) return String(props.OBJECTID);
+  if (props.ROUTE_ID !== undefined) {
+    return props.ROUTE_ID;
+  }
+  if (props.OBJECTID !== undefined) {
+    return String(props.OBJECTID);
+  }
   return "unknown";
 }
 
@@ -113,7 +117,9 @@ export function normalizeAReYengOverpass(
   const features: TransitLayerFeatureCollection["features"] = [];
 
   for (const element of raw.elements) {
-    if (element.type !== "way") continue;
+    if (element.type !== "way") {
+      continue;
+    }
     const stop: TransitStop = {
       id: `way/${element.id}`,
       name: element.tags?.name ?? "Unnamed",

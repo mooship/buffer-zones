@@ -11,10 +11,15 @@ export enum CommuteBucket {
 }
 
 export function getCommuteBucket(minutes: number): CommuteBucket {
-  if (minutes <= COMMUTE_BUCKET_BREAKPOINTS.short) return CommuteBucket.Short;
-  if (minutes <= COMMUTE_BUCKET_BREAKPOINTS.moderate)
+  if (minutes <= COMMUTE_BUCKET_BREAKPOINTS.short) {
+    return CommuteBucket.Short;
+  }
+  if (minutes <= COMMUTE_BUCKET_BREAKPOINTS.moderate) {
     return CommuteBucket.Moderate;
-  if (minutes <= COMMUTE_BUCKET_BREAKPOINTS.long) return CommuteBucket.Long;
+  }
+  if (minutes <= COMMUTE_BUCKET_BREAKPOINTS.long) {
+    return CommuteBucket.Long;
+  }
   return CommuteBucket.VeryLong;
 }
 
@@ -26,6 +31,8 @@ const BUCKET_COLOR_MAP: Record<CommuteBucket, string> = {
 };
 
 export function commuteMinutesToColor(minutes: number | null): string {
-  if (minutes === null) return COMMUTE_BUCKET_COLORS.noData;
+  if (minutes === null) {
+    return COMMUTE_BUCKET_COLORS.noData;
+  }
   return BUCKET_COLOR_MAP[getCommuteBucket(minutes)];
 }
