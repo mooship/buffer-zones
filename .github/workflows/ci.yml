@@ -17,8 +17,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            data-pipeline/package-lock.json
       - run: npm ci
+      - run: npm ci --prefix data-pipeline
       - run: npm run lint
       - run: npm run test
       - run: npm run build
