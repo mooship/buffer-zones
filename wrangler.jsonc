@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "buffer-zones",
+  "compatibility_date": "2026-07-27",
+  "assets": {
+    "directory": "./packages/web/dist"
+  }
+}
