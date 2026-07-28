@@ -9,7 +9,7 @@ import type {
   LineString,
   MultiLineString,
 } from "geojson";
-import type { OverpassResponse } from "./gautrain";
+import { type OverpassResponse, fetchOverpass } from "./gautrain";
 
 // Source: City of Tshwane Open Data / e-GIS ArcGIS Server, "Other_WS/BRT_A_Re_Yeng"
 // MapServer, layer 8 ("A Re Yeng Trunk Route"). Verified reachable and returning real
@@ -157,14 +157,5 @@ export async function fetchAReYengRoutes(): Promise<
     // fall through to the Overpass fallback below on any network/TLS failure
   }
 
-  const overpassResponse = await fetch(OVERPASS_URL, {
-    method: "POST",
-    body: `data=${encodeURIComponent(AREYENG_OVERPASS_QUERY)}`,
-  });
-  if (!overpassResponse.ok) {
-    throw new Error(
-      `A Re Yeng fallback Overpass query failed: ${overpassResponse.status}`,
-    );
-  }
-  return (await overpassResponse.json()) as OverpassResponse;
+  return fetchOverpass(OVERPASS_URL, AREYENG_OVERPASS_QUERY);
 }

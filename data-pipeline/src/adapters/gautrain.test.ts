@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { normalizeGautrainOverpass } from "./gautrain";
+import { describe, expect, it, vi } from "vitest";
+import { fetchOverpass, normalizeGautrainOverpass } from "./gautrain";
 
 describe("normalizeGautrainOverpass", () => {
   it("normalizes Overpass 'way' rail elements and 'node' station elements into transit features", () => {
@@ -47,5 +47,25 @@ describe("normalizeGautrainOverpass", () => {
       type: "Point",
       coordinates: [28.23, -25.75],
     });
+  });
+});
+
+describe("fetchOverpass", () => {
+  it("retries once on HTTP 504 then succeeds", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: false, status: 504 })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ elements: [] }),
+      });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchOverpass("https://example.com", "query");
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result).toEqual({ elements: [] });
+
+    vi.unstubAllGlobals();
   });
 });

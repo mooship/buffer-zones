@@ -75,13 +75,36 @@ export function normalizeGautrainOverpass(
   return { type: "FeatureCollection", features };
 }
 
-export async function fetchGautrainRail(): Promise<OverpassResponse> {
-  const response = await fetch(OVERPASS_URL, {
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// The public overpass-api.de instance was observed returning intermittent
+// 406/504 responses (load-balanced across backends, occasionally overloaded)
+// during manual verification on 2026-07-28; sending a descriptive User-Agent
+// plus retrying with backoff resolved it reliably in testing.
+export async function fetchOverpass(
+  url: string,
+  query: string,
+  attempt = 1,
+): Promise<OverpassResponse> {
+  const response = await fetch(url, {
     method: "POST",
-    body: `data=${encodeURIComponent(GAUTRAIN_QUERY)}`,
+    headers: {
+      "User-Agent": "buffer-zones-data-pipeline (github.com/buffer-zones)",
+    },
+    body: `data=${encodeURIComponent(query)}`,
   });
   if (!response.ok) {
+    if ((response.status === 504 || response.status === 429) && attempt < 4) {
+      await sleep(2000 * attempt);
+      return fetchOverpass(url, query, attempt + 1);
+    }
     throw new Error(`Overpass query failed: ${response.status}`);
   }
   return (await response.json()) as OverpassResponse;
+}
+
+export async function fetchGautrainRail(): Promise<OverpassResponse> {
+  return fetchOverpass(OVERPASS_URL, GAUTRAIN_QUERY);
 }
