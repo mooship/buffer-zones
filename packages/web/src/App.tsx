@@ -1,14 +1,15 @@
 import type { LayerId, TownshipFeature } from "@buffer-zones/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
-import { Layers, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Layers, Minus, Plus, X } from "lucide-react";
+import { type KeyboardEvent, useEffect, useRef, useState } from "react";
 import styles from "./App.module.css";
 import { BasemapToggle } from "./components/BasemapToggle/BasemapToggle";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { Legend } from "./components/Legend/Legend";
 import { MapView } from "./components/MapView/MapView";
+import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import type { Basemap } from "./constants/basemaps";
 import {
   APP_NAME,
@@ -27,7 +28,14 @@ const DEFAULT_VISIBLE_LAYER_IDS: LayerId[] = LAYER_REGISTRY.filter(
 ).map((layer) => layer.id);
 
 const MOBILE_BREAKPOINT_PX = 768;
-type PanelView = "evidence" | "layers";
+const PANEL_VIEWS = ["story", "places", "layers"] as const;
+type PanelView = (typeof PANEL_VIEWS)[number];
+
+const PANEL_LABELS: Record<PanelView, string> = {
+  story: "The pattern",
+  places: "Browse places",
+  layers: "Map layers",
+};
 
 export function App() {
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
@@ -39,7 +47,13 @@ export function App() {
   const [panelOpen, setPanelOpen] = useState(
     () => window.innerWidth > MOBILE_BREAKPOINT_PX,
   );
-  const [panelView, setPanelView] = useState<PanelView>("layers");
+  const [panelView, setPanelView] = useState<PanelView>("story");
+  const [titleExpanded, setTitleExpanded] = useState(true);
+  const [selectedTownshipId, setSelectedTownshipId] = useState<string | null>(
+    null,
+  );
+  const panelTriggerRef = useRef<HTMLButtonElement>(null);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -65,30 +79,101 @@ export function App() {
     );
   }
 
+  function handlePanelToggle() {
+    if (panelOpen) {
+      setPanelOpen(false);
+      requestAnimationFrame(() => panelTriggerRef.current?.focus());
+      return;
+    }
+    setPanelOpen(true);
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    const currentIndex = PANEL_VIEWS.indexOf(panelView);
+    let nextIndex: number | null = null;
+    if (event.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % PANEL_VIEWS.length;
+    } else if (event.key === "ArrowLeft") {
+      nextIndex = (currentIndex - 1 + PANEL_VIEWS.length) % PANEL_VIEWS.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = PANEL_VIEWS.length - 1;
+    }
+    if (nextIndex === null) {
+      return;
+    }
+    event.preventDefault();
+    const nextView = PANEL_VIEWS[nextIndex];
+    if (!nextView) {
+      return;
+    }
+    setPanelView(nextView);
+    tabRefs.current[nextIndex]?.focus();
+  }
+
   return (
     <div className={styles.app}>
-      <MapView
-        townships={townships}
-        townshipAreas={townshipAreas}
-        visibleLayerIds={visibleLayerIds}
-        basemap={basemap}
-      />
+      <a className={styles.skipLink} href="#map-information">
+        Skip to map information
+      </a>
 
-      <header className={clsx(styles.titleBlock, styles.ticked)}>
+      <main id="map-information" tabIndex={-1}>
+        <MapView
+          townships={townships}
+          townshipAreas={townshipAreas}
+          visibleLayerIds={visibleLayerIds}
+          basemap={basemap}
+          selectedTownshipId={selectedTownshipId}
+          onTownshipSelect={setSelectedTownshipId}
+        />
+      </main>
+
+      <header
+        className={clsx(
+          styles.titleBlock,
+          styles.ticked,
+          !titleExpanded && styles.titleBlockMinimised,
+        )}
+      >
         <h1 className={styles.title}>{APP_NAME}</h1>
-        <p className={styles.tagline}>{APP_TAGLINE}</p>
-        <p className={styles.stamp}>Data as of {DATA_AS_OF}</p>
+        <button
+          type="button"
+          className={styles.titleToggle}
+          aria-expanded={titleExpanded}
+          aria-controls="title-context"
+          aria-label={
+            titleExpanded ? "Minimise introduction" : "Expand introduction"
+          }
+          onClick={() => setTitleExpanded((expanded) => !expanded)}
+        >
+          {titleExpanded ? (
+            <Minus aria-hidden="true" />
+          ) : (
+            <Plus aria-hidden="true" />
+          )}
+        </button>
+        <div id="title-context" hidden={!titleExpanded}>
+          <p className={styles.eyebrow}>Tshwane spatial access atlas</p>
+          <p className={styles.tagline}>{APP_TAGLINE}</p>
+          <p className={styles.framing}>
+            Townships were planned apart from work and services. This baseline
+            makes the distance visible.
+          </p>
+          <p className={styles.stamp}>Data as of {DATA_AS_OF}</p>
+        </div>
       </header>
 
       <button
         type="button"
+        ref={panelTriggerRef}
         className={styles.panelTrigger}
         aria-expanded={panelOpen}
         aria-controls="map-controls"
-        onClick={() => setPanelOpen((open) => !open)}
+        onClick={handlePanelToggle}
       >
         {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
-        {panelOpen ? "Close" : "Layers"}
+        {panelOpen ? "Close" : "Explore"}
       </button>
 
       <aside
@@ -96,58 +181,82 @@ export function App() {
         className={clsx(styles.panel, styles.ticked)}
         hidden={!panelOpen}
       >
+        <span className={styles.sheetHandle} aria-hidden="true" />
         <div className={styles.panelTabs} role="tablist" aria-label="Map panel">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={panelView === "layers"}
-            className={styles.panelTab}
-            onClick={() => setPanelView("layers")}
-          >
-            Map layers
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={panelView === "evidence"}
-            className={styles.panelTab}
-            onClick={() => setPanelView("evidence")}
-          >
-            Evidence
-          </button>
+          {PANEL_VIEWS.map((view, index) => (
+            <button
+              key={view}
+              type="button"
+              ref={(element) => {
+                tabRefs.current[index] = element;
+              }}
+              id={`panel-tab-${view}`}
+              role="tab"
+              tabIndex={panelView === view ? 0 : -1}
+              aria-selected={panelView === view}
+              aria-controls={`panel-view-${view}`}
+              className={styles.panelTab}
+              onClick={() => setPanelView(view)}
+              onKeyDown={handleTabKeyDown}
+            >
+              {PANEL_LABELS[view]}
+            </button>
+          ))}
         </div>
 
-        {panelView === "evidence" ? (
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Why this map exists</h2>
-            <EvidenceSummary />
-          </section>
-        ) : (
-          <div className={styles.panelContent}>
+        <div
+          id={`panel-view-${panelView}`}
+          role="tabpanel"
+          aria-labelledby={`panel-tab-${panelView}`}
+          className={styles.panelViewport}
+        >
+          {panelView === "story" ? (
             <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Map legend</h2>
-              <Legend />
+              <h2 className={styles.sectionTitle}>Why this map exists</h2>
+              <EvidenceSummary />
+              <details className={styles.panelSources}>
+                <summary>Data sources and method</summary>
+                <div className={styles.panelSourceList}>
+                  {DATA_SOURCES.map((source) => (
+                    <span key={source}>{source}</span>
+                  ))}
+                </div>
+              </details>
             </section>
+          ) : null}
+          {panelView === "places" ? (
             <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Layers</h2>
-              <LayerToggles
-                visibleLayerIds={visibleLayerIds}
-                onToggle={handleToggle}
+              <h2 className={styles.sectionTitle}>Township evidence</h2>
+              <TownshipBrowser
+                townships={townships}
+                selectedTownshipId={selectedTownshipId}
+                onSelect={(township) =>
+                  setSelectedTownshipId(township.properties.id)
+                }
               />
             </section>
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Basemap</h2>
-              <BasemapToggle basemap={basemap} onChange={setBasemap} />
-            </section>
-          </div>
-        )}
+          ) : null}
+          {panelView === "layers" ? (
+            <div className={styles.panelContent}>
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>Map legend</h2>
+                <Legend />
+              </section>
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>Layers</h2>
+                <LayerToggles
+                  visibleLayerIds={visibleLayerIds}
+                  onToggle={handleToggle}
+                />
+              </section>
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>Basemap</h2>
+                <BasemapToggle basemap={basemap} onChange={setBasemap} />
+              </section>
+            </div>
+          ) : null}
+        </div>
       </aside>
-
-      <footer className={styles.attribution}>
-        {DATA_SOURCES.map((source) => (
-          <span key={source}>{source}</span>
-        ))}
-      </footer>
     </div>
   );
 }

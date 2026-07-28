@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import type { ReactNode } from "react";
+import { type ReactNode, forwardRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("react-leaflet", () => ({
@@ -7,11 +7,14 @@ vi.mock("react-leaflet", () => ({
     <div>{children}</div>
   ),
   TileLayer: () => null,
-  GeoJSON: ({ data }: { data: { features: unknown[] } }) => (
-    <div data-testid="geojson-layer">{data.features.length} features</div>
+  GeoJSON: forwardRef<never, { data: { features: unknown[] } }>(
+    ({ data }, _ref) => (
+      <div data-testid="geojson-layer">{data.features.length} features</div>
+    ),
   ),
   Pane: () => null,
   ZoomControl: () => null,
+  useMap: () => ({ fitBounds: vi.fn() }),
 }));
 
 vi.mock("./data/fetchFeatureCollection", () => ({
@@ -45,6 +48,18 @@ vi.mock("./data/TownshipDataRepository", () => ({
 import { App } from "./App";
 
 describe("App", () => {
+  it("provides skip navigation and a main landmark", async () => {
+    render(<App />);
+
+    expect(
+      screen.getByRole("link", { name: /skip to map information/i }),
+    ).toHaveAttribute("href", "#map-information");
+    expect(screen.getByRole("main")).toHaveAttribute("id", "map-information");
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+  });
+
   it("renders the title block and data attribution", async () => {
     render(<App />);
 
@@ -59,8 +74,29 @@ describe("App", () => {
     );
   });
 
+  it("minimises and restores the title context", async () => {
+    render(<App />);
+
+    const minimise = screen.getByRole("button", {
+      name: "Minimise introduction",
+    });
+    fireEvent.click(minimise);
+
+    expect(screen.getByRole("heading", { name: "Buffer Zones" })).toBeVisible();
+    expect(screen.getByText(/how tshwane's spatial legacy/i)).not.toBeVisible();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Expand introduction" }),
+    );
+    expect(screen.getByText(/how tshwane's spatial legacy/i)).toBeVisible();
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+  });
+
   it("shows the legend and layer controls", async () => {
     render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
 
     expect(
       screen.getByRole("list", { name: /modeled car time/i }),
@@ -76,11 +112,10 @@ describe("App", () => {
   it("separates the evidence narrative from map controls", async () => {
     render(<App />);
 
-    expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "The pattern" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    fireEvent.click(screen.getByRole("tab", { name: "Evidence" }));
 
     expect(screen.getByText(/apartheid law controlled/i)).toBeInTheDocument();
     expect(
@@ -91,9 +126,39 @@ describe("App", () => {
     );
   });
 
+  it("supports arrow-key navigation between panel tabs", async () => {
+    render(<App />);
+
+    const storyTab = screen.getByRole("tab", { name: "The pattern" });
+    fireEvent.keyDown(storyTab, { key: "ArrowRight" });
+
+    expect(screen.getByRole("tab", { name: "Browse places" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByRole("tabpanel")).toHaveAttribute(
+      "aria-labelledby",
+      "panel-tab-places",
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+  });
+
+  it("offers a non-map way to browse township evidence", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Browse places" }));
+
+    expect(
+      await screen.findByRole("button", { name: /browse mamelodi/i }),
+    ).toBeInTheDocument();
+  });
+
   it("collapses and restores the controls panel", async () => {
     render(<App />);
 
+    fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
     const trigger = screen.getByRole("button", { name: /close/i });
     expect(trigger).toHaveAttribute("aria-expanded", "true");
 
@@ -103,7 +168,7 @@ describe("App", () => {
       screen.queryByRole("list", { name: /modeled car time/i }),
     ).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /layers/i }));
+    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
 
     expect(
       screen.getByRole("list", { name: /modeled car time/i }),

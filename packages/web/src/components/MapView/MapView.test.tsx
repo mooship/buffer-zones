@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import type { ReactNode } from "react";
+import { type ReactNode, forwardRef } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("react-leaflet", () => ({
@@ -17,17 +17,17 @@ vi.mock("react-leaflet", () => ({
   TileLayer: ({ url }: { url: string }) => (
     <div data-testid="tile-layer">{url}</div>
   ),
-  GeoJSON: ({
-    data,
-    pathOptions,
-  }: {
-    data: { features: unknown[] };
-    pathOptions?: { pane?: string };
-  }) => (
+  GeoJSON: forwardRef<
+    never,
+    { data: { features: unknown[] }; pathOptions?: { pane?: string } }
+  >(({ data, pathOptions }, _ref) => (
     <div data-testid="geojson-layer" data-pane={pathOptions?.pane}>
       {data.features.length} features
     </div>
-  ),
+  )),
+  useMap: () => ({
+    fitBounds: vi.fn(),
+  }),
   Pane: () => null,
   ZoomControl: () => <div data-testid="zoom-control" />,
 }));

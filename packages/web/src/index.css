@@ -48,6 +48,27 @@ body {
   color: var(--color-line);
 }
 
+.leaflet-container .leaflet-control-zoom a {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.leaflet-container .leaflet-control-zoom a:focus-visible {
+  outline: 3px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .leaflet-control-zoom {
+    margin-right: 0.75rem !important;
+    transform: translateY(-5rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

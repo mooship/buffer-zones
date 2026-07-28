@@ -11,8 +11,9 @@ export function EvidenceSummary() {
       <div className={styles.limitation}>
         <strong>Car time is only a baseline proxy.</strong>
         <span>
-          It does not measure walking, waiting, transfers, service frequency or
-          whether a household has access to a car.
+          It shows the fastest modeled drive to the nearest of eight selected
+          job centres. It does not measure walking, waiting, transfers, service
+          frequency or whether a household has access to a car.
         </span>
       </div>
       <p className={styles.method}>
