@@ -8,6 +8,10 @@
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
+
+  .fullWidthGroup {
+    grid-column: 1 / -1;
+  }
 }
 
 .groupTitle {
@@ -41,6 +45,7 @@
   height: 1rem;
   flex-shrink: 0;
   border: 1px solid var(--color-line);
+  border-radius: 3px;
 }
 
 .lineSwatch {
@@ -49,6 +54,27 @@
   height: 0.25rem;
   flex-shrink: 0;
   border-radius: 1px;
+}
+
+.symbolGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.dotSwatch {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid var(--color-ink);
+}
+
+.symbolNote {
+  color: var(--color-muted);
+  font-size: 0.6875rem;
 }
 
 .label {

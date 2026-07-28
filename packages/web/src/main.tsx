@@ -1,5 +1,4 @@
-import "@fontsource-variable/fraunces";
-import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/inter";
 import "@fontsource-variable/martian-mono";
 import "leaflet/dist/leaflet.css";
 import "./index.css";

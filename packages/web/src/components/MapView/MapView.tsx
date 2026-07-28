@@ -16,6 +16,7 @@ import {
   GeoJSON,
   MapContainer,
   Pane,
+  ScaleControl,
   TileLayer,
   ZoomControl,
   useMap,
@@ -213,6 +214,7 @@ export function MapView({
         zoomControl={false}
       >
         <ZoomControl position="bottomright" />
+        <ScaleControl position="bottomleft" imperial={false} />
         <TileLayer
           key={basemap}
           url={tiles.url}

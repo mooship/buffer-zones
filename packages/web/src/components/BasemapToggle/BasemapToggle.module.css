@@ -1,8 +1,11 @@
 .group {
   display: flex;
-  border: 1px solid var(--color-line);
+  gap: 0.25rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
   margin: 0;
-  padding: 0;
+  padding: 0.25rem;
   min-width: 0;
 }
 
@@ -19,25 +22,27 @@
 
 .option {
   flex: 1;
-  min-height: 48px;
+  min-height: 44px;
   padding: 0 0.75rem;
+  border-radius: var(--radius-sm);
   background: transparent;
   border: 0;
   color: var(--color-paper);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.option + .option {
-  border-left: 1px solid var(--color-line);
+.option:hover {
+  background: var(--color-surface-hover);
 }
 
 .option[aria-pressed="true"] {
   background: var(--color-jacaranda);
   color: var(--color-ink);
+  font-weight: 700;
 }
 
 .option:focus-visible {

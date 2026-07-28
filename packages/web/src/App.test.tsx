@@ -19,6 +19,7 @@ vi.mock("react-leaflet", () => ({
   ),
   Pane: () => null,
   ZoomControl: () => null,
+  ScaleControl: () => null,
   useMap: () => ({
     fitBounds: vi.fn(),
     invalidateSize: vi.fn(),

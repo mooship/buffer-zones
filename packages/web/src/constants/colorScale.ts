@@ -19,9 +19,9 @@ export const TRANSIT_DISTANCE_BUCKET_BREAKPOINTS = {
 } as const;
 
 export const TRANSIT_DISTANCE_BUCKET_COLORS = {
-  near: "#D9CBEF",
-  moderate: "#B79BE0",
-  far: "#8F5FD1",
-  veryFar: "#5C2EA0",
+  near: "#CFE3F5",
+  moderate: "#7FB2E5",
+  far: "#3673B8",
+  veryFar: "#123F6E",
   noData: "#8A93A5",
 } as const;

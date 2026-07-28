@@ -45,6 +45,7 @@ vi.mock("react-leaflet", () => ({
   }),
   Pane: () => null,
   ZoomControl: () => <div data-testid="zoom-control" />,
+  ScaleControl: () => <div data-testid="scale-control" />,
 }));
 
 import { MapView } from "./MapView";
