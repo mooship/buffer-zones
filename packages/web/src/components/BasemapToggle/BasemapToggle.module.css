@@ -40,7 +40,7 @@
 }
 
 .option[aria-pressed="true"] {
-  background: var(--color-jacaranda);
+  background: var(--color-ochre);
   color: var(--color-ink);
   font-weight: 700;
 }

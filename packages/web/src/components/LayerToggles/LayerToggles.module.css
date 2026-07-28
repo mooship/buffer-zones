@@ -59,7 +59,7 @@
 }
 
 .checkbox:checked {
-  background: var(--color-jacaranda);
+  background: var(--color-ochre);
 }
 
 .checkbox:checked::before {

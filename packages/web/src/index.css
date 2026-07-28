@@ -3,16 +3,16 @@
   --font-body: "Inter Variable", sans-serif;
   --font-mono: "Martian Mono Variable", monospace;
 
-  --color-ink: #241934;
-  --color-panel: #35234a;
-  --color-line: #a78bc9;
+  --color-ink: #211d17;
+  --color-panel: #2f291f;
+  --color-line: #ab9a78;
   --color-paper: #f2ede6;
-  --color-jacaranda: #a87fe0;
+  --color-ochre: #d99a3d;
   --color-redearth: #c1502e;
-  --color-muted: #a78bc9;
+  --color-muted: #a89a7f;
 
-  --color-surface: #2b1d3d;
-  --color-surface-hover: #382649;
+  --color-surface: #29241b;
+  --color-surface-hover: #362f22;
 
   --radius-sm: 8px;
   --radius-md: 12px;

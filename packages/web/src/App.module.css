@@ -100,7 +100,7 @@
   font-weight: 600;
   line-height: 1.1;
   margin: 0;
-  color: var(--color-jacaranda);
+  color: var(--color-ochre);
 }
 
 .eyebrow {
@@ -132,7 +132,7 @@
 }
 
 .titleToggle:hover {
-  background: color-mix(in srgb, var(--color-jacaranda) 18%, transparent);
+  background: color-mix(in srgb, var(--color-ochre) 18%, transparent);
 }
 
 .titleToggle:focus-visible {
@@ -231,7 +231,7 @@
 }
 
 .panelTab[aria-selected="true"] {
-  border-bottom-color: var(--color-jacaranda);
+  border-bottom-color: var(--color-ochre);
   color: var(--color-paper);
 }
 
@@ -325,7 +325,7 @@
 .panelSources summary::before {
   content: "+";
   margin-right: 0.5rem;
-  color: var(--color-jacaranda);
+  color: var(--color-ochre);
   font-size: 1rem;
 }
 
