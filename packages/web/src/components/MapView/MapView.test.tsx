@@ -19,8 +19,13 @@ vi.mock("react-leaflet", () => ({
       {children}
     </div>
   ),
-  TileLayer: ({ url }: { url: string }) => (
-    <div data-testid="tile-layer">{url}</div>
+  TileLayer: ({
+    url,
+    detectRetina,
+  }: { url: string; detectRetina?: boolean }) => (
+    <div data-testid="tile-layer" data-retina={String(detectRetina)}>
+      {url}
+    </div>
   ),
   GeoJSON: forwardRef<
     never,
@@ -68,6 +73,10 @@ describe("MapView", () => {
       "true",
     );
     expect(screen.getByTestId("tile-layer")).toBeInTheDocument();
+    expect(screen.getByTestId("tile-layer")).toHaveAttribute(
+      "data-retina",
+      "true",
+    );
     expect(screen.getAllByTestId("geojson-layer")).toHaveLength(1);
   });
 

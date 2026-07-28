@@ -18,6 +18,7 @@ import {
 import { fetchPrasaRail, normalizePrasaOverpass } from "./adapters/prasa";
 import { fetchUnemploymentData } from "./adapters/unemployment";
 import { JOB_CENTERS } from "./constants/jobCenters";
+import { createDisplayPolygons } from "./displayTownships";
 import { writeGeoJsonFile } from "./export";
 import { joinTownshipData } from "./join";
 import { getNearestJobCenter } from "./osrmClient";
@@ -53,13 +54,28 @@ async function main() {
     nearestJobCenters,
     unemployment,
   );
-  await writeGeoJsonFile(resolve(OUTPUT_DIR, "townships.v1.geojson"), {
+  const townshipCollection = {
     type: "FeatureCollection",
     features: townshipFeatures,
-  });
+  } as const;
+  await writeGeoJsonFile(
+    resolve(OUTPUT_DIR, "townships.v1.geojson"),
+    townshipCollection,
+  );
+  await writeGeoJsonFile(
+    resolve(OUTPUT_DIR, "townships.display.v1.geojson"),
+    createDisplayPolygons(townshipCollection),
+    { compact: true },
+  );
+  const townshipAreas = createTownshipAreas(townships);
   await writeGeoJsonFile(
     resolve(OUTPUT_DIR, "township-areas.v1.geojson"),
-    createTownshipAreas(townships),
+    townshipAreas,
+  );
+  await writeGeoJsonFile(
+    resolve(OUTPUT_DIR, "township-areas.display.v1.geojson"),
+    createDisplayPolygons(townshipAreas),
+    { compact: true },
   );
 
   console.log("Fetching Gautrain rail via Overpass...");

@@ -5,7 +5,7 @@ export const LAYER_REGISTRY: LayerDefinition[] = [
   {
     id: "townships",
     label: "Modeled car time",
-    dataSource: "/data/townships.v1.geojson",
+    dataSource: "/data/townships.display.v1.geojson",
     layerType: "choropleth",
     defaultVisible: true,
     available: true,

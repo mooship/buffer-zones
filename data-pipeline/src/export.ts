@@ -4,7 +4,11 @@ import { dirname } from "node:path";
 export async function writeGeoJsonFile(
   path: string,
   data: unknown,
+  options: { compact?: boolean } = {},
 ): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, JSON.stringify(data, null, 2));
+  await writeFile(
+    path,
+    options.compact ? JSON.stringify(data) : JSON.stringify(data, null, 2),
+  );
 }

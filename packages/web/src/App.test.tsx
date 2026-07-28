@@ -1,6 +1,11 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { type ReactNode, forwardRef } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const dataMocks = vi.hoisted(() => ({
+  getTownships: vi.fn(),
+  fetchAreas: vi.fn(),
+}));
 
 vi.mock("react-leaflet", () => ({
   MapContainer: ({ children }: { children: ReactNode }) => (
@@ -25,15 +30,22 @@ vi.mock("react-leaflet", () => ({
 }));
 
 vi.mock("./data/fetchFeatureCollection", () => ({
-  fetchFeatureCollection: async () => ({
-    type: "FeatureCollection",
-    features: [],
-  }),
+  fetchFeatureCollection: dataMocks.fetchAreas,
 }));
 
 vi.mock("./data/TownshipDataRepository", () => ({
   createTownshipDataRepository: () => ({
-    getTownships: async () => [
+    getTownships: dataMocks.getTownships,
+  }),
+}));
+
+import { App } from "./App";
+import { useMapUiStore } from "./stores/useMapUiStore";
+
+describe("App", () => {
+  beforeEach(() => {
+    useMapUiStore.getState().reset();
+    dataMocks.getTownships.mockReset().mockResolvedValue([
       {
         type: "Feature",
         properties: {
@@ -48,13 +60,12 @@ vi.mock("./data/TownshipDataRepository", () => ({
         },
         geometry: null,
       },
-    ],
-  }),
-}));
-
-import { App } from "./App";
-
-describe("App", () => {
+    ]);
+    dataMocks.fetchAreas.mockReset().mockResolvedValue({
+      type: "FeatureCollection",
+      features: [],
+    });
+  });
   it("provides skip navigation and a main landmark", async () => {
     render(<App />);
 
@@ -182,6 +193,23 @@ describe("App", () => {
     ).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+  });
+
+  it("shows a data error and retries the validated requests", async () => {
+    dataMocks.getTownships.mockRejectedValueOnce(new Error("invalid data"));
+    render(<App />);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Map data could not be loaded",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Retry" }));
+
+    await waitFor(() =>
+      expect(dataMocks.getTownships).toHaveBeenCalledTimes(2),
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument(),
     );
   });
 });

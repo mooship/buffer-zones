@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "display": "tsx src/buildDisplayData.ts",
     "run": "tsx src/run.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
@@ -11,15 +12,21 @@
     "@buffer-zones/shared": "file:../packages/shared",
     "@turf/turf": "^7.1.0",
     "adm-zip": "^0.6.0",
-    "shapefile": "^0.6.6"
+    "shapefile": "^0.6.6",
+    "topojson-client": "^3.1.0",
+    "topojson-server": "^3.0.1",
+    "topojson-simplify": "^3.0.3"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.8",
     "@types/geojson": "^7946.0.14",
-    "@types/node": "^22.0.0",
+    "@types/node": "^26.1.2",
     "@types/shapefile": "^0.6.4",
+    "@types/topojson-client": "^3.1.5",
+    "@types/topojson-server": "^3.0.4",
+    "@types/topojson-simplify": "^3.0.3",
     "tsx": "^4.19.0",
-    "typescript": "^5.6.0",
-    "vitest": "^3.2.6"
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
   }
 }

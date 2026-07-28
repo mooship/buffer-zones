@@ -5,6 +5,51 @@
   overflow: hidden;
 }
 
+.mapLoading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-ink);
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
+
+.dataError {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1300;
+  display: grid;
+  gap: 0.75rem;
+  width: min(22rem, calc(100% - 2rem));
+  padding: 1rem;
+  border: 1px solid var(--color-redearth);
+  background: var(--color-panel);
+  color: var(--color-paper);
+  transform: translate(-50%, -50%);
+}
+
+.dataError p {
+  margin: 0;
+}
+
+.dataError button {
+  min-height: 48px;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-paper);
+  font: inherit;
+  cursor: pointer;
+}
+
+.dataError button:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
 .skipLink {
   position: absolute;
   top: 0.5rem;

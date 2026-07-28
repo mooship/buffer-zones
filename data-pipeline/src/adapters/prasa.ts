@@ -48,7 +48,7 @@ export function normalizePrasaOverpass(
           ),
         },
       });
-    } else {
+    } else if (element.type === "node") {
       features.push({
         type: "Feature",
         properties: stop,

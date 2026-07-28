@@ -1,16 +1,21 @@
-import type { LayerId, TownshipFeature } from "@buffer-zones/shared";
+import type { TownshipFeature } from "@buffer-zones/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, Minus, Plus, X } from "lucide-react";
-import { type KeyboardEvent, useEffect, useRef, useState } from "react";
+import {
+  type KeyboardEvent,
+  Suspense,
+  lazy,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./App.module.css";
 import { BasemapToggle } from "./components/BasemapToggle/BasemapToggle";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { Legend } from "./components/Legend/Legend";
-import { MapView } from "./components/MapView/MapView";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
-import type { Basemap } from "./constants/basemaps";
 import {
   APP_NAME,
   APP_TAGLINE,
@@ -19,17 +24,18 @@ import {
 } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
-import { LAYER_REGISTRY } from "./layers/registry";
+import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
 
-const repository = createTownshipDataRepository("/data/townships.v1.geojson");
+const repository = createTownshipDataRepository(
+  "/data/townships.display.v1.geojson",
+);
 
-const DEFAULT_VISIBLE_LAYER_IDS: LayerId[] = LAYER_REGISTRY.filter(
-  (layer) => layer.defaultVisible,
-).map((layer) => layer.id);
+const MapView = lazy(async () => {
+  const module = await import("./components/MapView/MapView");
+  return { default: module.MapView };
+});
 
-const MOBILE_BREAKPOINT_PX = 768;
 const PANEL_VIEWS = ["story", "places", "layers"] as const;
-type PanelView = (typeof PANEL_VIEWS)[number];
 
 const PANEL_LABELS: Record<PanelView, string> = {
   story: "The pattern",
@@ -40,44 +46,51 @@ const PANEL_LABELS: Record<PanelView, string> = {
 export function App() {
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
   const [townshipAreas, setTownshipAreas] = useState<Feature[]>([]);
-  const [visibleLayerIds, setVisibleLayerIds] = useState<LayerId[]>(
-    DEFAULT_VISIBLE_LAYER_IDS,
-  );
-  const [basemap, setBasemap] = useState<Basemap>("street");
-  const [panelOpen, setPanelOpen] = useState(
-    () => window.innerWidth > MOBILE_BREAKPOINT_PX,
-  );
-  const [panelView, setPanelView] = useState<PanelView>("story");
-  const [titleExpanded, setTitleExpanded] = useState(true);
-  const [selectedTownshipId, setSelectedTownshipId] = useState<string | null>(
-    null,
+  const [dataError, setDataError] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
+  const basemap = useMapUiStore((state) => state.basemap);
+  const panelOpen = useMapUiStore((state) => state.panelOpen);
+  const panelView = useMapUiStore((state) => state.panelView);
+  const titleExpanded = useMapUiStore((state) => state.titleExpanded);
+  const selectedTownshipId = useMapUiStore((state) => state.selectedTownshipId);
+  const toggleLayer = useMapUiStore((state) => state.toggleLayer);
+  const setBasemap = useMapUiStore((state) => state.setBasemap);
+  const setPanelOpen = useMapUiStore((state) => state.setPanelOpen);
+  const setPanelView = useMapUiStore((state) => state.setPanelView);
+  const setTitleExpanded = useMapUiStore((state) => state.setTitleExpanded);
+  const setSelectedTownshipId = useMapUiStore(
+    (state) => state.setSelectedTownshipId,
   );
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   useEffect(() => {
     let cancelled = false;
+    setDataError(false);
+    if (loadAttempt > 0) {
+      setTownships([]);
+      setTownshipAreas([]);
+    }
     Promise.all([
       repository.getTownships(),
-      fetchFeatureCollection("/data/township-areas.v1.geojson"),
-    ]).then(([features, areas]) => {
-      if (!cancelled) {
-        setTownships(features);
-        setTownshipAreas(areas.features);
-      }
-    });
+      fetchFeatureCollection("/data/township-areas.display.v1.geojson"),
+    ])
+      .then(([features, areas]) => {
+        if (!cancelled) {
+          setTownships(features);
+          setTownshipAreas(areas.features);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDataError(true);
+        }
+      });
     return () => {
       cancelled = true;
     };
-  }, []);
-
-  function handleToggle(id: LayerId) {
-    setVisibleLayerIds((current) =>
-      current.includes(id)
-        ? current.filter((existing) => existing !== id)
-        : [...current, id],
-    );
-  }
+  }, [loadAttempt]);
 
   function handlePanelToggle() {
     if (panelOpen) {
@@ -119,14 +132,29 @@ export function App() {
       </a>
 
       <main id="map-information" tabIndex={-1}>
-        <MapView
-          townships={townships}
-          townshipAreas={townshipAreas}
-          visibleLayerIds={visibleLayerIds}
-          basemap={basemap}
-          selectedTownshipId={selectedTownshipId}
-          onTownshipSelect={setSelectedTownshipId}
-        />
+        <Suspense
+          fallback={<output className={styles.mapLoading}>Loading map</output>}
+        >
+          <MapView
+            townships={townships}
+            townshipAreas={townshipAreas}
+            visibleLayerIds={visibleLayerIds}
+            basemap={basemap}
+            selectedTownshipId={selectedTownshipId}
+            onTownshipSelect={setSelectedTownshipId}
+          />
+        </Suspense>
+        {dataError ? (
+          <div className={styles.dataError} role="alert">
+            <p>Map data could not be loaded.</p>
+            <button
+              type="button"
+              onClick={() => setLoadAttempt((value) => value + 1)}
+            >
+              Retry
+            </button>
+          </div>
+        ) : null}
       </main>
 
       <header
@@ -145,7 +173,7 @@ export function App() {
           aria-label={
             titleExpanded ? "Minimise introduction" : "Expand introduction"
           }
-          onClick={() => setTitleExpanded((expanded) => !expanded)}
+          onClick={() => setTitleExpanded(!titleExpanded)}
         >
           {titleExpanded ? (
             <Minus aria-hidden="true" />
@@ -246,7 +274,7 @@ export function App() {
                 <h2 className={styles.sectionTitle}>Layers</h2>
                 <LayerToggles
                   visibleLayerIds={visibleLayerIds}
-                  onToggle={handleToggle}
+                  onToggle={toggleLayer}
                 />
               </section>
               <section className={styles.section}>

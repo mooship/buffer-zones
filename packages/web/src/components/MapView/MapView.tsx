@@ -217,6 +217,7 @@ export function MapView({
           key={basemap}
           url={tiles.url}
           attribution={tiles.attribution}
+          detectRetina
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />
@@ -229,7 +230,7 @@ export function MapView({
               fillOpacity: 0,
               interactive: false,
             }}
-            style={(feature) => ({
+            style={(feature: Feature | undefined) => ({
               ...TOWNSHIP_OUTLINE,
               opacity:
                 feature?.properties?.labelPriority === "secondary" ? 0.72 : 1,
@@ -262,7 +263,7 @@ export function MapView({
               }}
               onEachFeature={
                 isChoropleth
-                  ? (feature, featureLayer) =>
+                  ? (feature: Feature, featureLayer: Layer) =>
                       bindTownshipPopup(feature, featureLayer, onTownshipSelect)
                   : undefined
               }

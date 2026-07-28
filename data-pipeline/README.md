@@ -12,12 +12,18 @@ npm run run
 
 Outputs `townships.v1.geojson`, `township-areas.v1.geojson`, `gautrain.v1.geojson`, `gautrain-bus.v1.geojson`, `prasa.v1.geojson`, and `a-re-yeng.v1.geojson` into `packages/web/public/data/`.
 
+`townships.v1.geojson` and `township-areas.v1.geojson` remain the full-resolution
+source artifacts. The pipeline also writes compact `.display.v1.geojson`
+versions: topology-preserving, quantized and simplified copies used by the
+browser. To rebuild only those display artifacts from the committed
+full-resolution data, run `npm run display` in this directory.
+
 ## Adding a new metro or transit operator
 
-Follow `src/adapters/gautrain.ts` or `src/adapters/aReYeng.ts` as a template: one adapter file with a `fetchX()` + `normalizeX()` pair, normalizing into the shared `TransitLayerFeatureCollection` shape. Add a registry entry in `packages/web/src/layers/registry.ts`, and re-run the pipeline. No other pipeline or map code needs to change (see SPEC.md §11).
+Follow `src/adapters/gautrain.ts` or `src/adapters/aReYeng.ts` as a template: one adapter file with a `fetchX()` + `normalizeX()` pair, normalizing into the shared `TransitLayerFeatureCollection` shape. Add a registry entry in `packages/web/src/layers/registry.ts`, and re-run the pipeline. No other pipeline or map code needs to change; see the v1 design document in `docs/superpowers/specs/`.
 
 Currently stubbed (no typed adapter written yet): MyCiTi, Rea Vaya, Metrobus, Durban Transport — see design doc §8. Gautrain rail, Gautrain Bus, PRASA, and A Re Yeng are real, live layers.
 
 ## Rate limits
 
-Drive-time computation uses the public `router.project-osrm.org` demo server, batched at 50 origins per request (against all job centers in the same table request) with a 1s delay between batches and retry-with-backoff on HTTP 429. For heavier use, self-host OSRM (see SPEC.md §3) and swap the base URL in `src/osrmClient.ts`.
+Drive-time computation uses the public `router.project-osrm.org` demo server, batched at 50 origins per request (against all job centers in the same table request) with a 1s delay between batches and retry-with-backoff on HTTP 429. For heavier use, self-host OSRM and swap the base URL in `src/osrmClient.ts`.
