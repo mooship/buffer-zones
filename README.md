@@ -2,7 +2,7 @@
 
 Apartheid-era spatial planning still shapes commute times and access to economic opportunity in South African cities today. **Buffer Zones** visualizes this with a choropleth map of townships/suburbs colored by real drive time to the nearest major job center — making the physical "buffer zones" (highways, industrial land, empty veld) between townships and wealthy suburbs visible and quantifiable.
 
-**v1 scope: Pretoria/Tshwane.** Real Stats SA boundary data, real drive-time routing (via public OSRM) to six real job centers (Pretoria CBD, Menlyn, Centurion, Rosslyn, Hatfield, Waterkloof/Brooklyn), and real Gautrain + A Re Yeng transit overlays. Other South African metros are scaffolded for a future pipeline run — see [`docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md`](docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md).
+**v1 scope: Pretoria/Tshwane.** Real Stats SA boundary data, real drive-time routing (via public OSRM) to eight real job centers (Pretoria CBD, Menlyn, Centurion, Rosslyn, Hatfield, Waterkloof/Brooklyn, plus Sandton and Rosebank for the Gautrain corridor), and real Gautrain, A Re Yeng, and PRASA transit overlays. Other South African metros are scaffolded for a future pipeline run — see [`docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md`](docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md).
 
 ## Why
 
