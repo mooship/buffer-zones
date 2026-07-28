@@ -1,0 +1,10 @@
+.mapWrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+  background: var(--color-ink);
+}

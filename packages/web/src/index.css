@@ -2,9 +2,58 @@
   --font-display: "Fraunces Variable", serif;
   --font-body: "Bricolage Grotesque Variable", sans-serif;
   --font-mono: "Martian Mono Variable", monospace;
+
+  --color-ink: #241934;
+  --color-panel: #35234a;
+  --color-line: #a78bc9;
+  --color-paper: #f2ede6;
+  --color-jacaranda: #a87fe0;
+  --color-redearth: #c1502e;
+  --color-muted: #a78bc9;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {
   margin: 0;
   font-family: var(--font-body);
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--color-panel);
+  color: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.leaflet-popup-content {
+  margin: 0.75rem 0.875rem;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--color-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

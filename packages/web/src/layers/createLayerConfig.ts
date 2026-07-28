@@ -6,7 +6,7 @@ import { commuteMinutesToColor } from "../utils/colorScale";
 
 export interface LeafletLayerConfig {
   pathOptions?: PathOptions;
-  styleFn?: (feature: Feature) => PathOptions;
+  styleFn?: (feature?: Feature) => PathOptions;
 }
 
 export function createLayerConfig(
@@ -21,7 +21,7 @@ export function createLayerConfig(
     case "choropleth":
       return {
         styleFn: (feature) => {
-          const raw = feature.properties?.[style.propertyKey];
+          const raw = feature?.properties?.[style.propertyKey];
           const value = typeof raw === "number" ? raw : null;
           return {
             fillColor: commuteMinutesToColor(value),
