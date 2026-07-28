@@ -60,10 +60,9 @@ body {
 }
 
 .leaflet-control-scale-line {
-  border: 2px solid var(--color-surface);
-  border-top: none;
-  padding: 1px 6px;
-  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  border: 1px solid var(--color-line);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--color-panel) 85%, transparent);
   color: var(--color-paper);
   font-family: var(--font-mono);

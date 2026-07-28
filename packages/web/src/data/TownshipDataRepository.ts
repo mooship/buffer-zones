@@ -14,7 +14,14 @@ class FetchTownshipDataRepository implements TownshipDataRepository {
       this.dataUrl,
       townshipFeatureCollectionSchema,
     );
-    return (collection.features ?? []) as TownshipFeature[];
+    const features = (collection.features ?? []) as TownshipFeature[];
+    return features.map((feature) => ({
+      ...feature,
+      properties: {
+        ...feature.properties,
+        nearestTransitKm: feature.properties.nearestTransitKm ?? null,
+      },
+    }));
   }
 }
 
