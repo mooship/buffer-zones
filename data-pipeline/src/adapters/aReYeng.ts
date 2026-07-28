@@ -12,22 +12,32 @@ import type {
 import { type OverpassResponse, fetchOverpass } from "./gautrain";
 
 // Source: City of Tshwane Open Data / e-GIS ArcGIS Server, "Other_WS/BRT_A_Re_Yeng"
-// MapServer, layer 8 ("A Re Yeng Trunk Route"). Verified reachable and returning real
-// trunk-route geometry (3 features: Line 1A, Line 2A, Line 2B) via GeoJSON export on
-// 2026-07-28. Covers trunk routes only; feeder (layer 10) and complementary (layer 9)
-// routes are separate layers not included in this v1 fetch.
-const AREYENG_SOURCE_URL =
-  "https://e-gis001.tshwane.gov.za/server/rest/services/Other_WS/BRT_A_Re_Yeng/MapServer/8/query?where=1%3D1&outFields=*&f=geojson";
+// MapServer. Verified reachable and returning real route geometry via GeoJSON export
+// on 2026-07-28. Fetches all three service tiers so the layer isn't limited to trunk
+// corridors alone — many township areas are only reachable via feeder routes, and
+// showing trunk-only risked making those areas look unserved by transit when they
+// are not:
+//   - layer 8: trunk routes (3 features verified: Line 1A, Line 2A, Line 2B)
+//   - layer 9: complementary routes
+//   - layer 10: feeder routes
+const AREYENG_LAYERS = [8, 9, 10] as const;
+
+function areYengLayerUrl(layer: number): string {
+  return `https://e-gis001.tshwane.gov.za/server/rest/services/Other_WS/BRT_A_Re_Yeng/MapServer/${layer}/query?where=1%3D1&outFields=*&f=geojson`;
+}
 
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const TSHWANE_BBOX = "-25.95,28.05,-25.55,28.40";
 // Restricted to busway/bus-route ways (not just any element tagged
 // network="A Re Yeng") so a station building isn't picked up and rendered as a
-// fake route line. See task-5-report.md: OSM coverage for actual A Re Yeng route
-// geometry was found to be effectively empty at verification time.
+// fake route line. OSM coverage for feeder/complementary geometry is sparse, so this
+// fallback (used only if the portal is unreachable) may still be trunk-heavy.
 const AREYENG_OVERPASS_QUERY = `
 [out:json][timeout:60];
-way["network"="A Re Yeng"]["highway"="busway"](${TSHWANE_BBOX});
+(
+  way["network"="A Re Yeng"]["highway"="busway"](${TSHWANE_BBOX});
+  way["network"="A Re Yeng"]["route"="bus"](${TSHWANE_BBOX});
+);
 out geom;
 `;
 
@@ -143,21 +153,31 @@ export function normalizeAReYengOverpass(
 export async function fetchAReYengRoutes(): Promise<
   FeatureCollection | OverpassResponse
 > {
+  const merged: Feature[] = [];
+
   try {
-    const portalResponse = await fetch(AREYENG_SOURCE_URL);
-    if (portalResponse.ok) {
+    for (const layer of AREYENG_LAYERS) {
+      const portalResponse = await fetch(areYengLayerUrl(layer));
+      if (!portalResponse.ok) {
+        throw new Error(`A Re Yeng layer ${layer} request failed`);
+      }
       const collection: unknown = await portalResponse.json();
       if (
-        collection !== null &&
-        typeof collection === "object" &&
-        (collection as { type?: unknown }).type === "FeatureCollection" &&
-        Array.isArray((collection as { features?: unknown }).features)
+        collection === null ||
+        typeof collection !== "object" ||
+        (collection as { type?: unknown }).type !== "FeatureCollection" ||
+        !Array.isArray((collection as { features?: unknown }).features)
       ) {
-        return collection as FeatureCollection;
+        throw new Error(
+          `A Re Yeng layer ${layer} returned an unexpected shape`,
+        );
       }
+      merged.push(...(collection as FeatureCollection).features);
     }
+    return { type: "FeatureCollection", features: merged };
   } catch {
-    // fall through to the Overpass fallback below on any network/TLS failure
+    // fall through to the Overpass fallback below on any network/TLS/shape failure
+    // for any of the three layers, so the layer is all-or-nothing per source.
   }
 
   return fetchOverpass(OVERPASS_URL, AREYENG_OVERPASS_QUERY);

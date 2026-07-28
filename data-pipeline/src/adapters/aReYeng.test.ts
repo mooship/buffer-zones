@@ -126,19 +126,66 @@ describe("normalizeAReYengOverpass", () => {
 });
 
 describe("fetchAReYengRoutes", () => {
-  it("fetches only the official trunk route layer", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        type: "FeatureCollection",
-        features: [],
-      }),
+  it("fetches the trunk, complementary, and feeder layers and merges their features", async () => {
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      const layer = url.includes("/8/query")
+        ? "8"
+        : url.includes("/9/query")
+          ? "9"
+          : "10";
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: { OBJECTID: layer, Route_Code: `Line ${layer}` },
+              geometry: {
+                type: "LineString",
+                coordinates: [
+                  [28.19, -25.75],
+                  [28.2, -25.76],
+                ],
+              },
+            },
+          ],
+        }),
+      });
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    await fetchAReYengRoutes();
+    const result = await fetchAReYengRoutes();
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/8/query"));
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/9/query"));
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/10/query"),
+    );
+    expect("features" in result && result.features).toHaveLength(3);
+  });
+
+  it("falls back to Overpass if any of the three layers fails to fetch", async () => {
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes("overpass-api.de")) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ elements: [] }),
+        });
+      }
+      if (url.includes("/9/query")) {
+        return Promise.resolve({ ok: false });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ type: "FeatureCollection", features: [] }),
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchAReYengRoutes();
+
+    expect("elements" in result).toBe(true);
   });
 });

@@ -18,7 +18,7 @@ describe("LayerToggles", () => {
     const onToggle = vi.fn();
     render(<LayerToggles visibleLayerIds={[]} onToggle={onToggle} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "A Re Yeng trunk" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "A Re Yeng" }));
 
     expect(onToggle).toHaveBeenCalledWith("a-re-yeng");
   });

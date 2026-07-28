@@ -30,6 +30,6 @@ describe("Legend", () => {
     expect(transitLegend).toHaveTextContent("Gautrain");
     expect(transitLegend).toHaveTextContent("Gautrain Bus");
     expect(transitLegend).toHaveTextContent("PRASA Rail");
-    expect(transitLegend).toHaveTextContent("A Re Yeng trunk");
+    expect(transitLegend).toHaveTextContent("A Re Yeng");
   });
 });

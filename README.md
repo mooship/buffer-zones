@@ -2,7 +2,7 @@
 
 Apartheid-era spatial planning still shapes access to economic opportunity in South African cities today. **Buffer Zones** maps recognized Tshwane township areas, formal transit routes, and modeled car time to selected job centers. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
 
-**v1 scope: Pretoria/Tshwane.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to eight selected job centers, and Gautrain rail, Gautrain Bus, A Re Yeng trunk, and PRASA route overlays. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros are scaffolded for future data work — see [`docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md`](docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md).
+**v1 scope: Pretoria/Tshwane.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to eight selected job centers, and Gautrain rail, Gautrain Bus, A Re Yeng (trunk, complementary, and feeder), and PRASA route overlays. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros are scaffolded for future data work — see [`docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md`](docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md).
 
 ## Why
 

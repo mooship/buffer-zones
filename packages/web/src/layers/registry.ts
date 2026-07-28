@@ -53,7 +53,7 @@ export const LAYER_REGISTRY: LayerDefinition[] = [
   },
   {
     id: "a-re-yeng",
-    label: "A Re Yeng trunk",
+    label: "A Re Yeng",
     dataSource: "/data/a-re-yeng.v1.geojson",
     layerType: "line",
     defaultVisible: false,
