@@ -10,7 +10,6 @@ Under apartheid, townships were deliberately built far from jobs, separated by "
 
 ## Documentation
 
-- [`SPEC.md`](SPEC.md) — the full long-term project spec (architecture, all four metros, stretch goals)
 - [`docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md`](docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md) — what v1 actually builds and why it diverges from the full spec
 - [`docs/superpowers/plans/2026-07-27-buffer-zones-v1.md`](docs/superpowers/plans/2026-07-27-buffer-zones-v1.md) — the task-by-task implementation plan
 - [`data-pipeline/README.md`](data-pipeline/README.md) — how to (re-)run the data pipeline
