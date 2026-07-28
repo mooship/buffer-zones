@@ -36,5 +36,6 @@ export interface LayerDefinition {
   dataSource: string;
   layerType: LayerType;
   defaultVisible: boolean;
+  available: boolean;
   style?: LayerStyle;
 }

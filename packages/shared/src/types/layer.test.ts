@@ -9,6 +9,7 @@ describe("LayerDefinition", () => {
       dataSource: "/data/townships.v1.geojson",
       layerType: "choropleth",
       defaultVisible: true,
+      available: true,
     };
     expectTypeOf(def.id).toEqualTypeOf<LayerId>();
     expectTypeOf(def.layerType).toEqualTypeOf<LayerType>();
