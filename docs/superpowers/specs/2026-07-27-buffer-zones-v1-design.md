@@ -82,7 +82,42 @@ TDD per SPEC §4: Vitest + React Testing Library + happy-dom. Priority coverage:
 
 ## 8. Explicitly out of scope for v1
 
-- Cape Town, Joburg, Durban data and their transit operators (MyCiTi, PRASA, Rea Vaya, Metrobus, Durban Transport) — adapters/types exist, data doesn't yet
-- AI data chat (SPEC §16) — removed, not deferred quietly; if revisited later it needs its own design doc
+- Cape Town, Joburg, Durban data and their transit operators (MyCiTi, Rea Vaya, Metrobus, Durban Transport) — adapters/types exist, data doesn't yet. PRASA was originally in this list but was upgraded to a real Pretoria-area adapter (§4a) after the user pointed out it's more relevant to township commuters than Gautrain/A Re Yeng alone.
+- AI data chat — removed, not deferred quietly; if revisited later it needs its own design doc
 - Actual `wrangler deploy` — code/config ready, not executed this session
-- Historical aerial imagery, minibus taxi routes, Group Areas Act overlay, land-use zoning (SPEC §6 stretch goals — unchanged, still stretch)
+- Historical aerial imagery, minibus taxi routes, Group Areas Act overlay, land-use zoning — stretch goals, unchanged, still stretch
+
+Note: `SPEC.md` (the original full long-term spec this document diverged from) was deleted from the repo by the user on 2026-07-28. This design doc is now the standalone source of truth for v1 — remaining "SPEC §N" references above describe decisions already folded into this document's own sections, not live citations.
+
+## 4a. Real PRASA adapter (added mid-build)
+
+Upgraded from stub to real per user request: PRASA's Pretoria commuter rail (Pretoria–Mamelodi, Pretoria–Atteridgeville/Saulsville, Pretoria–Eersterust/Pienaarspoort) is more relevant to township residents' actual commutes than Gautrain (higher fare, aimed at higher-income commuters) or A Re Yeng (limited BRT coverage) alone. OSM tags this network as `operator=PRASA` on rail ways and `network=Metrorail Gauteng`-family tags on stations — the adapter (`data-pipeline/src/adapters/prasa.ts`) queries both. Live-verified: 248 features (200 rail-way segments, 48 stations) in the Tshwane area. Three real transit layers ship in v1: Gautrain, A Re Yeng, PRASA.
+
+Also added mid-build: Sandton and Rosebank as two additional (drive-time only) job centers, since Gautrain's real value for Pretoria commuters is substantially about reaching Johannesburg jobs — see §4's job center list (now 8 total, not 6).
+
+## 9. Design System
+
+Approved 2026-07-28. Concept: **"field survey document"** — apartheid spatial planning was executed *through* zoning maps and technical surveys, so the app borrows that visual register (hairline registration marks, a title-block header) to expose what those documents built, rather than a generic dashboard look. The hue story is grounded in Pretoria specifically — "Jacaranda City," known for ~70,000 jacaranda trees blooming purple every October — not a generic pan-African motif.
+
+**Color** (6 named tokens, used across UI chrome *and* derived for the commute-time data scale):
+| Token | Hex | Use |
+|---|---|---|
+| `ink` | `#241934` | page background |
+| `panel` | `#35234A` | raised panels, sidebar/drawer |
+| `line` | `#A78BC9` | hairline borders, registration ticks |
+| `paper` | `#F2EDE6` | primary text |
+| `jacaranda` | `#A87FE0` | primary accent (headings, active states) |
+| `redearth` | `#C1502E` | secondary accent, alerts, "very long commute" |
+
+Commute-time choropleth buckets (SPEC §12's `CommuteBucket` enum) derive from this palette rather than an unrelated data-viz scale: short = a muted veld green (`#7A9B6E`), moderate = brass/ochre (`#C9A227`), long = a lighter `redearth` (`#D6703F`), very long = `redearth` (`#C1502E`), no-data = a desaturated blue-grey. Verify WCAG AA contrast for any of these used as text/small UI elements, not just map fill (map fills sit at ~0.7 opacity over basemap tiles and aren't subject to text-contrast rules).
+
+**Typography** (all self-hosted via Fontsource, all variable fonts):
+- **Fraunces** — display headings and large commute-time numerals. A variable serif with a large optical-size axis; deliberately unexpected on a map/data app (which almost always defaults to a geometric sans).
+- **Bricolage Grotesque** — body/UI text. A 2023-vintage variable grotesque, distinctive without being a current "AI app" default (Inter, Space Grotesk, Manrope, Poppins are explicitly avoided as overused).
+- **Martian Mono** — data readouts (km, coordinates, commute-minute stats in popups/legend). Variable, squarish/technical character matching the "instrument/measurement" concept.
+
+**Signature element:** a hairline border with four short perpendicular corner tick marks (drafting/blueprint registration marks), applied consistently to the title block (top-left, holding app name + data-as-of date, styled like a technical drawing's corner stamp), the legend/toggle panel, and popups. One recurring device — restraint everywhere else (per frontend-design's "spend your boldness in one place").
+
+**Layout:** the map is full-bleed and *is* the page, not a widget inside a boxed dashboard. Title block anchors top-left; legend/toggle panel floats over the map corner on desktop, collapses to a bottom-sheet drawer on mobile (SPEC §4's responsive requirement).
+
+**Performance note:** per the user's explicit requirement (2026-07-28), the app must be mobile-friendly and score full/100 on Google Lighthouse across Performance, Accessibility, Best Practices, and SEO — this is a hard bar, not aspirational, and must be verified with an actual Lighthouse run before the build is considered done (see plan's Task 18 / the standalone Lighthouse-audit task added to track this).
