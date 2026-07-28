@@ -17,12 +17,7 @@ export const JOB_CENTERS = [
     lat: -25.7677,
     lon: 28.2361,
   },
-  // Included even though these sit outside Tshwane: the Gautrain corridor's
-  // real value for Pretoria is largely commuting to Johannesburg job centers.
-  // Drive time (not rail time) is what OSRM computes here — this doesn't
-  // capture the Gautrain's actual rail-speed advantage, only whether driving
-  // to Joburg is competitive with local options for townships along the
-  // corridor (see docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md).
+  // Outside Tshwane, but the Gautrain corridor's value is reaching these
   { id: "sandton", name: "Sandton", lat: -26.1076, lon: 28.0567 },
   { id: "rosebank", name: "Rosebank", lat: -26.1467, lon: 28.0436 },
 ] as const satisfies readonly JobCenter[];
