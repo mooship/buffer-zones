@@ -10,7 +10,7 @@ const properties: TownshipProperties = {
   commuteMinutes: 62,
   nearestJobCenter: "Pretoria CBD",
   distanceKm: 28.4,
-  nearestGautrainStationKm: null,
+  nearestTransitKm: null,
   nearestAReYengStopKm: null,
 };
 

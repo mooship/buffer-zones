@@ -1,8 +1,8 @@
 import {
   COMMUTE_BUCKET_BREAKPOINTS,
   COMMUTE_BUCKET_COLORS,
-  GAUTRAIN_DISTANCE_BUCKET_BREAKPOINTS,
-  GAUTRAIN_DISTANCE_BUCKET_COLORS,
+  TRANSIT_DISTANCE_BUCKET_BREAKPOINTS,
+  TRANSIT_DISTANCE_BUCKET_COLORS,
 } from "../constants/colorScale";
 
 export enum CommuteBucket {
@@ -39,36 +39,36 @@ export function commuteMinutesToColor(minutes: number | null): string {
   return BUCKET_COLOR_MAP[getCommuteBucket(minutes)];
 }
 
-export enum GautrainDistanceBucket {
+export enum TransitDistanceBucket {
   Near = "Near",
   Moderate = "Moderate",
   Far = "Far",
   VeryFar = "VeryFar",
 }
 
-export function getGautrainDistanceBucket(km: number): GautrainDistanceBucket {
-  if (km <= GAUTRAIN_DISTANCE_BUCKET_BREAKPOINTS.near) {
-    return GautrainDistanceBucket.Near;
+export function getTransitDistanceBucket(km: number): TransitDistanceBucket {
+  if (km <= TRANSIT_DISTANCE_BUCKET_BREAKPOINTS.near) {
+    return TransitDistanceBucket.Near;
   }
-  if (km <= GAUTRAIN_DISTANCE_BUCKET_BREAKPOINTS.moderate) {
-    return GautrainDistanceBucket.Moderate;
+  if (km <= TRANSIT_DISTANCE_BUCKET_BREAKPOINTS.moderate) {
+    return TransitDistanceBucket.Moderate;
   }
-  if (km <= GAUTRAIN_DISTANCE_BUCKET_BREAKPOINTS.far) {
-    return GautrainDistanceBucket.Far;
+  if (km <= TRANSIT_DISTANCE_BUCKET_BREAKPOINTS.far) {
+    return TransitDistanceBucket.Far;
   }
-  return GautrainDistanceBucket.VeryFar;
+  return TransitDistanceBucket.VeryFar;
 }
 
-const GAUTRAIN_DISTANCE_COLOR_MAP: Record<GautrainDistanceBucket, string> = {
-  [GautrainDistanceBucket.Near]: GAUTRAIN_DISTANCE_BUCKET_COLORS.near,
-  [GautrainDistanceBucket.Moderate]: GAUTRAIN_DISTANCE_BUCKET_COLORS.moderate,
-  [GautrainDistanceBucket.Far]: GAUTRAIN_DISTANCE_BUCKET_COLORS.far,
-  [GautrainDistanceBucket.VeryFar]: GAUTRAIN_DISTANCE_BUCKET_COLORS.veryFar,
+const TRANSIT_DISTANCE_COLOR_MAP: Record<TransitDistanceBucket, string> = {
+  [TransitDistanceBucket.Near]: TRANSIT_DISTANCE_BUCKET_COLORS.near,
+  [TransitDistanceBucket.Moderate]: TRANSIT_DISTANCE_BUCKET_COLORS.moderate,
+  [TransitDistanceBucket.Far]: TRANSIT_DISTANCE_BUCKET_COLORS.far,
+  [TransitDistanceBucket.VeryFar]: TRANSIT_DISTANCE_BUCKET_COLORS.veryFar,
 };
 
-export function gautrainDistanceToColor(km: number | null): string {
+export function transitDistanceToColor(km: number | null): string {
   if (km === null) {
-    return GAUTRAIN_DISTANCE_BUCKET_COLORS.noData;
+    return TRANSIT_DISTANCE_BUCKET_COLORS.noData;
   }
-  return GAUTRAIN_DISTANCE_COLOR_MAP[getGautrainDistanceBucket(km)];
+  return TRANSIT_DISTANCE_COLOR_MAP[getTransitDistanceBucket(km)];
 }

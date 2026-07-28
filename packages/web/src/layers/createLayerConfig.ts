@@ -5,7 +5,7 @@ import { CHOROPLETH_STROKE, TOWNSHIP_FILL } from "../constants/layerStyles";
 import { getTownshipGroup } from "../constants/townships";
 import {
   commuteMinutesToColor,
-  gautrainDistanceToColor,
+  transitDistanceToColor,
 } from "../utils/colorScale";
 
 export interface LeafletLayerConfig {
@@ -34,8 +34,8 @@ export function createLayerConfig(
             getTownshipGroup(name, typeof id === "string" ? id : undefined) !==
               undefined;
           const colorFn =
-            style.propertyKey === "nearestGautrainStationKm"
-              ? gautrainDistanceToColor
+            style.propertyKey === "nearestTransitKm"
+              ? transitDistanceToColor
               : commuteMinutesToColor;
           return {
             fillColor: colorFn(value),

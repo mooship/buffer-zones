@@ -24,19 +24,15 @@ const township = (id: string, name: string): NormalizedTownship => ({
 });
 
 describe("joinTownshipData", () => {
-  it("joins nearest job center, commute minutes, and Gautrain station distance onto each feature by index/id", () => {
+  it("joins nearest job center, commute minutes, and transit distance onto each feature by index/id", () => {
     const townships = [township("A", "Alpha"), township("B", "Beta")];
     const nearest: NearestJobCenterResult[] = [
       { minutes: 23.5, jobCenterId: "menlyn", jobCenterName: "Menlyn" },
       { minutes: null, jobCenterId: null, jobCenterName: null },
     ];
-    const nearestGautrainStationKm = [4.2, null];
+    const nearestTransitKm = [4.2, null];
 
-    const result = joinTownshipData(
-      townships,
-      nearest,
-      nearestGautrainStationKm,
-    );
+    const result = joinTownshipData(townships, nearest, nearestTransitKm);
 
     expect(result).toHaveLength(2);
     const features = result as [TownshipFeature, TownshipFeature];
@@ -49,18 +45,18 @@ describe("joinTownshipData", () => {
       name: "Alpha",
       commuteMinutes: 23.5,
       nearestJobCenter: "Menlyn",
-      nearestGautrainStationKm: 4.2,
+      nearestTransitKm: 4.2,
     });
     expect(features[1].properties).toMatchObject({
       id: "B",
       commuteMinutes: null,
       nearestJobCenter: "",
-      nearestGautrainStationKm: null,
+      nearestTransitKm: null,
     });
     expect(features[0].geometry).toEqual(towns[0].geometry);
   });
 
-  it("sets nearestGautrainStationKm to null when no distance was computed", () => {
+  it("sets nearestTransitKm to null when no distance was computed", () => {
     const result = joinTownshipData(
       [township("A", "Alpha")],
       [
@@ -72,6 +68,6 @@ describe("joinTownshipData", () => {
       ],
     );
     const features = result as [TownshipFeature];
-    expect(features[0].properties.nearestGautrainStationKm).toBeNull();
+    expect(features[0].properties.nearestTransitKm).toBeNull();
   });
 });

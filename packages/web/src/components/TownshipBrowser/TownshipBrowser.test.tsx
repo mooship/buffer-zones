@@ -14,8 +14,7 @@ const townships = [
       commuteMinutes: 24,
       nearestJobCenter: "Hatfield",
       distanceKm: 18.2,
-      nearestGautrainStationKm: null,
-      nearestAReYengStopKm: null,
+      nearestTransitKm: null,
     },
   },
   {
@@ -27,7 +26,7 @@ const townships = [
       commuteMinutes: 42,
       nearestJobCenter: "Rosslyn",
       distanceKm: 21.4,
-      nearestGautrainStationKm: null,
+      nearestTransitKm: null,
       nearestAReYengStopKm: null,
     },
   },

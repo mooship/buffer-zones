@@ -5,7 +5,7 @@ import type { NearestJobCenterResult } from "./osrmClient";
 export function joinTownshipData(
   townships: NormalizedTownship[],
   nearestJobCenters: NearestJobCenterResult[],
-  nearestGautrainStationKm: (number | null)[] = [],
+  nearestTransitKm: (number | null)[] = [],
 ): TownshipFeature[] {
   return townships.map((township, index) => {
     const nearest = nearestJobCenters[index] ?? {
@@ -23,8 +23,7 @@ export function joinTownshipData(
         commuteMinutes: nearest.minutes,
         nearestJobCenter: nearest.jobCenterName ?? "",
         distanceKm: null,
-        nearestGautrainStationKm: nearestGautrainStationKm[index] ?? null,
-        nearestAReYengStopKm: null,
+        nearestTransitKm: nearestTransitKm[index] ?? null,
       },
     };
   });

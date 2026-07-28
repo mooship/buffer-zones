@@ -19,10 +19,10 @@ import { fetchPrasaRail, normalizePrasaOverpass } from "./adapters/prasa";
 import { JOB_CENTERS } from "./constants/jobCenters";
 import { createDisplayPolygons } from "./displayTownships";
 import { writeGeoJsonFile } from "./export";
-import { computeNearestGautrainStationKm } from "./gautrainDistance";
 import { joinTownshipData } from "./join";
 import { getNearestJobCenter } from "./osrmClient";
 import { createTownshipAreas } from "./townshipAreas";
+import { computeNearestTransitKm } from "./transitDistance";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = resolve(__dirname, "../../packages/web/public/data");
@@ -45,15 +45,36 @@ async function main() {
   const gautrain = normalizeGautrainOverpass(await fetchGautrainRail());
   await writeGeoJsonFile(resolve(OUTPUT_DIR, "gautrain.v1.geojson"), gautrain);
 
-  const nearestGautrainStationKm = computeNearestGautrainStationKm(
+  console.log("Fetching Gautrain bus routes via Overpass...");
+  const gautrainBus = normalizeGautrainBusOverpass(
+    await fetchGautrainBusRoutes(),
+  );
+  await writeGeoJsonFile(
+    resolve(OUTPUT_DIR, "gautrain-bus.v1.geojson"),
+    gautrainBus,
+  );
+
+  console.log("Fetching PRASA rail via Overpass...");
+  const prasa = normalizePrasaOverpass(await fetchPrasaRail());
+  await writeGeoJsonFile(resolve(OUTPUT_DIR, "prasa.v1.geojson"), prasa);
+
+  console.log("Fetching A Re Yeng routes...");
+  const rawAReYeng = await fetchAReYengRoutes();
+  const aReYeng =
+    "elements" in rawAReYeng
+      ? normalizeAReYengOverpass(rawAReYeng)
+      : normalizeAReYeng(rawAReYeng);
+  await writeGeoJsonFile(resolve(OUTPUT_DIR, "a-re-yeng.v1.geojson"), aReYeng);
+
+  const nearestTransitKm = computeNearestTransitKm(
     townships.map((t) => t.centroid),
-    gautrain,
+    [gautrain, gautrainBus, prasa, aReYeng],
   );
 
   const townshipFeatures = joinTownshipData(
     townships,
     nearestJobCenters,
-    nearestGautrainStationKm,
+    nearestTransitKm,
   );
   const townshipCollection = {
     type: "FeatureCollection",
@@ -78,27 +99,6 @@ async function main() {
     createDisplayPolygons(townshipAreas),
     { compact: true },
   );
-
-  console.log("Fetching Gautrain bus routes via Overpass...");
-  const gautrainBus = normalizeGautrainBusOverpass(
-    await fetchGautrainBusRoutes(),
-  );
-  await writeGeoJsonFile(
-    resolve(OUTPUT_DIR, "gautrain-bus.v1.geojson"),
-    gautrainBus,
-  );
-
-  console.log("Fetching PRASA rail via Overpass...");
-  const prasa = normalizePrasaOverpass(await fetchPrasaRail());
-  await writeGeoJsonFile(resolve(OUTPUT_DIR, "prasa.v1.geojson"), prasa);
-
-  console.log("Fetching A Re Yeng routes...");
-  const rawAReYeng = await fetchAReYengRoutes();
-  const aReYeng =
-    "elements" in rawAReYeng
-      ? normalizeAReYengOverpass(rawAReYeng)
-      : normalizeAReYeng(rawAReYeng);
-  await writeGeoJsonFile(resolve(OUTPUT_DIR, "a-re-yeng.v1.geojson"), aReYeng);
 
   console.log("Done.");
 }

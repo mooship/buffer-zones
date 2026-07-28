@@ -54,7 +54,7 @@ describe("App", () => {
           commuteMinutes: 20,
           nearestJobCenter: "Pretoria CBD",
           distanceKm: null,
-          nearestGautrainStationKm: null,
+          nearestTransitKm: null,
           nearestAReYengStopKm: null,
         },
         geometry: null,

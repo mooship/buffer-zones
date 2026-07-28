@@ -33,11 +33,11 @@ export function TownshipPopup({ properties }: TownshipPopupProps) {
             </dd>
           </>
         )}
-        {properties.nearestGautrainStationKm !== null && (
+        {properties.nearestTransitKm !== null && (
           <>
-            <dt>Distance to Gautrain</dt>
+            <dt>Distance to nearest transit</dt>
             <dd className={styles.value}>
-              {properties.nearestGautrainStationKm.toFixed(1)} km
+              {properties.nearestTransitKm.toFixed(1)} km
             </dd>
           </>
         )}

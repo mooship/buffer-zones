@@ -3,7 +3,7 @@ export type LayerId =
   | "gautrain"
   | "gautrain-bus"
   | "a-re-yeng"
-  | "gautrain-distance"
+  | "nearest-transit"
   | "myciti"
   | "prasa"
   | "rea-vaya"

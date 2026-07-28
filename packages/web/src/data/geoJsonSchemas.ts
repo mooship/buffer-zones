@@ -82,8 +82,7 @@ const townshipPropertiesSchema = z.looseObject({
   commuteMinutes: z.nullable(z.number()),
   nearestJobCenter: z.string(),
   distanceKm: z.nullable(z.number()),
-  nearestGautrainStationKm: z.nullable(z.number()),
-  nearestAReYengStopKm: z.nullable(z.number()),
+  nearestTransitKm: z.nullable(z.number()),
 });
 
 export const townshipFeatureCollectionSchema = z.looseObject({
