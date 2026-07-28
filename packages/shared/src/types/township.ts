@@ -7,7 +7,6 @@ export interface TownshipProperties {
   commuteMinutes: number | null;
   nearestJobCenter: string;
   distanceKm: number | null;
-  unemploymentRatePercent: number | null;
   nearestGautrainStationKm: number | null;
   nearestAReYengStopKm: number | null;
 }

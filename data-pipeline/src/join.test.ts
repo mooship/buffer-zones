@@ -24,15 +24,19 @@ const township = (id: string, name: string): NormalizedTownship => ({
 });
 
 describe("joinTownshipData", () => {
-  it("joins nearest job center, commute minutes, and unemployment rate onto each feature by index/id", () => {
+  it("joins nearest job center, commute minutes, and Gautrain station distance onto each feature by index/id", () => {
     const townships = [township("A", "Alpha"), township("B", "Beta")];
     const nearest: NearestJobCenterResult[] = [
       { minutes: 23.5, jobCenterId: "menlyn", jobCenterName: "Menlyn" },
       { minutes: null, jobCenterId: null, jobCenterName: null },
     ];
-    const unemployment = new Map([["A", 41.2]]);
+    const nearestGautrainStationKm = [4.2, null];
 
-    const result = joinTownshipData(townships, nearest, unemployment);
+    const result = joinTownshipData(
+      townships,
+      nearest,
+      nearestGautrainStationKm,
+    );
 
     expect(result).toHaveLength(2);
     const features = result as [TownshipFeature, TownshipFeature];
@@ -45,18 +49,18 @@ describe("joinTownshipData", () => {
       name: "Alpha",
       commuteMinutes: 23.5,
       nearestJobCenter: "Menlyn",
-      unemploymentRatePercent: 41.2,
+      nearestGautrainStationKm: 4.2,
     });
     expect(features[1].properties).toMatchObject({
       id: "B",
       commuteMinutes: null,
       nearestJobCenter: "",
-      unemploymentRatePercent: null,
+      nearestGautrainStationKm: null,
     });
     expect(features[0].geometry).toEqual(towns[0].geometry);
   });
 
-  it("sets unemploymentRatePercent to null for every feature when unemployment data is unavailable", () => {
+  it("sets nearestGautrainStationKm to null when no distance was computed", () => {
     const result = joinTownshipData(
       [township("A", "Alpha")],
       [
@@ -66,9 +70,8 @@ describe("joinTownshipData", () => {
           jobCenterName: "Pretoria CBD",
         },
       ],
-      null,
     );
     const features = result as [TownshipFeature];
-    expect(features[0].properties.unemploymentRatePercent).toBeNull();
+    expect(features[0].properties.nearestGautrainStationKm).toBeNull();
   });
 });

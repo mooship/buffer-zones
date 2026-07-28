@@ -12,13 +12,13 @@ export const LAYER_REGISTRY: LayerDefinition[] = [
     style: { kind: "choropleth", propertyKey: "commuteMinutes" },
   },
   {
-    id: "unemployment",
-    label: "Unemployment Rate",
+    id: "gautrain-distance",
+    label: "Distance to Gautrain Station",
     dataSource: "/data/townships.v1.geojson",
     layerType: "choropleth",
     defaultVisible: false,
-    available: false,
-    style: { kind: "choropleth", propertyKey: "unemploymentRatePercent" },
+    available: true,
+    style: { kind: "choropleth", propertyKey: "nearestGautrainStationKm" },
   },
   {
     id: "gautrain",

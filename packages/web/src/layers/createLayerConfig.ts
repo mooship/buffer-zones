@@ -3,7 +3,10 @@ import type { Feature } from "geojson";
 import type { PathOptions } from "leaflet";
 import { CHOROPLETH_STROKE, TOWNSHIP_FILL } from "../constants/layerStyles";
 import { getTownshipGroup } from "../constants/townships";
-import { commuteMinutesToColor } from "../utils/colorScale";
+import {
+  commuteMinutesToColor,
+  gautrainDistanceToColor,
+} from "../utils/colorScale";
 
 export interface LeafletLayerConfig {
   pathOptions?: PathOptions;
@@ -30,8 +33,12 @@ export function createLayerConfig(
             typeof name === "string" &&
             getTownshipGroup(name, typeof id === "string" ? id : undefined) !==
               undefined;
+          const colorFn =
+            style.propertyKey === "nearestGautrainStationKm"
+              ? gautrainDistanceToColor
+              : commuteMinutesToColor;
           return {
-            fillColor: commuteMinutesToColor(value),
+            fillColor: colorFn(value),
             fillOpacity: isTownship
               ? TOWNSHIP_FILL.fillOpacity
               : CHOROPLETH_STROKE.fillOpacity,

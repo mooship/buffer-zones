@@ -1,7 +1,10 @@
 import type { LayerDefinition } from "@buffer-zones/shared";
 import type { Feature } from "geojson";
 import { describe, expect, it } from "vitest";
-import { COMMUTE_BUCKET_COLORS } from "../constants/colorScale";
+import {
+  COMMUTE_BUCKET_COLORS,
+  GAUTRAIN_DISTANCE_BUCKET_COLORS,
+} from "../constants/colorScale";
 import { createLayerConfig } from "./createLayerConfig";
 
 describe("createLayerConfig", () => {
@@ -71,6 +74,29 @@ describe("createLayerConfig", () => {
     expect(createLayerConfig(definition).styleFn?.(feature)).toMatchObject({
       weight: 0,
       fillOpacity: 0.78,
+    });
+  });
+
+  it("produces a styleFn for a choropleth layer that colors by nearestGautrainStationKm", () => {
+    const definition: LayerDefinition = {
+      id: "gautrain-distance",
+      label: "Distance to Gautrain Station",
+      dataSource: "/data/townships.v1.geojson",
+      layerType: "choropleth",
+      defaultVisible: false,
+      available: true,
+      style: { kind: "choropleth", propertyKey: "nearestGautrainStationKm" },
+    };
+
+    const config = createLayerConfig(definition);
+    const feature = {
+      type: "Feature",
+      properties: { nearestGautrainStationKm: 30 },
+      geometry: null,
+    } as unknown as Feature;
+
+    expect(config.styleFn?.(feature)).toMatchObject({
+      fillColor: GAUTRAIN_DISTANCE_BUCKET_COLORS.veryFar,
     });
   });
 

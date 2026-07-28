@@ -11,3 +11,17 @@ export const COMMUTE_BUCKET_COLORS = {
   veryLong: "#C1502E",
   noData: "#8A93A5",
 } as const;
+
+export const GAUTRAIN_DISTANCE_BUCKET_BREAKPOINTS = {
+  near: 3,
+  moderate: 8,
+  far: 20,
+} as const;
+
+export const GAUTRAIN_DISTANCE_BUCKET_COLORS = {
+  near: "#D9CBEF",
+  moderate: "#B79BE0",
+  far: "#8F5FD1",
+  veryFar: "#5C2EA0",
+  noData: "#8A93A5",
+} as const;

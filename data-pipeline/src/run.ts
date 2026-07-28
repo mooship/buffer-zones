@@ -16,10 +16,10 @@ import {
   normalizeGautrainOverpass,
 } from "./adapters/gautrain";
 import { fetchPrasaRail, normalizePrasaOverpass } from "./adapters/prasa";
-import { fetchUnemploymentData } from "./adapters/unemployment";
 import { JOB_CENTERS } from "./constants/jobCenters";
 import { createDisplayPolygons } from "./displayTownships";
 import { writeGeoJsonFile } from "./export";
+import { computeNearestGautrainStationKm } from "./gautrainDistance";
 import { joinTownshipData } from "./join";
 import { getNearestJobCenter } from "./osrmClient";
 import { createTownshipAreas } from "./townshipAreas";
@@ -41,18 +41,19 @@ async function main() {
     JOB_CENTERS,
   );
 
-  console.log("Fetching unemployment data (best-effort)...");
-  const unemployment = await fetchUnemploymentData();
-  if (!unemployment) {
-    console.log(
-      "  No usable unemployment source found — layer will ship empty.",
-    );
-  }
+  console.log("Fetching Gautrain rail via Overpass...");
+  const gautrain = normalizeGautrainOverpass(await fetchGautrainRail());
+  await writeGeoJsonFile(resolve(OUTPUT_DIR, "gautrain.v1.geojson"), gautrain);
+
+  const nearestGautrainStationKm = computeNearestGautrainStationKm(
+    townships.map((t) => t.centroid),
+    gautrain,
+  );
 
   const townshipFeatures = joinTownshipData(
     townships,
     nearestJobCenters,
-    unemployment,
+    nearestGautrainStationKm,
   );
   const townshipCollection = {
     type: "FeatureCollection",
@@ -77,10 +78,6 @@ async function main() {
     createDisplayPolygons(townshipAreas),
     { compact: true },
   );
-
-  console.log("Fetching Gautrain rail via Overpass...");
-  const gautrain = normalizeGautrainOverpass(await fetchGautrainRail());
-  await writeGeoJsonFile(resolve(OUTPUT_DIR, "gautrain.v1.geojson"), gautrain);
 
   console.log("Fetching Gautrain bus routes via Overpass...");
   const gautrainBus = normalizeGautrainBusOverpass(

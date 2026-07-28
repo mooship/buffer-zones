@@ -7,7 +7,7 @@ const ALL_LAYER_IDS: LayerId[] = [
   "gautrain",
   "gautrain-bus",
   "a-re-yeng",
-  "unemployment",
+  "gautrain-distance",
   "myciti",
   "prasa",
   "rea-vaya",
@@ -31,7 +31,14 @@ describe("LAYER_REGISTRY", () => {
       (layer) => layer.id,
     );
     expect(available.sort()).toEqual(
-      ["a-re-yeng", "gautrain", "gautrain-bus", "prasa", "townships"].sort(),
+      [
+        "a-re-yeng",
+        "gautrain",
+        "gautrain-bus",
+        "gautrain-distance",
+        "prasa",
+        "townships",
+      ].sort(),
     );
   });
 

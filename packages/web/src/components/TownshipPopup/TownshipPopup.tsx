@@ -33,11 +33,11 @@ export function TownshipPopup({ properties }: TownshipPopupProps) {
             </dd>
           </>
         )}
-        {properties.unemploymentRatePercent !== null && (
+        {properties.nearestGautrainStationKm !== null && (
           <>
-            <dt>Unemployment</dt>
+            <dt>Distance to Gautrain</dt>
             <dd className={styles.value}>
-              {properties.unemploymentRatePercent.toFixed(1)}%
+              {properties.nearestGautrainStationKm.toFixed(1)} km
             </dd>
           </>
         )}
