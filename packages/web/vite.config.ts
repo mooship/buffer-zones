@@ -1,0 +1,18 @@
+import react from "@vitejs/plugin-react";
+import { FontaineTransform } from "fontaine";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [
+    react(),
+    FontaineTransform.vite({
+      fallbacks: ["Arial", "sans-serif"],
+      resolvePath: (id) => new URL(`./node_modules/${id}`, import.meta.url),
+    }),
+  ],
+  test: {
+    environment: "happy-dom",
+    setupFiles: ["./vitest.setup.ts"],
+    globals: true,
+  },
+});

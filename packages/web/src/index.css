@@ -1,0 +1,10 @@
+:root {
+  --font-display: "Fraunces Variable", serif;
+  --font-body: "Bricolage Grotesque Variable", sans-serif;
+  --font-mono: "Martian Mono Variable", monospace;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+}

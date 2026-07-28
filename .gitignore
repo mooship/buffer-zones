@@ -5,3 +5,4 @@ dist
 .wrangler
 *.log
 data-pipeline/downloads/
+*.tsbuildinfo
