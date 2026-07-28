@@ -22,6 +22,11 @@ export function EvidenceSummary() {
         reachable within 45, 60 and 90 minutes by public transport, including
         walking, waiting and transfers.
       </p>
+      <p className={styles.method}>
+        Included township and settlement areas are a documented working
+        classification built from Census 2011 main places and named sub-places,
+        not an official Stats SA township category.
+      </p>
       <a
         className={styles.source}
         href="https://sahistory.org.za/ref/A-0098760"

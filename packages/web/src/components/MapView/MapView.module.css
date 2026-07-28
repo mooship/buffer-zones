@@ -26,3 +26,15 @@
 .townshipLabel::before {
   display: none;
 }
+
+.townshipLabelSecondary {
+  display: none;
+  background: rgb(242 237 230 / 76%);
+  font-size: 9px;
+  font-weight: 600;
+  opacity: 0.82;
+}
+
+.showSecondaryLabels .townshipLabelSecondary {
+  display: block;
+}

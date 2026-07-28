@@ -46,4 +46,34 @@ describe("createTownshipAreas", () => {
     expect(result.features).toHaveLength(1);
     expect(result.features[0]?.properties.name).toBe("Temba");
   });
+
+  it("publishes classification metadata and excludes non-residential sub-places", () => {
+    const result = createTownshipAreas([
+      township("Ekangala SP", 0, "799055001"),
+      township("Ekangala Section A", 1, "799055002"),
+      township("Ekandustria", 2, "799055007"),
+    ]);
+
+    expect(result.features).toHaveLength(1);
+    expect(result.features[0]?.properties).toEqual({
+      id: "ekangala",
+      name: "Ekangala",
+      labelPriority: "secondary",
+      selectionBasis: "census-main-place",
+      subPlaceCount: 2,
+    });
+  });
+
+  it("selects named township sub-places without dissolving their mixed main place", () => {
+    const result = createTownshipAreas([
+      township("Lotus Gardens", 0, "799047004"),
+      township("Lotus Gardens Ext 2", 1, "799047005"),
+      township("Pretoria Central", 2, "799047071"),
+    ]);
+
+    const lotusGardens = result.features.find(
+      (feature) => feature.properties.name === "Lotus Gardens",
+    );
+    expect(lotusGardens?.properties.subPlaceCount).toBe(2);
+  });
 });

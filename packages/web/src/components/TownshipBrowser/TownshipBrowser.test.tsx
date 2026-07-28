@@ -59,7 +59,7 @@ describe("TownshipBrowser", () => {
       screen.queryByRole("button", { name: /soshanguve/i }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByText(/1 township area · 1 census sub-place/i),
+      screen.getByText(/1 included area · 1 census sub-place/i),
     ).toBeInTheDocument();
   });
 

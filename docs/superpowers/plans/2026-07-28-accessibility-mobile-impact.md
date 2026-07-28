@@ -13,7 +13,7 @@ Make the Tshwane experience usable without a mouse or visual map, resilient on p
 - Lead with the spatial-planning story rather than configuration controls.
 - Use a complete three-tab keyboard interaction model.
 - Add a searchable, text-first township comparison linked to map selection.
-- Group Census sub-place analysis units under the eight outlined township areas instead of labeling all Tshwane sub-places as townships.
+- Group Census sub-place analysis units under a documented, versioned set of included township and settlement areas instead of labeling all Tshwane sub-places as townships.
 - Increase primary controls and Leaflet zoom controls to mobile-sized targets.
 - Turn the mobile panel into a bounded, internally scrolling bottom sheet.
 - Keep low-priority data sources in a disclosure within the evidence panel.

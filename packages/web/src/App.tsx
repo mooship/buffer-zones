@@ -226,7 +226,7 @@ export function App() {
           ) : null}
           {panelView === "places" ? (
             <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Township evidence</h2>
+              <h2 className={styles.sectionTitle}>Included areas</h2>
               <TownshipBrowser
                 townships={townships}
                 selectedTownshipId={selectedTownshipId}

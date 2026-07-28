@@ -85,8 +85,9 @@ export function TownshipBrowser({
         The choropleth compares all {townships.length.toLocaleString("en-ZA")}{" "}
         Tshwane Census 2011 sub-places.{" "}
         {townshipSubPlaceCount.toLocaleString("en-ZA")} sit within the{" "}
-        {TOWNSHIP_GROUPS.length} township areas outlined and listed here; the
-        rest provide citywide comparison.
+        {TOWNSHIP_GROUPS.length} currently included township and settlement
+        areas outlined here; the rest provide citywide comparison. This is a
+        documented working classification, not an official Stats SA category.
       </p>
       <label className={styles.search}>
         <span className={styles.visuallyHidden}>Search townships</span>
@@ -107,7 +108,7 @@ export function TownshipBrowser({
 
       <p className={styles.resultCount} aria-live="polite">
         {groups.length}{" "}
-        {groups.length === 1 ? "township area" : "township areas"}
+        {groups.length === 1 ? "included area" : "included areas"}
         {" · "}
         {resultCount} Census {resultCount === 1 ? "sub-place" : "sub-places"}
       </p>

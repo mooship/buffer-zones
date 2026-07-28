@@ -1,6 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { type ReactNode, forwardRef } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+const mapMocks = vi.hoisted(() => ({
+  fitBounds: vi.fn(),
+  invalidateSize: vi.fn(),
+}));
 
 vi.mock("react-leaflet", () => ({
   MapContainer: ({
@@ -26,7 +31,12 @@ vi.mock("react-leaflet", () => ({
     </div>
   )),
   useMap: () => ({
-    fitBounds: vi.fn(),
+    fitBounds: mapMocks.fitBounds,
+    invalidateSize: mapMocks.invalidateSize,
+    getContainer: () => document.createElement("div"),
+    getZoom: () => 9,
+    on: vi.fn(),
+    off: vi.fn(),
   }),
   Pane: () => null,
   ZoomControl: () => <div data-testid="zoom-control" />,
@@ -44,6 +54,8 @@ const townships = [
 
 describe("MapView", () => {
   afterEach(() => {
+    mapMocks.fitBounds.mockReset();
+    mapMocks.invalidateSize.mockReset();
     vi.unstubAllGlobals();
   });
 
@@ -141,5 +153,22 @@ describe("MapView", () => {
     render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
+  });
+
+  it("refits the full area bounds when crossing the mobile breakpoint", () => {
+    vi.stubGlobal("innerWidth", 1024);
+    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+
+    vi.stubGlobal("innerWidth", 390);
+    fireEvent(window, new Event("resize"));
+
+    expect(mapMocks.invalidateSize).toHaveBeenCalledWith({ animate: false });
+    expect(mapMocks.fitBounds).toHaveBeenCalledWith(
+      [
+        [-25.95, 27.92],
+        [-25.33, 28.79],
+      ],
+      { padding: [24, 24] },
+    );
   });
 });

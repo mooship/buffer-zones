@@ -14,7 +14,14 @@ vi.mock("react-leaflet", () => ({
   ),
   Pane: () => null,
   ZoomControl: () => null,
-  useMap: () => ({ fitBounds: vi.fn() }),
+  useMap: () => ({
+    fitBounds: vi.fn(),
+    invalidateSize: vi.fn(),
+    getContainer: () => document.createElement("div"),
+    getZoom: () => 9,
+    on: vi.fn(),
+    off: vi.fn(),
+  }),
 }));
 
 vi.mock("./data/fetchFeatureCollection", () => ({

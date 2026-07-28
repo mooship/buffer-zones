@@ -38,13 +38,23 @@ interface MapViewProps {
 }
 
 const TOWNSHIP_BOUNDS: [[number, number], [number, number]] = [
-  [-25.84, 27.92],
-  [-25.33, 28.5],
+  [-25.95, 27.92],
+  [-25.33, 28.79],
 ];
 const STOP_RADIUS = 4;
 const TOWNSHIP_PANE = "townships";
 const TOWNSHIP_OUTLINE_PANE = "township-outlines";
 const TRANSIT_PANE = "transit";
+const MOBILE_BREAKPOINT_PX = 768;
+
+function getBoundsOptions(desktop: boolean) {
+  return desktop
+    ? {
+        paddingTopLeft: [32, 96] as [number, number],
+        paddingBottomRight: [540, 48] as [number, number],
+      }
+    : { padding: [24, 24] as [number, number] };
+}
 
 function bindTownshipPopup(
   feature: Feature,
@@ -100,15 +110,66 @@ function TownshipSelection({
   return null;
 }
 
+function AreaLabelVisibility() {
+  const map = useMap();
+  const secondaryLabelsClass = styles.showSecondaryLabels;
+
+  useEffect(() => {
+    if (!secondaryLabelsClass) {
+      return;
+    }
+    const updateVisibility = () => {
+      map
+        .getContainer()
+        .classList.toggle(secondaryLabelsClass, map.getZoom() >= 12);
+    };
+    map.on("zoomend", updateVisibility);
+    updateVisibility();
+    return () => {
+      map.off("zoomend", updateVisibility);
+    };
+  }, [map, secondaryLabelsClass]);
+
+  return null;
+}
+
+function ResponsiveMapBounds() {
+  const map = useMap();
+  const desktopRef = useRef(window.innerWidth > MOBILE_BREAKPOINT_PX);
+
+  useEffect(() => {
+    const handleResize = () => {
+      map.invalidateSize({ animate: false });
+      const desktop = window.innerWidth > MOBILE_BREAKPOINT_PX;
+      if (desktop === desktopRef.current) {
+        return;
+      }
+      desktopRef.current = desktop;
+      map.fitBounds(TOWNSHIP_BOUNDS, getBoundsOptions(desktop));
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [map]);
+
+  return null;
+}
+
 function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
   const name = feature.properties?.name;
+  const labelPriority = feature.properties?.labelPriority;
   if (typeof name !== "string") {
     return;
   }
   layer.bindTooltip(name, {
     permanent: true,
     direction: "center",
-    className: styles.townshipLabel,
+    ...(feature.properties?.id === "saulsville"
+      ? { offset: [0, 18] as [number, number] }
+      : {}),
+    className:
+      labelPriority === "secondary"
+        ? `${styles.townshipLabel} ${styles.townshipLabelSecondary}`
+        : styles.townshipLabel,
   });
 }
 
@@ -135,13 +196,9 @@ export function MapView({
     type: "FeatureCollection",
     features: townshipAreas,
   };
-  const boundsOptions =
-    window.innerWidth > 768
-      ? {
-          paddingTopLeft: [32, 96] as [number, number],
-          paddingBottomRight: [540, 48] as [number, number],
-        }
-      : { padding: [24, 24] as [number, number] };
+  const boundsOptions = getBoundsOptions(
+    window.innerWidth > MOBILE_BREAKPOINT_PX,
+  );
 
   return (
     <section
@@ -168,11 +225,17 @@ export function MapView({
           <GeoJSON
             data={townshipAreaData}
             pathOptions={{
-              ...TOWNSHIP_OUTLINE,
               pane: TOWNSHIP_OUTLINE_PANE,
               fillOpacity: 0,
               interactive: false,
             }}
+            style={(feature) => ({
+              ...TOWNSHIP_OUTLINE,
+              opacity:
+                feature?.properties?.labelPriority === "secondary" ? 0.72 : 1,
+              weight:
+                feature?.properties?.labelPriority === "secondary" ? 2 : 4,
+            })}
             onEachFeature={bindTownshipAreaLabel}
           />
         ) : null}
@@ -220,6 +283,8 @@ export function MapView({
           selectedTownshipId={selectedTownshipId}
           townshipLayer={townshipLayerRef}
         />
+        <AreaLabelVisibility />
+        <ResponsiveMapBounds />
       </MapContainer>
     </section>
   );
