@@ -8,3 +8,21 @@
   width: 100%;
   background: var(--color-ink);
 }
+
+.townshipLabel {
+  padding: 3px 6px;
+  border: 1px solid rgb(36 25 52 / 70%);
+  border-radius: 2px;
+  background: rgb(242 237 230 / 88%);
+  box-shadow: none;
+  color: #241934;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  pointer-events: none;
+}
+
+.townshipLabel::before {
+  display: none;
+}

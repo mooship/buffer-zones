@@ -1,0 +1,46 @@
+.summary {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.context,
+.method {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.context {
+  max-width: 58ch;
+  color: var(--color-paper);
+  font-size: 0.875rem;
+}
+
+.limitation {
+  display: grid;
+  gap: 0.375rem;
+  padding: 0.875rem 0;
+  border-block: 1px solid color-mix(in srgb, var(--color-line) 55%, transparent);
+  color: var(--color-paper);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.limitation strong {
+  color: var(--color-redearth);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
+
+.method {
+  max-width: 62ch;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.source {
+  width: fit-content;
+  color: var(--color-paper);
+  font-size: 0.6875rem;
+  text-underline-offset: 0.2em;
+}

@@ -13,6 +13,11 @@ const TSHWANE_BBOX = "-25.95,28.05,-25.55,28.40";
 const PRASA_QUERY = `
 [out:json][timeout:60];
 (
+  relation["route"="train"]["operator"~"PRASA|Metrorail",i](${TSHWANE_BBOX});
+  relation["route"="train"]["network"~"Metrorail",i](${TSHWANE_BBOX});
+)->.routes;
+(
+  way(r.routes);
   way["railway"="rail"]["operator"~"PRASA|Metrorail",i](${TSHWANE_BBOX});
   node["railway"="station"]["network"~"Metrorail",i](${TSHWANE_BBOX});
   node["railway"="station"]["operator"~"PRASA|Metrorail",i](${TSHWANE_BBOX});

@@ -8,7 +8,7 @@ describe("createLayerConfig", () => {
   it("produces a styleFn for a choropleth layer that colors by commuteMinutes", () => {
     const definition: LayerDefinition = {
       id: "townships",
-      label: "Commute Time",
+      label: "Modeled car time",
       dataSource: "/data/townships.v1.geojson",
       layerType: "choropleth",
       defaultVisible: true,
@@ -32,7 +32,7 @@ describe("createLayerConfig", () => {
   it("styles a choropleth feature with a missing value as no-data", () => {
     const definition: LayerDefinition = {
       id: "townships",
-      label: "Commute Time",
+      label: "Modeled car time",
       dataSource: "/data/townships.v1.geojson",
       layerType: "choropleth",
       defaultVisible: true,
@@ -52,6 +52,28 @@ describe("createLayerConfig", () => {
     });
   });
 
+  it("gives recognized township sub-places a prominent boundary", () => {
+    const definition: LayerDefinition = {
+      id: "townships",
+      label: "Modeled car time",
+      dataSource: "/data/townships.v1.geojson",
+      layerType: "choropleth",
+      defaultVisible: true,
+      available: true,
+      style: { kind: "choropleth", propertyKey: "commuteMinutes" },
+    };
+    const feature = {
+      type: "Feature",
+      properties: { name: "Mamelodi Ext 17", commuteMinutes: 35 },
+      geometry: null,
+    } as unknown as Feature;
+
+    expect(createLayerConfig(definition).styleFn?.(feature)).toMatchObject({
+      weight: 0,
+      fillOpacity: 0.78,
+    });
+  });
+
   it("produces static pathOptions for a line layer", () => {
     const definition: LayerDefinition = {
       id: "gautrain",
@@ -65,7 +87,13 @@ describe("createLayerConfig", () => {
 
     const config = createLayerConfig(definition);
 
-    expect(config.pathOptions).toEqual({ color: "#A87FE0", weight: 3 });
+    expect(config.pathOptions).toEqual({
+      color: "#A87FE0",
+      weight: 3,
+      opacity: 0.95,
+      lineCap: "round",
+      lineJoin: "round",
+    });
     expect(config.styleFn).toBeUndefined();
   });
 

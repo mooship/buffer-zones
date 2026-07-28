@@ -1,4 +1,5 @@
 import { COMMUTE_BUCKET_COLORS } from "../../constants/colorScale";
+import { LAYER_REGISTRY } from "../../layers/registry";
 import styles from "./Legend.module.css";
 
 const ENTRIES = [
@@ -9,22 +10,48 @@ const ENTRIES = [
   { label: "No data", color: COMMUTE_BUCKET_COLORS.noData },
 ] as const;
 
+const TRANSIT_ENTRIES = LAYER_REGISTRY.flatMap((layer) =>
+  layer.available && layer.style?.kind === "line"
+    ? [{ label: layer.label, color: layer.style.color }]
+    : [],
+);
+
 export function Legend() {
   return (
-    <ul
-      className={styles.legend}
-      aria-label="Commute time to nearest job centre"
-    >
-      {ENTRIES.map((entry) => (
-        <li key={entry.label} className={styles.entry}>
-          <span
-            className={styles.swatch}
-            style={{ backgroundColor: entry.color }}
-            aria-hidden="true"
-          />
-          <span className={styles.label}>{entry.label}</span>
-        </li>
-      ))}
-    </ul>
+    <div className={styles.groups}>
+      <div>
+        <h3 className={styles.groupTitle}>Modeled car time</h3>
+        <ul
+          className={styles.legend}
+          aria-label="Modeled car time to nearest job centre"
+        >
+          {ENTRIES.map((entry) => (
+            <li key={entry.label} className={styles.entry}>
+              <span
+                className={styles.swatch}
+                style={{ backgroundColor: entry.color }}
+                aria-hidden="true"
+              />
+              <span className={styles.label}>{entry.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 className={styles.groupTitle}>Transit routes</h3>
+        <ul className={styles.legend} aria-label="Transit route colors">
+          {TRANSIT_ENTRIES.map((entry) => (
+            <li key={entry.label} className={styles.entry}>
+              <span
+                className={styles.lineSwatch}
+                style={{ backgroundColor: entry.color }}
+                aria-hidden="true"
+              />
+              <span className={styles.label}>{entry.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

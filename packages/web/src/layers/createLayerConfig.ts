@@ -1,7 +1,8 @@
 import type { LayerDefinition } from "@buffer-zones/shared";
 import type { Feature } from "geojson";
 import type { PathOptions } from "leaflet";
-import { CHOROPLETH_STROKE } from "../constants/layerStyles";
+import { CHOROPLETH_STROKE, TOWNSHIP_FILL } from "../constants/layerStyles";
+import { getTownshipGroup } from "../constants/townships";
 import { commuteMinutesToColor } from "../utils/colorScale";
 
 export interface LeafletLayerConfig {
@@ -23,16 +24,31 @@ export function createLayerConfig(
         styleFn: (feature) => {
           const raw = feature?.properties?.[style.propertyKey];
           const value = typeof raw === "number" ? raw : null;
+          const name = feature?.properties?.name;
+          const id = feature?.properties?.id;
+          const isTownship =
+            typeof name === "string" &&
+            getTownshipGroup(name, typeof id === "string" ? id : undefined) !==
+              undefined;
           return {
             fillColor: commuteMinutesToColor(value),
-            fillOpacity: CHOROPLETH_STROKE.fillOpacity,
+            fillOpacity: isTownship
+              ? TOWNSHIP_FILL.fillOpacity
+              : CHOROPLETH_STROKE.fillOpacity,
             weight: CHOROPLETH_STROKE.weight,
-            color: CHOROPLETH_STROKE.color,
           };
         },
       };
     case "line":
-      return { pathOptions: { color: style.color, weight: style.weight } };
+      return {
+        pathOptions: {
+          color: style.color,
+          weight: style.weight,
+          opacity: 0.95,
+          lineCap: "round",
+          lineJoin: "round",
+        },
+      };
     case "point":
       return { pathOptions: { color: style.color, fillColor: style.color } };
   }

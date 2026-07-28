@@ -1,5 +1,13 @@
-import { describe, expect, it } from "vitest";
-import { normalizeAReYeng, normalizeAReYengOverpass } from "./aReYeng";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  fetchAReYengRoutes,
+  normalizeAReYeng,
+  normalizeAReYengOverpass,
+} from "./aReYeng";
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe("normalizeAReYeng", () => {
   it("normalizes a raw open-data-portal route feature into the common TransitLayer shape", () => {
@@ -114,5 +122,23 @@ describe("normalizeAReYengOverpass", () => {
       name: "Line 1A",
       network: "A Re Yeng",
     });
+  });
+});
+
+describe("fetchAReYengRoutes", () => {
+  it("fetches only the official trunk route layer", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        type: "FeatureCollection",
+        features: [],
+      }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await fetchAReYengRoutes();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/8/query"));
   });
 });

@@ -5,6 +5,7 @@ import { LAYER_REGISTRY, getLayerDefinition } from "./registry";
 const ALL_LAYER_IDS: LayerId[] = [
   "townships",
   "gautrain",
+  "gautrain-bus",
   "a-re-yeng",
   "unemployment",
   "myciti",
@@ -30,7 +31,7 @@ describe("LAYER_REGISTRY", () => {
       (layer) => layer.id,
     );
     expect(available.sort()).toEqual(
-      ["a-re-yeng", "gautrain", "prasa", "townships"].sort(),
+      ["a-re-yeng", "gautrain", "gautrain-bus", "prasa", "townships"].sort(),
     );
   });
 

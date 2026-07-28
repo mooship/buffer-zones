@@ -7,7 +7,7 @@ describe("LayerToggles", () => {
     render(<LayerToggles visibleLayerIds={["townships"]} onToggle={vi.fn()} />);
 
     expect(
-      screen.getByRole("checkbox", { name: "Commute Time" }),
+      screen.getByRole("checkbox", { name: "Modeled car time" }),
     ).toBeChecked();
     expect(
       screen.getByRole("checkbox", { name: "Gautrain" }),
@@ -18,7 +18,7 @@ describe("LayerToggles", () => {
     const onToggle = vi.fn();
     render(<LayerToggles visibleLayerIds={[]} onToggle={onToggle} />);
 
-    fireEvent.click(screen.getByRole("checkbox", { name: "A Re Yeng" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "A Re Yeng trunk" }));
 
     expect(onToggle).toHaveBeenCalledWith("a-re-yeng");
   });

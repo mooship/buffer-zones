@@ -3,15 +3,33 @@ import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("react-leaflet", () => ({
-  MapContainer: ({ children }: { children: ReactNode }) => (
-    <div data-testid="map-container">{children}</div>
+  MapContainer: ({
+    bounds,
+    children,
+  }: {
+    bounds: unknown;
+    children: ReactNode;
+  }) => (
+    <div data-testid="map-container" data-has-bounds={String(Boolean(bounds))}>
+      {children}
+    </div>
   ),
   TileLayer: ({ url }: { url: string }) => (
     <div data-testid="tile-layer">{url}</div>
   ),
-  GeoJSON: ({ data }: { data: { features: unknown[] } }) => (
-    <div data-testid="geojson-layer">{data.features.length} features</div>
+  GeoJSON: ({
+    data,
+    pathOptions,
+  }: {
+    data: { features: unknown[] };
+    pathOptions?: { pane?: string };
+  }) => (
+    <div data-testid="geojson-layer" data-pane={pathOptions?.pane}>
+      {data.features.length} features
+    </div>
   ),
+  Pane: () => null,
+  ZoomControl: () => <div data-testid="zoom-control" />,
 }));
 
 import { MapView } from "./MapView";
@@ -33,6 +51,10 @@ describe("MapView", () => {
     render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
 
     expect(screen.getByTestId("map-container")).toBeInTheDocument();
+    expect(screen.getByTestId("map-container")).toHaveAttribute(
+      "data-has-bounds",
+      "true",
+    );
     expect(screen.getByTestId("tile-layer")).toBeInTheDocument();
     expect(screen.getAllByTestId("geojson-layer")).toHaveLength(1);
   });
@@ -41,6 +63,18 @@ describe("MapView", () => {
     render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
+  });
+
+  it("waits for township data before mounting the choropleth", () => {
+    const { rerender } = render(
+      <MapView townships={[]} visibleLayerIds={["townships"]} />,
+    );
+
+    expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
+
+    rerender(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+
+    expect(screen.getByTestId("geojson-layer")).toHaveTextContent("1 features");
   });
 
   it("does not render a layer that has no data available yet", () => {
@@ -63,8 +97,44 @@ describe("MapView", () => {
 
     render(<MapView townships={[]} visibleLayerIds={["gautrain"]} />);
 
-    expect(await screen.findByText("1 features")).toBeInTheDocument();
+    expect(await screen.findByText("1 features")).toHaveAttribute(
+      "data-pane",
+      "transit",
+    );
     expect(fetch).toHaveBeenCalledWith("/data/gautrain.v1.geojson");
+  });
+
+  it("keeps township polygons in the pane below transit overlays", () => {
+    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+
+    expect(screen.getByTestId("geojson-layer")).toHaveAttribute(
+      "data-pane",
+      "townships",
+    );
+  });
+
+  it("renders dissolved township borders in a separate outline pane", () => {
+    const townshipAreas = [
+      {
+        type: "Feature",
+        properties: { name: "Mamelodi" },
+        geometry: null,
+      },
+    ] as never;
+
+    render(
+      <MapView
+        townships={townships}
+        townshipAreas={townshipAreas}
+        visibleLayerIds={["townships"]}
+      />,
+    );
+
+    expect(
+      screen
+        .getAllByTestId("geojson-layer")
+        .some((layer) => layer.dataset.pane === "township-outlines"),
+    ).toBe(true);
   });
 
   it("switches tile source when the satellite basemap is selected", () => {

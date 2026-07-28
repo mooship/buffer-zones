@@ -1,9 +1,11 @@
 import type { LayerId, TownshipFeature } from "@buffer-zones/shared";
 import clsx from "clsx";
+import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import styles from "./App.module.css";
 import { BasemapToggle } from "./components/BasemapToggle/BasemapToggle";
+import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { Legend } from "./components/Legend/Legend";
 import { MapView } from "./components/MapView/MapView";
@@ -15,6 +17,7 @@ import {
   DATA_SOURCES,
 } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
+import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
 import { LAYER_REGISTRY } from "./layers/registry";
 
 const repository = createTownshipDataRepository("/data/townships.v1.geojson");
@@ -23,19 +26,30 @@ const DEFAULT_VISIBLE_LAYER_IDS: LayerId[] = LAYER_REGISTRY.filter(
   (layer) => layer.defaultVisible,
 ).map((layer) => layer.id);
 
+const MOBILE_BREAKPOINT_PX = 768;
+type PanelView = "evidence" | "layers";
+
 export function App() {
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
+  const [townshipAreas, setTownshipAreas] = useState<Feature[]>([]);
   const [visibleLayerIds, setVisibleLayerIds] = useState<LayerId[]>(
     DEFAULT_VISIBLE_LAYER_IDS,
   );
   const [basemap, setBasemap] = useState<Basemap>("street");
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(
+    () => window.innerWidth > MOBILE_BREAKPOINT_PX,
+  );
+  const [panelView, setPanelView] = useState<PanelView>("layers");
 
   useEffect(() => {
     let cancelled = false;
-    repository.getTownships().then((features) => {
+    Promise.all([
+      repository.getTownships(),
+      fetchFeatureCollection("/data/township-areas.v1.geojson"),
+    ]).then(([features, areas]) => {
       if (!cancelled) {
         setTownships(features);
+        setTownshipAreas(areas.features);
       }
     });
     return () => {
@@ -55,6 +69,7 @@ export function App() {
     <div className={styles.app}>
       <MapView
         townships={townships}
+        townshipAreas={townshipAreas}
         visibleLayerIds={visibleLayerIds}
         basemap={basemap}
       />
@@ -78,27 +93,54 @@ export function App() {
 
       <aside
         id="map-controls"
-        className={clsx(
-          styles.panel,
-          styles.ticked,
-          panelOpen && styles.panelOpen,
-        )}
+        className={clsx(styles.panel, styles.ticked)}
+        hidden={!panelOpen}
       >
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Commute time</h2>
-          <Legend />
-        </section>
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Layers</h2>
-          <LayerToggles
-            visibleLayerIds={visibleLayerIds}
-            onToggle={handleToggle}
-          />
-        </section>
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Basemap</h2>
-          <BasemapToggle basemap={basemap} onChange={setBasemap} />
-        </section>
+        <div className={styles.panelTabs} role="tablist" aria-label="Map panel">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={panelView === "layers"}
+            className={styles.panelTab}
+            onClick={() => setPanelView("layers")}
+          >
+            Map layers
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={panelView === "evidence"}
+            className={styles.panelTab}
+            onClick={() => setPanelView("evidence")}
+          >
+            Evidence
+          </button>
+        </div>
+
+        {panelView === "evidence" ? (
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>Why this map exists</h2>
+            <EvidenceSummary />
+          </section>
+        ) : (
+          <div className={styles.panelContent}>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>Map legend</h2>
+              <Legend />
+            </section>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>Layers</h2>
+              <LayerToggles
+                visibleLayerIds={visibleLayerIds}
+                onToggle={handleToggle}
+              />
+            </section>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>Basemap</h2>
+              <BasemapToggle basemap={basemap} onChange={setBasemap} />
+            </section>
+          </div>
+        )}
       </aside>
 
       <footer className={styles.attribution}>

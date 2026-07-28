@@ -11,7 +11,7 @@ export function TownshipPopup({ properties }: TownshipPopupProps) {
     <div className={styles.popup}>
       <h2 className={styles.name}>{properties.name}</h2>
       <dl className={styles.rows}>
-        <dt>Commute</dt>
+        <dt>Modeled car time</dt>
         <dd className={styles.value}>
           {formatCommuteTime(properties.commuteMinutes)}
         </dd>

@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchOverpass, normalizeGautrainOverpass } from "./gautrain";
+import {
+  fetchOverpass,
+  normalizeGautrainBusOverpass,
+  normalizeGautrainOverpass,
+} from "./gautrain";
 
 describe("normalizeGautrainOverpass", () => {
   it("normalizes Overpass 'way' rail elements and 'node' station elements into transit features", () => {
@@ -46,6 +50,45 @@ describe("normalizeGautrainOverpass", () => {
     expect(point?.geometry).toEqual({
       type: "Point",
       coordinates: [28.23, -25.75],
+    });
+  });
+});
+
+describe("normalizeGautrainBusOverpass", () => {
+  it("normalizes way members of a Gautrain bus route relation", () => {
+    const result = normalizeGautrainBusOverpass({
+      elements: [
+        {
+          type: "relation",
+          id: 42,
+          tags: { name: "Pretoria - CBD", ref: "P3" },
+          members: [
+            {
+              type: "way",
+              ref: 100,
+              geometry: [
+                { lat: -25.75, lon: 28.19 },
+                { lat: -25.76, lon: 28.21 },
+              ],
+            },
+            {
+              type: "way",
+              ref: 100,
+              geometry: [
+                { lat: -25.75, lon: 28.19 },
+                { lat: -25.76, lon: 28.21 },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(result.features).toHaveLength(1);
+    expect(result.features[0]?.properties).toEqual({
+      id: "relation/42",
+      name: "Pretoria - CBD",
+      network: "Gautrain Bus",
     });
   });
 });

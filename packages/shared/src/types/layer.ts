@@ -1,6 +1,7 @@
 export type LayerId =
   | "townships"
   | "gautrain"
+  | "gautrain-bus"
   | "a-re-yeng"
   | "unemployment"
   | "myciti"

@@ -146,17 +146,14 @@ export async function fetchAReYengRoutes(): Promise<
   try {
     const portalResponse = await fetch(AREYENG_SOURCE_URL);
     if (portalResponse.ok) {
-      const json: unknown = await portalResponse.json();
-      // ArcGIS Server returns HTTP 200 with an `{"error": {...}}` body on most
-      // failures (bad params, service down), so a 200 status alone doesn't mean
-      // valid data. Confirm the shape is really a FeatureCollection before trusting it.
+      const collection: unknown = await portalResponse.json();
       if (
-        json !== null &&
-        typeof json === "object" &&
-        (json as { type?: unknown }).type === "FeatureCollection" &&
-        Array.isArray((json as { features?: unknown }).features)
+        collection !== null &&
+        typeof collection === "object" &&
+        (collection as { type?: unknown }).type === "FeatureCollection" &&
+        Array.isArray((collection as { features?: unknown }).features)
       ) {
-        return json as FeatureCollection;
+        return collection as FeatureCollection;
       }
     }
   } catch {

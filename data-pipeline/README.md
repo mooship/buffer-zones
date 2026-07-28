@@ -10,13 +10,13 @@ npm install
 npm run run
 ```
 
-Outputs `townships.v1.geojson`, `gautrain.v1.geojson`, `prasa.v1.geojson`, `a-re-yeng.v1.geojson` into `packages/web/public/data/`.
+Outputs `townships.v1.geojson`, `township-areas.v1.geojson`, `gautrain.v1.geojson`, `gautrain-bus.v1.geojson`, `prasa.v1.geojson`, and `a-re-yeng.v1.geojson` into `packages/web/public/data/`.
 
 ## Adding a new metro or transit operator
 
 Follow `src/adapters/gautrain.ts` or `src/adapters/aReYeng.ts` as a template: one adapter file with a `fetchX()` + `normalizeX()` pair, normalizing into the shared `TransitLayerFeatureCollection` shape. Add a registry entry in `packages/web/src/layers/registry.ts`, and re-run the pipeline. No other pipeline or map code needs to change (see SPEC.md §11).
 
-Currently stubbed (no typed adapter written yet): MyCiTi, Rea Vaya, Metrobus, Durban Transport — see design doc §8. Gautrain, PRASA, and A Re Yeng are the three real, live adapters.
+Currently stubbed (no typed adapter written yet): MyCiTi, Rea Vaya, Metrobus, Durban Transport — see design doc §8. Gautrain rail, Gautrain Bus, PRASA, and A Re Yeng are real, live layers.
 
 ## Rate limits
 

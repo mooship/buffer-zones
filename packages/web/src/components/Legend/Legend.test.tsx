@@ -17,7 +17,19 @@ describe("Legend", () => {
     render(<Legend />);
 
     expect(
-      screen.getByRole("list", { name: /commute time/i }),
+      screen.getByRole("list", { name: /modeled car time/i }),
     ).toBeInTheDocument();
+  });
+
+  it("shows the color assigned to every available transit route", () => {
+    render(<Legend />);
+
+    const transitLegend = screen.getByRole("list", {
+      name: /transit route colors/i,
+    });
+    expect(transitLegend).toHaveTextContent("Gautrain");
+    expect(transitLegend).toHaveTextContent("Gautrain Bus");
+    expect(transitLegend).toHaveTextContent("PRASA Rail");
+    expect(transitLegend).toHaveTextContent("A Re Yeng trunk");
   });
 });

@@ -4,7 +4,7 @@ import { TRANSIT_LINE_COLORS } from "../constants/layerStyles";
 export const LAYER_REGISTRY: LayerDefinition[] = [
   {
     id: "townships",
-    label: "Commute Time",
+    label: "Modeled car time",
     dataSource: "/data/townships.v1.geojson",
     layerType: "choropleth",
     defaultVisible: true,
@@ -30,6 +30,19 @@ export const LAYER_REGISTRY: LayerDefinition[] = [
     style: { kind: "line", color: TRANSIT_LINE_COLORS.gautrain, weight: 3 },
   },
   {
+    id: "gautrain-bus",
+    label: "Gautrain Bus",
+    dataSource: "/data/gautrain-bus.v1.geojson",
+    layerType: "line",
+    defaultVisible: false,
+    available: true,
+    style: {
+      kind: "line",
+      color: TRANSIT_LINE_COLORS.gautrainBus,
+      weight: 3,
+    },
+  },
+  {
     id: "prasa",
     label: "PRASA Rail",
     dataSource: "/data/prasa.v1.geojson",
@@ -40,7 +53,7 @@ export const LAYER_REGISTRY: LayerDefinition[] = [
   },
   {
     id: "a-re-yeng",
-    label: "A Re Yeng",
+    label: "A Re Yeng trunk",
     dataSource: "/data/a-re-yeng.v1.geojson",
     layerType: "line",
     defaultVisible: false,

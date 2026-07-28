@@ -12,8 +12,15 @@ const GAUTRAIN_QUERY = `
 [out:json][timeout:60];
 (
   way["railway"="rail"]["operator"~"Gautrain",i](${TSHWANE_BBOX});
+  way["railway"="rail"]["gauge"="1435"](${TSHWANE_BBOX});
   node["railway"="station"]["operator"~"Gautrain",i](${TSHWANE_BBOX});
 );
+out geom;
+`;
+
+const GAUTRAIN_BUS_QUERY = `
+[out:json][timeout:60];
+relation["route"="bus"]["operator"~"Gautrain",i](${TSHWANE_BBOX});
 out geom;
 `;
 
@@ -32,7 +39,21 @@ interface OverpassNodeElement {
   lon: number;
 }
 
-export type OverpassElement = OverpassWayElement | OverpassNodeElement;
+interface OverpassRelationElement {
+  type: "relation";
+  id: number;
+  tags?: Record<string, string>;
+  members: {
+    type: string;
+    ref: number;
+    geometry?: { lat: number; lon: number }[];
+  }[];
+}
+
+export type OverpassElement =
+  | OverpassWayElement
+  | OverpassNodeElement
+  | OverpassRelationElement;
 export interface OverpassResponse {
   elements: OverpassElement[];
 }
@@ -43,6 +64,9 @@ export function normalizeGautrainOverpass(
   const features: TransitLayerFeatureCollection["features"] = [];
 
   for (const element of raw.elements) {
+    if (element.type === "relation") {
+      continue;
+    }
     const stop: TransitStop = {
       id: `${element.type}/${element.id}`,
       name: element.tags?.name ?? "Unnamed",
@@ -67,6 +91,47 @@ export function normalizeGautrainOverpass(
         geometry: {
           type: "Point",
           coordinates: [element.lon, element.lat] as [number, number],
+        },
+      });
+    }
+  }
+
+  return { type: "FeatureCollection", features };
+}
+
+export function normalizeGautrainBusOverpass(
+  raw: OverpassResponse,
+): TransitLayerFeatureCollection {
+  const features: TransitLayerFeatureCollection["features"] = [];
+  const seenMembers = new Set<string>();
+
+  for (const element of raw.elements) {
+    if (element.type !== "relation") {
+      continue;
+    }
+    const route: TransitStop = {
+      id: `relation/${element.id}`,
+      name: element.tags?.name ?? element.tags?.ref ?? "Unnamed",
+      network: "Gautrain Bus",
+    };
+    for (const member of element.members) {
+      const memberId = `${element.id}/${member.ref}`;
+      if (
+        member.type !== "way" ||
+        !member.geometry ||
+        seenMembers.has(memberId)
+      ) {
+        continue;
+      }
+      seenMembers.add(memberId);
+      features.push({
+        type: "Feature",
+        properties: route,
+        geometry: {
+          type: "LineString",
+          coordinates: member.geometry.map(
+            (point) => [point.lon, point.lat] as [number, number],
+          ),
         },
       });
     }
@@ -107,4 +172,8 @@ export async function fetchOverpass(
 
 export async function fetchGautrainRail(): Promise<OverpassResponse> {
   return fetchOverpass(OVERPASS_URL, GAUTRAIN_QUERY);
+}
+
+export async function fetchGautrainBusRoutes(): Promise<OverpassResponse> {
+  return fetchOverpass(OVERPASS_URL, GAUTRAIN_BUS_QUERY);
 }

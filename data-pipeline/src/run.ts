@@ -10,7 +10,9 @@ import {
   normalizeBoundaries,
 } from "./adapters/boundaries";
 import {
+  fetchGautrainBusRoutes,
   fetchGautrainRail,
+  normalizeGautrainBusOverpass,
   normalizeGautrainOverpass,
 } from "./adapters/gautrain";
 import { fetchPrasaRail, normalizePrasaOverpass } from "./adapters/prasa";
@@ -19,6 +21,7 @@ import { JOB_CENTERS } from "./constants/jobCenters";
 import { writeGeoJsonFile } from "./export";
 import { joinTownshipData } from "./join";
 import { getNearestJobCenter } from "./osrmClient";
+import { createTownshipAreas } from "./townshipAreas";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = resolve(__dirname, "../../packages/web/public/data");
@@ -54,10 +57,23 @@ async function main() {
     type: "FeatureCollection",
     features: townshipFeatures,
   });
+  await writeGeoJsonFile(
+    resolve(OUTPUT_DIR, "township-areas.v1.geojson"),
+    createTownshipAreas(townships),
+  );
 
   console.log("Fetching Gautrain rail via Overpass...");
   const gautrain = normalizeGautrainOverpass(await fetchGautrainRail());
   await writeGeoJsonFile(resolve(OUTPUT_DIR, "gautrain.v1.geojson"), gautrain);
+
+  console.log("Fetching Gautrain bus routes via Overpass...");
+  const gautrainBus = normalizeGautrainBusOverpass(
+    await fetchGautrainBusRoutes(),
+  );
+  await writeGeoJsonFile(
+    resolve(OUTPUT_DIR, "gautrain-bus.v1.geojson"),
+    gautrainBus,
+  );
 
   console.log("Fetching PRASA rail via Overpass...");
   const prasa = normalizePrasaOverpass(await fetchPrasaRail());
