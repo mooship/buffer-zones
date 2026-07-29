@@ -105,7 +105,7 @@
 
 .eyebrow {
   margin: 0.4rem 0 0;
-  color: var(--color-line);
+  color: var(--color-muted);
   font-family: var(--font-mono);
   font-size: 0.5625rem;
   text-transform: uppercase;
@@ -197,7 +197,7 @@
 .panelViewport::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
-  background: var(--color-line);
+  background: var(--color-muted);
   background-clip: padding-box;
 }
 
@@ -232,6 +232,7 @@
 
 .panelTab[aria-selected="true"] {
   border-bottom-color: var(--color-ochre);
+  background: color-mix(in srgb, var(--color-ochre) 10%, transparent);
   color: var(--color-paper);
 }
 

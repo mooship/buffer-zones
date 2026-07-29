@@ -18,6 +18,7 @@ export function BasemapToggle({ basemap, onChange }: BasemapToggleProps) {
           type="button"
           className={styles.option}
           aria-pressed={id === basemap}
+          aria-label={`${BASEMAPS[id].label} basemap`}
           onClick={() => onChange(id)}
         >
           {BASEMAPS[id].label}
