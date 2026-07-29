@@ -228,6 +228,7 @@ export function MapView({
           url={tileUrl}
           attribution={tileAttribution}
           detectRetina
+          className={useDarkTiles ? styles.darkTile : undefined}
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />

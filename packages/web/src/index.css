@@ -27,16 +27,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-ink: #17191d;
-    --color-panel: #1f2227;
-    --color-line: #3a3e46;
-    --color-paper: #e8eaed;
+    --color-ink: #23262c;
+    --color-panel: #2f3339;
+    --color-line: #4c515b;
+    --color-paper: #f0f1f3;
     --color-ochre: #e2954f;
     --color-redearth: #e2685a;
-    --color-muted: #9aa0ac;
+    --color-muted: #a9afba;
 
-    --color-surface: #22252b;
-    --color-surface-hover: #2b2f36;
+    --color-surface: #33373e;
+    --color-surface-hover: #3d424a;
 
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 45%), 0 1px 3px rgb(0 0 0 / 30%);
     --shadow-md: 0 2px 6px rgb(0 0 0 / 45%), 0 6px 16px rgb(0 0 0 / 35%);

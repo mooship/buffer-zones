@@ -9,6 +9,10 @@
   background: var(--color-ink);
 }
 
+.darkTile {
+  filter: brightness(1.35) contrast(0.9) saturate(0.9);
+}
+
 .townshipLabel {
   padding: 3px 6px;
   border: 1px solid rgb(36 25 52 / 70%);
