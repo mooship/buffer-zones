@@ -4,7 +4,7 @@ import { Legend } from "./Legend";
 
 describe("Legend", () => {
   it("renders one entry per commute bucket", () => {
-    render(<Legend />);
+    render(<Legend metroId="tshwane" />);
 
     const commuteLegend = screen.getByRole("list", {
       name: /modeled car time/i,
@@ -17,7 +17,7 @@ describe("Legend", () => {
   });
 
   it("labels the legend for assistive technology", () => {
-    render(<Legend />);
+    render(<Legend metroId="tshwane" />);
 
     expect(
       screen.getByRole("list", { name: /modeled car time/i }),
@@ -25,7 +25,7 @@ describe("Legend", () => {
   });
 
   it("renders one entry per distance-to-transit bucket", () => {
-    render(<Legend />);
+    render(<Legend metroId="tshwane" />);
 
     const transitDistanceLegend = screen.getByRole("list", {
       name: /distance from each area to the nearest transit/i,
@@ -48,7 +48,7 @@ describe("Legend", () => {
   });
 
   it("shows the color assigned to every available transit route", () => {
-    render(<Legend />);
+    render(<Legend metroId="tshwane" />);
 
     const transitLegend = screen.getByRole("list", {
       name: /transit route colors/i,
@@ -60,7 +60,7 @@ describe("Legend", () => {
   });
 
   it("marks networks with real station data separately from route-only networks", () => {
-    render(<Legend />);
+    render(<Legend metroId="tshwane" />);
 
     const transitLegend = screen.getByRole("list", {
       name: /transit route colors/i,
@@ -73,5 +73,15 @@ describe("Legend", () => {
       .closest("li");
     expect(gautrainRow).toHaveTextContent("line + stations");
     expect(gautrainBusRow).toHaveTextContent("route only");
+  });
+
+  it("shows Johannesburg's own operator (Rea Vaya) instead of Tshwane's when that metro is selected", () => {
+    render(<Legend metroId="johannesburg" />);
+
+    const transitLegend = screen.getByRole("list", {
+      name: /transit route colors/i,
+    });
+    expect(transitLegend).toHaveTextContent("Rea Vaya");
+    expect(transitLegend).not.toHaveTextContent("A Re Yeng");
   });
 });

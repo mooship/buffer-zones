@@ -9,6 +9,7 @@ describe("useMapUiStore", () => {
 
   it("owns the cross-cutting map UI defaults", () => {
     expect(useMapUiStore.getState()).toMatchObject({
+      metroId: "tshwane",
       basemap: "street",
       panelView: "story",
       titleExpanded: true,
@@ -60,5 +61,18 @@ describe("useMapUiStore", () => {
     useMapUiStore.getState().reset();
 
     expect(useMapUiStore.getState().panelOpen).toBe(true);
+  });
+
+  it("switches metro, resets layers to that metro's defaults, and clears selection", () => {
+    useMapUiStore.getState().setSelectedTownshipId("799045001");
+    useMapUiStore.getState().toggleLayer("gautrain");
+
+    useMapUiStore.getState().setMetro("johannesburg");
+
+    expect(useMapUiStore.getState()).toMatchObject({
+      metroId: "johannesburg",
+      visibleLayerIds: ["townships"],
+      selectedTownshipId: null,
+    });
   });
 });

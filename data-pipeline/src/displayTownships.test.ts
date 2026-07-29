@@ -67,7 +67,7 @@ describe("createDisplayPolygons", () => {
   it("keeps every production feature within one percent area drift", async () => {
     const dataDirectory = resolve(
       import.meta.dirname,
-      "../../packages/web/public/data",
+      "../../packages/web/public/data/tshwane",
     );
     const readCollection = async (name: string) =>
       JSON.parse(
@@ -100,7 +100,7 @@ describe("createDisplayPolygons", () => {
   it("does not introduce polygon self-intersections", async () => {
     const dataDirectory = resolve(
       import.meta.dirname,
-      "../../packages/web/public/data",
+      "../../packages/web/public/data/tshwane",
     );
     const readCollection = async (name: string) =>
       JSON.parse(

@@ -4,26 +4,23 @@ import type {
 } from "@buffer-zones/shared";
 import { type OverpassResponse, fetchOverpass } from "./gautrain";
 
-const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
-
-// Tshwane/Gauteng bounding box (south, west, north, east), covers the Pretoria PRASA commuter lines
-const TSHWANE_BBOX = "-25.95,28.05,-25.55,28.40";
-
 // Rail ways carry operator=PRASA; stations are tagged network=Metrorail Gauteng (verified 2026-07-28).
-const PRASA_QUERY = `
+function prasaQuery(bbox: string): string {
+  return `
 [out:json][timeout:60];
 (
-  relation["route"="train"]["operator"~"PRASA|Metrorail",i](${TSHWANE_BBOX});
-  relation["route"="train"]["network"~"Metrorail",i](${TSHWANE_BBOX});
+  relation["route"="train"]["operator"~"PRASA|Metrorail",i](${bbox});
+  relation["route"="train"]["network"~"Metrorail",i](${bbox});
 )->.routes;
 (
   way(r.routes);
-  way["railway"="rail"]["operator"~"PRASA|Metrorail",i](${TSHWANE_BBOX});
-  node["railway"="station"]["network"~"Metrorail",i](${TSHWANE_BBOX});
-  node["railway"="station"]["operator"~"PRASA|Metrorail",i](${TSHWANE_BBOX});
+  way["railway"="rail"]["operator"~"PRASA|Metrorail",i](${bbox});
+  node["railway"="station"]["network"~"Metrorail",i](${bbox});
+  node["railway"="station"]["operator"~"PRASA|Metrorail",i](${bbox});
 );
 out geom;
 `;
+}
 
 export function normalizePrasaOverpass(
   raw: OverpassResponse,
@@ -63,6 +60,6 @@ export function normalizePrasaOverpass(
   return { type: "FeatureCollection", features };
 }
 
-export async function fetchPrasaRail(): Promise<OverpassResponse> {
-  return fetchOverpass(OVERPASS_URL, PRASA_QUERY);
+export async function fetchPrasaRail(bbox: string): Promise<OverpassResponse> {
+  return fetchOverpass(prasaQuery(bbox));
 }

@@ -24,7 +24,19 @@ describe("township groups", () => {
     expect(getTownshipGroup("Olievenhoutbos Ext 21", "799078003")).toBe(
       "Olievenhoutbosch",
     );
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(32);
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(60);
+  });
+
+  it("tags each area with its metro and includes Johannesburg's townships", () => {
+    expect(getTownshipGroup("Alexandra Ext 1", "798027001")).toBe("Alexandra");
+    expect(getTownshipGroup("Diepkloof Zone 4", "798030037")).toBe("Soweto");
+    expect(getTownshipGroup("Cosmo City", "798020002")).toBe("Cosmo City");
+    expect(
+      getTownshipAreaDefinition("Alexandra Ext 1", "798027001"),
+    ).toMatchObject({ metroId: "johannesburg" });
+    expect(getTownshipAreaDefinition("Mamelodi SP", "799045001")).toMatchObject(
+      { metroId: "tshwane" },
+    );
   });
 
   it("uses exact names for township areas inside mixed Census main places", () => {

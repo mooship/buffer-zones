@@ -5,13 +5,16 @@ test.describe("data load error and retry", () => {
     page,
   }) => {
     let requestCount = 0;
-    await page.route("**/data/townships.display.v1.geojson", (route) => {
-      requestCount += 1;
-      if (requestCount === 1) {
-        return route.fulfill({ status: 500, body: "Internal Server Error" });
-      }
-      return route.continue();
-    });
+    await page.route(
+      "**/data/tshwane/townships.display.v1.geojson*",
+      (route) => {
+        requestCount += 1;
+        if (requestCount === 1) {
+          return route.fulfill({ status: 500, body: "Internal Server Error" });
+        }
+        return route.continue();
+      },
+    );
 
     await page.goto("/");
 

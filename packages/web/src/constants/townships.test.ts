@@ -24,7 +24,7 @@ describe("township groups", () => {
     expect(getTownshipGroup("Olievenhoutbos Ext 21", "799078003")).toBe(
       "Olievenhoutbosch",
     );
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(32);
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(60);
   });
 
   it("uses exact names for township areas inside mixed Census main places", () => {

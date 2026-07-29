@@ -1,19 +1,27 @@
 import styles from "./EvidenceSummary.module.css";
 
-export function EvidenceSummary() {
+interface EvidenceSummaryProps {
+  metroName: string;
+  jobCenterCount: number;
+}
+
+export function EvidenceSummary({
+  metroName,
+  jobCenterCount,
+}: EvidenceSummaryProps) {
   return (
     <div className={styles.summary}>
       <p className={styles.context}>
         Apartheid law controlled where Black, Coloured and Indian people could
-        live. Around Tshwane, Black townships were deliberately separated from
-        economic centres; those distances still shape access to work.
+        live. Around {metroName}, Black townships were deliberately separated
+        from economic centres; those distances still shape access to work.
       </p>
       <div className={styles.limitation}>
         <strong>Car time is only a baseline proxy.</strong>
         <span>
-          It shows the fastest modeled drive to the nearest of eight selected
-          job centres. It does not measure walking, waiting, transfers, service
-          frequency or whether a household has access to a car.
+          It shows the fastest modeled drive to the nearest of {jobCenterCount}{" "}
+          selected job centres. It does not measure walking, waiting, transfers,
+          service frequency or whether a household has access to a car.
         </span>
       </div>
       <p className={styles.method}>

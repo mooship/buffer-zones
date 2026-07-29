@@ -104,10 +104,28 @@ describe("fetchOverpass", () => {
       });
     vi.stubGlobal("fetch", fetchMock);
 
-    const result = await fetchOverpass("https://example.com", "query");
+    const result = await fetchOverpass("query");
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(result).toEqual({ elements: [] });
+
+    vi.unstubAllGlobals();
+  });
+
+  it("rotates to a different public Overpass mirror on repeated failures", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: false, status: 429 })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ elements: [] }),
+      });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await fetchOverpass("query");
+
+    const urlsCalled = fetchMock.mock.calls.map((call) => call[0] as string);
+    expect(new Set(urlsCalled).size).toBe(2);
 
     vi.unstubAllGlobals();
   });

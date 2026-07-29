@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { filterTshwaneFeatures, normalizeBoundaries } from "./boundaries";
+import {
+  filterFeaturesByMunicipality,
+  normalizeBoundaries,
+} from "./boundaries";
 
 describe("normalizeBoundaries", () => {
   it("maps raw sub-place properties to NormalizedTownship and computes a centroid", () => {
@@ -72,7 +75,7 @@ describe("normalizeBoundaries", () => {
   });
 });
 
-describe("filterTshwaneFeatures", () => {
+describe("filterFeaturesByMunicipality", () => {
   it("keeps only City of Tshwane (MN_CODE 799) records and remaps their properties", () => {
     const nationalCollection = {
       type: "FeatureCollection" as const,
@@ -122,7 +125,7 @@ describe("filterTshwaneFeatures", () => {
       ],
     };
 
-    const result = filterTshwaneFeatures(nationalCollection);
+    const result = filterFeaturesByMunicipality(nationalCollection, 799);
 
     expect(result.features).toHaveLength(1);
     const [feature] = result.features;
@@ -160,7 +163,7 @@ describe("filterTshwaneFeatures", () => {
       ],
     };
 
-    const result = filterTshwaneFeatures(nationalCollection);
+    const result = filterFeaturesByMunicipality(nationalCollection, 799);
 
     expect(result.features).toHaveLength(0);
   });

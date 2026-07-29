@@ -24,7 +24,7 @@ describe("useLayerData", () => {
     fetchFeatureCollectionMock.mockResolvedValue(emptyCollection());
 
     const { result, rerender } = renderHook(
-      (ids: LayerId[]) => useLayerData(ids),
+      (ids: LayerId[]) => useLayerData(ids, "tshwane"),
       { initialProps: ["townships"] },
     );
 
@@ -40,7 +40,7 @@ describe("useLayerData", () => {
     });
     expect(fetchFeatureCollectionMock).toHaveBeenCalledTimes(2);
     expect(fetchFeatureCollectionMock).toHaveBeenCalledWith(
-      "/data/gautrain.v1.geojson",
+      "/data/tshwane/gautrain.display.v1.geojson",
     );
   });
 
@@ -50,7 +50,7 @@ describe("useLayerData", () => {
     );
 
     const { result, rerender } = renderHook(
-      (ids: LayerId[]) => useLayerData(ids),
+      (ids: LayerId[]) => useLayerData(ids, "tshwane"),
       { initialProps: ["townships"] },
     );
 
@@ -69,13 +69,43 @@ describe("useLayerData", () => {
   });
 
   it("does not fetch a layer id that is marked unavailable", async () => {
-    const { result } = renderHook((ids: LayerId[]) => useLayerData(ids), {
-      initialProps: ["myciti"],
-    });
+    const { result } = renderHook(
+      (ids: LayerId[]) => useLayerData(ids, "tshwane"),
+      { initialProps: ["myciti"] },
+    );
 
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(fetchFeatureCollectionMock).not.toHaveBeenCalled();
     expect(result.current.myciti).toBeUndefined();
+  });
+
+  it("clears loaded data and refetches from the new metro's data source when the metro changes", async () => {
+    fetchFeatureCollectionMock.mockResolvedValue(emptyCollection());
+
+    const { result, rerender } = renderHook(
+      ({
+        ids,
+        metroId,
+      }: { ids: LayerId[]; metroId: "tshwane" | "johannesburg" }) =>
+        useLayerData(ids, metroId),
+      { initialProps: { ids: ["townships"] as LayerId[], metroId: "tshwane" } },
+    );
+
+    await waitFor(() => {
+      expect(result.current.townships).toBeDefined();
+    });
+    expect(fetchFeatureCollectionMock).toHaveBeenCalledWith(
+      "/data/tshwane/townships.display.v1.geojson",
+    );
+
+    rerender({ ids: ["townships"], metroId: "johannesburg" });
+
+    await waitFor(() => {
+      expect(result.current.townships).toBeDefined();
+    });
+    expect(fetchFeatureCollectionMock).toHaveBeenCalledWith(
+      "/data/johannesburg/townships.display.v1.geojson",
+    );
   });
 });

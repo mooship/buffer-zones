@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@buffer-zones/shared";
+import { type TownshipFeature, getMetroDefinition } from "@buffer-zones/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, Minus, Plus, X } from "lucide-react";
@@ -18,10 +18,10 @@ import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import {
   APP_NAME,
-  APP_TAGLINE,
   DATA_AS_OF,
   DATA_SOURCES,
   REPOSITORY_URL,
+  getAppTagline,
 } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
@@ -30,10 +30,6 @@ import {
   useThemePreference,
 } from "./hooks/useThemePreference";
 import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
-
-const repository = createTownshipDataRepository(
-  "/data/townships.display.v1.geojson",
-);
 
 const MapView = lazy(async () => {
   const module = await import("./components/MapView/MapView");
@@ -54,6 +50,7 @@ export function App() {
   const [dataError, setDataError] = useState(false);
   const [loadAttempt, setLoadAttempt] = useState(0);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
+  const metroId = useMapUiStore((state) => state.metroId);
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
   const panelView = useMapUiStore((state) => state.panelView);
@@ -61,6 +58,7 @@ export function App() {
   const selectedTownshipId = useMapUiStore((state) => state.selectedTownshipId);
   const toggleLayer = useMapUiStore((state) => state.toggleLayer);
   const setBasemap = useMapUiStore((state) => state.setBasemap);
+  const setMetro = useMapUiStore((state) => state.setMetro);
   const setPanelOpen = useMapUiStore((state) => state.setPanelOpen);
   const setPanelView = useMapUiStore((state) => state.setPanelView);
   const setTitleExpanded = useMapUiStore((state) => state.setTitleExpanded);
@@ -70,17 +68,22 @@ export function App() {
   const themePreference = useThemePreference();
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const metroDefinition = getMetroDefinition(metroId);
 
   useEffect(() => {
     let cancelled = false;
     setDataError(false);
-    if (loadAttempt > 0) {
-      setTownships([]);
-      setTownshipAreas([]);
-    }
+    setTownships([]);
+    setTownshipAreas([]);
+    const cacheBust = loadAttempt > 0 ? `?retry=${loadAttempt}` : "";
+    const repository = createTownshipDataRepository(
+      `/data/${metroId}/townships.display.v1.geojson${cacheBust}`,
+    );
     Promise.all([
       repository.getTownships(),
-      fetchFeatureCollection("/data/township-areas.display.v1.geojson"),
+      fetchFeatureCollection(
+        `/data/${metroId}/township-areas.display.v1.geojson${cacheBust}`,
+      ),
     ])
       .then(([features, areas]) => {
         if (!cancelled) {
@@ -96,7 +99,7 @@ export function App() {
     return () => {
       cancelled = true;
     };
-  }, [loadAttempt]);
+  }, [loadAttempt, metroId]);
 
   function handlePanelToggle() {
     if (panelOpen) {
@@ -145,6 +148,7 @@ export function App() {
             townships={townships}
             townshipAreas={townshipAreas}
             visibleLayerIds={visibleLayerIds}
+            metroId={metroId}
             basemap={basemap}
             selectedTownshipId={selectedTownshipId}
             onTownshipSelect={setSelectedTownshipId}
@@ -188,8 +192,12 @@ export function App() {
           )}
         </button>
         <div id="title-context" hidden={!titleExpanded}>
-          <p className={styles.eyebrow}>Tshwane spatial access atlas</p>
-          <p className={styles.tagline}>{APP_TAGLINE}</p>
+          <p className={styles.eyebrow}>
+            {metroDefinition.shortName} spatial access atlas
+          </p>
+          <p className={styles.tagline}>
+            {getAppTagline(metroDefinition.shortName)}
+          </p>
           <p className={styles.framing}>
             Townships were planned apart from work and services. This baseline
             makes the distance visible.
@@ -247,7 +255,10 @@ export function App() {
           {panelView === "story" ? (
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Why this map exists</h2>
-              <EvidenceSummary />
+              <EvidenceSummary
+                metroName={metroDefinition.shortName}
+                jobCenterCount={metroDefinition.jobCenterCount}
+              />
               <details className={styles.panelSources}>
                 <summary>Data sources and method</summary>
                 <div className={styles.panelSourceList}>
@@ -272,6 +283,7 @@ export function App() {
               <TownshipBrowser
                 townships={townships}
                 selectedTownshipId={selectedTownshipId}
+                metroName={metroDefinition.shortName}
                 onSelect={(township) =>
                   setSelectedTownshipId(township.properties.id)
                 }
@@ -282,12 +294,13 @@ export function App() {
             <div className={styles.panelContent}>
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Map legend</h2>
-                <Legend />
+                <Legend metroId={metroId} />
               </section>
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Layers</h2>
                 <LayerToggles
                   visibleLayerIds={visibleLayerIds}
+                  metroId={metroId}
                   onToggle={toggleLayer}
                 />
               </section>
@@ -302,6 +315,8 @@ export function App() {
           onBasemapChange={setBasemap}
           themePreference={themePreference}
           onThemePreferenceChange={setThemePreference}
+          metroId={metroId}
+          onMetroChange={setMetro}
         />
       </div>
     </div>

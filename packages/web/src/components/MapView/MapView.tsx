@@ -1,8 +1,10 @@
 import type {
   LayerId,
+  MetroId,
   TownshipFeature,
   TownshipProperties,
 } from "@buffer-zones/shared";
+import { getMetroDefinition } from "@buffer-zones/shared";
 import type { Feature, FeatureCollection } from "geojson";
 import {
   type LatLng,
@@ -27,7 +29,7 @@ import { useLayerData } from "../../hooks/useLayerData";
 import { usePrefersDarkMode } from "../../hooks/usePrefersDarkMode";
 import { useThemePreference } from "../../hooks/useThemePreference";
 import { createLayerConfig } from "../../layers/createLayerConfig";
-import { LAYER_REGISTRY } from "../../layers/registry";
+import { getLayerDefinitions } from "../../layers/registry";
 import { TownshipPopup } from "../TownshipPopup/TownshipPopup";
 import styles from "./MapView.module.css";
 
@@ -35,15 +37,22 @@ interface MapViewProps {
   townships: TownshipFeature[];
   townshipAreas?: Feature[];
   visibleLayerIds: LayerId[];
+  metroId: MetroId;
   basemap?: Basemap;
   selectedTownshipId?: string | null;
   onTownshipSelect?: (townshipId: string) => void;
 }
 
-const TOWNSHIP_BOUNDS: [[number, number], [number, number]] = [
-  [-25.95, 27.92],
-  [-25.33, 28.79],
-];
+const METRO_BOUNDS: Record<MetroId, [[number, number], [number, number]]> = {
+  tshwane: [
+    [-25.95, 27.92],
+    [-25.33, 28.79],
+  ],
+  johannesburg: [
+    [-26.55, 27.75],
+    [-25.95, 28.25],
+  ],
+};
 const STOP_RADIUS = 4;
 const TOWNSHIP_PANE = "townships";
 const TOWNSHIP_OUTLINE_PANE = "township-outlines";
@@ -136,7 +145,7 @@ function AreaLabelVisibility() {
   return null;
 }
 
-function ResponsiveMapBounds() {
+function ResponsiveMapBounds({ metroId }: { metroId: MetroId }) {
   const map = useMap();
   const desktopRef = useRef(window.innerWidth > MOBILE_BREAKPOINT_PX);
 
@@ -148,11 +157,27 @@ function ResponsiveMapBounds() {
         return;
       }
       desktopRef.current = desktop;
-      map.fitBounds(TOWNSHIP_BOUNDS, getBoundsOptions(desktop));
+      map.fitBounds(METRO_BOUNDS[metroId], getBoundsOptions(desktop));
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [map]);
+  }, [map, metroId]);
+
+  return null;
+}
+
+function MetroRecenter({ metroId }: { metroId: MetroId }) {
+  const map = useMap();
+  const previousMetro = useRef(metroId);
+
+  useEffect(() => {
+    if (previousMetro.current === metroId) {
+      return;
+    }
+    previousMetro.current = metroId;
+    const desktop = window.innerWidth > MOBILE_BREAKPOINT_PX;
+    map.fitBounds(METRO_BOUNDS[metroId], getBoundsOptions(desktop));
+  }, [map, metroId]);
 
   return null;
 }
@@ -180,18 +205,20 @@ export function MapView({
   townships,
   townshipAreas = [],
   visibleLayerIds,
+  metroId,
   basemap = "street",
   selectedTownshipId = null,
   onTownshipSelect,
 }: MapViewProps) {
   const townshipLayerRef = useRef<LeafletGeoJSON | null>(null);
-  const visibleLayers = LAYER_REGISTRY.filter(
+  const visibleLayers = getLayerDefinitions(metroId).filter(
     (layer) => layer.available && visibleLayerIds.includes(layer.id),
   );
   const overlayData = useLayerData(
     visibleLayers
       .filter((layer) => layer.layerType !== "choropleth")
       .map((layer) => layer.id),
+    metroId,
   );
   const prefersDark = usePrefersDarkMode();
   const themePreference = useThemePreference();
@@ -216,10 +243,10 @@ export function MapView({
   return (
     <section
       className={styles.mapWrapper}
-      aria-label="Map of Tshwane township access to selected job centres"
+      aria-label={`Map of ${getMetroDefinition(metroId).shortName} township access to selected job centres`}
     >
       <MapContainer
-        bounds={TOWNSHIP_BOUNDS}
+        bounds={METRO_BOUNDS[metroId]}
         boundsOptions={boundsOptions}
         className={styles.map}
         scrollWheelZoom
@@ -300,7 +327,8 @@ export function MapView({
           townshipLayer={townshipLayerRef}
         />
         <AreaLabelVisibility />
-        <ResponsiveMapBounds />
+        <ResponsiveMapBounds metroId={metroId} />
+        <MetroRecenter metroId={metroId} />
       </MapContainer>
     </section>
   );

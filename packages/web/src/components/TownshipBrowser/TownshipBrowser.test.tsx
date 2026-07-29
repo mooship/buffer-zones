@@ -38,6 +38,7 @@ describe("TownshipBrowser", () => {
       <TownshipBrowser
         townships={townships}
         selectedTownshipId={null}
+        metroName="Tshwane"
         onSelect={vi.fn()}
       />,
     );
@@ -66,6 +67,7 @@ describe("TownshipBrowser", () => {
       <TownshipBrowser
         townships={townships}
         selectedTownshipId={null}
+        metroName="Tshwane"
         onSelect={onSelect}
       />,
     );
@@ -80,6 +82,7 @@ describe("TownshipBrowser", () => {
       <TownshipBrowser
         townships={townships}
         selectedTownshipId="mamelodi"
+        metroName="Tshwane"
         onSelect={onSelect}
       />,
     );
@@ -138,6 +141,7 @@ describe("TownshipBrowser", () => {
       <TownshipBrowser
         townships={mamelodiTownships}
         selectedTownshipId={null}
+        metroName="Tshwane"
         onSelect={vi.fn()}
       />,
     );

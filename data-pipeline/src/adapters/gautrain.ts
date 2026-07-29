@@ -2,27 +2,27 @@ import type {
   TransitLayerFeatureCollection,
   TransitStop,
 } from "@buffer-zones/shared";
+import { getOverpassUrls } from "../constants/serviceUrls";
 
-const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
-
-// Tshwane/Gauteng bounding box (south, west, north, east), covers the Pretoria portion of the Gautrain network
-const TSHWANE_BBOX = "-25.95,28.05,-25.55,28.40";
-
-const GAUTRAIN_QUERY = `
+function gautrainQuery(bbox: string): string {
+  return `
 [out:json][timeout:60];
 (
-  way["railway"="rail"]["operator"~"Gautrain",i](${TSHWANE_BBOX});
-  way["railway"="rail"]["gauge"="1435"](${TSHWANE_BBOX});
-  node["railway"="station"]["operator"~"Gautrain",i](${TSHWANE_BBOX});
+  way["railway"="rail"]["operator"~"Gautrain",i](${bbox});
+  way["railway"="rail"]["gauge"="1435"](${bbox});
+  node["railway"="station"]["operator"~"Gautrain",i](${bbox});
 );
 out geom;
 `;
+}
 
-const GAUTRAIN_BUS_QUERY = `
+function gautrainBusQuery(bbox: string): string {
+  return `
 [out:json][timeout:60];
-relation["route"="bus"]["operator"~"Gautrain",i](${TSHWANE_BBOX});
+relation["route"="bus"]["operator"~"Gautrain",i](${bbox});
 out geom;
 `;
+}
 
 interface OverpassWayElement {
   type: "way";
@@ -144,15 +144,19 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// The public overpass-api.de instance was observed returning intermittent
-// 406/504 responses (load-balanced across backends, occasionally overloaded)
-// during manual verification on 2026-07-28; sending a descriptive User-Agent
-// plus retrying with backoff resolved it reliably in testing.
+// Retries with backoff on a single mirror before rotating to the next one
+// (see constants/serviceUrls.ts) on repeated 429/504 responses, since a
+// single public Overpass instance can be temporarily rate-limited or
+// overloaded while others are not.
 export async function fetchOverpass(
-  url: string,
   query: string,
   attempt = 1,
 ): Promise<OverpassResponse> {
+  const urls = getOverpassUrls();
+  const url =
+    urls[(attempt - 1) % urls.length] ??
+    urls[0] ??
+    "https://overpass-api.de/api/interpreter";
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -161,19 +165,26 @@ export async function fetchOverpass(
     body: `data=${encodeURIComponent(query)}`,
   });
   if (!response.ok) {
-    if ((response.status === 504 || response.status === 429) && attempt < 4) {
+    if (
+      (response.status === 504 || response.status === 429) &&
+      attempt < urls.length * 2
+    ) {
       await sleep(2000 * attempt);
-      return fetchOverpass(url, query, attempt + 1);
+      return fetchOverpass(query, attempt + 1);
     }
     throw new Error(`Overpass query failed: ${response.status}`);
   }
   return (await response.json()) as OverpassResponse;
 }
 
-export async function fetchGautrainRail(): Promise<OverpassResponse> {
-  return fetchOverpass(OVERPASS_URL, GAUTRAIN_QUERY);
+export async function fetchGautrainRail(
+  bbox: string,
+): Promise<OverpassResponse> {
+  return fetchOverpass(gautrainQuery(bbox));
 }
 
-export async function fetchGautrainBusRoutes(): Promise<OverpassResponse> {
-  return fetchOverpass(OVERPASS_URL, GAUTRAIN_BUS_QUERY);
+export async function fetchGautrainBusRoutes(
+  bbox: string,
+): Promise<OverpassResponse> {
+  return fetchOverpass(gautrainBusQuery(bbox));
 }

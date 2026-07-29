@@ -5,15 +5,18 @@ import { SettingsMenu } from "./SettingsMenu";
 function renderMenu() {
   const onBasemapChange = vi.fn();
   const onThemePreferenceChange = vi.fn();
+  const onMetroChange = vi.fn();
   render(
     <SettingsMenu
       basemap="street"
       onBasemapChange={onBasemapChange}
       themePreference="system"
       onThemePreferenceChange={onThemePreferenceChange}
+      metroId="tshwane"
+      onMetroChange={onMetroChange}
     />,
   );
-  return { onBasemapChange, onThemePreferenceChange };
+  return { onBasemapChange, onThemePreferenceChange, onMetroChange };
 }
 
 describe("SettingsMenu", () => {
@@ -39,14 +42,19 @@ describe("SettingsMenu", () => {
   });
 
   it("forwards basemap and theme changes", () => {
-    const { onBasemapChange, onThemePreferenceChange } = renderMenu();
+    const { onBasemapChange, onThemePreferenceChange, onMetroChange } =
+      renderMenu();
 
     fireEvent.click(screen.getByRole("button", { name: /map settings/i }));
     fireEvent.click(screen.getByRole("button", { name: /satellite basemap/i }));
     fireEvent.click(screen.getByRole("button", { name: /dark theme/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /johannesburg metro/i }),
+    );
 
     expect(onBasemapChange).toHaveBeenCalledWith("satellite");
     expect(onThemePreferenceChange).toHaveBeenCalledWith("dark");
+    expect(onMetroChange).toHaveBeenCalledWith("johannesburg");
   });
 
   it("closes when clicking the trigger again", () => {

@@ -1,8 +1,8 @@
 # Buffer Zones
 
-Apartheid-era spatial planning still shapes access to economic opportunity in South African cities today. **Buffer Zones** maps recognized Tshwane township areas, formal transit routes, and modeled car time to selected job centers. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
+Apartheid-era spatial planning still shapes access to economic opportunity in South African cities today. **Buffer Zones** maps recognized township areas, formal transit routes, and modeled car time to selected job centers across multiple metros. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
 
-**v1 scope: Pretoria/Tshwane.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to eight selected job centers, and Gautrain rail, Gautrain Bus, A Re Yeng (trunk, complementary, and feeder), and PRASA route overlays. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros are scaffolded for future data work — see [`docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md`](docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md).
+**Current scope: Tshwane/Pretoria and Johannesburg, switchable in the app.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to each metro's own selected job centers, and real transit route overlays: Gautrain rail, Gautrain Bus, A Re Yeng (trunk, complementary, and feeder), and PRASA in Tshwane; Gautrain, PRASA, and Rea Vaya in Johannesburg. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros (Cape Town, Durban) are scaffolded for future data work — see [`docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md`](docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md).
 
 ## Why
 
@@ -14,6 +14,7 @@ Under apartheid, townships were deliberately separated from economic centers by 
 - [`docs/superpowers/plans/2026-07-27-buffer-zones-v1.md`](docs/superpowers/plans/2026-07-27-buffer-zones-v1.md) — the task-by-task implementation plan
 - [`docs/superpowers/plans/2026-07-28-spatial-legacy-evidence.md`](docs/superpowers/plans/2026-07-28-spatial-legacy-evidence.md) — the evidence roadmap and data requirements
 - [`docs/data/tshwane-area-classification.md`](docs/data/tshwane-area-classification.md) — how included Tshwane township and settlement areas are selected and displayed
+- [`docs/data/johannesburg-area-classification.md`](docs/data/johannesburg-area-classification.md) — the same, for Johannesburg
 - [`data-pipeline/README.md`](data-pipeline/README.md) — how to (re-)run the data pipeline
 
 ## Stack

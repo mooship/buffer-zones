@@ -1,4 +1,5 @@
 import type { JobCenter } from "./constants/jobCenters";
+import { getOsrmBaseUrl } from "./constants/serviceUrls";
 
 export interface LatLon {
   lat: number;
@@ -11,7 +12,6 @@ export interface NearestJobCenterResult {
   jobCenterName: string | null;
 }
 
-const OSRM_BASE_URL = "https://router.project-osrm.org";
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
 
@@ -31,7 +31,7 @@ async function fetchTable(
   const destinationIndices = destinations
     .map((_, i) => origins.length + i)
     .join(";");
-  const url = `${OSRM_BASE_URL}/table/v1/driving/${coords}?sources=${sourceIndices}&destinations=${destinationIndices}`;
+  const url = `${getOsrmBaseUrl()}/table/v1/driving/${coords}?sources=${sourceIndices}&destinations=${destinationIndices}`;
 
   const response = await fetch(url);
   if (!response.ok) {

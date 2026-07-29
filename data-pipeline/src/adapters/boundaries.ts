@@ -1,3 +1,4 @@
+import { type MetroId, getMetroDefinition } from "@buffer-zones/shared";
 import * as turf from "@turf/turf";
 import AdmZip from "adm-zip";
 import type {
@@ -14,14 +15,12 @@ import * as shapefile from "shapefile";
 // scriptable download link; Adrian Frith's public repos were checked and do
 // not host a ready-made sub-place boundary GeoJSON/shapefile for Tshwane).
 // Verified working (HTTP 200, valid zip containing SP_SA_2011.shp/.dbf/.shx,
-// City of Tshwane records present with MN_CODE 799) on 2026-07-27.
+// City of Tshwane records present with MN_CODE 799, City of Johannesburg
+// records present with MN_CODE 798) on 2026-07-27 (Tshwane) and 2026-07-29
+// (Johannesburg).
 // https://github.com/j-norwood-young/SA-Maps/raw/master/Subplace.zip
 const BOUNDARY_SOURCE_URL =
   "https://github.com/j-norwood-young/SA-Maps/raw/master/Subplace.zip";
-
-// City of Tshwane's municipality code (MN_CODE) in the Stats SA Census 2011
-// sub-place shapefile.
-const TSHWANE_MUNICIPALITY_CODE = 799;
 
 const SHP_ENTRY_NAME = "Subplace/SP_SA_2011.shp";
 const DBF_ENTRY_NAME = "Subplace/SP_SA_2011.dbf";
@@ -67,20 +66,21 @@ export function normalizeBoundaries(
 }
 
 /**
- * Pure transform: filters a national sub-place FeatureCollection down to
- * City of Tshwane records only (matching on the shapefile's MN_CODE
+ * Pure transform: filters a national sub-place FeatureCollection down to a
+ * single metro's records only (matching on the shapefile's MN_CODE
  * municipality field) and remaps each feature's properties to the
  * RawSubPlaceProperties shape. Contains no I/O, so it can be unit tested
  * against a small in-memory fixture without touching the network.
  */
-export function filterTshwaneFeatures(
+export function filterFeaturesByMunicipality(
   collection: FeatureCollection,
+  municipalityCode: number,
 ): FeatureCollection {
   const features: Feature[] = collection.features
     .filter(
       (feature) =>
         (feature.properties as Record<string, unknown> | null)?.MN_CODE ===
-        TSHWANE_MUNICIPALITY_CODE,
+        municipalityCode,
     )
     .map((feature) => {
       const rawProps = feature.properties as Record<string, unknown> | null;
@@ -99,13 +99,14 @@ export function filterTshwaneFeatures(
 
 /**
  * Extracts the sub-place shapefile pair (.shp/.dbf) from the zip archive and
- * converts it to a GeoJSON FeatureCollection, filtered down to City of
- * Tshwane sub-places only. I/O-bound (zip extraction + shapefile parsing);
+ * converts it to a GeoJSON FeatureCollection, filtered down to a single
+ * metro's sub-places only. I/O-bound (zip extraction + shapefile parsing);
  * the filtering logic itself lives in the pure, separately-tested
- * `filterTshwaneFeatures`.
+ * `filterFeaturesByMunicipality`.
  */
 export async function convertShapefileToGeoJSON(
   zipBuffer: Buffer,
+  municipalityCode: number,
 ): Promise<FeatureCollection> {
   const zip = new AdmZip(zipBuffer);
   const shpEntry = zip.getEntry(SHP_ENTRY_NAME);
@@ -125,14 +126,19 @@ export async function convertShapefileToGeoJSON(
     dbfBuffer,
   );
 
-  return filterTshwaneFeatures(collection);
+  return filterFeaturesByMunicipality(collection, municipalityCode);
 }
 
-export async function fetchTshwaneBoundaries(): Promise<FeatureCollection> {
+export async function fetchMetroBoundaries(
+  metroId: MetroId,
+): Promise<FeatureCollection> {
   const response = await fetch(BOUNDARY_SOURCE_URL);
   if (!response.ok) {
-    throw new Error(`Failed to fetch Tshwane boundaries: ${response.status}`);
+    throw new Error(`Failed to fetch metro boundaries: ${response.status}`);
   }
   const zipBuffer = Buffer.from(await response.arrayBuffer());
-  return convertShapefileToGeoJSON(zipBuffer);
+  return convertShapefileToGeoJSON(
+    zipBuffer,
+    getMetroDefinition(metroId).municipalityCode,
+  );
 }

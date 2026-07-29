@@ -26,7 +26,6 @@ function areYengLayerUrl(layer: number): string {
   return `https://e-gis001.tshwane.gov.za/server/rest/services/Other_WS/BRT_A_Re_Yeng/MapServer/${layer}/query?where=1%3D1&outFields=*&f=geojson`;
 }
 
-const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const TSHWANE_BBOX = "-25.95,28.05,-25.55,28.40";
 // Restricted to busway/bus-route ways (not just any element tagged
 // network="A Re Yeng") so a station building isn't picked up and rendered as a
@@ -180,5 +179,5 @@ export async function fetchAReYengRoutes(): Promise<
     // for any of the three layers, so the layer is all-or-nothing per source.
   }
 
-  return fetchOverpass(OVERPASS_URL, AREYENG_OVERPASS_QUERY);
+  return fetchOverpass(AREYENG_OVERPASS_QUERY);
 }

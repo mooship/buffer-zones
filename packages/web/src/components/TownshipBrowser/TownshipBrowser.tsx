@@ -12,12 +12,14 @@ import styles from "./TownshipBrowser.module.css";
 interface TownshipBrowserProps {
   townships: TownshipFeature[];
   selectedTownshipId: string | null;
+  metroName: string;
   onSelect: (township: TownshipFeature) => void;
 }
 
 export function TownshipBrowser({
   townships,
   selectedTownshipId,
+  metroName,
   onSelect,
 }: TownshipBrowserProps) {
   const [query, setQuery] = useState("");
@@ -62,6 +64,13 @@ export function TownshipBrowser({
       getTownshipGroup(township.properties.name, township.properties.id) !==
       undefined,
   ).length;
+  const includedGroupCount = TOWNSHIP_GROUPS.filter((name) =>
+    townships.some(
+      (township) =>
+        getTownshipGroup(township.properties.name, township.properties.id) ===
+        name,
+    ),
+  ).length;
   const selectedTownship = townships.find(
     (township) => township.properties.id === selectedTownshipId,
   );
@@ -83,10 +92,10 @@ export function TownshipBrowser({
     <div className={styles.browser}>
       <p className={styles.intro}>
         The choropleth compares all {townships.length.toLocaleString("en-ZA")}{" "}
-        Tshwane Census 2011 sub-places.{" "}
+        {metroName} Census 2011 sub-places.{" "}
         {townshipSubPlaceCount.toLocaleString("en-ZA")} sit within the{" "}
-        {TOWNSHIP_GROUPS.length} currently included township and settlement
-        areas outlined here; the rest provide citywide comparison. This is a
+        {includedGroupCount} currently included township and settlement areas
+        outlined here; the rest provide citywide comparison. This is a
         documented working classification, not an official Stats SA category.
       </p>
       <label className={styles.search}>

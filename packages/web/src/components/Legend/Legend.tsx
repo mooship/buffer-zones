@@ -1,9 +1,10 @@
+import type { MetroId } from "@buffer-zones/shared";
 import {
   COMMUTE_BUCKET_COLORS,
   TRANSIT_DISTANCE_BUCKET_COLORS,
 } from "../../constants/colorScale";
 import { STATION_LAYER_IDS } from "../../constants/layerStyles";
-import { LAYER_REGISTRY } from "../../layers/registry";
+import { getLayerDefinitions } from "../../layers/registry";
 import styles from "./Legend.module.css";
 
 const ENTRIES = [
@@ -25,19 +26,27 @@ const TRANSIT_DISTANCE_ENTRIES = [
   { label: "No data", color: TRANSIT_DISTANCE_BUCKET_COLORS.noData },
 ] as const;
 
-const TRANSIT_ENTRIES = LAYER_REGISTRY.flatMap((layer) =>
-  layer.available && layer.style?.kind === "line"
-    ? [
-        {
-          label: layer.label,
-          color: layer.style.color,
-          hasStations: STATION_LAYER_IDS.includes(layer.id),
-        },
-      ]
-    : [],
-);
+function getTransitEntries(metroId: MetroId) {
+  return getLayerDefinitions(metroId).flatMap((layer) =>
+    layer.available && layer.style?.kind === "line"
+      ? [
+          {
+            label: layer.label,
+            color: layer.style.color,
+            hasStations: STATION_LAYER_IDS.includes(layer.id),
+          },
+        ]
+      : [],
+  );
+}
 
-export function Legend() {
+interface LegendProps {
+  metroId: MetroId;
+}
+
+export function Legend({ metroId }: LegendProps) {
+  const transitEntries = getTransitEntries(metroId);
+
   return (
     <div className={styles.groups}>
       <div>
@@ -79,7 +88,7 @@ export function Legend() {
       <div className={styles.fullWidthGroup}>
         <h3 className={styles.groupTitle}>Transit routes</h3>
         <ul className={styles.legend} aria-label="Transit route colors">
-          {TRANSIT_ENTRIES.map((entry) => (
+          {transitEntries.map((entry) => (
             <li key={entry.label} className={styles.entry}>
               <span className={styles.symbolGroup} aria-hidden="true">
                 <span

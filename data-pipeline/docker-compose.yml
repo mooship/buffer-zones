@@ -1,0 +1,32 @@
+# Optional local infrastructure for running the data pipeline without public
+# rate limits. See "Running locally without rate limits" in README.md for the
+# one-time setup steps (downloading and pre-processing the OSM extract) that
+# must happen before `docker compose up` will serve real data.
+#
+# Once running, set these before `npm run run`:
+#   OSRM_BASE_URL=http://localhost:5000
+#   OVERPASS_URL=http://localhost:12345/api/interpreter
+services:
+  osrm:
+    image: ghcr.io/project-osrm/osrm-backend
+    command: osrm-routed --algorithm mld /data/south-africa-latest.osrm
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./osrm-data:/data
+
+  overpass:
+    image: wiktorn/overpass-api
+    environment:
+      - OVERPASS_META=yes
+      - OVERPASS_MODE=init
+      - OVERPASS_PLANET_URL=file:///osm-data/south-africa-latest.osm.pbf
+      - OVERPASS_RULES_LOAD=10
+    ports:
+      - "12345:80"
+    volumes:
+      - ./osm-data:/osm-data
+      - overpass-db:/db
+
+volumes:
+  overpass-db:

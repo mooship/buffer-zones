@@ -7,6 +7,7 @@ export const TRANSIT_LINE_COLORS = {
   gautrain: "#E69F00",
   gautrainBus: "#CC79A7",
   aReYeng: "#009E73",
+  reaVaya: "#56B4E9",
   prasa: "#D55E00",
   unavailable: "#8A93A5",
 } as const;
