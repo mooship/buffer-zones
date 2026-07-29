@@ -15,6 +15,7 @@ import { BasemapToggle } from "./components/BasemapToggle/BasemapToggle";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { Legend } from "./components/Legend/Legend";
+import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import {
   APP_NAME,
@@ -24,6 +25,10 @@ import {
 } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
+import {
+  setThemePreference,
+  useThemePreference,
+} from "./hooks/useThemePreference";
 import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
 
 const repository = createTownshipDataRepository(
@@ -62,6 +67,7 @@ export function App() {
   const setSelectedTownshipId = useMapUiStore(
     (state) => state.setSelectedTownshipId,
   );
+  const themePreference = useThemePreference();
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -284,6 +290,10 @@ export function App() {
 
       <div className={styles.basemapControl}>
         <BasemapToggle basemap={basemap} onChange={setBasemap} />
+        <ThemeToggle
+          preference={themePreference}
+          onChange={setThemePreference}
+        />
       </div>
     </div>
   );

@@ -55,5 +55,7 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 
 ## Design system
 
-Named colour tokens (ink/panel/line/paper/jacaranda/redearth — "jacaranda-dusk" palette), Fraunces / Bricolage Grotesque / Martian Mono as the three self-hosted variable fonts, and a recurring hairline-plus-corner-registration-tick motif. Keep new UI consistent with this rather than introducing new ad hoc styles.
+Named CSS custom-property colour tokens (`--color-ink/panel/line/paper/ochre/redearth/muted/surface`, defined in `packages/web/src/index.css` with separate light/dark-mode values), Inter Variable and Martian Mono Variable as the two self-hosted variable fonts, and a recurring hairline-plus-corner-registration-tick motif (`App.module.css`). Keep new UI consistent with this rather than introducing new ad hoc styles or fonts.
+
+Note: `docs/superpowers/specs/2026-07-27-buffer-zones-v1-design.md` §9 describes an earlier design intent (Fraunces/Bricolage Grotesque fonts, a purple `jacaranda` token, dark ink/panel base colours) that was **not** what shipped — treat that doc as historical rationale, not a current reference for tokens or fonts.
 

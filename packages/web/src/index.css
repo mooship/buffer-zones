@@ -26,7 +26,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-ink: #23262c;
     --color-panel: #2f3339;
     --color-line: #4c515b;
@@ -44,6 +44,25 @@
 
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --color-ink: #23262c;
+  --color-panel: #2f3339;
+  --color-line: #4c515b;
+  --color-paper: #f0f1f3;
+  --color-ochre: #e2954f;
+  --color-redearth: #e2685a;
+  --color-muted: #a9afba;
+
+  --color-surface: #33373e;
+  --color-surface-hover: #3d424a;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 45%), 0 1px 3px rgb(0 0 0 / 30%);
+  --shadow-md: 0 2px 6px rgb(0 0 0 / 45%), 0 6px 16px rgb(0 0 0 / 35%);
+  --shadow-lg: 0 4px 12px rgb(0 0 0 / 50%), 0 10px 28px rgb(0 0 0 / 40%);
+
+  color-scheme: dark;
 }
 
 * {
