@@ -1,3 +1,4 @@
+import { truncate } from "@turf/turf";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import { feature } from "topojson-client";
 import { topology } from "topojson-server";
@@ -5,6 +6,9 @@ import { presimplify, simplify } from "topojson-simplify";
 import type { Objects, Topology } from "topojson-specification";
 
 const MINIMUM_TRIANGLE_WEIGHT = 3e-8;
+// ~11cm at the equator - far finer than anything visible on a township map,
+// but cuts several redundant digits off every coordinate in the payload.
+const COORDINATE_PRECISION = 6;
 
 export function createDisplayPolygons<
   Geometry extends Polygon | MultiPolygon,
@@ -23,8 +27,13 @@ export function createDisplayPolygons<
   if (!townships) {
     throw new Error("Display topology did not contain township geometry");
   }
-  return feature(simplified, townships) as unknown as FeatureCollection<
+  const result = feature(simplified, townships) as unknown as FeatureCollection<
     Geometry,
     Properties
   >;
+  return truncate(result, {
+    precision: COORDINATE_PRECISION,
+    coordinates: 2,
+    mutate: true,
+  });
 }

@@ -6,6 +6,10 @@
     "cloudflare-builds": { "url": "https://builds.mcp.cloudflare.com/mcp" },
     "cloudflare-observability": {
       "url": "https://observability.mcp.cloudflare.com/mcp"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest", "--headless", "--isolated"]
     }
   }
 }

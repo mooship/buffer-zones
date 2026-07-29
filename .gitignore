@@ -7,3 +7,4 @@ dist
 .tmp-*
 data-pipeline/downloads/
 *.tsbuildinfo
+lighthouse-report*.json
