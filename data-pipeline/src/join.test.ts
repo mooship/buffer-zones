@@ -56,6 +56,16 @@ describe("joinTownshipData", () => {
     expect(features[0].geometry).toEqual(towns[0].geometry);
   });
 
+  it("defaults to a null result when a township has no matching OSRM entry", () => {
+    const result = joinTownshipData([township("A", "Alpha")], []);
+    const features = result as [TownshipFeature];
+
+    expect(features[0].properties).toMatchObject({
+      commuteMinutes: null,
+      nearestJobCenter: "",
+    });
+  });
+
   it("sets nearestTransitKm to null when no distance was computed", () => {
     const result = joinTownshipData(
       [township("A", "Alpha")],

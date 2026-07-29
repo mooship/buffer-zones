@@ -93,4 +93,64 @@ describe("TownshipBrowser", () => {
     fireEvent.click(group);
     expect(group).toHaveAttribute("aria-expanded", "false");
   });
+
+  it("orders same-group places by commute time, breaking ties alphabetically, and shows a time range that tolerates missing data", () => {
+    const mamelodiTownships = [
+      {
+        type: "Feature",
+        geometry: null,
+        properties: {
+          id: "mamelodi-b",
+          name: "Mamelodi Ext 12",
+          commuteMinutes: 30,
+          nearestJobCenter: "Hatfield",
+          distanceKm: 18.2,
+          nearestTransitKm: null,
+        },
+      },
+      {
+        type: "Feature",
+        geometry: null,
+        properties: {
+          id: "mamelodi-a",
+          name: "Mamelodi Ext 5",
+          commuteMinutes: 30,
+          nearestJobCenter: "Hatfield",
+          distanceKm: 18.2,
+          nearestTransitKm: null,
+        },
+      },
+      {
+        type: "Feature",
+        geometry: null,
+        properties: {
+          id: "mamelodi-c",
+          name: "Mamelodi Ext 20",
+          commuteMinutes: null,
+          nearestJobCenter: "Hatfield",
+          distanceKm: null,
+          nearestTransitKm: null,
+        },
+      },
+    ] as unknown as TownshipFeature[];
+
+    render(
+      <TownshipBrowser
+        townships={mamelodiTownships}
+        selectedTownshipId={null}
+        onSelect={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /browse mamelodi/i }));
+
+    const placeButtons = screen.getAllByRole("button", {
+      name: /mamelodi ext/i,
+    });
+    expect(placeButtons.map((button) => button.textContent)).toEqual([
+      expect.stringContaining("Mamelodi Ext 12"),
+      expect.stringContaining("Mamelodi Ext 5"),
+      expect.stringContaining("Mamelodi Ext 20"),
+    ]);
+  });
 });

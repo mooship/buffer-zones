@@ -43,4 +43,13 @@ describe("TownshipPopup", () => {
 
     expect(screen.getByText("No data")).toBeInTheDocument();
   });
+
+  it("shows the distance to nearest transit when it is known", () => {
+    render(
+      <TownshipPopup properties={{ ...properties, nearestTransitKm: 4.28 }} />,
+    );
+
+    expect(screen.getByText("Distance to nearest transit")).toBeInTheDocument();
+    expect(screen.getByText("4.3 km")).toBeInTheDocument();
+  });
 });

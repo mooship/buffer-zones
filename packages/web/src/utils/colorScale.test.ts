@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { COMMUTE_BUCKET_COLORS } from "../constants/colorScale";
+import {
+  COMMUTE_BUCKET_COLORS,
+  TRANSIT_DISTANCE_BUCKET_COLORS,
+} from "../constants/colorScale";
 import {
   CommuteBucket,
+  TransitDistanceBucket,
   commuteMinutesToColor,
   getCommuteBucket,
+  getTransitDistanceBucket,
+  transitDistanceToColor,
 } from "./colorScale";
 
 describe("getCommuteBucket", () => {
@@ -33,5 +39,34 @@ describe("commuteMinutesToColor", () => {
 
   it("returns the no-data color for null", () => {
     expect(commuteMinutesToColor(null)).toBe(COMMUTE_BUCKET_COLORS.noData);
+  });
+});
+
+describe("getTransitDistanceBucket", () => {
+  it.each([
+    [0.5, TransitDistanceBucket.Near],
+    [2, TransitDistanceBucket.Moderate],
+    [5, TransitDistanceBucket.Far],
+    [10, TransitDistanceBucket.VeryFar],
+  ])("classifies %i km as %s", (km, expected) => {
+    expect(getTransitDistanceBucket(km)).toBe(expected);
+  });
+});
+
+describe("transitDistanceToColor", () => {
+  it("returns a distinct color per bucket", () => {
+    const colors = new Set([
+      transitDistanceToColor(0.5),
+      transitDistanceToColor(2),
+      transitDistanceToColor(5),
+      transitDistanceToColor(10),
+    ]);
+    expect(colors.size).toBe(4);
+  });
+
+  it("returns the no-data color for null", () => {
+    expect(transitDistanceToColor(null)).toBe(
+      TRANSIT_DISTANCE_BUCKET_COLORS.noData,
+    );
   });
 });

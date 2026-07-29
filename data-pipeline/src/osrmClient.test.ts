@@ -85,6 +85,35 @@ describe("getNearestJobCenter", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
+  it("throws when OSRM responds ok but with a non-Ok result code", async () => {
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({ code: "NoRoute", durations: [] }),
+    });
+
+    await expect(
+      getNearestJobCenter([{ lat: -25.75, lon: 28.19 }], destinations),
+    ).rejects.toThrow("OSRM table returned code NoRoute");
+  });
+
+  it("returns a null result when a duration row's nearest index has no matching destination", async () => {
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({ code: "Ok", durations: [[500, 200, 100]] }),
+    });
+
+    const result = await getNearestJobCenter(
+      [{ lat: -25.75, lon: 28.19 }],
+      destinations,
+    );
+
+    expect(result).toEqual([
+      { minutes: null, jobCenterId: null, jobCenterName: null },
+    ]);
+  });
+
   it("splits origins into batches of 50 and waits between batches", async () => {
     vi.useFakeTimers();
     const fetchMock = fetch as ReturnType<typeof vi.fn>;

@@ -98,6 +98,49 @@ describe("normalizeAReYeng", () => {
   });
 });
 
+describe("normalizeAReYeng", () => {
+  it("falls back to an 'unknown' id and 'Unnamed' name when properties are missing", () => {
+    const raw = {
+      type: "FeatureCollection" as const,
+      features: [
+        {
+          type: "Feature" as const,
+          properties: null,
+          geometry: {
+            type: "LineString" as const,
+            coordinates: [
+              [28.19, -25.75],
+              [28.28, -25.78],
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = normalizeAReYeng(raw);
+
+    expect(result.features[0]?.properties.id).toBe("unknown");
+    expect(result.features[0]?.properties.name).toBe("Unnamed");
+  });
+
+  it("skips a feature whose geometry is neither LineString nor MultiLineString", () => {
+    const raw = {
+      type: "FeatureCollection" as const,
+      features: [
+        {
+          type: "Feature" as const,
+          properties: { ROUTE_ID: "ARY-1", ROUTE_NAME: "Stop marker" },
+          geometry: { type: "Point" as const, coordinates: [28.19, -25.75] },
+        },
+      ],
+    };
+
+    const result = normalizeAReYeng(raw);
+
+    expect(result.features).toHaveLength(0);
+  });
+});
+
 describe("normalizeAReYengOverpass", () => {
   it("normalizes an OSM-tagged fallback way into the common TransitLayer shape", () => {
     const raw = {
@@ -122,6 +165,53 @@ describe("normalizeAReYengOverpass", () => {
       name: "Line 1A",
       network: "A Re Yeng",
     });
+  });
+
+  it("falls back to 'Unnamed' when a way has no name tag", () => {
+    const raw = {
+      elements: [
+        {
+          type: "way" as const,
+          id: 333,
+          geometry: [
+            { lat: -25.75, lon: 28.19 },
+            { lat: -25.78, lon: 28.28 },
+          ],
+        },
+      ],
+    };
+
+    const result = normalizeAReYengOverpass(raw);
+
+    expect(result.features[0]?.properties.name).toBe("Unnamed");
+  });
+
+  it("skips non-way elements such as nodes", () => {
+    const raw = {
+      elements: [
+        {
+          type: "node" as const,
+          id: 1,
+          tags: { name: "A stop" },
+          lat: -25.75,
+          lon: 28.19,
+        },
+        {
+          type: "way" as const,
+          id: 333,
+          tags: { name: "Line 1A" },
+          geometry: [
+            { lat: -25.75, lon: 28.19 },
+            { lat: -25.78, lon: 28.28 },
+          ],
+        },
+      ],
+    };
+
+    const result = normalizeAReYengOverpass(raw);
+
+    expect(result.features).toHaveLength(1);
+    expect(result.features[0]?.properties.id).toBe("way/333");
   });
 });
 
@@ -164,6 +254,32 @@ describe("fetchAReYengRoutes", () => {
       expect.stringContaining("/10/query"),
     );
     expect("features" in result && result.features).toHaveLength(3);
+  });
+
+  it("falls back to Overpass if a layer response has an unexpected shape", async () => {
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes("overpass-api.de")) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ elements: [] }),
+        });
+      }
+      if (url.includes("/9/query")) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ error: "not a feature collection" }),
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ type: "FeatureCollection", features: [] }),
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchAReYengRoutes();
+
+    expect("elements" in result).toBe(true);
   });
 
   it("falls back to Overpass if any of the three layers fails to fetch", async () => {

@@ -72,6 +72,28 @@ describe("SettingsMenu", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("stays open when clicking inside the menu", () => {
+    renderMenu();
+
+    fireEvent.click(screen.getByRole("button", { name: /map settings/i }));
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+
+    fireEvent.mouseDown(screen.getByRole("menu"));
+
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("stays open when a non-Escape key is pressed", () => {
+    renderMenu();
+
+    fireEvent.click(screen.getByRole("button", { name: /map settings/i }));
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: "Enter" });
+
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
   it("closes and returns focus to the trigger when Escape is pressed", () => {
     renderMenu();
 

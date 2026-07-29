@@ -173,6 +173,64 @@ describe("App", () => {
     ).toBeInTheDocument();
   });
 
+  it("supports Home, End, and ArrowLeft tab navigation shortcuts", async () => {
+    render(<App />);
+
+    const storyTab = screen.getByRole("tab", { name: "The pattern" });
+    fireEvent.keyDown(storyTab, { key: "End" });
+    expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Map layers" }), {
+      key: "ArrowLeft",
+    });
+    expect(screen.getByRole("tab", { name: "Browse places" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Browse places" }), {
+      key: "Home",
+    });
+    expect(screen.getByRole("tab", { name: "The pattern" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+  });
+
+  it("ignores keys other than the supported arrow/Home/End tab shortcuts", async () => {
+    render(<App />);
+
+    const storyTab = screen.getByRole("tab", { name: "The pattern" });
+    fireEvent.keyDown(storyTab, { key: "a" });
+
+    expect(storyTab).toHaveAttribute("aria-selected", "true");
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+  });
+
+  it("selecting a place in the browser updates the shared selection", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Browse places" }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /browse mamelodi/i }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: /mamelodi, modeled car time/i }),
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Mamelodi" }),
+    ).toBeInTheDocument();
+  });
+
   it("collapses and restores the controls panel", async () => {
     render(<App />);
 

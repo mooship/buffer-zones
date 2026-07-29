@@ -54,4 +54,31 @@ describe("useThemePreference theme-color meta sync", () => {
     ).not.toBeInTheDocument();
     expect(document.documentElement.dataset.theme).toBeUndefined();
   });
+
+  it("updates the existing override meta tag's content instead of creating a new one", async () => {
+    const { setThemePreference, THEME_COLOR } = await importFreshModule();
+    setThemePreference("dark");
+    setThemePreference("light");
+
+    const metas = document.querySelectorAll(
+      'meta[name="theme-color"][data-theme-override]',
+    );
+    expect(metas).toHaveLength(1);
+    expect(metas[0]).toHaveAttribute("content", THEME_COLOR.light);
+  });
+
+  it("notifies subscribers when the preference changes", async () => {
+    const { setThemePreference, useThemePreference } =
+      await importFreshModule();
+    const { act, renderHook } = await import("@testing-library/react");
+
+    const { result } = renderHook(() => useThemePreference());
+    expect(result.current).toBe("system");
+
+    act(() => {
+      setThemePreference("dark");
+    });
+
+    expect(result.current).toBe("dark");
+  });
 });

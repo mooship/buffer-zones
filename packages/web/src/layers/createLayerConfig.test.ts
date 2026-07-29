@@ -123,6 +123,24 @@ describe("createLayerConfig", () => {
     expect(config.styleFn).toBeUndefined();
   });
 
+  it("produces static pathOptions for a point layer", () => {
+    const definition: LayerDefinition = {
+      id: "gautrain",
+      label: "Gautrain",
+      dataSource: "/data/gautrain.v1.geojson",
+      layerType: "point",
+      defaultVisible: false,
+      available: true,
+      style: { kind: "point", color: "#A87FE0", radius: 4 },
+    };
+
+    const config = createLayerConfig(definition);
+
+    expect(config).toEqual({
+      pathOptions: { color: "#A87FE0", fillColor: "#A87FE0" },
+    });
+  });
+
   it("returns an empty config for a layer without a style", () => {
     const definition: LayerDefinition = {
       id: "myciti",
