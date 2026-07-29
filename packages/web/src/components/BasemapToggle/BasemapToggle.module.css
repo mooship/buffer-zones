@@ -4,6 +4,7 @@
   border: none;
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--color-line) 25%, var(--color-panel));
+  box-shadow: var(--shadow-md);
   margin: 0;
   padding: 0.25rem;
   min-width: 0;

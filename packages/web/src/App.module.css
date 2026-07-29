@@ -300,6 +300,13 @@
   outline-offset: 2px;
 }
 
+.basemapControl {
+  position: absolute;
+  bottom: 3.25rem;
+  left: 1.25rem;
+  z-index: 1200;
+}
+
 .panelSources {
   padding-top: 0.75rem;
   border-top: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
@@ -402,5 +409,10 @@
   .panelTrigger[aria-expanded="true"] {
     right: 0.75rem;
     bottom: calc(min(62dvh, 34rem) + 0.75rem);
+  }
+
+  .basemapControl {
+    left: 0.75rem;
+    bottom: 3rem;
   }
 }

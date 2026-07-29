@@ -277,14 +277,14 @@ export function App() {
                   onToggle={toggleLayer}
                 />
               </section>
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Basemap</h2>
-                <BasemapToggle basemap={basemap} onChange={setBasemap} />
-              </section>
             </div>
           ) : null}
         </div>
       </aside>
+
+      <div className={styles.basemapControl}>
+        <BasemapToggle basemap={basemap} onChange={setBasemap} />
+      </div>
     </div>
   );
 }

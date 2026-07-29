@@ -24,6 +24,7 @@ import {
 import { BASEMAPS, type Basemap } from "../../constants/basemaps";
 import { TOWNSHIP_OUTLINE } from "../../constants/layerStyles";
 import { useLayerData } from "../../hooks/useLayerData";
+import { usePrefersDarkMode } from "../../hooks/usePrefersDarkMode";
 import { createLayerConfig } from "../../layers/createLayerConfig";
 import { LAYER_REGISTRY } from "../../layers/registry";
 import { TownshipPopup } from "../TownshipPopup/TownshipPopup";
@@ -191,7 +192,14 @@ export function MapView({
       .filter((layer) => layer.layerType !== "choropleth")
       .map((layer) => layer.id),
   );
+  const prefersDark = usePrefersDarkMode();
+  const useDarkTiles =
+    basemap === "street" && prefersDark && "darkUrl" in BASEMAPS.street;
   const tiles = BASEMAPS[basemap];
+  const tileUrl = useDarkTiles ? BASEMAPS.street.darkUrl : tiles.url;
+  const tileAttribution = useDarkTiles
+    ? BASEMAPS.street.darkAttribution
+    : tiles.attribution;
   const showTownships = visibleLayerIds.includes("townships");
   const townshipAreaData: FeatureCollection = {
     type: "FeatureCollection",
@@ -216,9 +224,9 @@ export function MapView({
         <ZoomControl position="bottomright" />
         <ScaleControl position="bottomleft" imperial={false} />
         <TileLayer
-          key={basemap}
-          url={tiles.url}
-          attribution={tiles.attribution}
+          key={`${basemap}-${useDarkTiles ? "dark" : "light"}`}
+          url={tileUrl}
+          attribution={tileAttribution}
           detectRetina
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
