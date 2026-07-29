@@ -35,36 +35,6 @@ describe("LayerToggles", () => {
     expect(onToggle).toHaveBeenCalledWith("a-re-yeng");
   });
 
-  it("disables layers that have no data yet and explains why", () => {
-    render(
-      <LayerToggles
-        visibleLayerIds={[]}
-        metroId="tshwane"
-        onToggle={vi.fn()}
-      />,
-    );
-
-    const myciti = screen.getByRole("checkbox", { name: /MyCiTi/ });
-
-    expect(myciti).toBeDisabled();
-    expect(screen.getAllByText("Not yet available").length).toBeGreaterThan(0);
-  });
-
-  it("does not call onToggle for an unavailable layer", () => {
-    const onToggle = vi.fn();
-    render(
-      <LayerToggles
-        visibleLayerIds={[]}
-        metroId="tshwane"
-        onToggle={onToggle}
-      />,
-    );
-
-    fireEvent.click(screen.getByRole("checkbox", { name: /MyCiTi/ }));
-
-    expect(onToggle).not.toHaveBeenCalled();
-  });
-
   it("omits a metro-specific operator entirely for a metro it doesn't serve", () => {
     render(
       <LayerToggles

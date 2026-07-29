@@ -26,13 +26,4 @@ test.describe("layer toggles", () => {
     await expect(gautrainCheckbox).not.toBeChecked();
     await expect(page.locator(".leaflet-transit-pane path")).toHaveCount(0);
   });
-
-  test("disables layers that are not yet available", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("tab", { name: "Map layers" }).click();
-
-    const myciti = page.getByRole("checkbox", { name: "MyCiTi" });
-    await expect(myciti).toBeDisabled();
-    await expect(page.getByText("Not yet available").first()).toBeVisible();
-  });
 });

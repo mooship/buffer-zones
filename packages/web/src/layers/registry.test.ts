@@ -7,10 +7,7 @@ const COMMON_LAYER_IDS: LayerId[] = [
   "gautrain",
   "gautrain-bus",
   "nearest-transit",
-  "myciti",
   "prasa",
-  "metrobus",
-  "durban-transport",
 ];
 
 const METRO_IDS: MetroId[] = ["tshwane", "johannesburg"];
@@ -122,5 +119,14 @@ describe("getLayerDefinitions availability per metro", () => {
     );
     expect(tshwaneIds).not.toContain("rea-vaya");
     expect(johannesburgIds).not.toContain("a-re-yeng");
+  });
+
+  it("withholds operators for metros not yet supported (MyCiTi, Metrobus, Durban Transport) from every metro", () => {
+    for (const metroId of METRO_IDS) {
+      const ids = getLayerDefinitions(metroId).map((layer) => layer.id);
+      expect(ids).not.toContain("myciti");
+      expect(ids).not.toContain("metrobus");
+      expect(ids).not.toContain("durban-transport");
+    }
   });
 });

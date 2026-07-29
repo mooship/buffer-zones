@@ -14,9 +14,8 @@ import { writeGeoJsonFile } from "./export";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../packages/web/public/data");
 
-// Transit layer base filenames that may exist per metro; not every metro has
-// every operator (e.g. only Tshwane has a-re-yeng/gautrain-bus), so each is
-// skipped with a friendly log line rather than failing the whole run.
+// Not every metro has every operator (e.g. only Tshwane has a-re-yeng), so
+// each missing file is skipped with a log line rather than failing the run.
 const TRANSIT_LAYER_NAMES = [
   "gautrain",
   "gautrain-bus",

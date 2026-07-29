@@ -4,16 +4,10 @@ import type {
 } from "@buffer-zones/shared";
 import { type OverpassResponse, fetchOverpass } from "./gautrain";
 
-// Rea Vaya is the City of Johannesburg's own BRT system (the Johannesburg
-// equivalent of Tshwane's A Re Yeng). No public open-data portal export was
-// found for it (unlike A Re Yeng's City of Tshwane e-GIS MapServer), so this
-// adapter is Overpass-only. Verified against a live Overpass query on
-// 2026-07-29: unlike A Re Yeng, Rea Vaya's OSM coverage tags `network="Rea
-// Vaya"`/`route="bus"` on route RELATIONS (e.g. "BRT T1: Ellis Park East =>
-// Thokoza Park"), not on individual ways — the member ways themselves carry
-// no distinguishing tag at all. So this mirrors `gautrain.ts`'s Gautrain Bus
-// pattern (relation members extracted into LineStrings) rather than A Re
-// Yeng's way-tag pattern.
+// No open-data portal found (unlike A Re Yeng's Tshwane e-GIS MapServer), so
+// Overpass-only. Rea Vaya tags network/route on the route RELATION, not on
+// member ways, so this mirrors gautrain.ts's Gautrain Bus pattern instead of
+// A Re Yeng's way-tag pattern.
 function reaVayaQuery(bbox: string): string {
   return `
 [out:json][timeout:60];

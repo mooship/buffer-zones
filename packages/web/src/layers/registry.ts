@@ -58,11 +58,8 @@ export function getLayerDefinitions(metroId: MetroId): LayerDefinition[] {
     },
   ];
 
-  // A Re Yeng and Rea Vaya are each a single city's own BRT operator, not a
-  // Gauteng-wide network like Gautrain/Gautrain Bus/PRASA — they will never
-  // exist in the other metro, so (unlike the genuinely-not-built-yet stubs
-  // below) they're omitted entirely rather than shown disabled, to avoid
-  // implying they're "coming soon" for a city they'll never serve.
+  // A Re Yeng and Rea Vaya each belong to a single city, so unlike a
+  // not-yet-available layer, they're omitted rather than shown disabled.
   if (isTshwane) {
     layers.push({
       id: "a-re-yeng",
@@ -86,52 +83,6 @@ export function getLayerDefinitions(metroId: MetroId): LayerDefinition[] {
       style: { kind: "line", color: TRANSIT_LINE_COLORS.reaVaya, weight: 3 },
     });
   }
-
-  // MyCiTi/Metrobus/Durban Transport are operators in metros this app
-  // doesn't cover at all yet (Cape Town, Johannesburg's conventional bus,
-  // Durban) — shown disabled in every metro as a roadmap signal, distinct
-  // from the Tshwane/Johannesburg-only operators above.
-  layers.push(
-    {
-      id: "myciti",
-      label: "MyCiTi",
-      dataSource: `${base}/myciti.v1.geojson`,
-      layerType: "line",
-      defaultVisible: false,
-      available: false,
-      style: {
-        kind: "line",
-        color: TRANSIT_LINE_COLORS.unavailable,
-        weight: 2,
-      },
-    },
-    {
-      id: "metrobus",
-      label: "Metrobus",
-      dataSource: `${base}/metrobus.v1.geojson`,
-      layerType: "line",
-      defaultVisible: false,
-      available: false,
-      style: {
-        kind: "line",
-        color: TRANSIT_LINE_COLORS.unavailable,
-        weight: 2,
-      },
-    },
-    {
-      id: "durban-transport",
-      label: "Durban Transport",
-      dataSource: `${base}/durban-transport.v1.geojson`,
-      layerType: "line",
-      defaultVisible: false,
-      available: false,
-      style: {
-        kind: "line",
-        color: TRANSIT_LINE_COLORS.unavailable,
-        weight: 2,
-      },
-    },
-  );
 
   return layers;
 }
