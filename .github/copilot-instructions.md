@@ -1,6 +1,6 @@
-# CLAUDE.md
+# .github/copilot-instructions.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to GitHub Copilot when working with code in this repository.
 
 ## What this is
 
@@ -13,8 +13,8 @@ npm install
 npm run test        # vitest across all workspaces (packages/*, data-pipeline)
 npm run typecheck   # shared package typecheck + web build + data-pipeline typecheck
 npm run build       # build all workspaces
-npm run lint         # biome check .
-npm run format       # biome format --write .
+npm run lint        # biome check .
+npm run format      # biome format --write .
 npm run dev --workspace @buffer-zones/web
 ```
 
