@@ -4,6 +4,13 @@ export type ThemePreference = "system" | "light" | "dark";
 
 export const THEME_STORAGE_KEY = "buffer-zones-theme";
 
+export const THEME_COLOR: Record<"light" | "dark", string> = {
+  light: "#edeff2",
+  dark: "#23262c",
+};
+
+const THEME_COLOR_OVERRIDE_ATTR = "data-theme-override";
+
 function isExplicitTheme(value: string | null): value is "light" | "dark" {
   return value === "light" || value === "dark";
 }
@@ -13,15 +20,40 @@ function readStoredPreference(): ThemePreference {
   return isExplicitTheme(stored) ? stored : "system";
 }
 
+function syncThemeColorMeta(preference: ThemePreference) {
+  const existingOverride = document.querySelector(
+    `meta[name="theme-color"][${THEME_COLOR_OVERRIDE_ATTR}]`,
+  );
+
+  if (preference === "system") {
+    existingOverride?.remove();
+    return;
+  }
+
+  const content = THEME_COLOR[preference];
+  if (existingOverride) {
+    existingOverride.setAttribute("content", content);
+    return;
+  }
+
+  const override = document.createElement("meta");
+  override.setAttribute("name", "theme-color");
+  override.setAttribute("content", content);
+  override.setAttribute(THEME_COLOR_OVERRIDE_ATTR, "");
+  document.head.prepend(override);
+}
+
 function applyThemeAttribute(preference: ThemePreference) {
   if (preference === "system") {
     delete document.documentElement.dataset.theme;
   } else {
     document.documentElement.dataset.theme = preference;
   }
+  syncThemeColorMeta(preference);
 }
 
 let currentPreference = readStoredPreference();
+applyThemeAttribute(currentPreference);
 const listeners = new Set<() => void>();
 
 function subscribe(callback: () => void) {

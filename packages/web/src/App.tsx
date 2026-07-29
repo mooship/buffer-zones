@@ -11,17 +11,17 @@ import {
   useState,
 } from "react";
 import styles from "./App.module.css";
-import { BasemapToggle } from "./components/BasemapToggle/BasemapToggle";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { Legend } from "./components/Legend/Legend";
-import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
+import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import {
   APP_NAME,
   APP_TAGLINE,
   DATA_AS_OF,
   DATA_SOURCES,
+  REPOSITORY_URL,
 } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
@@ -254,6 +254,14 @@ export function App() {
                   {DATA_SOURCES.map((source) => (
                     <span key={source}>{source}</span>
                   ))}
+                  <a
+                    className={styles.panelSourceLink}
+                    href={REPOSITORY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Source code: mooship/buffer-zones
+                  </a>
                 </div>
               </details>
             </section>
@@ -288,11 +296,12 @@ export function App() {
         </div>
       </aside>
 
-      <div className={styles.basemapControl}>
-        <BasemapToggle basemap={basemap} onChange={setBasemap} />
-        <ThemeToggle
-          preference={themePreference}
-          onChange={setThemePreference}
+      <div className={styles.settingsControl}>
+        <SettingsMenu
+          basemap={basemap}
+          onBasemapChange={setBasemap}
+          themePreference={themePreference}
+          onThemePreferenceChange={setThemePreference}
         />
       </div>
     </div>

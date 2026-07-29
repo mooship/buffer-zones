@@ -300,14 +300,11 @@
   outline-offset: 2px;
 }
 
-.basemapControl {
+.settingsControl {
   position: absolute;
   bottom: 3.25rem;
   left: 1.25rem;
   z-index: 1200;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .panelSources {
@@ -354,6 +351,23 @@
   gap: 0.375rem;
   padding: 0.25rem 0 0.5rem 1.25rem;
   line-height: 1.35;
+}
+
+.panelSourceLink {
+  color: var(--color-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  width: fit-content;
+}
+
+.panelSourceLink:hover,
+.panelSourceLink:focus-visible {
+  color: var(--color-ochre);
+}
+
+.panelSourceLink:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
@@ -414,7 +428,7 @@
     bottom: calc(min(62dvh, 34rem) + 0.75rem);
   }
 
-  .basemapControl {
+  .settingsControl {
     left: 0.75rem;
     bottom: 3rem;
   }
