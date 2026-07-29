@@ -7,6 +7,7 @@ describe("getNearestJobCenter", () => {
   });
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 
   const destinations = [
@@ -82,5 +83,56 @@ describe("getNearestJobCenter", () => {
       },
     ]);
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("splits origins into batches of 50 and waits between batches", async () => {
+    vi.useFakeTimers();
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    const firstBatchDurations = Array.from({ length: 50 }, () => [120, 800]);
+    const secondBatchDurations = [[300, 900]];
+    fetchMock
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ code: "Ok", durations: firstBatchDurations }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ code: "Ok", durations: secondBatchDurations }),
+      });
+
+    const origins = Array.from({ length: 51 }, (_, index) => ({
+      lat: -25.75 - index * 0.001,
+      lon: 28.19,
+    }));
+
+    const resultPromise = getNearestJobCenter(origins, destinations);
+    await vi.advanceTimersByTimeAsync(1000);
+    const result = await resultPromise;
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result).toHaveLength(51);
+    expect(result[50]).toEqual({
+      minutes: 5,
+      jobCenterId: "pretoria-cbd",
+      jobCenterName: "Pretoria CBD",
+    });
+  });
+
+  it("throws once retries are exhausted after repeated HTTP 429 responses", async () => {
+    vi.useFakeTimers();
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    fetchMock.mockResolvedValue({ ok: false, status: 429 });
+
+    const resultPromise = getNearestJobCenter(
+      [{ lat: -25.75, lon: 28.19 }],
+      destinations,
+    );
+    const assertion = expect(resultPromise).rejects.toThrow(
+      "OSRM table request failed: 429",
+    );
+    await vi.advanceTimersByTimeAsync(10_000);
+    await assertion;
+
+    expect(fetchMock).toHaveBeenCalledTimes(3);
   });
 });

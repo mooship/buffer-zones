@@ -1,5 +1,8 @@
 {
   "name": "buffer-zones-data-pipeline",
+  "version": "1.0.0",
+  "description": "Offline GIS data pipeline for spatial boundaries, OSRM routing, and transit normalization",
+  "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
   "scripts": {

@@ -57,4 +57,39 @@ describe("LAYER_REGISTRY", () => {
     // @ts-expect-error deliberately invalid id for the runtime-safety test
     expect(getLayerDefinition("not-a-real-layer")).toBeUndefined();
   });
+
+  it("points every layer's dataSource at a .geojson file under /data/", () => {
+    for (const layer of LAYER_REGISTRY) {
+      expect(layer.dataSource).toMatch(/^\/data\/[\w.-]+\.geojson$/);
+    }
+  });
+
+  it("gives every line layer a valid hex colour", () => {
+    const lineLayers = LAYER_REGISTRY.filter(
+      (layer) => layer.style?.kind === "line",
+    );
+    expect(lineLayers.length).toBeGreaterThan(0);
+    for (const layer of lineLayers) {
+      expect(layer.style?.kind).toBe("line");
+      if (layer.style?.kind === "line") {
+        expect(layer.style.color).toMatch(/^#[0-9A-Fa-f]{6}$/);
+      }
+    }
+  });
+
+  it("gives every choropleth layer a recognised property key", () => {
+    const choroplethLayers = LAYER_REGISTRY.filter(
+      (layer) => layer.style?.kind === "choropleth",
+    );
+    expect(choroplethLayers.map((layer) => layer.id).sort()).toEqual(
+      ["nearest-transit", "townships"].sort(),
+    );
+    for (const layer of choroplethLayers) {
+      if (layer.style?.kind === "choropleth") {
+        expect(["commuteMinutes", "nearestTransitKm"]).toContain(
+          layer.style.propertyKey,
+        );
+      }
+    }
+  });
 });

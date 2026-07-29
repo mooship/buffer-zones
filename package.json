@@ -1,5 +1,8 @@
 {
   "name": "buffer-zones",
+  "version": "1.0.0",
+  "description": "Spatial planning legacy & transit accessibility mapping in Tshwane",
+  "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
   "workspaces": ["packages/*"],
@@ -7,11 +10,13 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "npm run typecheck --workspace @buffer-zones/shared && npm run build --workspace @buffer-zones/web && npm run typecheck --prefix data-pipeline",
     "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "lefthook": "^1.7.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

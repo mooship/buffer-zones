@@ -20,16 +20,14 @@ Under apartheid, townships were deliberately separated from economic centers by 
 
 React + TypeScript SPA (Vite, `react-leaflet`, Zustand, Zod, CSS Modules), a Node/TypeScript offline data pipeline (public OSRM for routing, Overpass API + open data portals for transit, no Docker/GDAL required), and Cloudflare Workers for static hosting. No backend, no accounts, no tracking beyond cookieless page views.
 
-## Development
+## Contributing
 
 ```bash
 npm install
-npm run test    # Vitest across all workspaces
-npm run build   # type-check + build packages/web
 npm run dev --workspace @buffer-zones/web
 ```
 
-To regenerate the map data, see [`data-pipeline/README.md`](data-pipeline/README.md).
+[`CONTRIBUTING.md`](CONTRIBUTING.md) covers the full setup, the project conventions, and how to propose data changes. [`SECURITY.md`](SECURITY.md) covers reporting a suspected vulnerability privately.
 
 ## License
 

@@ -39,4 +39,26 @@ describe("useMapUiStore", () => {
       titleExpanded: false,
     });
   });
+
+  it("sets panelOpen directly", () => {
+    useMapUiStore.getState().setPanelOpen(false);
+    expect(useMapUiStore.getState().panelOpen).toBe(false);
+
+    useMapUiStore.getState().setPanelOpen(true);
+    expect(useMapUiStore.getState().panelOpen).toBe(true);
+  });
+
+  it("defaults the panel closed on reset when the viewport is mobile-width", () => {
+    window.innerWidth = 500;
+    useMapUiStore.getState().reset();
+
+    expect(useMapUiStore.getState().panelOpen).toBe(false);
+  });
+
+  it("defaults the panel open on reset when the viewport is wider than the mobile breakpoint", () => {
+    window.innerWidth = 1024;
+    useMapUiStore.getState().reset();
+
+    expect(useMapUiStore.getState().panelOpen).toBe(true);
+  });
 });

@@ -1,11 +1,14 @@
 {
   "name": "@buffer-zones/shared",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Shared GeoJSON layer types and township definitions",
+  "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

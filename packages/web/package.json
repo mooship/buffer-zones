@@ -1,10 +1,14 @@
 {
   "name": "@buffer-zones/web",
+  "version": "1.0.0",
+  "description": "Buffer Zones web SPA map viewer",
+  "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "preview": "vite preview",
     "test": "vitest run"
   },
   "dependencies": {
