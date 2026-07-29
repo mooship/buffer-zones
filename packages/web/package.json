@@ -9,7 +9,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "playwright:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
     "@buffer-zones/shared": "file:../shared",
@@ -25,6 +28,7 @@
   "devDependencies": {
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource-variable/martian-mono": "^5.3.0",
+    "@playwright/test": "^1.62.0",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.0.1",
     "@types/leaflet": "^1.9.14",

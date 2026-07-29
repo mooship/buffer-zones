@@ -25,6 +25,7 @@ import { BASEMAPS, type Basemap } from "../../constants/basemaps";
 import { TOWNSHIP_OUTLINE } from "../../constants/layerStyles";
 import { useLayerData } from "../../hooks/useLayerData";
 import { usePrefersDarkMode } from "../../hooks/usePrefersDarkMode";
+import { useThemePreference } from "../../hooks/useThemePreference";
 import { createLayerConfig } from "../../layers/createLayerConfig";
 import { LAYER_REGISTRY } from "../../layers/registry";
 import { TownshipPopup } from "../TownshipPopup/TownshipPopup";
@@ -193,8 +194,11 @@ export function MapView({
       .map((layer) => layer.id),
   );
   const prefersDark = usePrefersDarkMode();
+  const themePreference = useThemePreference();
+  const resolvedDark =
+    themePreference === "dark" || (themePreference === "system" && prefersDark);
   const useDarkTiles =
-    basemap === "street" && prefersDark && "darkUrl" in BASEMAPS.street;
+    basemap === "street" && resolvedDark && "darkUrl" in BASEMAPS.street;
   const tiles = BASEMAPS[basemap];
   const tileUrl = useDarkTiles ? BASEMAPS.street.darkUrl : tiles.url;
   const tileAttribution = useDarkTiles

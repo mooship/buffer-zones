@@ -53,6 +53,7 @@ vi.mock("react-leaflet", () => ({
   ScaleControl: () => <div data-testid="scale-control" />,
 }));
 
+import { setThemePreference } from "../../hooks/useThemePreference";
 import { MapView } from "./MapView";
 
 const townships = [
@@ -80,6 +81,7 @@ describe("MapView", () => {
     mapMocks.fitBounds.mockReset();
     mapMocks.invalidateSize.mockReset();
     vi.unstubAllGlobals();
+    setThemePreference("system");
   });
 
   it("renders a tile layer and one GeoJSON layer per visible registry entry", () => {
@@ -202,6 +204,24 @@ describe("MapView", () => {
     stubMatchMedia(true);
 
     render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
+
+    expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
+  });
+
+  it("applies the dark tile filter class when the theme is explicitly dark, regardless of OS preference", () => {
+    stubMatchMedia(false);
+    setThemePreference("dark");
+
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
+
+    expect(screen.getByTestId("tile-layer").dataset.classname).not.toBe("");
+  });
+
+  it("does not apply the dark tile filter class when the theme is explicitly light, regardless of OS preference", () => {
+    stubMatchMedia(true);
+    setThemePreference("light");
+
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
   });

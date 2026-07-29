@@ -21,6 +21,14 @@ npm run dev --workspace @buffer-zones/web
 
 Run a single test file: `npx vitest run path/to/file.test.ts` (or `npx vitest path/to/file.test.ts` to watch).
 
+Playwright end-to-end tests live in `packages/web/e2e/` and run on demand only — they are **not** part of `npm run test` or CI:
+
+```bash
+npm run playwright:install --workspace @buffer-zones/web  # once, downloads the Chromium binary
+npm run test:e2e                                          # builds packages/web and runs the suite against the production preview server
+npm run test:e2e:ui --workspace @buffer-zones/web          # Playwright's interactive UI runner
+```
+
 `data-pipeline/` is **not** an npm workspace — it's a standalone project:
 
 ```bash
@@ -43,6 +51,8 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 - **packages/web** — the layer registry (`layers/registry.ts`, a flat array of `LayerDefinition`) is the single point that drives both map rendering and the layer-toggle UI; `MapView` doesn't need edits to add a layer. State: one Zustand store (`stores/useMapUiStore.ts`) holding only UI state (visible layer ids, basemap, panel/selection state) — never map data. `hooks/useLayerData.ts` lazily fetches GeoJSON per visible layer id (dedupes by ref) via `data/fetchFeatureCollection.ts`, which validates responses against Zod schemas in `data/geoJsonSchemas.ts` before anything reaches a component.
 
 - **Deploy** — Cloudflare Workers serving static assets only (`packages/web/dist`), no bindings/API routes (`wrangler.jsonc`). Full/100 Lighthouse scores and mobile-friendliness are a hard requirement, not aspirational — this drives decisions like the `.display.v1.geojson` simplification step and self-hosted variable fonts.
+
+- **Testing** — vitest unit/component tests (gated in CI) deliberately mock `react-leaflet`, so real Leaflet rendering, tile requests, and popup/tooltip binding are untested there by design. `packages/web/e2e/` fills that gap with Playwright, run on demand against a production preview build (`vite build && vite preview`, not the dev server, to avoid React StrictMode's dev-only double effect invocation) with basemap tile requests mocked to a 1x1 PNG so the suite doesn't depend on OSM/CARTO/Esri availability.
 
 ## Conventions
 

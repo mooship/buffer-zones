@@ -9,3 +9,7 @@ coverage
 data-pipeline/downloads/
 *.tsbuildinfo
 lighthouse-report*.json
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
