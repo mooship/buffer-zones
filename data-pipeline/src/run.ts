@@ -26,7 +26,7 @@ import {
   normalizeReaVayaOverpass,
 } from "./adapters/reaVaya";
 import { getJobCentersForMetro } from "./constants/jobCenters";
-import { getMetroBbox } from "./constants/metroBbox";
+import { getMetroBbox, getSharedTransitBbox } from "./constants/metroBbox";
 import { createDisplayPolygons } from "./displayTownships";
 import { createDisplayTransit } from "./displayTransit";
 import { writeGeoJsonFile } from "./export";
@@ -38,7 +38,39 @@ import { computeNearestTransitKm } from "./transitDistance";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_ROOT = resolve(__dirname, "../../packages/web/public/data");
 
-async function runMetro(metroId: MetroId): Promise<void> {
+interface SharedTransit {
+  gautrain: TransitLayerFeatureCollection;
+  gautrainBus: TransitLayerFeatureCollection;
+  prasa: TransitLayerFeatureCollection;
+}
+
+// Gautrain, Gautrain Bus and PRASA are Gauteng-wide networks, not confined
+// to a single metro, so they're fetched once against the union of every
+// metro's bbox rather than per metro (which would clip each line at that
+// metro's boundary). The resulting collections are written into every
+// metro's output directory unchanged, so the same complete, connected
+// network renders regardless of which metro is selected in the UI.
+async function fetchSharedTransit(): Promise<SharedTransit> {
+  const bbox = getSharedTransitBbox();
+
+  console.log("Fetching Gautrain rail via Overpass (Gauteng-wide)...");
+  const gautrain = normalizeGautrainOverpass(await fetchGautrainRail(bbox));
+
+  console.log("Fetching PRASA rail via Overpass (Gauteng-wide)...");
+  const prasa = normalizePrasaOverpass(await fetchPrasaRail(bbox));
+
+  console.log("Fetching Gautrain bus routes via Overpass (Gauteng-wide)...");
+  const gautrainBus = normalizeGautrainBusOverpass(
+    await fetchGautrainBusRoutes(bbox),
+  );
+
+  return { gautrain, gautrainBus, prasa };
+}
+
+async function runMetro(
+  metroId: MetroId,
+  sharedTransit: SharedTransit,
+): Promise<void> {
   const outputDir = resolve(OUTPUT_ROOT, metroId);
   const bbox = getMetroBbox(metroId);
   const jobCenters = getJobCentersForMetro(metroId);
@@ -74,22 +106,14 @@ async function runMetro(metroId: MetroId): Promise<void> {
 
   const transitCollections: TransitLayerFeatureCollection[] = [];
 
-  console.log("Fetching Gautrain rail via Overpass...");
-  const gautrain = normalizeGautrainOverpass(await fetchGautrainRail(bbox));
-  await writeTransitLayer("gautrain", gautrain);
-  transitCollections.push(gautrain);
+  await writeTransitLayer("gautrain", sharedTransit.gautrain);
+  transitCollections.push(sharedTransit.gautrain);
 
-  console.log("Fetching PRASA rail via Overpass...");
-  const prasa = normalizePrasaOverpass(await fetchPrasaRail(bbox));
-  await writeTransitLayer("prasa", prasa);
-  transitCollections.push(prasa);
+  await writeTransitLayer("prasa", sharedTransit.prasa);
+  transitCollections.push(sharedTransit.prasa);
 
-  console.log("Fetching Gautrain bus routes via Overpass...");
-  const gautrainBus = normalizeGautrainBusOverpass(
-    await fetchGautrainBusRoutes(bbox),
-  );
-  await writeTransitLayer("gautrain-bus", gautrainBus);
-  transitCollections.push(gautrainBus);
+  await writeTransitLayer("gautrain-bus", sharedTransit.gautrainBus);
+  transitCollections.push(sharedTransit.gautrainBus);
 
   if (metroId === "tshwane") {
     console.log("Fetching A Re Yeng routes...");
@@ -152,8 +176,9 @@ async function main() {
     requested.length > 0
       ? METROS.filter((metro) => requested.includes(metro.id))
       : METROS;
+  const sharedTransit = await fetchSharedTransit();
   for (const metro of metros) {
-    await runMetro(metro.id);
+    await runMetro(metro.id, sharedTransit);
   }
   console.log("\nAll metros done.");
 }
