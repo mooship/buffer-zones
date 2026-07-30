@@ -3,6 +3,7 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
+  --mobile-safe-top: env(safe-area-inset-top);
   --mobile-control-edge: 0.75rem;
   --mobile-control-bottom: calc(1.5rem + env(safe-area-inset-bottom));
 }
@@ -188,6 +189,7 @@
   min-height: 0;
   padding-right: 0.25rem;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   scrollbar-color: var(--color-line) transparent;
   scrollbar-width: thin;
 }
@@ -384,7 +386,7 @@
 
 @media (max-width: 768px) {
   .titleBlock {
-    top: 0.75rem;
+    top: calc(0.75rem + var(--mobile-safe-top));
     left: 0.75rem;
     padding: 0.625rem 3.5rem 0.625rem 0.875rem;
     max-width: calc(100% - 1.5rem);
