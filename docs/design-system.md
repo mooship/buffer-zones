@@ -27,18 +27,20 @@ The Material influence is structural rather than literal: surface, outline, prim
 
 These components should be preferred whenever the interaction matches them.
 
+- `ControlButton`: shared elevated control surface for pill and icon actions.
 - `SegmentedControl`: compact mutually-exclusive choices such as basemap and theme.
-- `IconButton`: icon-only actions such as settings and legend triggers.
+- `IconButton`: icon-only wrapper around `ControlButton` for settings, legend, and panel header actions.
 
 If a new control needs the same pressed-state, elevation, focus-ring, or control-height treatment, extend these primitives before introducing one-off CSS.
 
 ## Usage rules
 
 - Use `SegmentedControl` for two to five mutually-exclusive options.
-- Use `IconButton` for icon-only actions; the accessible label must describe the action, not the icon.
+- Use `ControlButton` for prominent floating actions and `IconButton` for icon-only actions; the accessible label must describe the action, not the icon.
 - Keep focus rings explicit and high-contrast.
 - Prefer `--color-on-surface-variant` for secondary labels and metadata.
 - Keep floating map controls on the same elevation family so the map chrome reads as one system.
+- Use the dedicated map-label colour tokens for Leaflet overlay chips so they stay legible against basemaps without drifting into a separate palette.
 
 ## Non-goals
 

@@ -13,7 +13,9 @@ import {
   useState,
 } from "react";
 import styles from "./App.module.css";
+import { ControlButton } from "./components/ControlButton/ControlButton";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
+import { IconButton } from "./components/IconButton/IconButton";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { MobileLegend } from "./components/MobileLegend/MobileLegend";
 import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
@@ -311,14 +313,14 @@ export function App() {
         )}
       >
         <h1 className={styles.title}>{APP_NAME}</h1>
-        <button
-          type="button"
+        <IconButton
           className={styles.titleToggle}
           aria-expanded={titleExpanded}
           aria-controls="title-context"
-          aria-label={
+          label={
             titleExpanded ? "Minimise introduction" : "Expand introduction"
           }
+          variant="embedded"
           onClick={() => setTitleExpanded(!titleExpanded)}
         >
           {titleExpanded ? (
@@ -326,7 +328,7 @@ export function App() {
           ) : (
             <Plus aria-hidden="true" />
           )}
-        </button>
+        </IconButton>
         <div id="title-context" hidden={!titleExpanded}>
           <p className={styles.eyebrow}>South African spatial access atlas</p>
           <p className={styles.tagline}>{getAppTagline()}</p>
@@ -338,10 +340,10 @@ export function App() {
         </div>
       </header>
 
-      <button
-        type="button"
+      <ControlButton
         ref={panelTriggerRef}
         className={styles.panelTrigger}
+        shape="pill"
         data-testid="panel-toggle"
         data-e2e="panel-toggle"
         aria-expanded={panelOpen}
@@ -350,7 +352,7 @@ export function App() {
       >
         {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
         {panelOpen ? "Close" : "Explore"}
-      </button>
+      </ControlButton>
 
       <MobileLegend visibleLayerIds={visibleLayerIds} suppressed={false} />
 

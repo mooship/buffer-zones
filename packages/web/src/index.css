@@ -36,6 +36,22 @@
   --color-outline: color-mix(in srgb, var(--color-line) 52%, transparent);
   --color-surface-container-low: var(--color-surface);
   --color-state-hover: var(--color-surface-hover);
+  --color-map-label-surface: color-mix(
+    in srgb,
+    var(--color-panel) 92%,
+    transparent
+  );
+  --color-map-label-surface-secondary: color-mix(
+    in srgb,
+    var(--color-panel) 78%,
+    transparent
+  );
+  --color-map-label-outline: color-mix(
+    in srgb,
+    var(--color-paper) 16%,
+    var(--color-line)
+  );
+  --color-map-label-text: var(--color-paper);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
