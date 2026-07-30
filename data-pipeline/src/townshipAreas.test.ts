@@ -36,15 +36,42 @@ describe("createTownshipAreas", () => {
     expect(result.features[0]?.geometry.type).toBe("Polygon");
   });
 
-  it("uses the Census main-place code for differently named Temba areas", () => {
+  it("lets Kudube override the broader Temba main-place grouping", () => {
     const result = createTownshipAreas([
       township("Temba Unit 1", 0, "799008006"),
       township("Kudube Unit 10", 1, "799008002"),
       township("Sekampaneng", 2, "799008012"),
     ]);
 
-    expect(result.features).toHaveLength(1);
-    expect(result.features[0]?.properties.name).toBe("Temba");
+    const areaNames = result.features.map((feature) => feature.properties.name);
+    expect(areaNames.sort()).toEqual(["Kudube", "Temba"]);
+  });
+
+  it("lets Plastic View override the broader Soshanguve main-place grouping", () => {
+    const result = createTownshipAreas([
+      township("Soshanguve Block T", 0, "799014001"),
+      township("Plastic View", 1, "799014063"),
+    ]);
+
+    const areaNames = result.features.map((feature) => feature.properties.name);
+    expect(areaNames.sort()).toEqual(["Plastic View", "Soshanguve"]);
+  });
+
+  it("lets named Soweto sub-places override the broader Soweto main-place grouping", () => {
+    const result = createTownshipAreas([
+      township("Soweto SP", 0, "798030001"),
+      township("Klipspruit", 1, "798030045"),
+      township("Protea South", 2, "798030091"),
+      township("Slovoville", 3, "798030025"),
+    ]);
+
+    const areaNames = result.features.map((feature) => feature.properties.name);
+    expect(areaNames.sort()).toEqual([
+      "Klipspruit",
+      "Protea South",
+      "Slovoville",
+      "Soweto",
+    ]);
   });
 
   it("publishes classification metadata and excludes non-residential sub-places", () => {

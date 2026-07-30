@@ -23,31 +23,36 @@ City of Johannesburg's municipality code (`MN_CODE`) in the Stats SA Census 2011
 
 ## Current inclusion set
 
-The current version includes 28 areas:
+The current version includes 33 areas:
 
 - Alexandra
 - Bosmont
 - Cosmo City
 - Coronationville
 - Diepsloot
+- Eldorado Park
 - Drie Ziek
 - Ebony Park
 - Ennerdale
 - Kaalfontein
 - Kanana Park
+- Klipspruit
 - Kya Sand
 - Lakeside
 - Lawley
 - Lehae
 - Lenasia
 - Lenasia South
+- Matholesville
 - Mayibuye
 - Newclare
 - Orange Farm
 - Poortjie
+- Protea South
 - Rabie Ridge
 - Riverlea
 - Soweto
+- Slovoville
 - Stretford
 - Vlakfontein
 - Westbury

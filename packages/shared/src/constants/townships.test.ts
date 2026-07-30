@@ -9,7 +9,7 @@ describe("township groups", () => {
   it("groups township extensions under their recognizable place name", () => {
     expect(getTownshipGroup("Mamelodi Ext 17")).toBe("Mamelodi");
     expect(getTownshipGroup("Mahube Valley", "799045028")).toBe("Mamelodi");
-    expect(getTownshipGroup("Kudube Unit 10", "799008002")).toBe("Temba");
+    expect(getTownshipGroup("Kudube Unit 10", "799008002")).toBe("Kudube");
     expect(getTownshipGroup("Pretoria Central")).toBeUndefined();
   });
 
@@ -24,13 +24,20 @@ describe("township groups", () => {
     expect(getTownshipGroup("Olievenhoutbos Ext 21", "799078003")).toBe(
       "Olievenhoutbosch",
     );
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(60);
+    expect(getTownshipGroup("Plastic View", "799014063")).toBe("Plastic View");
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(67);
   });
 
   it("tags each area with its metro and includes Johannesburg's townships", () => {
     expect(getTownshipGroup("Alexandra Ext 1", "798027001")).toBe("Alexandra");
     expect(getTownshipGroup("Diepkloof Zone 4", "798030037")).toBe("Soweto");
     expect(getTownshipGroup("Cosmo City", "798020002")).toBe("Cosmo City");
+    expect(getTownshipGroup("Eldorado Park", "798026212")).toBe(
+      "Eldorado Park",
+    );
+    expect(getTownshipGroup("Matholesville", "798020063")).toBe(
+      "Matholesville",
+    );
     expect(
       getTownshipAreaDefinition("Alexandra Ext 1", "798027001"),
     ).toMatchObject({ metroId: "johannesburg" });

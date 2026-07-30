@@ -14,6 +14,7 @@ export interface NearestJobCenterResult {
 
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
+const OSRM_TIMEOUT_MS = 30_000;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,22 +34,45 @@ async function fetchTable(
     .join(";");
   const url = `${getOsrmBaseUrl()}/table/v1/driving/${coords}?sources=${sourceIndices}&destinations=${destinationIndices}`;
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    if (response.status === 429 && attempt < 3) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, OSRM_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      if ((response.status === 429 || response.status === 504) && attempt < 3) {
+        await sleep(BATCH_DELAY_MS * attempt);
+        return fetchTable(origins, destinations, attempt + 1);
+      }
+      throw new Error(`OSRM table request failed: ${response.status}`);
+    }
+
+    const body = (await response.json()) as {
+      code: string;
+      durations: (number | null)[][];
+    };
+    if (body.code !== "Ok") {
+      throw new Error(`OSRM table returned code ${body.code}`);
+    }
+    return body.durations;
+  } catch (error) {
+    if (attempt < 3) {
       await sleep(BATCH_DELAY_MS * attempt);
       return fetchTable(origins, destinations, attempt + 1);
     }
-    throw new Error(`OSRM table request failed: ${response.status}`);
+
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(
+        `OSRM table request timed out after ${OSRM_TIMEOUT_MS}ms`,
+      );
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-  const body = (await response.json()) as {
-    code: string;
-    durations: (number | null)[][];
-  };
-  if (body.code !== "Ok") {
-    throw new Error(`OSRM table returned code ${body.code}`);
-  }
-  return body.durations;
 }
 
 function pickNearest(

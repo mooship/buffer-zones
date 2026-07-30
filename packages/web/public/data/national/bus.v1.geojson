@@ -106338,6 +106338,8389 @@
           ]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1857622,
+            -25.748086
+          ],
+          [
+            28.1856327,
+            -25.7466395
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1856327,
+            -25.7466395
+          ],
+          [
+            28.1855524,
+            -25.7456747
+          ],
+          [
+            28.1855093,
+            -25.7451573
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1855093,
+            -25.7451573
+          ],
+          [
+            28.1859593,
+            -25.7451288
+          ],
+          [
+            28.1867025,
+            -25.7450786
+          ],
+          [
+            28.1871958,
+            -25.7450455
+          ],
+          [
+            28.1873757,
+            -25.7450334
+          ],
+          [
+            28.1876617,
+            -25.7450141
+          ],
+          [
+            28.1878294,
+            -25.7450029
+          ],
+          [
+            28.1879123,
+            -25.7449973
+          ],
+          [
+            28.1879656,
+            -25.7449937
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1879656,
+            -25.7449937
+          ],
+          [
+            28.1880263,
+            -25.7449896
+          ],
+          [
+            28.188111,
+            -25.7449839
+          ],
+          [
+            28.1885671,
+            -25.7449533
+          ],
+          [
+            28.1887378,
+            -25.7449418
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1887378,
+            -25.7449418
+          ],
+          [
+            28.1894143,
+            -25.7448962
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1894143,
+            -25.7448962
+          ],
+          [
+            28.1904248,
+            -25.7448294
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1904248,
+            -25.7448294
+          ],
+          [
+            28.1913361,
+            -25.7447622
+          ],
+          [
+            28.1915884,
+            -25.7447436
+          ],
+          [
+            28.1918084,
+            -25.7447276
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1918084,
+            -25.7447276
+          ],
+          [
+            28.192036,
+            -25.7447111
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.192036,
+            -25.7447111
+          ],
+          [
+            28.1922725,
+            -25.7446948
+          ],
+          [
+            28.1928418,
+            -25.7446555
+          ],
+          [
+            28.1930766,
+            -25.7446357
+          ],
+          [
+            28.1938522,
+            -25.7445794
+          ],
+          [
+            28.193932,
+            -25.7445736
+          ],
+          [
+            28.1945294,
+            -25.7445303
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1945294,
+            -25.7445303
+          ],
+          [
+            28.1952787,
+            -25.744476
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1952787,
+            -25.744476
+          ],
+          [
+            28.1960179,
+            -25.744424
+          ],
+          [
+            28.1969751,
+            -25.7443567
+          ],
+          [
+            28.1972534,
+            -25.7443372
+          ],
+          [
+            28.1976883,
+            -25.7443066
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1976883,
+            -25.7443066
+          ],
+          [
+            28.1978509,
+            -25.7442952
+          ],
+          [
+            28.1982507,
+            -25.7442671
+          ],
+          [
+            28.1983256,
+            -25.7442618
+          ],
+          [
+            28.1991128,
+            -25.7442071
+          ],
+          [
+            28.1996775,
+            -25.7441694
+          ],
+          [
+            28.2001414,
+            -25.7441356
+          ],
+          [
+            28.20025,
+            -25.744129
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.20025,
+            -25.744129
+          ],
+          [
+            28.2008799,
+            -25.7440823
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2008799,
+            -25.7440823
+          ],
+          [
+            28.2010883,
+            -25.7440676
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2010883,
+            -25.7440676
+          ],
+          [
+            28.201192,
+            -25.7440603
+          ],
+          [
+            28.2031495,
+            -25.7439227
+          ],
+          [
+            28.2037229,
+            -25.7438824
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2037229,
+            -25.7438824
+          ],
+          [
+            28.2036223,
+            -25.742779
+          ],
+          [
+            28.2036089,
+            -25.7426317
+          ],
+          [
+            28.2035887,
+            -25.7424103
+          ],
+          [
+            28.2034784,
+            -25.7409243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2034784,
+            -25.7409243
+          ],
+          [
+            28.2034282,
+            -25.7404856
+          ],
+          [
+            28.2033557,
+            -25.7398515
+          ],
+          [
+            28.2032305,
+            -25.7384653
+          ],
+          [
+            28.203227,
+            -25.7384261
+          ],
+          [
+            28.2032214,
+            -25.7383711
+          ],
+          [
+            28.2032155,
+            -25.7383127
+          ],
+          [
+            28.2032097,
+            -25.7382551
+          ],
+          [
+            28.2031731,
+            -25.7376438
+          ],
+          [
+            28.2031497,
+            -25.7372523
+          ],
+          [
+            28.2031377,
+            -25.737051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2031377,
+            -25.737051
+          ],
+          [
+            28.203122,
+            -25.7367889
+          ],
+          [
+            28.2030727,
+            -25.7362427
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2030727,
+            -25.7362427
+          ],
+          [
+            28.2030569,
+            -25.7361087
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2030569,
+            -25.7361087
+          ],
+          [
+            28.203053,
+            -25.7359896
+          ],
+          [
+            28.2030618,
+            -25.7358512
+          ],
+          [
+            28.2030859,
+            -25.7357154
+          ],
+          [
+            28.2032501,
+            -25.7353351
+          ],
+          [
+            28.2033648,
+            -25.7350602
+          ],
+          [
+            28.2033966,
+            -25.7349951
+          ],
+          [
+            28.2034358,
+            -25.7349128
+          ],
+          [
+            28.2034908,
+            -25.7348065
+          ],
+          [
+            28.2037029,
+            -25.7343859
+          ],
+          [
+            28.203806,
+            -25.7341952
+          ],
+          [
+            28.2038704,
+            -25.7340623
+          ],
+          [
+            28.2039304,
+            -25.7339389
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2039304,
+            -25.7339389
+          ],
+          [
+            28.2042327,
+            -25.7332589
+          ],
+          [
+            28.2042757,
+            -25.7331712
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2042757,
+            -25.7331712
+          ],
+          [
+            28.2043539,
+            -25.7330231
+          ],
+          [
+            28.2044208,
+            -25.7328929
+          ],
+          [
+            28.2044417,
+            -25.7328482
+          ],
+          [
+            28.2044671,
+            -25.732789
+          ],
+          [
+            28.2044926,
+            -25.7327177
+          ],
+          [
+            28.204521,
+            -25.7326299
+          ],
+          [
+            28.2045919,
+            -25.7323481
+          ],
+          [
+            28.2046254,
+            -25.7321898
+          ],
+          [
+            28.2046361,
+            -25.7321258
+          ],
+          [
+            28.2046455,
+            -25.7320628
+          ],
+          [
+            28.2046495,
+            -25.7320062
+          ],
+          [
+            28.2046495,
+            -25.731953
+          ],
+          [
+            28.2046482,
+            -25.7318986
+          ],
+          [
+            28.2046455,
+            -25.7318467
+          ],
+          [
+            28.2046296,
+            -25.7317342
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2046296,
+            -25.7317342
+          ],
+          [
+            28.2043962,
+            -25.730467
+          ],
+          [
+            28.2043794,
+            -25.7303505
+          ],
+          [
+            28.2043625,
+            -25.7302691
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2043625,
+            -25.7302691
+          ],
+          [
+            28.204353,
+            -25.7302049
+          ],
+          [
+            28.2043102,
+            -25.7299753
+          ],
+          [
+            28.2043049,
+            -25.7299354
+          ],
+          [
+            28.2043022,
+            -25.7298859
+          ],
+          [
+            28.2043045,
+            -25.7298477
+          ],
+          [
+            28.2043089,
+            -25.729811
+          ],
+          [
+            28.2043169,
+            -25.7297578
+          ],
+          [
+            28.2043227,
+            -25.7297062
+          ],
+          [
+            28.2043223,
+            -25.7296564
+          ],
+          [
+            28.2043223,
+            -25.7295959
+          ],
+          [
+            28.2043194,
+            -25.7295387
+          ],
+          [
+            28.2043129,
+            -25.72948
+          ],
+          [
+            28.2042994,
+            -25.7293712
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2042994,
+            -25.7293712
+          ],
+          [
+            28.2042958,
+            -25.7293505
+          ],
+          [
+            28.204229,
+            -25.7289629
+          ],
+          [
+            28.2042111,
+            -25.7288594
+          ],
+          [
+            28.2041687,
+            -25.7286036
+          ],
+          [
+            28.2041308,
+            -25.7283753
+          ],
+          [
+            28.2040701,
+            -25.7280099
+          ],
+          [
+            28.2040057,
+            -25.7276215
+          ],
+          [
+            28.2039079,
+            -25.7270441
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2039079,
+            -25.7270441
+          ],
+          [
+            28.203863,
+            -25.726755
+          ],
+          [
+            28.2038035,
+            -25.7263481
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2038035,
+            -25.7263481
+          ],
+          [
+            28.2037635,
+            -25.7261066
+          ],
+          [
+            28.2035822,
+            -25.7250106
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2035822,
+            -25.7250106
+          ],
+          [
+            28.2033846,
+            -25.7238329
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2033846,
+            -25.7238329
+          ],
+          [
+            28.203323,
+            -25.7234465
+          ],
+          [
+            28.2033066,
+            -25.7233525
+          ],
+          [
+            28.2032682,
+            -25.7231316
+          ],
+          [
+            28.2032132,
+            -25.7228334
+          ],
+          [
+            28.2030069,
+            -25.7215105
+          ],
+          [
+            28.2028762,
+            -25.7207115
+          ],
+          [
+            28.2027761,
+            -25.7201281
+          ],
+          [
+            28.2027187,
+            -25.7197935
+          ],
+          [
+            28.2026248,
+            -25.7191846
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2026248,
+            -25.7191846
+          ],
+          [
+            28.202609,
+            -25.7190719
+          ],
+          [
+            28.2025338,
+            -25.7185948
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2025338,
+            -25.7185948
+          ],
+          [
+            28.2026135,
+            -25.7185824
+          ],
+          [
+            28.2034689,
+            -25.7184678
+          ],
+          [
+            28.2040011,
+            -25.7183965
+          ],
+          [
+            28.2041136,
+            -25.7183832
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2041136,
+            -25.7183832
+          ],
+          [
+            28.2042081,
+            -25.7183684
+          ],
+          [
+            28.2056073,
+            -25.7181747
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2056073,
+            -25.7181747
+          ],
+          [
+            28.2060877,
+            -25.718113
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2060877,
+            -25.718113
+          ],
+          [
+            28.207148,
+            -25.7179772
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.207148,
+            -25.7179772
+          ],
+          [
+            28.2074178,
+            -25.7179407
+          ],
+          [
+            28.2078528,
+            -25.7178819
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2078528,
+            -25.7178819
+          ],
+          [
+            28.2086757,
+            -25.7177706
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2086757,
+            -25.7177706
+          ],
+          [
+            28.2101369,
+            -25.7175636
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2101369,
+            -25.7175636
+          ],
+          [
+            28.2101499,
+            -25.7174477
+          ],
+          [
+            28.2101011,
+            -25.7171672
+          ],
+          [
+            28.2100205,
+            -25.7166544
+          ],
+          [
+            28.2098386,
+            -25.7155395
+          ],
+          [
+            28.2098275,
+            -25.7154565
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2098275,
+            -25.7154565
+          ],
+          [
+            28.2113815,
+            -25.7152569
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2113815,
+            -25.7152569
+          ],
+          [
+            28.2112437,
+            -25.7143616
+          ],
+          [
+            28.2110643,
+            -25.7134029
+          ],
+          [
+            28.2110129,
+            -25.7131391
+          ],
+          [
+            28.2106586,
+            -25.7110256
+          ],
+          [
+            28.2105345,
+            -25.7102901
+          ],
+          [
+            28.2104065,
+            -25.7095053
+          ],
+          [
+            28.210332,
+            -25.7090622
+          ],
+          [
+            28.2102083,
+            -25.7083013
+          ],
+          [
+            28.2100247,
+            -25.7071249
+          ],
+          [
+            28.2098542,
+            -25.7061485
+          ],
+          [
+            28.2096237,
+            -25.7047009
+          ],
+          [
+            28.2095017,
+            -25.704035
+          ],
+          [
+            28.2094634,
+            -25.7038387
+          ],
+          [
+            28.2093729,
+            -25.7032701
+          ],
+          [
+            28.2093032,
+            -25.7027288
+          ],
+          [
+            28.2091771,
+            -25.7019107
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2091771,
+            -25.7019107
+          ],
+          [
+            28.2100019,
+            -25.7018092
+          ],
+          [
+            28.2106783,
+            -25.7017093
+          ],
+          [
+            28.2114919,
+            -25.7016098
+          ],
+          [
+            28.212206,
+            -25.7015173
+          ],
+          [
+            28.2137127,
+            -25.7013119
+          ],
+          [
+            28.2148339,
+            -25.7011626
+          ],
+          [
+            28.2152444,
+            -25.7011082
+          ],
+          [
+            28.2156754,
+            -25.701057
+          ],
+          [
+            28.2168254,
+            -25.700898
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2168254,
+            -25.700898
+          ],
+          [
+            28.2169159,
+            -25.7008472
+          ],
+          [
+            28.216975,
+            -25.7008056
+          ],
+          [
+            28.2170239,
+            -25.7007729
+          ],
+          [
+            28.2170648,
+            -25.7007439
+          ],
+          [
+            28.2171421,
+            -25.7006964
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2171421,
+            -25.7006964
+          ],
+          [
+            28.217153,
+            -25.7006817
+          ],
+          [
+            28.2171661,
+            -25.7006684
+          ],
+          [
+            28.2171915,
+            -25.7006502
+          ],
+          [
+            28.2172208,
+            -25.7006374
+          ],
+          [
+            28.2172525,
+            -25.7006307
+          ],
+          [
+            28.217285,
+            -25.7006304
+          ],
+          [
+            28.2172925,
+            -25.7006313
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2172925,
+            -25.7006313
+          ],
+          [
+            28.2173344,
+            -25.7005796
+          ],
+          [
+            28.2173666,
+            -25.7005639
+          ],
+          [
+            28.2174357,
+            -25.7005306
+          ],
+          [
+            28.2175107,
+            -25.7005052
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2175107,
+            -25.7005052
+          ],
+          [
+            28.2175342,
+            -25.7004856
+          ],
+          [
+            28.2175684,
+            -25.7004702
+          ],
+          [
+            28.2176093,
+            -25.7004599
+          ],
+          [
+            28.2176455,
+            -25.7004512
+          ],
+          [
+            28.2188485,
+            -25.7002878
+          ],
+          [
+            28.2204613,
+            -25.7000817
+          ],
+          [
+            28.222073,
+            -25.699858
+          ],
+          [
+            28.2225143,
+            -25.6998002
+          ],
+          [
+            28.2228535,
+            -25.6997558
+          ],
+          [
+            28.2232944,
+            -25.699698
+          ],
+          [
+            28.2236809,
+            -25.6996473
+          ],
+          [
+            28.2237923,
+            -25.6996316
+          ],
+          [
+            28.2252951,
+            -25.6994185
+          ],
+          [
+            28.2264817,
+            -25.6992575
+          ],
+          [
+            28.2269052,
+            -25.6992001
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2269052,
+            -25.6992001
+          ],
+          [
+            28.2274548,
+            -25.6991237
+          ],
+          [
+            28.2285218,
+            -25.6989848
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2285218,
+            -25.6989848
+          ],
+          [
+            28.2301383,
+            -25.6987771
+          ],
+          [
+            28.2317413,
+            -25.6985568
+          ],
+          [
+            28.2333595,
+            -25.6983253
+          ],
+          [
+            28.2343271,
+            -25.6981964
+          ],
+          [
+            28.234992,
+            -25.6981091
+          ],
+          [
+            28.2356731,
+            -25.6980149
+          ],
+          [
+            28.2357895,
+            -25.698001
+          ],
+          [
+            28.2358689,
+            -25.6979765
+          ],
+          [
+            28.2360549,
+            -25.6979222
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2360549,
+            -25.6979222
+          ],
+          [
+            28.2361159,
+            -25.6978974
+          ],
+          [
+            28.23625,
+            -25.6978298
+          ],
+          [
+            28.2363955,
+            -25.6977415
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2363955,
+            -25.6977415
+          ],
+          [
+            28.2365504,
+            -25.6976515
+          ],
+          [
+            28.2366369,
+            -25.6976122
+          ],
+          [
+            28.236712,
+            -25.6975893
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.236712,
+            -25.6975893
+          ],
+          [
+            28.2367844,
+            -25.697579
+          ],
+          [
+            28.2369205,
+            -25.6975718
+          ],
+          [
+            28.237571,
+            -25.6975718
+          ],
+          [
+            28.2382214,
+            -25.6975601
+          ],
+          [
+            28.2383763,
+            -25.6975573
+          ],
+          [
+            28.2390489,
+            -25.6975536
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2390489,
+            -25.6975536
+          ],
+          [
+            28.2405201,
+            -25.6975409
+          ],
+          [
+            28.2416707,
+            -25.697518
+          ],
+          [
+            28.2427651,
+            -25.6975119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2427711,
+            -25.6981844
+          ],
+          [
+            28.2427651,
+            -25.6975119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2427711,
+            -25.6981844
+          ],
+          [
+            28.2428663,
+            -25.6981983
+          ],
+          [
+            28.2439734,
+            -25.6983289
+          ],
+          [
+            28.2458925,
+            -25.6985391
+          ],
+          [
+            28.2468581,
+            -25.6986479
+          ],
+          [
+            28.2483548,
+            -25.6988183
+          ],
+          [
+            28.2500915,
+            -25.699014
+          ],
+          [
+            28.2561525,
+            -25.6996888
+          ],
+          [
+            28.2569794,
+            -25.6997742
+          ],
+          [
+            28.2577653,
+            -25.6998684
+          ],
+          [
+            28.2584428,
+            -25.6999354
+          ],
+          [
+            28.2585351,
+            -25.6999445
+          ],
+          [
+            28.2591997,
+            -25.700019
+          ],
+          [
+            28.2622372,
+            -25.7003596
+          ],
+          [
+            28.2683044,
+            -25.7010311
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2683044,
+            -25.7010311
+          ],
+          [
+            28.2685,
+            -25.6996169
+          ],
+          [
+            28.2686889,
+            -25.6982124
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2686889,
+            -25.6982124
+          ],
+          [
+            28.268951,
+            -25.698233
+          ],
+          [
+            28.2700316,
+            -25.6983355
+          ],
+          [
+            28.271033,
+            -25.6984272
+          ],
+          [
+            28.2711222,
+            -25.6984401
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2711018,
+            -25.6986419
+          ],
+          [
+            28.2711222,
+            -25.6984401
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2730029,
+            -25.6987156
+          ],
+          [
+            28.2729191,
+            -25.6987065
+          ],
+          [
+            28.2727555,
+            -25.6986878
+          ],
+          [
+            28.2725396,
+            -25.698666
+          ],
+          [
+            28.2724229,
+            -25.6986563
+          ],
+          [
+            28.272319,
+            -25.6986569
+          ],
+          [
+            28.2721499,
+            -25.6986629
+          ],
+          [
+            28.272048,
+            -25.6986716
+          ],
+          [
+            28.271911,
+            -25.6986883
+          ],
+          [
+            28.2717893,
+            -25.6987035
+          ],
+          [
+            28.2716846,
+            -25.6986986
+          ],
+          [
+            28.2711018,
+            -25.6986419
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2727939,
+            -25.7006761
+          ],
+          [
+            28.2727897,
+            -25.7006285
+          ],
+          [
+            28.2727897,
+            -25.7005778
+          ],
+          [
+            28.2727924,
+            -25.7004932
+          ],
+          [
+            28.2728165,
+            -25.70033
+          ],
+          [
+            28.2728902,
+            -25.6996236
+          ],
+          [
+            28.2730029,
+            -25.6987156
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2728768,
+            -25.7009047
+          ],
+          [
+            28.272838,
+            -25.7008195
+          ],
+          [
+            28.2728058,
+            -25.7007288
+          ],
+          [
+            28.2727939,
+            -25.7006761
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2724742,
+            -25.7010347
+          ],
+          [
+            28.2728768,
+            -25.7009047
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959612",
+        "name": "Rietfontein 21 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2724742,
+            -25.7010347
+          ],
+          [
+            28.2724893,
+            -25.7006448
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2724742,
+            -25.7010347
+          ],
+          [
+            28.2724893,
+            -25.7006448
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2724893,
+            -25.7006448
+          ],
+          [
+            28.2726591,
+            -25.7006601
+          ],
+          [
+            28.2727939,
+            -25.7006761
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2727939,
+            -25.7006761
+          ],
+          [
+            28.2727897,
+            -25.7006285
+          ],
+          [
+            28.2727897,
+            -25.7005778
+          ],
+          [
+            28.2727924,
+            -25.7004932
+          ],
+          [
+            28.2728165,
+            -25.70033
+          ],
+          [
+            28.2728902,
+            -25.6996236
+          ],
+          [
+            28.2730029,
+            -25.6987156
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2730029,
+            -25.6987156
+          ],
+          [
+            28.2729191,
+            -25.6987065
+          ],
+          [
+            28.2727555,
+            -25.6986878
+          ],
+          [
+            28.2725396,
+            -25.698666
+          ],
+          [
+            28.2724229,
+            -25.6986563
+          ],
+          [
+            28.272319,
+            -25.6986569
+          ],
+          [
+            28.2721499,
+            -25.6986629
+          ],
+          [
+            28.272048,
+            -25.6986716
+          ],
+          [
+            28.271911,
+            -25.6986883
+          ],
+          [
+            28.2717893,
+            -25.6987035
+          ],
+          [
+            28.2716846,
+            -25.6986986
+          ],
+          [
+            28.2711018,
+            -25.6986419
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2711018,
+            -25.6986419
+          ],
+          [
+            28.2711222,
+            -25.6984401
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2686889,
+            -25.6982124
+          ],
+          [
+            28.268951,
+            -25.698233
+          ],
+          [
+            28.2700316,
+            -25.6983355
+          ],
+          [
+            28.271033,
+            -25.6984272
+          ],
+          [
+            28.2711222,
+            -25.6984401
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2683044,
+            -25.7010311
+          ],
+          [
+            28.2685,
+            -25.6996169
+          ],
+          [
+            28.2686889,
+            -25.6982124
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2427711,
+            -25.6981844
+          ],
+          [
+            28.2428663,
+            -25.6981983
+          ],
+          [
+            28.2439734,
+            -25.6983289
+          ],
+          [
+            28.2458925,
+            -25.6985391
+          ],
+          [
+            28.2468581,
+            -25.6986479
+          ],
+          [
+            28.2483548,
+            -25.6988183
+          ],
+          [
+            28.2500915,
+            -25.699014
+          ],
+          [
+            28.2561525,
+            -25.6996888
+          ],
+          [
+            28.2569794,
+            -25.6997742
+          ],
+          [
+            28.2577653,
+            -25.6998684
+          ],
+          [
+            28.2584428,
+            -25.6999354
+          ],
+          [
+            28.2585351,
+            -25.6999445
+          ],
+          [
+            28.2591997,
+            -25.700019
+          ],
+          [
+            28.2622372,
+            -25.7003596
+          ],
+          [
+            28.2683044,
+            -25.7010311
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2427711,
+            -25.6981844
+          ],
+          [
+            28.2427651,
+            -25.6975119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2390489,
+            -25.6975536
+          ],
+          [
+            28.2405201,
+            -25.6975409
+          ],
+          [
+            28.2416707,
+            -25.697518
+          ],
+          [
+            28.2427651,
+            -25.6975119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.236712,
+            -25.6975893
+          ],
+          [
+            28.2367844,
+            -25.697579
+          ],
+          [
+            28.2369205,
+            -25.6975718
+          ],
+          [
+            28.237571,
+            -25.6975718
+          ],
+          [
+            28.2382214,
+            -25.6975601
+          ],
+          [
+            28.2383763,
+            -25.6975573
+          ],
+          [
+            28.2390489,
+            -25.6975536
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2363955,
+            -25.6977415
+          ],
+          [
+            28.2365504,
+            -25.6976515
+          ],
+          [
+            28.2366369,
+            -25.6976122
+          ],
+          [
+            28.236712,
+            -25.6975893
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2360549,
+            -25.6979222
+          ],
+          [
+            28.2361159,
+            -25.6978974
+          ],
+          [
+            28.23625,
+            -25.6978298
+          ],
+          [
+            28.2363955,
+            -25.6977415
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2285218,
+            -25.6989848
+          ],
+          [
+            28.2301383,
+            -25.6987771
+          ],
+          [
+            28.2317413,
+            -25.6985568
+          ],
+          [
+            28.2333595,
+            -25.6983253
+          ],
+          [
+            28.2343271,
+            -25.6981964
+          ],
+          [
+            28.234992,
+            -25.6981091
+          ],
+          [
+            28.2356731,
+            -25.6980149
+          ],
+          [
+            28.2357895,
+            -25.698001
+          ],
+          [
+            28.2358689,
+            -25.6979765
+          ],
+          [
+            28.2360549,
+            -25.6979222
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2269052,
+            -25.6992001
+          ],
+          [
+            28.2274548,
+            -25.6991237
+          ],
+          [
+            28.2285218,
+            -25.6989848
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2175107,
+            -25.7005052
+          ],
+          [
+            28.2175342,
+            -25.7004856
+          ],
+          [
+            28.2175684,
+            -25.7004702
+          ],
+          [
+            28.2176093,
+            -25.7004599
+          ],
+          [
+            28.2176455,
+            -25.7004512
+          ],
+          [
+            28.2188485,
+            -25.7002878
+          ],
+          [
+            28.2204613,
+            -25.7000817
+          ],
+          [
+            28.222073,
+            -25.699858
+          ],
+          [
+            28.2225143,
+            -25.6998002
+          ],
+          [
+            28.2228535,
+            -25.6997558
+          ],
+          [
+            28.2232944,
+            -25.699698
+          ],
+          [
+            28.2236809,
+            -25.6996473
+          ],
+          [
+            28.2237923,
+            -25.6996316
+          ],
+          [
+            28.2252951,
+            -25.6994185
+          ],
+          [
+            28.2264817,
+            -25.6992575
+          ],
+          [
+            28.2269052,
+            -25.6992001
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2175107,
+            -25.7005052
+          ],
+          [
+            28.2174893,
+            -25.7005536
+          ],
+          [
+            28.2174651,
+            -25.7006002
+          ],
+          [
+            28.2174524,
+            -25.7006394
+          ],
+          [
+            28.2174138,
+            -25.7007305
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2174138,
+            -25.7007305
+          ],
+          [
+            28.2174181,
+            -25.7007569
+          ],
+          [
+            28.2174165,
+            -25.7007836
+          ],
+          [
+            28.2174091,
+            -25.7008095
+          ],
+          [
+            28.217396,
+            -25.7008335
+          ],
+          [
+            28.217378,
+            -25.7008546
+          ],
+          [
+            28.2173556,
+            -25.7008722
+          ],
+          [
+            28.2173227,
+            -25.7008879
+          ],
+          [
+            28.2172866,
+            -25.7008957
+          ],
+          [
+            28.2172495,
+            -25.7008952
+          ],
+          [
+            28.2172136,
+            -25.7008864
+          ],
+          [
+            28.2172028,
+            -25.7008819
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2172028,
+            -25.7008819
+          ],
+          [
+            28.2171372,
+            -25.7008853
+          ],
+          [
+            28.2170822,
+            -25.7008853
+          ],
+          [
+            28.2169937,
+            -25.7008926
+          ],
+          [
+            28.2169374,
+            -25.7008986
+          ],
+          [
+            28.2168777,
+            -25.7009025
+          ],
+          [
+            28.2168254,
+            -25.700898
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2091771,
+            -25.7019107
+          ],
+          [
+            28.2100019,
+            -25.7018092
+          ],
+          [
+            28.2106783,
+            -25.7017093
+          ],
+          [
+            28.2114919,
+            -25.7016098
+          ],
+          [
+            28.212206,
+            -25.7015173
+          ],
+          [
+            28.2137127,
+            -25.7013119
+          ],
+          [
+            28.2148339,
+            -25.7011626
+          ],
+          [
+            28.2152444,
+            -25.7011082
+          ],
+          [
+            28.2156754,
+            -25.701057
+          ],
+          [
+            28.2168254,
+            -25.700898
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2113815,
+            -25.7152569
+          ],
+          [
+            28.2112437,
+            -25.7143616
+          ],
+          [
+            28.2110643,
+            -25.7134029
+          ],
+          [
+            28.2110129,
+            -25.7131391
+          ],
+          [
+            28.2106586,
+            -25.7110256
+          ],
+          [
+            28.2105345,
+            -25.7102901
+          ],
+          [
+            28.2104065,
+            -25.7095053
+          ],
+          [
+            28.210332,
+            -25.7090622
+          ],
+          [
+            28.2102083,
+            -25.7083013
+          ],
+          [
+            28.2100247,
+            -25.7071249
+          ],
+          [
+            28.2098542,
+            -25.7061485
+          ],
+          [
+            28.2096237,
+            -25.7047009
+          ],
+          [
+            28.2095017,
+            -25.704035
+          ],
+          [
+            28.2094634,
+            -25.7038387
+          ],
+          [
+            28.2093729,
+            -25.7032701
+          ],
+          [
+            28.2093032,
+            -25.7027288
+          ],
+          [
+            28.2091771,
+            -25.7019107
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2098275,
+            -25.7154565
+          ],
+          [
+            28.2113815,
+            -25.7152569
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2101369,
+            -25.7175636
+          ],
+          [
+            28.2101499,
+            -25.7174477
+          ],
+          [
+            28.2101011,
+            -25.7171672
+          ],
+          [
+            28.2100205,
+            -25.7166544
+          ],
+          [
+            28.2098386,
+            -25.7155395
+          ],
+          [
+            28.2098275,
+            -25.7154565
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2101553,
+            -25.7197484
+          ],
+          [
+            28.2100125,
+            -25.7188021
+          ],
+          [
+            28.2099933,
+            -25.7186197
+          ],
+          [
+            28.2099752,
+            -25.7184808
+          ],
+          [
+            28.2099732,
+            -25.7184149
+          ],
+          [
+            28.2099739,
+            -25.7183551
+          ],
+          [
+            28.209988,
+            -25.7182602
+          ],
+          [
+            28.2100917,
+            -25.7178106
+          ],
+          [
+            28.2101369,
+            -25.7175636
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2101553,
+            -25.7197484
+          ],
+          [
+            28.2095261,
+            -25.719824
+          ],
+          [
+            28.2092392,
+            -25.7198584
+          ],
+          [
+            28.2090225,
+            -25.7198843
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2090225,
+            -25.7198843
+          ],
+          [
+            28.2085848,
+            -25.7199419
+          ],
+          [
+            28.2082099,
+            -25.7199913
+          ],
+          [
+            28.2081902,
+            -25.7199943
+          ],
+          [
+            28.2072734,
+            -25.7201237
+          ],
+          [
+            28.2068089,
+            -25.7201892
+          ],
+          [
+            28.2059786,
+            -25.7203039
+          ],
+          [
+            28.2051216,
+            -25.7204129
+          ],
+          [
+            28.2046063,
+            -25.7204785
+          ],
+          [
+            28.2044685,
+            -25.7204954
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044685,
+            -25.7204954
+          ],
+          [
+            28.2044813,
+            -25.7205594
+          ],
+          [
+            28.204676,
+            -25.7219105
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.204676,
+            -25.7219105
+          ],
+          [
+            28.2047269,
+            -25.7221955
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2047269,
+            -25.7221955
+          ],
+          [
+            28.20475,
+            -25.7223548
+          ],
+          [
+            28.2048815,
+            -25.7232482
+          ],
+          [
+            28.2050103,
+            -25.7241855
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2050103,
+            -25.7241855
+          ],
+          [
+            28.2050848,
+            -25.7246572
+          ],
+          [
+            28.2050994,
+            -25.7247356
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2050994,
+            -25.7247356
+          ],
+          [
+            28.2051259,
+            -25.7249158
+          ],
+          [
+            28.2052245,
+            -25.725503
+          ],
+          [
+            28.2053649,
+            -25.7263728
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2053649,
+            -25.7263728
+          ],
+          [
+            28.2054287,
+            -25.7267567
+          ],
+          [
+            28.2054432,
+            -25.7268483
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2054432,
+            -25.7268483
+          ],
+          [
+            28.2054573,
+            -25.7269309
+          ],
+          [
+            28.2055548,
+            -25.7275373
+          ],
+          [
+            28.2055672,
+            -25.7276616
+          ],
+          [
+            28.2055709,
+            -25.7276992
+          ],
+          [
+            28.2055814,
+            -25.7277929
+          ],
+          [
+            28.2055829,
+            -25.7278985
+          ],
+          [
+            28.2055744,
+            -25.7280449
+          ],
+          [
+            28.2055628,
+            -25.7281244
+          ],
+          [
+            28.2055422,
+            -25.7282338
+          ],
+          [
+            28.2055119,
+            -25.7283274
+          ],
+          [
+            28.2054689,
+            -25.7284361
+          ],
+          [
+            28.2054327,
+            -25.7285098
+          ],
+          [
+            28.2053976,
+            -25.7285733
+          ],
+          [
+            28.2053496,
+            -25.7286415
+          ],
+          [
+            28.2052892,
+            -25.72872
+          ],
+          [
+            28.2052329,
+            -25.7287933
+          ],
+          [
+            28.2047427,
+            -25.7293401
+          ],
+          [
+            28.2047275,
+            -25.7293569
+          ],
+          [
+            28.2046938,
+            -25.7294039
+          ],
+          [
+            28.2046656,
+            -25.7294522
+          ],
+          [
+            28.2046352,
+            -25.7295143
+          ],
+          [
+            28.204608,
+            -25.7295754
+          ],
+          [
+            28.2045771,
+            -25.7296551
+          ],
+          [
+            28.2045517,
+            -25.7297283
+          ],
+          [
+            28.2045355,
+            -25.7297796
+          ],
+          [
+            28.2045168,
+            -25.7298472
+          ],
+          [
+            28.2045047,
+            -25.7298992
+          ],
+          [
+            28.2044943,
+            -25.7299598
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044943,
+            -25.7299598
+          ],
+          [
+            28.2044886,
+            -25.7300019
+          ],
+          [
+            28.2044885,
+            -25.7300477
+          ],
+          [
+            28.2044913,
+            -25.7300816
+          ],
+          [
+            28.2044953,
+            -25.7301167
+          ],
+          [
+            28.2045097,
+            -25.7302038
+          ],
+          [
+            28.2045194,
+            -25.7302676
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2045194,
+            -25.7302676
+          ],
+          [
+            28.2045315,
+            -25.7303369
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2045315,
+            -25.7303369
+          ],
+          [
+            28.2045564,
+            -25.7304595
+          ],
+          [
+            28.204691,
+            -25.7311834
+          ],
+          [
+            28.2048016,
+            -25.7317199
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2048016,
+            -25.7317199
+          ],
+          [
+            28.2048145,
+            -25.7318274
+          ],
+          [
+            28.2048185,
+            -25.7318708
+          ],
+          [
+            28.2048211,
+            -25.7319192
+          ],
+          [
+            28.2048212,
+            -25.731976
+          ],
+          [
+            28.2048199,
+            -25.7320303
+          ],
+          [
+            28.2048145,
+            -25.7320811
+          ],
+          [
+            28.2048064,
+            -25.7321366
+          ],
+          [
+            28.2047917,
+            -25.7322164
+          ],
+          [
+            28.2047634,
+            -25.732354
+          ],
+          [
+            28.204683,
+            -25.7326839
+          ],
+          [
+            28.2046576,
+            -25.7327612
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2046576,
+            -25.7327612
+          ],
+          [
+            28.2046294,
+            -25.7328398
+          ],
+          [
+            28.2045999,
+            -25.732911
+          ],
+          [
+            28.2045623,
+            -25.7329883
+          ],
+          [
+            28.2045343,
+            -25.7330455
+          ],
+          [
+            28.2044654,
+            -25.733183
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044654,
+            -25.733183
+          ],
+          [
+            28.2044218,
+            -25.7332779
+          ],
+          [
+            28.2043345,
+            -25.7334641
+          ],
+          [
+            28.2042861,
+            -25.7335707
+          ],
+          [
+            28.2042566,
+            -25.7336468
+          ],
+          [
+            28.2042297,
+            -25.733722
+          ],
+          [
+            28.204207,
+            -25.7337893
+          ],
+          [
+            28.2041869,
+            -25.733863
+          ],
+          [
+            28.2041761,
+            -25.7339138
+          ],
+          [
+            28.204168,
+            -25.7339668
+          ],
+          [
+            28.2041614,
+            -25.7340297
+          ],
+          [
+            28.20416,
+            -25.7340744
+          ],
+          [
+            28.2041613,
+            -25.7341279
+          ],
+          [
+            28.2041681,
+            -25.7341964
+          ],
+          [
+            28.2041761,
+            -25.734252
+          ],
+          [
+            28.2041861,
+            -25.7343007
+          ],
+          [
+            28.2041942,
+            -25.7343378
+          ],
+          [
+            28.2042076,
+            -25.7343849
+          ],
+          [
+            28.2042187,
+            -25.734415
+          ],
+          [
+            28.2042357,
+            -25.7344616
+          ],
+          [
+            28.2042412,
+            -25.7344967
+          ],
+          [
+            28.204274,
+            -25.7345565
+          ],
+          [
+            28.2042928,
+            -25.7345964
+          ],
+          [
+            28.2043223,
+            -25.7346549
+          ],
+          [
+            28.2043458,
+            -25.7346942
+          ],
+          [
+            28.2043672,
+            -25.7347258
+          ],
+          [
+            28.2044806,
+            -25.7348711
+          ],
+          [
+            28.2047042,
+            -25.7351368
+          ],
+          [
+            28.2047763,
+            -25.7352244
+          ],
+          [
+            28.2048564,
+            -25.7353323
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2048564,
+            -25.7353323
+          ],
+          [
+            28.2048826,
+            -25.735367
+          ],
+          [
+            28.2049486,
+            -25.7354529
+          ],
+          [
+            28.2049821,
+            -25.7355024
+          ],
+          [
+            28.205009,
+            -25.7355471
+          ],
+          [
+            28.2050348,
+            -25.7355922
+          ],
+          [
+            28.2050613,
+            -25.7356425
+          ],
+          [
+            28.20508,
+            -25.7356848
+          ],
+          [
+            28.2050985,
+            -25.7357308
+          ],
+          [
+            28.2051069,
+            -25.7357561
+          ],
+          [
+            28.2051175,
+            -25.7357802
+          ],
+          [
+            28.2051393,
+            -25.7358279
+          ],
+          [
+            28.2051411,
+            -25.735849
+          ],
+          [
+            28.2051432,
+            -25.7358731
+          ],
+          [
+            28.2051476,
+            -25.735925
+          ],
+          [
+            28.2051878,
+            -25.7363947
+          ],
+          [
+            28.2053059,
+            -25.7377782
+          ],
+          [
+            28.2053688,
+            -25.7385045
+          ],
+          [
+            28.2054474,
+            -25.7394347
+          ],
+          [
+            28.2055623,
+            -25.7408108
+          ],
+          [
+            28.205643,
+            -25.741778
+          ],
+          [
+            28.2056827,
+            -25.7422544
+          ],
+          [
+            28.2057229,
+            -25.7427355
+          ],
+          [
+            28.2057448,
+            -25.7429982
+          ],
+          [
+            28.2057478,
+            -25.7430338
+          ],
+          [
+            28.2058064,
+            -25.7437366
+          ],
+          [
+            28.2058741,
+            -25.744547
+          ],
+          [
+            28.2058966,
+            -25.7448167
+          ],
+          [
+            28.2059296,
+            -25.7452126
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2059296,
+            -25.7452126
+          ],
+          [
+            28.2059849,
+            -25.7458753
+          ],
+          [
+            28.2059982,
+            -25.7460349
+          ],
+          [
+            28.2060188,
+            -25.7462687
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2060188,
+            -25.7462687
+          ],
+          [
+            28.2060441,
+            -25.7465834
+          ],
+          [
+            28.206052,
+            -25.7466782
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.206052,
+            -25.7466782
+          ],
+          [
+            28.2059141,
+            -25.7466874
+          ],
+          [
+            28.2050831,
+            -25.7467463
+          ],
+          [
+            28.2050409,
+            -25.7467493
+          ],
+          [
+            28.2046361,
+            -25.746778
+          ],
+          [
+            28.2044088,
+            -25.7467941
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044088,
+            -25.7467941
+          ],
+          [
+            28.2041137,
+            -25.7468172
+          ],
+          [
+            28.2039548,
+            -25.7468263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2039548,
+            -25.7468263
+          ],
+          [
+            28.203825,
+            -25.7468366
+          ],
+          [
+            28.2031034,
+            -25.7468936
+          ],
+          [
+            28.2027962,
+            -25.7469179
+          ],
+          [
+            28.2024275,
+            -25.746947
+          ],
+          [
+            28.2022778,
+            -25.7469198
+          ],
+          [
+            28.2021603,
+            -25.746872
+          ],
+          [
+            28.2018434,
+            -25.7466945
+          ],
+          [
+            28.2017359,
+            -25.7466674
+          ],
+          [
+            28.2016547,
+            -25.7466618
+          ],
+          [
+            28.2015149,
+            -25.7466656
+          ],
+          [
+            28.2014117,
+            -25.7466853
+          ],
+          [
+            28.2013043,
+            -25.7467255
+          ],
+          [
+            28.2011258,
+            -25.7468089
+          ],
+          [
+            28.2008452,
+            -25.7469693
+          ],
+          [
+            28.2007675,
+            -25.7470028
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2007675,
+            -25.7470028
+          ],
+          [
+            28.2007378,
+            -25.7470153
+          ],
+          [
+            28.200641,
+            -25.7470486
+          ],
+          [
+            28.2005247,
+            -25.7470781
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2005247,
+            -25.7470781
+          ],
+          [
+            28.2004418,
+            -25.7470891
+          ],
+          [
+            28.2003399,
+            -25.7470921
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2003399,
+            -25.7470921
+          ],
+          [
+            28.2002158,
+            -25.7471
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2002158,
+            -25.7471
+          ],
+          [
+            28.2000898,
+            -25.747109
+          ],
+          [
+            28.1999021,
+            -25.7471199
+          ],
+          [
+            28.1995594,
+            -25.7471455
+          ],
+          [
+            28.1979262,
+            -25.7472564
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1979262,
+            -25.7472564
+          ],
+          [
+            28.1974525,
+            -25.7472891
+          ],
+          [
+            28.1955297,
+            -25.747422
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1955297,
+            -25.747422
+          ],
+          [
+            28.1942053,
+            -25.7475167
+          ],
+          [
+            28.1940346,
+            -25.7475289
+          ],
+          [
+            28.1939,
+            -25.7475384
+          ],
+          [
+            28.193083,
+            -25.7475982
+          ],
+          [
+            28.1922722,
+            -25.7476577
+          ],
+          [
+            28.1918979,
+            -25.7476835
+          ],
+          [
+            28.1916832,
+            -25.7476983
+          ],
+          [
+            28.1915066,
+            -25.7477105
+          ],
+          [
+            28.1913256,
+            -25.747723
+          ],
+          [
+            28.1910975,
+            -25.7477387
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1910975,
+            -25.7477387
+          ],
+          [
+            28.1906474,
+            -25.7477695
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19959712",
+        "name": "Rietfontein 21 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1906474,
+            -25.7477695
+          ],
+          [
+            28.1899631,
+            -25.7478156
+          ],
+          [
+            28.1896401,
+            -25.7478372
+          ],
+          [
+            28.1894773,
+            -25.7478481
+          ],
+          [
+            28.1889999,
+            -25.74788
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1857622,
+            -25.748086
+          ],
+          [
+            28.1856327,
+            -25.7466395
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1856327,
+            -25.7466395
+          ],
+          [
+            28.1855524,
+            -25.7456747
+          ],
+          [
+            28.1855093,
+            -25.7451573
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1855093,
+            -25.7451573
+          ],
+          [
+            28.1859593,
+            -25.7451288
+          ],
+          [
+            28.1867025,
+            -25.7450786
+          ],
+          [
+            28.1871958,
+            -25.7450455
+          ],
+          [
+            28.1873757,
+            -25.7450334
+          ],
+          [
+            28.1876617,
+            -25.7450141
+          ],
+          [
+            28.1878294,
+            -25.7450029
+          ],
+          [
+            28.1879123,
+            -25.7449973
+          ],
+          [
+            28.1879656,
+            -25.7449937
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1879656,
+            -25.7449937
+          ],
+          [
+            28.1880263,
+            -25.7449896
+          ],
+          [
+            28.188111,
+            -25.7449839
+          ],
+          [
+            28.1885671,
+            -25.7449533
+          ],
+          [
+            28.1887378,
+            -25.7449418
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1887378,
+            -25.7449418
+          ],
+          [
+            28.1894143,
+            -25.7448962
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1894143,
+            -25.7448962
+          ],
+          [
+            28.1904248,
+            -25.7448294
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1904248,
+            -25.7448294
+          ],
+          [
+            28.1913361,
+            -25.7447622
+          ],
+          [
+            28.1915884,
+            -25.7447436
+          ],
+          [
+            28.1918084,
+            -25.7447276
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1918084,
+            -25.7447276
+          ],
+          [
+            28.192036,
+            -25.7447111
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.192036,
+            -25.7447111
+          ],
+          [
+            28.1922725,
+            -25.7446948
+          ],
+          [
+            28.1928418,
+            -25.7446555
+          ],
+          [
+            28.1930766,
+            -25.7446357
+          ],
+          [
+            28.1938522,
+            -25.7445794
+          ],
+          [
+            28.193932,
+            -25.7445736
+          ],
+          [
+            28.1945294,
+            -25.7445303
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1945294,
+            -25.7445303
+          ],
+          [
+            28.1952787,
+            -25.744476
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1952787,
+            -25.744476
+          ],
+          [
+            28.1960179,
+            -25.744424
+          ],
+          [
+            28.1969751,
+            -25.7443567
+          ],
+          [
+            28.1972534,
+            -25.7443372
+          ],
+          [
+            28.1976883,
+            -25.7443066
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1976883,
+            -25.7443066
+          ],
+          [
+            28.1978509,
+            -25.7442952
+          ],
+          [
+            28.1982507,
+            -25.7442671
+          ],
+          [
+            28.1983256,
+            -25.7442618
+          ],
+          [
+            28.1991128,
+            -25.7442071
+          ],
+          [
+            28.1996775,
+            -25.7441694
+          ],
+          [
+            28.2001414,
+            -25.7441356
+          ],
+          [
+            28.20025,
+            -25.744129
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.20025,
+            -25.744129
+          ],
+          [
+            28.2008799,
+            -25.7440823
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2008799,
+            -25.7440823
+          ],
+          [
+            28.2010883,
+            -25.7440676
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2010883,
+            -25.7440676
+          ],
+          [
+            28.201192,
+            -25.7440603
+          ],
+          [
+            28.2031495,
+            -25.7439227
+          ],
+          [
+            28.2037229,
+            -25.7438824
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2037229,
+            -25.7438824
+          ],
+          [
+            28.2036223,
+            -25.742779
+          ],
+          [
+            28.2036089,
+            -25.7426317
+          ],
+          [
+            28.2035887,
+            -25.7424103
+          ],
+          [
+            28.2034784,
+            -25.7409243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2034784,
+            -25.7409243
+          ],
+          [
+            28.2034282,
+            -25.7404856
+          ],
+          [
+            28.2033557,
+            -25.7398515
+          ],
+          [
+            28.2032305,
+            -25.7384653
+          ],
+          [
+            28.203227,
+            -25.7384261
+          ],
+          [
+            28.2032214,
+            -25.7383711
+          ],
+          [
+            28.2032155,
+            -25.7383127
+          ],
+          [
+            28.2032097,
+            -25.7382551
+          ],
+          [
+            28.2031731,
+            -25.7376438
+          ],
+          [
+            28.2031497,
+            -25.7372523
+          ],
+          [
+            28.2031377,
+            -25.737051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2031377,
+            -25.737051
+          ],
+          [
+            28.203122,
+            -25.7367889
+          ],
+          [
+            28.2030727,
+            -25.7362427
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2030727,
+            -25.7362427
+          ],
+          [
+            28.2030569,
+            -25.7361087
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2030569,
+            -25.7361087
+          ],
+          [
+            28.203053,
+            -25.7359896
+          ],
+          [
+            28.2030618,
+            -25.7358512
+          ],
+          [
+            28.2030859,
+            -25.7357154
+          ],
+          [
+            28.2032501,
+            -25.7353351
+          ],
+          [
+            28.2033648,
+            -25.7350602
+          ],
+          [
+            28.2033966,
+            -25.7349951
+          ],
+          [
+            28.2034358,
+            -25.7349128
+          ],
+          [
+            28.2034908,
+            -25.7348065
+          ],
+          [
+            28.2037029,
+            -25.7343859
+          ],
+          [
+            28.203806,
+            -25.7341952
+          ],
+          [
+            28.2038704,
+            -25.7340623
+          ],
+          [
+            28.2039304,
+            -25.7339389
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2039304,
+            -25.7339389
+          ],
+          [
+            28.2042327,
+            -25.7332589
+          ],
+          [
+            28.2042757,
+            -25.7331712
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2042757,
+            -25.7331712
+          ],
+          [
+            28.2043539,
+            -25.7330231
+          ],
+          [
+            28.2044208,
+            -25.7328929
+          ],
+          [
+            28.2044417,
+            -25.7328482
+          ],
+          [
+            28.2044671,
+            -25.732789
+          ],
+          [
+            28.2044926,
+            -25.7327177
+          ],
+          [
+            28.204521,
+            -25.7326299
+          ],
+          [
+            28.2045919,
+            -25.7323481
+          ],
+          [
+            28.2046254,
+            -25.7321898
+          ],
+          [
+            28.2046361,
+            -25.7321258
+          ],
+          [
+            28.2046455,
+            -25.7320628
+          ],
+          [
+            28.2046495,
+            -25.7320062
+          ],
+          [
+            28.2046495,
+            -25.731953
+          ],
+          [
+            28.2046482,
+            -25.7318986
+          ],
+          [
+            28.2046455,
+            -25.7318467
+          ],
+          [
+            28.2046296,
+            -25.7317342
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2046296,
+            -25.7317342
+          ],
+          [
+            28.2043962,
+            -25.730467
+          ],
+          [
+            28.2043794,
+            -25.7303505
+          ],
+          [
+            28.2043625,
+            -25.7302691
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2043625,
+            -25.7302691
+          ],
+          [
+            28.204353,
+            -25.7302049
+          ],
+          [
+            28.2043102,
+            -25.7299753
+          ],
+          [
+            28.2043049,
+            -25.7299354
+          ],
+          [
+            28.2043022,
+            -25.7298859
+          ],
+          [
+            28.2043045,
+            -25.7298477
+          ],
+          [
+            28.2043089,
+            -25.729811
+          ],
+          [
+            28.2043169,
+            -25.7297578
+          ],
+          [
+            28.2043227,
+            -25.7297062
+          ],
+          [
+            28.2043223,
+            -25.7296564
+          ],
+          [
+            28.2043223,
+            -25.7295959
+          ],
+          [
+            28.2043194,
+            -25.7295387
+          ],
+          [
+            28.2043129,
+            -25.72948
+          ],
+          [
+            28.2042994,
+            -25.7293712
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2042994,
+            -25.7293712
+          ],
+          [
+            28.2042958,
+            -25.7293505
+          ],
+          [
+            28.204229,
+            -25.7289629
+          ],
+          [
+            28.2042111,
+            -25.7288594
+          ],
+          [
+            28.2041687,
+            -25.7286036
+          ],
+          [
+            28.2041308,
+            -25.7283753
+          ],
+          [
+            28.2040701,
+            -25.7280099
+          ],
+          [
+            28.2040057,
+            -25.7276215
+          ],
+          [
+            28.2039079,
+            -25.7270441
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2039079,
+            -25.7270441
+          ],
+          [
+            28.203863,
+            -25.726755
+          ],
+          [
+            28.2038035,
+            -25.7263481
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2038035,
+            -25.7263481
+          ],
+          [
+            28.2037635,
+            -25.7261066
+          ],
+          [
+            28.2035822,
+            -25.7250106
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2035822,
+            -25.7250106
+          ],
+          [
+            28.2033846,
+            -25.7238329
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2033846,
+            -25.7238329
+          ],
+          [
+            28.203323,
+            -25.7234465
+          ],
+          [
+            28.2033066,
+            -25.7233525
+          ],
+          [
+            28.2032682,
+            -25.7231316
+          ],
+          [
+            28.2032132,
+            -25.7228334
+          ],
+          [
+            28.2030069,
+            -25.7215105
+          ],
+          [
+            28.2028762,
+            -25.7207115
+          ],
+          [
+            28.2027761,
+            -25.7201281
+          ],
+          [
+            28.2027187,
+            -25.7197935
+          ],
+          [
+            28.2026248,
+            -25.7191846
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2026248,
+            -25.7191846
+          ],
+          [
+            28.202609,
+            -25.7190719
+          ],
+          [
+            28.2025338,
+            -25.7185948
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2025338,
+            -25.7185948
+          ],
+          [
+            28.2024502,
+            -25.7180886
+          ],
+          [
+            28.2024115,
+            -25.7178545
+          ],
+          [
+            28.202399,
+            -25.7177796
+          ],
+          [
+            28.202184,
+            -25.7164944
+          ],
+          [
+            28.201847,
+            -25.7143754
+          ],
+          [
+            28.2017216,
+            -25.7135955
+          ],
+          [
+            28.2016345,
+            -25.7129933
+          ],
+          [
+            28.2014044,
+            -25.7116969
+          ],
+          [
+            28.2013695,
+            -25.7114458
+          ],
+          [
+            28.2010455,
+            -25.7095014
+          ],
+          [
+            28.2009808,
+            -25.7091128
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2009808,
+            -25.7091128
+          ],
+          [
+            28.2008186,
+            -25.7081312
+          ],
+          [
+            28.2007464,
+            -25.7076943
+          ],
+          [
+            28.2006933,
+            -25.7073762
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2006933,
+            -25.7073762
+          ],
+          [
+            28.2006337,
+            -25.7069908
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2006337,
+            -25.7069908
+          ],
+          [
+            28.2006039,
+            -25.706809
+          ],
+          [
+            28.2004842,
+            -25.7060799
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2004842,
+            -25.7060799
+          ],
+          [
+            28.2004165,
+            -25.7056885
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2004165,
+            -25.7056885
+          ],
+          [
+            28.2003951,
+            -25.7055628
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2003951,
+            -25.7055628
+          ],
+          [
+            28.2003457,
+            -25.7052732
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2003457,
+            -25.7052732
+          ],
+          [
+            28.2003238,
+            -25.7051292
+          ],
+          [
+            28.2002829,
+            -25.7049329
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2002829,
+            -25.7049329
+          ],
+          [
+            28.2001992,
+            -25.7044079
+          ],
+          [
+            28.2001495,
+            -25.7040526
+          ],
+          [
+            28.2000502,
+            -25.7034453
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2000502,
+            -25.7034453
+          ],
+          [
+            28.2000001,
+            -25.7031375
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2000001,
+            -25.7031375
+          ],
+          [
+            28.1999356,
+            -25.702794
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1999356,
+            -25.702794
+          ],
+          [
+            28.1997827,
+            -25.7018539
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1997827,
+            -25.7018539
+          ],
+          [
+            28.1997576,
+            -25.7016696
+          ],
+          [
+            28.1997263,
+            -25.701475
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1997263,
+            -25.701475
+          ],
+          [
+            28.1996633,
+            -25.7011361
+          ],
+          [
+            28.1996492,
+            -25.7010388
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1996492,
+            -25.7010388
+          ],
+          [
+            28.1996297,
+            -25.7009379
+          ],
+          [
+            28.1995849,
+            -25.7005953
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1995849,
+            -25.7005953
+          ],
+          [
+            28.1994615,
+            -25.6998155
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1994615,
+            -25.6998155
+          ],
+          [
+            28.1994116,
+            -25.6995336
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1994116,
+            -25.6995336
+          ],
+          [
+            28.1993669,
+            -25.6992437
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1993669,
+            -25.6992437
+          ],
+          [
+            28.1993229,
+            -25.6990184
+          ],
+          [
+            28.1993036,
+            -25.6989198
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1993036,
+            -25.6989198
+          ],
+          [
+            28.199392,
+            -25.698908
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.199392,
+            -25.698908
+          ],
+          [
+            28.1994552,
+            -25.6988995
+          ],
+          [
+            28.1997779,
+            -25.6988564
+          ],
+          [
+            28.1999893,
+            -25.6988278
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1999893,
+            -25.6988278
+          ],
+          [
+            28.2002689,
+            -25.6987903
+          ],
+          [
+            28.2008854,
+            -25.6987076
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2008854,
+            -25.6987076
+          ],
+          [
+            28.2012836,
+            -25.6986542
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2012836,
+            -25.6986542
+          ],
+          [
+            28.2015084,
+            -25.6986241
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2015084,
+            -25.6986241
+          ],
+          [
+            28.2024059,
+            -25.698498
+          ],
+          [
+            28.2028391,
+            -25.6984415
+          ],
+          [
+            28.2039183,
+            -25.6983008
+          ],
+          [
+            28.2054507,
+            -25.6980982
+          ],
+          [
+            28.2069604,
+            -25.6978928
+          ],
+          [
+            28.2084835,
+            -25.6976888
+          ],
+          [
+            28.2100084,
+            -25.6974989
+          ],
+          [
+            28.2115225,
+            -25.6972809
+          ],
+          [
+            28.2130334,
+            -25.6970757
+          ],
+          [
+            28.2145603,
+            -25.6968763
+          ],
+          [
+            28.2160757,
+            -25.6966769
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2160757,
+            -25.6966769
+          ],
+          [
+            28.2166189,
+            -25.6965983
+          ],
+          [
+            28.216812,
+            -25.6965669
+          ],
+          [
+            28.2170038,
+            -25.6965246
+          ],
+          [
+            28.2171687,
+            -25.6964787
+          ],
+          [
+            28.2173485,
+            -25.6964207
+          ],
+          [
+            28.2175431,
+            -25.6963481
+          ],
+          [
+            28.217614,
+            -25.6963216
+          ],
+          [
+            28.2177213,
+            -25.6962902
+          ],
+          [
+            28.2178044,
+            -25.6962708
+          ],
+          [
+            28.2179412,
+            -25.6962442
+          ],
+          [
+            28.2181612,
+            -25.6962116
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19962709",
+        "name": "Wonderboom South 20 Out",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2184767,
+            -25.6980436
+          ],
+          [
+            28.2181612,
+            -25.6962116
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2184767,
+            -25.6980436
+          ],
+          [
+            28.2181612,
+            -25.6962116
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2163546,
+            -25.6983319
+          ],
+          [
+            28.2184767,
+            -25.6980436
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2163546,
+            -25.6983319
+          ],
+          [
+            28.2160757,
+            -25.6966769
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2015084,
+            -25.6986241
+          ],
+          [
+            28.2024059,
+            -25.698498
+          ],
+          [
+            28.2028391,
+            -25.6984415
+          ],
+          [
+            28.2039183,
+            -25.6983008
+          ],
+          [
+            28.2054507,
+            -25.6980982
+          ],
+          [
+            28.2069604,
+            -25.6978928
+          ],
+          [
+            28.2084835,
+            -25.6976888
+          ],
+          [
+            28.2100084,
+            -25.6974989
+          ],
+          [
+            28.2115225,
+            -25.6972809
+          ],
+          [
+            28.2130334,
+            -25.6970757
+          ],
+          [
+            28.2145603,
+            -25.6968763
+          ],
+          [
+            28.2160757,
+            -25.6966769
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2012836,
+            -25.6986542
+          ],
+          [
+            28.2015084,
+            -25.6986241
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2008854,
+            -25.6987076
+          ],
+          [
+            28.2012836,
+            -25.6986542
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1999893,
+            -25.6988278
+          ],
+          [
+            28.2002689,
+            -25.6987903
+          ],
+          [
+            28.2008854,
+            -25.6987076
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.199392,
+            -25.698908
+          ],
+          [
+            28.1994552,
+            -25.6988995
+          ],
+          [
+            28.1997779,
+            -25.6988564
+          ],
+          [
+            28.1999893,
+            -25.6988278
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.199392,
+            -25.698908
+          ],
+          [
+            28.1994096,
+            -25.6990025
+          ],
+          [
+            28.199448,
+            -25.6992355
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.199448,
+            -25.6992355
+          ],
+          [
+            28.1994553,
+            -25.6992904
+          ],
+          [
+            28.199486,
+            -25.699523
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.199486,
+            -25.699523
+          ],
+          [
+            28.1994948,
+            -25.6995905
+          ],
+          [
+            28.1995234,
+            -25.6998115
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1995234,
+            -25.6998115
+          ],
+          [
+            28.1996495,
+            -25.7005888
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1996495,
+            -25.7005888
+          ],
+          [
+            28.1997018,
+            -25.7009291
+          ],
+          [
+            28.1997143,
+            -25.7010276
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1997143,
+            -25.7010276
+          ],
+          [
+            28.1997345,
+            -25.7011304
+          ],
+          [
+            28.1997828,
+            -25.7014635
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1997828,
+            -25.7014635
+          ],
+          [
+            28.1998189,
+            -25.7016654
+          ],
+          [
+            28.199841,
+            -25.7018508
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.199841,
+            -25.7018508
+          ],
+          [
+            28.2000133,
+            -25.7027964
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2000133,
+            -25.7027964
+          ],
+          [
+            28.200069,
+            -25.7031257
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.200069,
+            -25.7031257
+          ],
+          [
+            28.200122,
+            -25.7034429
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.200122,
+            -25.7034429
+          ],
+          [
+            28.2002051,
+            -25.7040459
+          ],
+          [
+            28.2002648,
+            -25.7044096
+          ],
+          [
+            28.2003647,
+            -25.7049172
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2003647,
+            -25.7049172
+          ],
+          [
+            28.2004103,
+            -25.7051377
+          ],
+          [
+            28.2004341,
+            -25.7052607
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2004341,
+            -25.7052607
+          ],
+          [
+            28.200448,
+            -25.705341
+          ],
+          [
+            28.2004839,
+            -25.7055486
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2004839,
+            -25.7055486
+          ],
+          [
+            28.2005054,
+            -25.7056732
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2005054,
+            -25.7056732
+          ],
+          [
+            28.2005498,
+            -25.7058464
+          ],
+          [
+            28.2005645,
+            -25.7059093
+          ],
+          [
+            28.2005766,
+            -25.7059515
+          ],
+          [
+            28.2005906,
+            -25.7059953
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2005906,
+            -25.7059953
+          ],
+          [
+            28.2006088,
+            -25.7060579
+          ],
+          [
+            28.2006289,
+            -25.7061147
+          ],
+          [
+            28.2006466,
+            -25.7061611
+          ],
+          [
+            28.2006665,
+            -25.7062089
+          ],
+          [
+            28.2006893,
+            -25.7062561
+          ],
+          [
+            28.2007349,
+            -25.7063419
+          ],
+          [
+            28.200765,
+            -25.7063906
+          ],
+          [
+            28.2009354,
+            -25.7066357
+          ],
+          [
+            28.2011341,
+            -25.7069291
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2011341,
+            -25.7069291
+          ],
+          [
+            28.2012883,
+            -25.7071567
+          ],
+          [
+            28.2013784,
+            -25.7072846
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2013784,
+            -25.7072846
+          ],
+          [
+            28.2014472,
+            -25.7073937
+          ],
+          [
+            28.2015093,
+            -25.7074876
+          ],
+          [
+            28.2016516,
+            -25.7076985
+          ],
+          [
+            28.201834,
+            -25.70797
+          ],
+          [
+            28.2019953,
+            -25.7082164
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2019953,
+            -25.7082164
+          ],
+          [
+            28.2021526,
+            -25.7084565
+          ],
+          [
+            28.202202,
+            -25.708535
+          ],
+          [
+            28.2022449,
+            -25.7086051
+          ],
+          [
+            28.2022825,
+            -25.7086764
+          ],
+          [
+            28.202316,
+            -25.7087392
+          ],
+          [
+            28.2023509,
+            -25.7088142
+          ],
+          [
+            28.2023831,
+            -25.7088879
+          ],
+          [
+            28.2024045,
+            -25.7089398
+          ],
+          [
+            28.202422,
+            -25.7089795
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.202422,
+            -25.7089795
+          ],
+          [
+            28.2024488,
+            -25.7090607
+          ],
+          [
+            28.202493,
+            -25.7092008
+          ],
+          [
+            28.202544,
+            -25.7093495
+          ],
+          [
+            28.2025802,
+            -25.709463
+          ],
+          [
+            28.2026187,
+            -25.7095929
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2026187,
+            -25.7095929
+          ],
+          [
+            28.2026459,
+            -25.7096963
+          ],
+          [
+            28.2026701,
+            -25.7097953
+          ],
+          [
+            28.2026861,
+            -25.7098677
+          ],
+          [
+            28.2027103,
+            -25.7099742
+          ],
+          [
+            28.2027349,
+            -25.7100947
+          ],
+          [
+            28.2027666,
+            -25.7102545
+          ],
+          [
+            28.2028015,
+            -25.7104418
+          ],
+          [
+            28.2028282,
+            -25.7106463
+          ],
+          [
+            28.2028789,
+            -25.710904
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2028789,
+            -25.710904
+          ],
+          [
+            28.203081,
+            -25.7121385
+          ],
+          [
+            28.2031492,
+            -25.7125804
+          ],
+          [
+            28.2031834,
+            -25.7127482
+          ],
+          [
+            28.2032153,
+            -25.7129387
+          ],
+          [
+            28.2032252,
+            -25.7130398
+          ],
+          [
+            28.2032985,
+            -25.7134561
+          ],
+          [
+            28.2033216,
+            -25.7135863
+          ],
+          [
+            28.2033384,
+            -25.7136805
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2033384,
+            -25.7136805
+          ],
+          [
+            28.2033556,
+            -25.7137845
+          ],
+          [
+            28.2034096,
+            -25.7140631
+          ],
+          [
+            28.2034195,
+            -25.7141299
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2034195,
+            -25.7141299
+          ],
+          [
+            28.2034268,
+            -25.7141864
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2034268,
+            -25.7141864
+          ],
+          [
+            28.2034353,
+            -25.7142434
+          ],
+          [
+            28.2035379,
+            -25.7149154
+          ],
+          [
+            28.2036841,
+            -25.7158724
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2036841,
+            -25.7158724
+          ],
+          [
+            28.2037573,
+            -25.716277
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2037573,
+            -25.716277
+          ],
+          [
+            28.2040003,
+            -25.7176502
+          ],
+          [
+            28.2040985,
+            -25.7182703
+          ],
+          [
+            28.2041136,
+            -25.7183832
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2041136,
+            -25.7183832
+          ],
+          [
+            28.2041263,
+            -25.7184748
+          ],
+          [
+            28.2041983,
+            -25.7188785
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2041983,
+            -25.7188785
+          ],
+          [
+            28.2044083,
+            -25.7201327
+          ],
+          [
+            28.2044561,
+            -25.7204181
+          ],
+          [
+            28.2044685,
+            -25.7204954
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044685,
+            -25.7204954
+          ],
+          [
+            28.2044813,
+            -25.7205594
+          ],
+          [
+            28.204676,
+            -25.7219105
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.204676,
+            -25.7219105
+          ],
+          [
+            28.2047269,
+            -25.7221955
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2047269,
+            -25.7221955
+          ],
+          [
+            28.20475,
+            -25.7223548
+          ],
+          [
+            28.2048815,
+            -25.7232482
+          ],
+          [
+            28.2050103,
+            -25.7241855
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2050103,
+            -25.7241855
+          ],
+          [
+            28.2050848,
+            -25.7246572
+          ],
+          [
+            28.2050994,
+            -25.7247356
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2050994,
+            -25.7247356
+          ],
+          [
+            28.2051259,
+            -25.7249158
+          ],
+          [
+            28.2052245,
+            -25.725503
+          ],
+          [
+            28.2053649,
+            -25.7263728
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2053649,
+            -25.7263728
+          ],
+          [
+            28.2054287,
+            -25.7267567
+          ],
+          [
+            28.2054432,
+            -25.7268483
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2054432,
+            -25.7268483
+          ],
+          [
+            28.2054573,
+            -25.7269309
+          ],
+          [
+            28.2055548,
+            -25.7275373
+          ],
+          [
+            28.2055672,
+            -25.7276616
+          ],
+          [
+            28.2055709,
+            -25.7276992
+          ],
+          [
+            28.2055814,
+            -25.7277929
+          ],
+          [
+            28.2055829,
+            -25.7278985
+          ],
+          [
+            28.2055744,
+            -25.7280449
+          ],
+          [
+            28.2055628,
+            -25.7281244
+          ],
+          [
+            28.2055422,
+            -25.7282338
+          ],
+          [
+            28.2055119,
+            -25.7283274
+          ],
+          [
+            28.2054689,
+            -25.7284361
+          ],
+          [
+            28.2054327,
+            -25.7285098
+          ],
+          [
+            28.2053976,
+            -25.7285733
+          ],
+          [
+            28.2053496,
+            -25.7286415
+          ],
+          [
+            28.2052892,
+            -25.72872
+          ],
+          [
+            28.2052329,
+            -25.7287933
+          ],
+          [
+            28.2047427,
+            -25.7293401
+          ],
+          [
+            28.2047275,
+            -25.7293569
+          ],
+          [
+            28.2046938,
+            -25.7294039
+          ],
+          [
+            28.2046656,
+            -25.7294522
+          ],
+          [
+            28.2046352,
+            -25.7295143
+          ],
+          [
+            28.204608,
+            -25.7295754
+          ],
+          [
+            28.2045771,
+            -25.7296551
+          ],
+          [
+            28.2045517,
+            -25.7297283
+          ],
+          [
+            28.2045355,
+            -25.7297796
+          ],
+          [
+            28.2045168,
+            -25.7298472
+          ],
+          [
+            28.2045047,
+            -25.7298992
+          ],
+          [
+            28.2044943,
+            -25.7299598
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044943,
+            -25.7299598
+          ],
+          [
+            28.2044886,
+            -25.7300019
+          ],
+          [
+            28.2044885,
+            -25.7300477
+          ],
+          [
+            28.2044913,
+            -25.7300816
+          ],
+          [
+            28.2044953,
+            -25.7301167
+          ],
+          [
+            28.2045097,
+            -25.7302038
+          ],
+          [
+            28.2045194,
+            -25.7302676
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2045194,
+            -25.7302676
+          ],
+          [
+            28.2045315,
+            -25.7303369
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2045315,
+            -25.7303369
+          ],
+          [
+            28.2045564,
+            -25.7304595
+          ],
+          [
+            28.204691,
+            -25.7311834
+          ],
+          [
+            28.2048016,
+            -25.7317199
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2048016,
+            -25.7317199
+          ],
+          [
+            28.2048145,
+            -25.7318274
+          ],
+          [
+            28.2048185,
+            -25.7318708
+          ],
+          [
+            28.2048211,
+            -25.7319192
+          ],
+          [
+            28.2048212,
+            -25.731976
+          ],
+          [
+            28.2048199,
+            -25.7320303
+          ],
+          [
+            28.2048145,
+            -25.7320811
+          ],
+          [
+            28.2048064,
+            -25.7321366
+          ],
+          [
+            28.2047917,
+            -25.7322164
+          ],
+          [
+            28.2047634,
+            -25.732354
+          ],
+          [
+            28.204683,
+            -25.7326839
+          ],
+          [
+            28.2046576,
+            -25.7327612
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2046576,
+            -25.7327612
+          ],
+          [
+            28.2046294,
+            -25.7328398
+          ],
+          [
+            28.2045999,
+            -25.732911
+          ],
+          [
+            28.2045623,
+            -25.7329883
+          ],
+          [
+            28.2045343,
+            -25.7330455
+          ],
+          [
+            28.2044654,
+            -25.733183
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044654,
+            -25.733183
+          ],
+          [
+            28.2044218,
+            -25.7332779
+          ],
+          [
+            28.2043345,
+            -25.7334641
+          ],
+          [
+            28.2042861,
+            -25.7335707
+          ],
+          [
+            28.2042566,
+            -25.7336468
+          ],
+          [
+            28.2042297,
+            -25.733722
+          ],
+          [
+            28.204207,
+            -25.7337893
+          ],
+          [
+            28.2041869,
+            -25.733863
+          ],
+          [
+            28.2041761,
+            -25.7339138
+          ],
+          [
+            28.204168,
+            -25.7339668
+          ],
+          [
+            28.2041614,
+            -25.7340297
+          ],
+          [
+            28.20416,
+            -25.7340744
+          ],
+          [
+            28.2041613,
+            -25.7341279
+          ],
+          [
+            28.2041681,
+            -25.7341964
+          ],
+          [
+            28.2041761,
+            -25.734252
+          ],
+          [
+            28.2041861,
+            -25.7343007
+          ],
+          [
+            28.2041942,
+            -25.7343378
+          ],
+          [
+            28.2042076,
+            -25.7343849
+          ],
+          [
+            28.2042187,
+            -25.734415
+          ],
+          [
+            28.2042357,
+            -25.7344616
+          ],
+          [
+            28.2042412,
+            -25.7344967
+          ],
+          [
+            28.204274,
+            -25.7345565
+          ],
+          [
+            28.2042928,
+            -25.7345964
+          ],
+          [
+            28.2043223,
+            -25.7346549
+          ],
+          [
+            28.2043458,
+            -25.7346942
+          ],
+          [
+            28.2043672,
+            -25.7347258
+          ],
+          [
+            28.2044806,
+            -25.7348711
+          ],
+          [
+            28.2047042,
+            -25.7351368
+          ],
+          [
+            28.2047763,
+            -25.7352244
+          ],
+          [
+            28.2048564,
+            -25.7353323
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2048564,
+            -25.7353323
+          ],
+          [
+            28.2048826,
+            -25.735367
+          ],
+          [
+            28.2049486,
+            -25.7354529
+          ],
+          [
+            28.2049821,
+            -25.7355024
+          ],
+          [
+            28.205009,
+            -25.7355471
+          ],
+          [
+            28.2050348,
+            -25.7355922
+          ],
+          [
+            28.2050613,
+            -25.7356425
+          ],
+          [
+            28.20508,
+            -25.7356848
+          ],
+          [
+            28.2050985,
+            -25.7357308
+          ],
+          [
+            28.2051069,
+            -25.7357561
+          ],
+          [
+            28.2051175,
+            -25.7357802
+          ],
+          [
+            28.2051393,
+            -25.7358279
+          ],
+          [
+            28.2051411,
+            -25.735849
+          ],
+          [
+            28.2051432,
+            -25.7358731
+          ],
+          [
+            28.2051476,
+            -25.735925
+          ],
+          [
+            28.2051878,
+            -25.7363947
+          ],
+          [
+            28.2053059,
+            -25.7377782
+          ],
+          [
+            28.2053688,
+            -25.7385045
+          ],
+          [
+            28.2054474,
+            -25.7394347
+          ],
+          [
+            28.2055623,
+            -25.7408108
+          ],
+          [
+            28.205643,
+            -25.741778
+          ],
+          [
+            28.2056827,
+            -25.7422544
+          ],
+          [
+            28.2057229,
+            -25.7427355
+          ],
+          [
+            28.2057448,
+            -25.7429982
+          ],
+          [
+            28.2057478,
+            -25.7430338
+          ],
+          [
+            28.2058064,
+            -25.7437366
+          ],
+          [
+            28.2058741,
+            -25.744547
+          ],
+          [
+            28.2058966,
+            -25.7448167
+          ],
+          [
+            28.2059296,
+            -25.7452126
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2059296,
+            -25.7452126
+          ],
+          [
+            28.2059849,
+            -25.7458753
+          ],
+          [
+            28.2059982,
+            -25.7460349
+          ],
+          [
+            28.2060188,
+            -25.7462687
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2060188,
+            -25.7462687
+          ],
+          [
+            28.2060441,
+            -25.7465834
+          ],
+          [
+            28.206052,
+            -25.7466782
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.206052,
+            -25.7466782
+          ],
+          [
+            28.2059141,
+            -25.7466874
+          ],
+          [
+            28.2050831,
+            -25.7467463
+          ],
+          [
+            28.2050409,
+            -25.7467493
+          ],
+          [
+            28.2046361,
+            -25.746778
+          ],
+          [
+            28.2044088,
+            -25.7467941
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2044088,
+            -25.7467941
+          ],
+          [
+            28.2041137,
+            -25.7468172
+          ],
+          [
+            28.2039548,
+            -25.7468263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2039548,
+            -25.7468263
+          ],
+          [
+            28.203825,
+            -25.7468366
+          ],
+          [
+            28.2031034,
+            -25.7468936
+          ],
+          [
+            28.2027962,
+            -25.7469179
+          ],
+          [
+            28.2024275,
+            -25.746947
+          ],
+          [
+            28.2022778,
+            -25.7469198
+          ],
+          [
+            28.2021603,
+            -25.746872
+          ],
+          [
+            28.2018434,
+            -25.7466945
+          ],
+          [
+            28.2017359,
+            -25.7466674
+          ],
+          [
+            28.2016547,
+            -25.7466618
+          ],
+          [
+            28.2015149,
+            -25.7466656
+          ],
+          [
+            28.2014117,
+            -25.7466853
+          ],
+          [
+            28.2013043,
+            -25.7467255
+          ],
+          [
+            28.2011258,
+            -25.7468089
+          ],
+          [
+            28.2008452,
+            -25.7469693
+          ],
+          [
+            28.2007675,
+            -25.7470028
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2007675,
+            -25.7470028
+          ],
+          [
+            28.2007378,
+            -25.7470153
+          ],
+          [
+            28.200641,
+            -25.7470486
+          ],
+          [
+            28.2005247,
+            -25.7470781
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2005247,
+            -25.7470781
+          ],
+          [
+            28.2004418,
+            -25.7470891
+          ],
+          [
+            28.2003399,
+            -25.7470921
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2003399,
+            -25.7470921
+          ],
+          [
+            28.2002158,
+            -25.7471
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.2002158,
+            -25.7471
+          ],
+          [
+            28.2000898,
+            -25.747109
+          ],
+          [
+            28.1999021,
+            -25.7471199
+          ],
+          [
+            28.1995594,
+            -25.7471455
+          ],
+          [
+            28.1979262,
+            -25.7472564
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1979262,
+            -25.7472564
+          ],
+          [
+            28.1974525,
+            -25.7472891
+          ],
+          [
+            28.1955297,
+            -25.747422
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1955297,
+            -25.747422
+          ],
+          [
+            28.1942053,
+            -25.7475167
+          ],
+          [
+            28.1940346,
+            -25.7475289
+          ],
+          [
+            28.1939,
+            -25.7475384
+          ],
+          [
+            28.193083,
+            -25.7475982
+          ],
+          [
+            28.1922722,
+            -25.7476577
+          ],
+          [
+            28.1918979,
+            -25.7476835
+          ],
+          [
+            28.1916832,
+            -25.7476983
+          ],
+          [
+            28.1915066,
+            -25.7477105
+          ],
+          [
+            28.1913256,
+            -25.747723
+          ],
+          [
+            28.1910975,
+            -25.7477387
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1910975,
+            -25.7477387
+          ],
+          [
+            28.1906474,
+            -25.7477695
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19966458",
+        "name": "Wonderboom South 20 In",
+        "network": "Tshwane Bus Services"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.1906474,
+            -25.7477695
+          ],
+          [
+            28.1899631,
+            -25.7478156
+          ],
+          [
+            28.1896401,
+            -25.7478372
+          ],
+          [
+            28.1894773,
+            -25.7478481
+          ],
+          [
+            28.1889999,
+            -25.74788
+          ]
+        ]
+      }
     }
   ]
 }

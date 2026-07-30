@@ -86,6 +86,13 @@ const TSHWANE_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] 
       censusMainPlaceCodes: ["799059"],
     },
     {
+      id: "kudube",
+      name: "Kudube",
+      selectionBasis: "named-sub-places",
+      labelPriority: "secondary",
+      subPlaceNamePrefixes: ["Kudube"],
+    },
+    {
       id: "lotus-gardens",
       name: "Lotus Gardens",
       selectionBasis: "named-sub-places",
@@ -192,6 +199,13 @@ const TSHWANE_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] 
       censusMainPlaceCodes: ["799058"],
     },
     {
+      id: "plastic-view",
+      name: "Plastic View",
+      selectionBasis: "named-sub-places",
+      labelPriority: "secondary",
+      subPlaceNamePrefixes: ["Plastic View"],
+    },
+    {
       id: "soshanguve",
       name: "Soshanguve",
       selectionBasis: "census-main-place",
@@ -264,6 +278,27 @@ const JOHANNESBURG_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInp
       selectionBasis: "census-main-place",
       labelPriority: "primary",
       censusMainPlaceCodes: ["798027"],
+    },
+    {
+      id: "klipspruit",
+      name: "Klipspruit",
+      selectionBasis: "named-sub-places",
+      labelPriority: "secondary",
+      subPlaceNamePrefixes: ["Klipspruit"],
+    },
+    {
+      id: "protea-south",
+      name: "Protea South",
+      selectionBasis: "named-sub-places",
+      labelPriority: "secondary",
+      subPlaceNamePrefixes: ["Protea South"],
+    },
+    {
+      id: "slovoville",
+      name: "Slovoville",
+      selectionBasis: "named-sub-places",
+      labelPriority: "secondary",
+      subPlaceNamePrefixes: ["Slovoville"],
     },
     {
       id: "soweto",
@@ -418,6 +453,20 @@ const JOHANNESBURG_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInp
       selectionBasis: "named-sub-places",
       labelPriority: "secondary",
       subPlaceNamePrefixes: ["Zandspruit"],
+    },
+    {
+      id: "matholesville",
+      name: "Matholesville",
+      selectionBasis: "named-sub-places",
+      labelPriority: "secondary",
+      subPlaceNamePrefixes: ["Matholesville"],
+    },
+    {
+      id: "eldorado-park",
+      name: "Eldorado Park",
+      selectionBasis: "named-sub-places",
+      labelPriority: "secondary",
+      subPlaceNamePrefixes: ["Eldorado Park"],
     },
     {
       id: "newclare",

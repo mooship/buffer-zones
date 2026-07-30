@@ -45,9 +45,8 @@ it to the appropriate national layer file(s), then re-run the pipeline.
 Gautrain rail, Gautrain Bus, and PRASA/Metrorail are treated as shared
 networks. A Re Yeng (Tshwane) and Rea Vaya (Johannesburg) are city-specific
 sources that currently contribute to the national `bus-rapid-transit` layer.
-Metrobus (Johannesburg's own conventional bus operator) was tried as a real
-Overpass adapter on 2026-07-29 but OSM coverage turned out to be too sparse to
-ship.
+Tshwane Bus Services and Metrobus (Johannesburg) are city-specific sources that
+contribute to the national `bus` layer alongside Gautrain Bus.
 
 ## Rate limits
 

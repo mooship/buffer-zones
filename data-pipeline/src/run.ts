@@ -20,11 +20,19 @@ import {
   normalizeGautrainBusOverpass,
   normalizeGautrainOverpass,
 } from "./adapters/gautrain";
+import {
+  fetchMetrobusRoutes,
+  normalizeMetrobusOverpass,
+} from "./adapters/metrobus";
 import { fetchPrasaRail, normalizePrasaOverpass } from "./adapters/prasa";
 import {
   fetchReaVayaRoutes,
   normalizeReaVayaOverpass,
 } from "./adapters/reaVaya";
+import {
+  fetchTshwaneBusRoutes,
+  normalizeTshwaneBusOverpass,
+} from "./adapters/tshwaneBus";
 import { getJobCentersForMetro } from "./constants/jobCenters";
 import { getMetroBbox, getSharedTransitBbox } from "./constants/metroBbox";
 import { createDisplayPolygons } from "./displayTownships";
@@ -44,6 +52,10 @@ interface SharedTransit {
   prasa: TransitLayerFeatureCollection;
 }
 
+function emptyTransitCollection(): TransitLayerFeatureCollection {
+  return { type: "FeatureCollection", features: [] };
+}
+
 // Gautrain, Gautrain Bus and PRASA are Gauteng-wide networks, not confined
 // to a single metro, so they're fetched once against the union of every
 // metro's bbox rather than per metro (which would clip each line at that
@@ -54,15 +66,47 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
   const bbox = getSharedTransitBbox();
 
   console.log("Fetching Gautrain rail via Overpass (Gauteng-wide)...");
-  const gautrain = normalizeGautrainOverpass(await fetchGautrainRail(bbox));
-
   console.log("Fetching PRASA rail via Overpass (Gauteng-wide)...");
-  const prasa = normalizePrasaOverpass(await fetchPrasaRail(bbox));
-
   console.log("Fetching Gautrain bus routes via Overpass (Gauteng-wide)...");
-  const gautrainBus = normalizeGautrainBusOverpass(
-    await fetchGautrainBusRoutes(bbox),
-  );
+
+  const [gautrainResult, prasaResult, gautrainBusResult] =
+    await Promise.allSettled([
+      fetchGautrainRail(bbox),
+      fetchPrasaRail(bbox),
+      fetchGautrainBusRoutes(bbox),
+    ]);
+
+  const gautrain =
+    gautrainResult.status === "fulfilled"
+      ? normalizeGautrainOverpass(gautrainResult.value)
+      : emptyTransitCollection();
+  const prasa =
+    prasaResult.status === "fulfilled"
+      ? normalizePrasaOverpass(prasaResult.value)
+      : emptyTransitCollection();
+  const gautrainBus =
+    gautrainBusResult.status === "fulfilled"
+      ? normalizeGautrainBusOverpass(gautrainBusResult.value)
+      : emptyTransitCollection();
+
+  if (gautrainResult.status === "rejected") {
+    console.warn(
+      "Skipping Gautrain rail due to fetch failure",
+      gautrainResult.reason,
+    );
+  }
+  if (prasaResult.status === "rejected") {
+    console.warn(
+      "Skipping PRASA rail due to fetch failure",
+      prasaResult.reason,
+    );
+  }
+  if (gautrainBusResult.status === "rejected") {
+    console.warn(
+      "Skipping Gautrain Bus due to fetch failure",
+      gautrainBusResult.reason,
+    );
+  }
 
   return { gautrain, gautrainBus, prasa };
 }
@@ -89,6 +133,7 @@ async function runNational(): Promise<void> {
   const allTownships = [];
   const allNormalizedTownships = [];
   const brtCollections = [];
+  const busCollections = [...sharedTransit.gautrainBus.features];
 
   for (const metro of METROS) {
     console.log(`\n=== ${metro.id} ===`);
@@ -111,22 +156,46 @@ async function runNational(): Promise<void> {
     ];
 
     if (metro.id === "tshwane") {
+      const bbox = getMetroBbox(metro.id);
+
       console.log("Fetching A Re Yeng routes...");
-      const rawAReYeng = await fetchAReYengRoutes();
+      console.log("Fetching Tshwane Bus Services routes via Overpass...");
+
+      const [rawAReYeng, tshwaneBusRaw] = await Promise.all([
+        fetchAReYengRoutes(),
+        fetchTshwaneBusRoutes(bbox),
+      ]);
+
       const aReYeng =
         "elements" in rawAReYeng
           ? normalizeAReYengOverpass(rawAReYeng)
           : normalizeAReYeng(rawAReYeng);
       brtCollections.push(...aReYeng.features);
       transitCollections.push(aReYeng);
+
+      const tshwaneBus = normalizeTshwaneBusOverpass(tshwaneBusRaw);
+      busCollections.push(...tshwaneBus.features);
+      transitCollections.push(tshwaneBus);
     }
 
     if (metro.id === "johannesburg") {
       const bbox = getMetroBbox(metro.id);
+
       console.log("Fetching Rea Vaya routes via Overpass...");
-      const reaVaya = normalizeReaVayaOverpass(await fetchReaVayaRoutes(bbox));
+      console.log("Fetching Metrobus routes via Overpass...");
+
+      const [reaVayaRaw, metrobusRaw] = await Promise.all([
+        fetchReaVayaRoutes(bbox),
+        fetchMetrobusRoutes(bbox),
+      ]);
+
+      const reaVaya = normalizeReaVayaOverpass(reaVayaRaw);
       brtCollections.push(...reaVaya.features);
       transitCollections.push(reaVaya);
+
+      const metrobus = normalizeMetrobusOverpass(metrobusRaw);
+      busCollections.push(...metrobus.features);
+      transitCollections.push(metrobus);
     }
 
     const nearestTransitKm = computeNearestTransitKm(
@@ -175,10 +244,15 @@ async function runNational(): Promise<void> {
     features: brtCollections,
   };
 
+  const bus: TransitLayerFeatureCollection = {
+    type: "FeatureCollection",
+    features: busCollections,
+  };
+
   await writeTransitLayer("rapid-rail", sharedTransit.gautrain);
   await writeTransitLayer("commuter-rail", sharedTransit.prasa);
   await writeTransitLayer("bus-rapid-transit", brt);
-  await writeTransitLayer("bus", sharedTransit.gautrainBus);
+  await writeTransitLayer("bus", bus);
 }
 
 runNational().catch((err) => {

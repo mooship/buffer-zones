@@ -2434,21 +2434,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "node/13903059565",
-        "name": "Germiston Lake",
-        "network": "PRASA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          28.167376,
-          -26.2317094
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "way/4251316",
         "name": "Unnamed",
         "network": "PRASA"

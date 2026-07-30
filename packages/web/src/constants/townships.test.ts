@@ -9,7 +9,7 @@ describe("township groups", () => {
   it("groups township extensions under their recognizable place name", () => {
     expect(getTownshipGroup("Mamelodi Ext 17")).toBe("Mamelodi");
     expect(getTownshipGroup("Mahube Valley", "799045028")).toBe("Mamelodi");
-    expect(getTownshipGroup("Kudube Unit 10", "799008002")).toBe("Temba");
+    expect(getTownshipGroup("Kudube Unit 10", "799008002")).toBe("Kudube");
     expect(getTownshipGroup("Pretoria Central")).toBeUndefined();
   });
 
@@ -24,7 +24,8 @@ describe("township groups", () => {
     expect(getTownshipGroup("Olievenhoutbos Ext 21", "799078003")).toBe(
       "Olievenhoutbosch",
     );
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(60);
+    expect(getTownshipGroup("Plastic View", "799014063")).toBe("Plastic View");
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(67);
   });
 
   it("uses exact names for township areas inside mixed Census main places", () => {

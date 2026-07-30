@@ -27,7 +27,7 @@ Explicit exclusions remove known non-residential anomalies from otherwise useful
 
 ## Current inclusion set
 
-The current version includes 32 areas:
+The current version includes 34 areas:
 
 - Atteridgeville
 - Bosplaas Mathabe
@@ -37,6 +37,7 @@ The current version includes 32 areas:
 - Ga-Rankuwa
 - Hebron
 - Kekana Garden
+- Kudube
 - Laudium
 - Lotus Gardens
 - Mabopane
@@ -49,6 +50,7 @@ The current version includes 32 areas:
 - Nellmapius
 - New Eersterus
 - Olievenhoutbosch
+- Plastic View
 - Ramotse
 - Refilwe
 - Rethabiseng

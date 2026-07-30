@@ -4,6 +4,8 @@ import type {
 } from "@buffer-zones/shared";
 import { getOverpassUrls } from "../constants/serviceUrls";
 
+const OVERPASS_TIMEOUT_MS = 45_000;
+
 function gautrainQuery(bbox: string): string {
   return `
 [out:json][timeout:60];
@@ -157,24 +159,53 @@ export async function fetchOverpass(
     urls[(attempt - 1) % urls.length] ??
     urls[0] ??
     "https://overpass-api.de/api/interpreter";
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "User-Agent": "buffer-zones-data-pipeline (github.com/buffer-zones)",
-    },
-    body: `data=${encodeURIComponent(query)}`,
-  });
-  if (!response.ok) {
-    if (
-      (response.status === 504 || response.status === 429) &&
-      attempt < urls.length * 2
-    ) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, OVERPASS_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "User-Agent": "buffer-zones-data-pipeline (github.com/buffer-zones)",
+      },
+      body: `data=${encodeURIComponent(query)}`,
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      if (
+        (response.status === 504 || response.status === 429) &&
+        attempt < urls.length * 2
+      ) {
+        await sleep(2000 * attempt);
+        return fetchOverpass(query, attempt + 1);
+      }
+      throw new Error(`Overpass query failed: ${response.status}`);
+    }
+
+    return (await response.json()) as OverpassResponse;
+  } catch (error) {
+    const shouldRetry =
+      (error instanceof Error && error.name === "AbortError") ||
+      error instanceof TypeError;
+
+    if (shouldRetry && attempt < urls.length * 2) {
       await sleep(2000 * attempt);
       return fetchOverpass(query, attempt + 1);
     }
-    throw new Error(`Overpass query failed: ${response.status}`);
+
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(
+        `Overpass query timed out after ${OVERPASS_TIMEOUT_MS}ms`,
+      );
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-  return (await response.json()) as OverpassResponse;
 }
 
 export async function fetchGautrainRail(
