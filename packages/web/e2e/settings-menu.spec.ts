@@ -1,6 +1,8 @@
 import { expect, test } from "./fixtures";
 import { E2E } from "./selectors";
 
+const THEME_STORAGE_KEY = "buffer-zones-theme";
+
 test.describe("settings menu", () => {
   test("closes on Escape and outside click", async ({ page }) => {
     await page.goto("/");
@@ -47,6 +49,11 @@ test.describe("settings menu", () => {
 
     await page.getByTestId(E2E.themeOption.dark).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expect
+      .poll(async () =>
+        page.evaluate((key) => localStorage.getItem(key), THEME_STORAGE_KEY),
+      )
+      .toBe("dark");
     await expect(
       page.locator('meta[name="theme-color"][data-theme-override]'),
     ).toHaveAttribute("content", "#23262c");
@@ -57,6 +64,11 @@ test.describe("settings menu", () => {
     await page.getByTestId(E2E.settingsMenuTrigger).click();
     await page.getByTestId(E2E.themeOption.system).click();
     await expect(page.locator("html")).not.toHaveAttribute("data-theme");
+    await expect
+      .poll(async () =>
+        page.evaluate((key) => localStorage.getItem(key), THEME_STORAGE_KEY),
+      )
+      .toBeNull();
     await expect(
       page.locator('meta[name="theme-color"][data-theme-override]'),
     ).toHaveCount(0);

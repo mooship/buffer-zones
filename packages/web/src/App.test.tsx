@@ -387,7 +387,9 @@ describe("App", () => {
     await waitFor(() =>
       expect(panel).toHaveAttribute("data-panel-dragging", "false"),
     );
-    expect(panel).toHaveAttribute("data-panel-drag-direction", "none");
+    await waitFor(() =>
+      expect(panel).toHaveAttribute("data-panel-drag-direction", "none"),
+    );
 
     fireEvent.pointerDown(handle, {
       pointerType: "touch",

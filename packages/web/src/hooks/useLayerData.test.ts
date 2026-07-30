@@ -52,4 +52,41 @@ describe("useLayerData", () => {
       expect.stringContaining("/data/national/rapid-rail.display.v1.geojson"),
     );
   });
+
+  it("does not fetch layers that are unavailable", async () => {
+    const { result } = renderHook(() => useLayerData(["myciti" as LayerId]));
+
+    await waitFor(() => {
+      expect(result.current).toEqual({});
+    });
+
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it("retries a failed fetch after a layer is toggled off and on again", async () => {
+    vi.mocked(global.fetch)
+      .mockRejectedValueOnce(new Error("network"))
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ type: "FeatureCollection", features: [] }),
+      } as Response);
+
+    const { result, rerender } = renderHook(
+      ({ ids }: { ids: LayerId[] }) => useLayerData(ids),
+      { initialProps: { ids: ["rapid-rail" as LayerId] } },
+    );
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+    expect(result.current).toEqual({});
+
+    rerender({ ids: [] });
+    rerender({ ids: ["rapid-rail" as LayerId] });
+
+    await waitFor(() => {
+      expect(result.current).toHaveProperty("rapid-rail");
+    });
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
 });

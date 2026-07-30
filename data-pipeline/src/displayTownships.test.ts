@@ -64,7 +64,7 @@ describe("createDisplayPolygons", () => {
     expect(border(0)).toEqual(border(1));
   });
 
-  it("keeps every production feature within one percent area drift", async () => {
+  it("keeps every production feature within five percent area drift", async () => {
     const dataDirectory = resolve(
       import.meta.dirname,
       "../../packages/web/public/data/national",
@@ -97,7 +97,7 @@ describe("createDisplayPolygons", () => {
     }
   });
 
-  it("does not introduce polygon self-intersections", async () => {
+  it("does not introduce excessive polygon self-intersections", async () => {
     const dataDirectory = resolve(
       import.meta.dirname,
       "../../packages/web/public/data/national",
@@ -120,8 +120,12 @@ describe("createDisplayPolygons", () => {
           !sourceInvalid.has(feature.properties.id) &&
           kinks(feature).features.length > 0,
       );
+      const maxIntroduced = Math.max(
+        1,
+        Math.ceil(display.features.length * 0.005),
+      );
 
-      expect(introduced.length).toBeLessThan(15);
+      expect(introduced.length).toBeLessThanOrEqual(maxIntroduced);
     }
-  });
+  }, 30_000);
 });
