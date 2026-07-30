@@ -91,6 +91,18 @@ describe("createTownshipAreas", () => {
     });
   });
 
+  it("publishes configured label offsets for exceptional labels", () => {
+    const result = createTownshipAreas([
+      township("Saulsville SP", 0, "799058001"),
+    ]);
+
+    expect(result.features).toHaveLength(1);
+    expect(result.features[0]?.properties).toMatchObject({
+      id: "saulsville",
+      labelOffset: [0, 18],
+    });
+  });
+
   it("selects named township sub-places without dissolving their mixed main place", () => {
     const result = createTownshipAreas([
       township("Lotus Gardens", 0, "799047004"),

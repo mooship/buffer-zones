@@ -1,0 +1,1 @@
+export const GEOJSON_COORDINATE_PRECISION = 6;

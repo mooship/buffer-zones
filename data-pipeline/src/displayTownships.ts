@@ -4,11 +4,11 @@ import { feature } from "topojson-client";
 import { topology } from "topojson-server";
 import { presimplify, simplify } from "topojson-simplify";
 import type { Objects, Topology } from "topojson-specification";
+import { GEOJSON_COORDINATE_PRECISION } from "./constants/geoJson";
 
 const MINIMUM_TRIANGLE_WEIGHT = 3e-8;
 // ~11cm at the equator - far finer than anything visible on a township map,
 // but cuts several redundant digits off every coordinate in the payload.
-const COORDINATE_PRECISION = 6;
 
 export function createDisplayPolygons<
   Geometry extends Polygon | MultiPolygon,
@@ -32,7 +32,7 @@ export function createDisplayPolygons<
     Properties
   >;
   return truncate(result, {
-    precision: COORDINATE_PRECISION,
+    precision: GEOJSON_COORDINATE_PRECISION,
     coordinates: 2,
     mutate: true,
   });

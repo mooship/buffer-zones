@@ -4,6 +4,7 @@ import type {
 } from "@buffer-zones/shared";
 import { hashKey, readJsonCache, writeJsonCache } from "../cache";
 import { getOverpassUrls } from "../constants/serviceUrls";
+import { normalizeRelationTransitOverpass } from "./relationTransit";
 
 const OVERPASS_TIMEOUT_MS = 45_000;
 const OVERPASS_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
@@ -110,42 +111,7 @@ export function normalizeGautrainOverpass(
 export function normalizeGautrainBusOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
-  const features: TransitLayerFeatureCollection["features"] = [];
-  const seenMembers = new Set<string>();
-
-  for (const element of raw.elements) {
-    if (element.type !== "relation") {
-      continue;
-    }
-    const route: TransitStop = {
-      id: `relation/${element.id}`,
-      name: element.tags?.name ?? element.tags?.ref ?? "Unnamed",
-      network: "Gautrain Bus",
-    };
-    for (const member of element.members) {
-      const memberId = `${element.id}/${member.ref}`;
-      if (
-        member.type !== "way" ||
-        !member.geometry ||
-        seenMembers.has(memberId)
-      ) {
-        continue;
-      }
-      seenMembers.add(memberId);
-      features.push({
-        type: "Feature",
-        properties: route,
-        geometry: {
-          type: "LineString",
-          coordinates: member.geometry.map(
-            (point) => [point.lon, point.lat] as [number, number],
-          ),
-        },
-      });
-    }
-  }
-
-  return { type: "FeatureCollection", features };
+  return normalizeRelationTransitOverpass(raw, "Gautrain Bus");
 }
 
 function sleep(ms: number): Promise<void> {

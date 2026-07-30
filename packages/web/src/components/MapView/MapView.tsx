@@ -163,15 +163,21 @@ function ResponsiveMapBounds() {
 function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
   const name = feature.properties?.name;
   const labelPriority = feature.properties?.labelPriority;
+  const labelOffset = feature.properties?.labelOffset;
+  const offset =
+    Array.isArray(labelOffset) &&
+    labelOffset.length === 2 &&
+    typeof labelOffset[0] === "number" &&
+    typeof labelOffset[1] === "number"
+      ? [labelOffset[0], labelOffset[1]]
+      : undefined;
   if (typeof name !== "string") {
     return;
   }
   layer.bindTooltip(name, {
     permanent: true,
     direction: "center",
-    ...(feature.properties?.id === "saulsville"
-      ? { offset: [0, 18] as [number, number] }
-      : {}),
+    ...(offset ? { offset: offset as [number, number] } : {}),
     className:
       labelPriority === "secondary"
         ? `${styles.townshipLabel} ${styles.townshipLabelSecondary}`

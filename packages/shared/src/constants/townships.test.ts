@@ -78,6 +78,12 @@ describe("township groups", () => {
       selectionBasis: "named-sub-places",
       labelPriority: "secondary",
     });
+    expect(
+      getTownshipAreaDefinition("Saulsville SP", "799058001"),
+    ).toMatchObject({
+      name: "Saulsville",
+      labelOffset: [0, 18],
+    });
   });
 
   it("does not match a name or census id belonging to no defined area", () => {

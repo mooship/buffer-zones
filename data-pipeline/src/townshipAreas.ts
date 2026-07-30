@@ -12,6 +12,7 @@ interface TownshipAreaProperties {
   id: string;
   name: string;
   labelPriority: TownshipAreaLabelPriority;
+  labelOffset?: [number, number];
   selectionBasis: TownshipAreaSelectionBasis;
   subPlaceCount: number;
 }
@@ -38,6 +39,10 @@ export function createTownshipAreas(
       return [];
     }
 
+    const labelOffset: [number, number] | undefined = definition.labelOffset
+      ? [definition.labelOffset[0], definition.labelOffset[1]]
+      : undefined;
+
     return [
       {
         ...dissolved,
@@ -45,6 +50,7 @@ export function createTownshipAreas(
           id: definition.id,
           name: definition.name,
           labelPriority: definition.labelPriority,
+          labelOffset,
           selectionBasis: definition.selectionBasis,
           subPlaceCount: members.length,
         },

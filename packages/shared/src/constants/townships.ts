@@ -12,6 +12,7 @@ export interface TownshipAreaDefinition {
   metroId: MetroId;
   selectionBasis: TownshipAreaSelectionBasis;
   labelPriority: TownshipAreaLabelPriority;
+  labelOffset?: readonly [number, number];
   censusMainPlaceCodes?: readonly string[];
   subPlaceNamePrefixes?: readonly string[];
   excludedSubPlaceNames?: readonly string[];
@@ -196,6 +197,7 @@ const TSHWANE_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] 
       name: "Saulsville",
       selectionBasis: "census-main-place",
       labelPriority: "secondary",
+      labelOffset: [0, 18],
       censusMainPlaceCodes: ["799058"],
     },
     {
