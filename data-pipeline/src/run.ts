@@ -15,6 +15,10 @@ import {
   normalizeBoundaries,
 } from "./adapters/boundaries";
 import {
+  fetchEkurhuleniIrptnRoutes,
+  normalizeEkurhuleniIrptn,
+} from "./adapters/ekurhuleniIrptn";
+import {
   fetchGautrainBusRoutes,
   fetchGautrainRail,
   normalizeGautrainBusOverpass,
@@ -343,6 +347,15 @@ async function runNational(): Promise<void> {
         const reaVaya = normalizeReaVayaOverpass(reaVayaRaw);
         brtCollections.push(...reaVaya.features);
         transitCollections.push(reaVaya);
+      }
+
+      if (metro.id === "ekurhuleni") {
+        console.log("Fetching Ekurhuleni IRPTN routes...");
+
+        const ekurhuleniIrptnRaw = await fetchEkurhuleniIrptnRoutes();
+        const ekurhuleniIrptn = normalizeEkurhuleniIrptn(ekurhuleniIrptnRaw);
+        brtCollections.push(...ekurhuleniIrptn.features);
+        transitCollections.push(ekurhuleniIrptn);
       }
 
       const nearestTransitKm = computeNearestTransitKm(
