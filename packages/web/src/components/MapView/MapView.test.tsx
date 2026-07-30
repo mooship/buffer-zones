@@ -85,13 +85,7 @@ describe("MapView", () => {
   });
 
   it("renders a tile layer and one GeoJSON layer per visible registry entry", () => {
-    render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        metroId="tshwane"
-      />,
-    );
+    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
 
     expect(screen.getByTestId("map-container")).toBeInTheDocument();
     expect(screen.getByTestId("map-container")).toHaveAttribute(
@@ -107,41 +101,25 @@ describe("MapView", () => {
   });
 
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
-    render(<MapView townships={[]} visibleLayerIds={[]} metroId="tshwane" />);
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
   });
 
   it("waits for township data before mounting the choropleth", () => {
     const { rerender } = render(
-      <MapView
-        townships={[]}
-        visibleLayerIds={["townships"]}
-        metroId="tshwane"
-      />,
+      <MapView townships={[]} visibleLayerIds={["townships"]} />,
     );
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
 
-    rerender(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        metroId="tshwane"
-      />,
-    );
+    rerender(<MapView townships={townships} visibleLayerIds={["townships"]} />);
 
     expect(screen.getByTestId("geojson-layer")).toHaveTextContent("1 features");
   });
 
   it("does not render a layer that has no data available yet", () => {
-    render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["myciti"]}
-        metroId="tshwane"
-      />,
-    );
+    render(<MapView townships={townships} visibleLayerIds={["myciti"]} />);
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
   });
@@ -158,31 +136,19 @@ describe("MapView", () => {
       }),
     );
 
-    render(
-      <MapView
-        townships={[]}
-        visibleLayerIds={["gautrain"]}
-        metroId="tshwane"
-      />,
-    );
+    render(<MapView townships={[]} visibleLayerIds={["rapid-rail"]} />);
 
     expect(await screen.findByText("1 features")).toHaveAttribute(
       "data-pane",
       "transit",
     );
     expect(fetch).toHaveBeenCalledWith(
-      "/data/tshwane/gautrain.display.v1.geojson",
+      "/data/national/rapid-rail.display.v1.geojson",
     );
   });
 
   it("keeps township polygons in the pane below transit overlays", () => {
-    render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        metroId="tshwane"
-      />,
-    );
+    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
 
     expect(screen.getByTestId("geojson-layer")).toHaveAttribute(
       "data-pane",
@@ -204,7 +170,6 @@ describe("MapView", () => {
         townships={townships}
         townshipAreas={townshipAreas}
         visibleLayerIds={["townships"]}
-        metroId="tshwane"
       />,
     );
 
@@ -216,14 +181,7 @@ describe("MapView", () => {
   });
 
   it("switches tile source when the satellite basemap is selected", () => {
-    render(
-      <MapView
-        townships={[]}
-        visibleLayerIds={[]}
-        metroId="tshwane"
-        basemap="satellite"
-      />,
-    );
+    render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
   });
@@ -231,7 +189,7 @@ describe("MapView", () => {
   it("applies the dark tile filter class to street tiles when the OS prefers dark mode", () => {
     stubMatchMedia(true);
 
-    render(<MapView townships={[]} visibleLayerIds={[]} metroId="tshwane" />);
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.getByTestId("tile-layer").dataset.classname).not.toBe("");
   });
@@ -239,7 +197,7 @@ describe("MapView", () => {
   it("does not apply the dark tile filter class when the OS prefers light mode", () => {
     stubMatchMedia(false);
 
-    render(<MapView townships={[]} visibleLayerIds={[]} metroId="tshwane" />);
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
   });
@@ -247,14 +205,7 @@ describe("MapView", () => {
   it("does not apply the dark tile filter class to the satellite basemap in dark mode", () => {
     stubMatchMedia(true);
 
-    render(
-      <MapView
-        townships={[]}
-        visibleLayerIds={[]}
-        metroId="tshwane"
-        basemap="satellite"
-      />,
-    );
+    render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
 
     expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
   });
@@ -263,7 +214,7 @@ describe("MapView", () => {
     stubMatchMedia(false);
     setThemePreference("dark");
 
-    render(<MapView townships={[]} visibleLayerIds={[]} metroId="tshwane" />);
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.getByTestId("tile-layer").dataset.classname).not.toBe("");
   });
@@ -272,20 +223,14 @@ describe("MapView", () => {
     stubMatchMedia(true);
     setThemePreference("light");
 
-    render(<MapView townships={[]} visibleLayerIds={[]} metroId="tshwane" />);
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
   });
 
   it("refits the full area bounds when crossing the mobile breakpoint", () => {
     vi.stubGlobal("innerWidth", 1024);
-    render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        metroId="tshwane"
-      />,
-    );
+    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
 
     vi.stubGlobal("innerWidth", 390);
     fireEvent(window, new Event("resize"));
@@ -293,8 +238,8 @@ describe("MapView", () => {
     expect(mapMocks.invalidateSize).toHaveBeenCalledWith({ animate: false });
     expect(mapMocks.fitBounds).toHaveBeenCalledWith(
       [
-        [-25.95, 27.92],
-        [-25.33, 28.79],
+        [-35, 16],
+        [-22, 33],
       ],
       { padding: [24, 24] },
     );

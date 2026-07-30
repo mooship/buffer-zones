@@ -12,14 +12,12 @@ import styles from "./TownshipBrowser.module.css";
 interface TownshipBrowserProps {
   townships: TownshipFeature[];
   selectedTownshipId: string | null;
-  metroName: string;
   onSelect: (township: TownshipFeature) => void;
 }
 
 export function TownshipBrowser({
   townships,
   selectedTownshipId,
-  metroName,
   onSelect,
 }: TownshipBrowserProps) {
   const [query, setQuery] = useState("");
@@ -92,7 +90,7 @@ export function TownshipBrowser({
     <div className={styles.browser}>
       <p className={styles.intro}>
         The choropleth compares all {townships.length.toLocaleString("en-ZA")}{" "}
-        {metroName} Census 2011 sub-places.{" "}
+        Census 2011 sub-places in the selected regions.{" "}
         {townshipSubPlaceCount.toLocaleString("en-ZA")} sit within the{" "}
         {includedGroupCount} currently included township and settlement areas
         outlined here; the rest provide citywide comparison. This is a

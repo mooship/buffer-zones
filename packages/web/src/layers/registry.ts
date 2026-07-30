@@ -1,10 +1,8 @@
-import type { LayerDefinition, LayerId, MetroId } from "@buffer-zones/shared";
+import type { LayerDefinition, LayerId } from "@buffer-zones/shared";
 import { TRANSIT_LINE_COLORS } from "../constants/layerStyles";
 
-export function getLayerDefinitions(metroId: MetroId): LayerDefinition[] {
-  const base = `/data/${metroId}`;
-  const isTshwane = metroId === "tshwane";
-  const isJohannesburg = metroId === "johannesburg";
+export function getLayerDefinitions(): LayerDefinition[] {
+  const base = "/data/national";
 
   const layers: LayerDefinition[] = [
     {
@@ -26,70 +24,58 @@ export function getLayerDefinitions(metroId: MetroId): LayerDefinition[] {
       style: { kind: "choropleth", propertyKey: "nearestTransitKm" },
     },
     {
-      id: "gautrain",
-      label: "Gautrain",
-      dataSource: `${base}/gautrain.display.v1.geojson`,
+      id: "rapid-rail",
+      label: "Rapid Rail",
+      dataSource: `${base}/rapid-rail.display.v1.geojson`,
       layerType: "line",
       defaultVisible: false,
       available: true,
-      style: { kind: "line", color: TRANSIT_LINE_COLORS.gautrain, weight: 3 },
+      style: { kind: "line", color: TRANSIT_LINE_COLORS.rapidRail, weight: 3 },
     },
     {
-      id: "gautrain-bus",
-      label: "Gautrain Bus",
-      dataSource: `${base}/gautrain-bus.display.v1.geojson`,
+      id: "bus-rapid-transit",
+      label: "Bus Rapid Transit",
+      dataSource: `${base}/bus-rapid-transit.display.v1.geojson`,
       layerType: "line",
       defaultVisible: false,
       available: true,
       style: {
         kind: "line",
-        color: TRANSIT_LINE_COLORS.gautrainBus,
+        color: TRANSIT_LINE_COLORS.busRapidTransit,
         weight: 3,
       },
     },
     {
-      id: "prasa",
-      label: "PRASA Rail",
-      dataSource: `${base}/prasa.display.v1.geojson`,
+      id: "commuter-rail",
+      label: "Commuter Rail",
+      dataSource: `${base}/commuter-rail.display.v1.geojson`,
       layerType: "line",
       defaultVisible: false,
       available: true,
-      style: { kind: "line", color: TRANSIT_LINE_COLORS.prasa, weight: 2 },
+      style: {
+        kind: "line",
+        color: TRANSIT_LINE_COLORS.commuterRail,
+        weight: 2,
+      },
+    },
+    {
+      id: "bus",
+      label: "Bus",
+      dataSource: `${base}/bus.display.v1.geojson`,
+      layerType: "line",
+      defaultVisible: false,
+      available: true,
+      style: {
+        kind: "line",
+        color: TRANSIT_LINE_COLORS.bus,
+        weight: 3,
+      },
     },
   ];
-
-  // A Re Yeng and Rea Vaya each belong to a single city, so unlike a
-  // not-yet-available layer, they're omitted rather than shown disabled.
-  if (isTshwane) {
-    layers.push({
-      id: "a-re-yeng",
-      label: "A Re Yeng",
-      dataSource: `${base}/a-re-yeng.display.v1.geojson`,
-      layerType: "line",
-      defaultVisible: false,
-      available: true,
-      style: { kind: "line", color: TRANSIT_LINE_COLORS.aReYeng, weight: 3 },
-    });
-  }
-
-  if (isJohannesburg) {
-    layers.push({
-      id: "rea-vaya",
-      label: "Rea Vaya",
-      dataSource: `${base}/rea-vaya.display.v1.geojson`,
-      layerType: "line",
-      defaultVisible: false,
-      available: true,
-      style: { kind: "line", color: TRANSIT_LINE_COLORS.reaVaya, weight: 3 },
-    });
-  }
 
   return layers;
 }
 
-export function getLayerDefinition(
-  id: LayerId,
-  metroId: MetroId,
-): LayerDefinition | undefined {
-  return getLayerDefinitions(metroId).find((layer) => layer.id === id);
+export function getLayerDefinition(id: LayerId): LayerDefinition | undefined {
+  return getLayerDefinitions().find((layer) => layer.id === id);
 }

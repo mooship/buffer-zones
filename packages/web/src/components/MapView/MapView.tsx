@@ -37,22 +37,16 @@ interface MapViewProps {
   townships: TownshipFeature[];
   townshipAreas?: Feature[];
   visibleLayerIds: LayerId[];
-  metroId: MetroId;
   basemap?: Basemap;
   selectedTownshipId?: string | null;
   onTownshipSelect?: (townshipId: string) => void;
 }
 
-const METRO_BOUNDS: Record<MetroId, [[number, number], [number, number]]> = {
-  tshwane: [
-    [-25.95, 27.92],
-    [-25.33, 28.79],
-  ],
-  johannesburg: [
-    [-26.55, 27.75],
-    [-25.95, 28.25],
-  ],
-};
+const NATIONAL_BOUNDS: [[number, number], [number, number]] = [
+  [-35.0, 16.0],
+  [-22.0, 33.0],
+];
+
 const STOP_RADIUS = 4;
 const TOWNSHIP_PANE = "townships";
 const TOWNSHIP_OUTLINE_PANE = "township-outlines";
@@ -145,7 +139,7 @@ function AreaLabelVisibility() {
   return null;
 }
 
-function ResponsiveMapBounds({ metroId }: { metroId: MetroId }) {
+function ResponsiveMapBounds() {
   const map = useMap();
   const desktopRef = useRef(window.innerWidth > MOBILE_BREAKPOINT_PX);
 
@@ -157,27 +151,11 @@ function ResponsiveMapBounds({ metroId }: { metroId: MetroId }) {
         return;
       }
       desktopRef.current = desktop;
-      map.fitBounds(METRO_BOUNDS[metroId], getBoundsOptions(desktop));
+      map.fitBounds(NATIONAL_BOUNDS, getBoundsOptions(desktop));
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [map, metroId]);
-
-  return null;
-}
-
-function MetroRecenter({ metroId }: { metroId: MetroId }) {
-  const map = useMap();
-  const previousMetro = useRef(metroId);
-
-  useEffect(() => {
-    if (previousMetro.current === metroId) {
-      return;
-    }
-    previousMetro.current = metroId;
-    const desktop = window.innerWidth > MOBILE_BREAKPOINT_PX;
-    map.fitBounds(METRO_BOUNDS[metroId], getBoundsOptions(desktop));
-  }, [map, metroId]);
+  }, [map]);
 
   return null;
 }
@@ -205,20 +183,18 @@ export function MapView({
   townships,
   townshipAreas = [],
   visibleLayerIds,
-  metroId,
   basemap = "street",
   selectedTownshipId = null,
   onTownshipSelect,
 }: MapViewProps) {
   const townshipLayerRef = useRef<LeafletGeoJSON | null>(null);
-  const visibleLayers = getLayerDefinitions(metroId).filter(
+  const visibleLayers = getLayerDefinitions().filter(
     (layer) => layer.available && visibleLayerIds.includes(layer.id),
   );
   const overlayData = useLayerData(
     visibleLayers
       .filter((layer) => layer.layerType !== "choropleth")
       .map((layer) => layer.id),
-    metroId,
   );
   const prefersDark = usePrefersDarkMode();
   const themePreference = useThemePreference();
@@ -243,10 +219,10 @@ export function MapView({
   return (
     <section
       className={styles.mapWrapper}
-      aria-label={`Map of ${getMetroDefinition(metroId).shortName} township access to selected job centres`}
+      aria-label="Map of South African township access to job centres"
     >
       <MapContainer
-        bounds={METRO_BOUNDS[metroId]}
+        bounds={NATIONAL_BOUNDS}
         boundsOptions={boundsOptions}
         className={styles.map}
         scrollWheelZoom
@@ -327,8 +303,7 @@ export function MapView({
           townshipLayer={townshipLayerRef}
         />
         <AreaLabelVisibility />
-        <ResponsiveMapBounds metroId={metroId} />
-        <MetroRecenter metroId={metroId} />
+        <ResponsiveMapBounds />
       </MapContainer>
     </section>
   );

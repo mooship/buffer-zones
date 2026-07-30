@@ -1,4 +1,4 @@
-import type { LayerId, MetroId } from "@buffer-zones/shared";
+import type { LayerId } from "@buffer-zones/shared";
 import type { FeatureCollection } from "geojson";
 import { useEffect, useRef, useState } from "react";
 import { fetchFeatureCollection } from "../data/fetchFeatureCollection";
@@ -6,31 +6,22 @@ import { getLayerDefinition } from "../layers/registry";
 
 export type LayerDataMap = Partial<Record<LayerId, FeatureCollection>>;
 
-export function useLayerData(
-  layerIds: LayerId[],
-  metroId: MetroId,
-): LayerDataMap {
+export function useLayerData(layerIds: LayerId[]): LayerDataMap {
   const [data, setData] = useState<LayerDataMap>({});
   const requested = useRef(new Set<string>());
-  const previousMetro = useRef(metroId);
   const key = layerIds.join(",");
 
   useEffect(() => {
     let cancelled = false;
-    if (previousMetro.current !== metroId) {
-      previousMetro.current = metroId;
-      requested.current.clear();
-      setData({});
-    }
 
     const ids = key.length > 0 ? (key.split(",") as LayerId[]) : [];
 
     for (const id of ids) {
-      const requestKey = `${metroId}:${id}`;
+      const requestKey = `national:${id}`;
       if (requested.current.has(requestKey)) {
         continue;
       }
-      const definition = getLayerDefinition(id, metroId);
+      const definition = getLayerDefinition(id);
       if (!definition?.available) {
         continue;
       }
@@ -50,7 +41,7 @@ export function useLayerData(
     return () => {
       cancelled = true;
     };
-  }, [key, metroId]);
+  }, [key]);
 
   return data;
 }

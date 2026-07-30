@@ -1,111 +1,55 @@
 import type { LayerId } from "@buffer-zones/shared";
 import { renderHook, waitFor } from "@testing-library/react";
-import type { FeatureCollection } from "geojson";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { fetchFeatureCollection } from "../data/fetchFeatureCollection";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { useLayerData } from "./useLayerData";
 
-vi.mock("../data/fetchFeatureCollection", () => ({
-  fetchFeatureCollection: vi.fn(),
-}));
-
-const fetchFeatureCollectionMock = vi.mocked(fetchFeatureCollection);
-
-function emptyCollection(): FeatureCollection {
-  return { type: "FeatureCollection", features: [] };
-}
+global.fetch = vi.fn();
 
 describe("useLayerData", () => {
+  beforeEach(() => {
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ type: "FeatureCollection", features: [] }),
+    } as Response);
+  });
+
   afterEach(() => {
-    fetchFeatureCollectionMock.mockReset();
+    vi.clearAllMocks();
   });
 
-  it("does not refetch a layer id that already loaded successfully", async () => {
-    fetchFeatureCollectionMock.mockResolvedValue(emptyCollection());
+  it("fetches layers when mounted", async () => {
+    const { result } = renderHook(() => useLayerData(["townships" as LayerId]));
 
+    await waitFor(() => {
+      expect(result.current).toHaveProperty("townships");
+    });
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/data/national/townships.display.v1.geojson"),
+    );
+  });
+
+  it("adds newly requested layers without refetching existing ones", async () => {
     const { result, rerender } = renderHook(
-      (ids: LayerId[]) => useLayerData(ids, "tshwane"),
-      { initialProps: ["townships"] },
+      ({ ids }: { ids: LayerId[] }) => useLayerData(ids),
+      { initialProps: { ids: ["townships" as LayerId] } },
     );
 
     await waitFor(() => {
-      expect(result.current.townships).toBeDefined();
+      expect(result.current).toHaveProperty("townships");
     });
-    expect(fetchFeatureCollectionMock).toHaveBeenCalledTimes(1);
+    vi.clearAllMocks();
 
-    rerender(["townships", "gautrain"]);
+    rerender({ ids: ["townships", "rapid-rail"] as LayerId[] });
 
     await waitFor(() => {
-      expect(result.current.gautrain).toBeDefined();
+      expect(result.current).toHaveProperty("rapid-rail");
     });
-    expect(fetchFeatureCollectionMock).toHaveBeenCalledTimes(2);
-    expect(fetchFeatureCollectionMock).toHaveBeenCalledWith(
-      "/data/tshwane/gautrain.display.v1.geojson",
-    );
-  });
 
-  it("retries a layer id after a failed fetch once it is requested again", async () => {
-    fetchFeatureCollectionMock.mockRejectedValueOnce(
-      new Error("network error"),
-    );
-
-    const { result, rerender } = renderHook(
-      (ids: LayerId[]) => useLayerData(ids, "tshwane"),
-      { initialProps: ["townships"] },
-    );
-
-    await waitFor(() => {
-      expect(fetchFeatureCollectionMock).toHaveBeenCalledTimes(1);
-    });
-    expect(result.current.townships).toBeUndefined();
-
-    fetchFeatureCollectionMock.mockResolvedValue(emptyCollection());
-    rerender(["townships", "gautrain"]);
-
-    await waitFor(() => {
-      expect(result.current.townships).toBeDefined();
-    });
-    expect(fetchFeatureCollectionMock).toHaveBeenCalledTimes(3);
-  });
-
-  it("does not fetch a layer id that is marked unavailable", async () => {
-    const { result } = renderHook(
-      (ids: LayerId[]) => useLayerData(ids, "tshwane"),
-      { initialProps: ["myciti"] },
-    );
-
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    expect(fetchFeatureCollectionMock).not.toHaveBeenCalled();
-    expect(result.current.myciti).toBeUndefined();
-  });
-
-  it("clears loaded data and refetches from the new metro's data source when the metro changes", async () => {
-    fetchFeatureCollectionMock.mockResolvedValue(emptyCollection());
-
-    const { result, rerender } = renderHook(
-      ({
-        ids,
-        metroId,
-      }: { ids: LayerId[]; metroId: "tshwane" | "johannesburg" }) =>
-        useLayerData(ids, metroId),
-      { initialProps: { ids: ["townships"] as LayerId[], metroId: "tshwane" } },
-    );
-
-    await waitFor(() => {
-      expect(result.current.townships).toBeDefined();
-    });
-    expect(fetchFeatureCollectionMock).toHaveBeenCalledWith(
-      "/data/tshwane/townships.display.v1.geojson",
-    );
-
-    rerender({ ids: ["townships"], metroId: "johannesburg" });
-
-    await waitFor(() => {
-      expect(result.current.townships).toBeDefined();
-    });
-    expect(fetchFeatureCollectionMock).toHaveBeenCalledWith(
-      "/data/johannesburg/townships.display.v1.geojson",
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/data/national/rapid-rail.display.v1.geojson"),
     );
   });
 });

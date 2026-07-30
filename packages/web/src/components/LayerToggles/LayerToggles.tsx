@@ -1,21 +1,16 @@
-import type { LayerId, MetroId } from "@buffer-zones/shared";
+import type { LayerId } from "@buffer-zones/shared";
 import { getLayerDefinitions } from "../../layers/registry";
 import styles from "./LayerToggles.module.css";
 
 interface LayerTogglesProps {
   visibleLayerIds: LayerId[];
-  metroId: MetroId;
   onToggle: (id: LayerId) => void;
 }
 
-export function LayerToggles({
-  visibleLayerIds,
-  metroId,
-  onToggle,
-}: LayerTogglesProps) {
+export function LayerToggles({ visibleLayerIds, onToggle }: LayerTogglesProps) {
   return (
     <ul className={styles.list}>
-      {getLayerDefinitions(metroId).map((layer) => (
+      {getLayerDefinitions().map((layer) => (
         <li key={layer.id}>
           <label
             className={styles.row}

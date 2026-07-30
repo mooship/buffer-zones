@@ -1,10 +1,8 @@
-import type { MetroId } from "@buffer-zones/shared";
 import { Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Basemap } from "../../constants/basemaps";
 import type { ThemePreference } from "../../hooks/useThemePreference";
 import { BasemapToggle } from "../BasemapToggle/BasemapToggle";
-import { MetroToggle } from "../MetroToggle/MetroToggle";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import styles from "./SettingsMenu.module.css";
 
@@ -13,8 +11,6 @@ interface SettingsMenuProps {
   onBasemapChange: (basemap: Basemap) => void;
   themePreference: ThemePreference;
   onThemePreferenceChange: (preference: ThemePreference) => void;
-  metroId: MetroId;
-  onMetroChange: (metroId: MetroId) => void;
 }
 
 export function SettingsMenu({
@@ -22,8 +18,6 @@ export function SettingsMenu({
   onBasemapChange,
   themePreference,
   onThemePreferenceChange,
-  metroId,
-  onMetroChange,
 }: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -70,7 +64,6 @@ export function SettingsMenu({
       </button>
       {open ? (
         <div id="map-settings-menu" className={styles.menu} role="menu">
-          <MetroToggle metroId={metroId} onChange={onMetroChange} />
           <BasemapToggle basemap={basemap} onChange={onBasemapChange} />
           <ThemeToggle
             preference={themePreference}

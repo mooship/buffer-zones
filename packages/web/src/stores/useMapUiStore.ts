@@ -1,22 +1,19 @@
-import type { LayerId, MetroId } from "@buffer-zones/shared";
+import type { LayerId } from "@buffer-zones/shared";
 import { create } from "zustand";
 import type { Basemap } from "../constants/basemaps";
 import { getLayerDefinitions } from "../layers/registry";
 
 const MOBILE_BREAKPOINT_PX = 768;
-const DEFAULT_METRO: MetroId = "tshwane";
 
 export type PanelView = "story" | "places" | "layers";
 
 interface MapUiState {
-  metroId: MetroId;
   visibleLayerIds: LayerId[];
   basemap: Basemap;
   panelOpen: boolean;
   panelView: PanelView;
   titleExpanded: boolean;
   selectedTownshipId: string | null;
-  setMetro: (metroId: MetroId) => void;
   toggleLayer: (id: LayerId) => void;
   setBasemap: (basemap: Basemap) => void;
   setPanelOpen: (open: boolean) => void;
@@ -28,8 +25,7 @@ interface MapUiState {
 
 function createInitialState() {
   return {
-    metroId: DEFAULT_METRO,
-    visibleLayerIds: getLayerDefinitions(DEFAULT_METRO)
+    visibleLayerIds: getLayerDefinitions()
       .filter((layer) => layer.defaultVisible)
       .map((layer) => layer.id),
     basemap: "street" as const,
@@ -42,14 +38,6 @@ function createInitialState() {
 
 export const useMapUiStore = create<MapUiState>()((set) => ({
   ...createInitialState(),
-  setMetro: (metroId) =>
-    set({
-      metroId,
-      visibleLayerIds: getLayerDefinitions(metroId)
-        .filter((layer) => layer.defaultVisible)
-        .map((layer) => layer.id),
-      selectedTownshipId: null,
-    }),
   toggleLayer: (id) =>
     set((state) => ({
       visibleLayerIds: state.visibleLayerIds.includes(id)

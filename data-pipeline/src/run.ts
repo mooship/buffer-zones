@@ -67,13 +67,9 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
   return { gautrain, gautrainBus, prasa };
 }
 
-async function runMetro(
-  metroId: MetroId,
-  sharedTransit: SharedTransit,
-): Promise<void> {
-  const outputDir = resolve(OUTPUT_ROOT, metroId);
-  const bbox = getMetroBbox(metroId);
-  const jobCenters = getJobCentersForMetro(metroId);
+async function runNational(): Promise<void> {
+  const outputDir = resolve(OUTPUT_ROOT, "national");
+  const sharedTransit = await fetchSharedTransit();
 
   async function writeTransitLayer(
     name: string,
@@ -90,63 +86,69 @@ async function runMetro(
     );
   }
 
-  console.log(`\n=== ${metroId} ===`);
-  console.log(`Fetching ${metroId} sub-place boundaries...`);
-  const rawBoundaries = await fetchMetroBoundaries(metroId);
-  const townships = normalizeBoundaries(rawBoundaries);
-  console.log(`  ${townships.length} sub-places loaded`);
+  const allTownships = [];
+  const allNormalizedTownships = [];
+  const brtCollections = [];
 
-  console.log(
-    `Computing drive times to nearest of ${jobCenters.length} job centers (${jobCenters.map((c) => c.name).join(", ")}) via public OSRM...`,
-  );
-  const nearestJobCenters = await getNearestJobCenter(
-    townships.map((t) => t.centroid),
-    jobCenters,
-  );
+  for (const metro of METROS) {
+    console.log(`\n=== ${metro.id} ===`);
+    console.log(`Fetching ${metro.id} sub-place boundaries...`);
+    const rawBoundaries = await fetchMetroBoundaries(metro.id);
+    const townships = normalizeBoundaries(rawBoundaries);
+    console.log(`  ${townships.length} sub-places loaded`);
 
-  const transitCollections: TransitLayerFeatureCollection[] = [];
+    const jobCenters = getJobCentersForMetro(metro.id);
+    console.log("Computing drive times...");
+    const nearestJobCenters = await getNearestJobCenter(
+      townships.map((t) => t.centroid),
+      jobCenters,
+    );
 
-  await writeTransitLayer("gautrain", sharedTransit.gautrain);
-  transitCollections.push(sharedTransit.gautrain);
+    const transitCollections = [
+      sharedTransit.gautrain,
+      sharedTransit.prasa,
+      sharedTransit.gautrainBus,
+    ];
 
-  await writeTransitLayer("prasa", sharedTransit.prasa);
-  transitCollections.push(sharedTransit.prasa);
+    if (metro.id === "tshwane") {
+      console.log("Fetching A Re Yeng routes...");
+      const rawAReYeng = await fetchAReYengRoutes();
+      const aReYeng =
+        "elements" in rawAReYeng
+          ? normalizeAReYengOverpass(rawAReYeng)
+          : normalizeAReYeng(rawAReYeng);
+      brtCollections.push(...aReYeng.features);
+      transitCollections.push(aReYeng);
+    }
 
-  await writeTransitLayer("gautrain-bus", sharedTransit.gautrainBus);
-  transitCollections.push(sharedTransit.gautrainBus);
+    if (metro.id === "johannesburg") {
+      const bbox = getMetroBbox(metro.id);
+      console.log("Fetching Rea Vaya routes via Overpass...");
+      const reaVaya = normalizeReaVayaOverpass(await fetchReaVayaRoutes(bbox));
+      brtCollections.push(...reaVaya.features);
+      transitCollections.push(reaVaya);
+    }
 
-  if (metroId === "tshwane") {
-    console.log("Fetching A Re Yeng routes...");
-    const rawAReYeng = await fetchAReYengRoutes();
-    const aReYeng =
-      "elements" in rawAReYeng
-        ? normalizeAReYengOverpass(rawAReYeng)
-        : normalizeAReYeng(rawAReYeng);
-    await writeTransitLayer("a-re-yeng", aReYeng);
-    transitCollections.push(aReYeng);
+    const nearestTransitKm = computeNearestTransitKm(
+      townships.map((t) => t.centroid),
+      transitCollections,
+    );
+
+    const townshipFeatures = joinTownshipData(
+      townships,
+      nearestJobCenters,
+      nearestTransitKm,
+    );
+    allTownships.push(...townshipFeatures);
+    allNormalizedTownships.push(...townships);
   }
 
-  if (metroId === "johannesburg") {
-    console.log("Fetching Rea Vaya routes via Overpass...");
-    const reaVaya = normalizeReaVayaOverpass(await fetchReaVayaRoutes(bbox));
-    await writeTransitLayer("rea-vaya", reaVaya);
-    transitCollections.push(reaVaya);
-  }
+  console.log("Writing national files...");
 
-  const nearestTransitKm = computeNearestTransitKm(
-    townships.map((t) => t.centroid),
-    transitCollections,
-  );
-
-  const townshipFeatures = joinTownshipData(
-    townships,
-    nearestJobCenters,
-    nearestTransitKm,
-  );
   const townshipCollection = {
-    type: "FeatureCollection",
-    features: townshipFeatures,
-  } as const;
+    type: "FeatureCollection" as const,
+    features: allTownships,
+  };
   await writeGeoJsonFile(
     resolve(outputDir, "townships.v1.geojson"),
     townshipCollection,
@@ -156,7 +158,8 @@ async function runMetro(
     createDisplayPolygons(townshipCollection),
     { compact: true },
   );
-  const townshipAreas = createTownshipAreas(townships);
+
+  const townshipAreas = createTownshipAreas(allNormalizedTownships);
   await writeGeoJsonFile(
     resolve(outputDir, "township-areas.v1.geojson"),
     townshipAreas,
@@ -167,23 +170,18 @@ async function runMetro(
     { compact: true },
   );
 
-  console.log(`Done with ${metroId}.`);
+  const brt: TransitLayerFeatureCollection = {
+    type: "FeatureCollection",
+    features: brtCollections,
+  };
+
+  await writeTransitLayer("rapid-rail", sharedTransit.gautrain);
+  await writeTransitLayer("commuter-rail", sharedTransit.prasa);
+  await writeTransitLayer("bus-rapid-transit", brt);
+  await writeTransitLayer("bus", sharedTransit.gautrainBus);
 }
 
-async function main() {
-  const requested = process.argv.slice(2);
-  const metros =
-    requested.length > 0
-      ? METROS.filter((metro) => requested.includes(metro.id))
-      : METROS;
-  const sharedTransit = await fetchSharedTransit();
-  for (const metro of metros) {
-    await runMetro(metro.id, sharedTransit);
-  }
-  console.log("\nAll metros done.");
-}
-
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+runNational().catch((err) => {
+  console.error(err);
+  process.exit(1);
 });

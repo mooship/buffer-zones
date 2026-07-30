@@ -1,14 +1,10 @@
 export type LayerId =
   | "townships"
-  | "gautrain"
-  | "gautrain-bus"
-  | "a-re-yeng"
   | "nearest-transit"
-  | "myciti"
-  | "prasa"
-  | "rea-vaya"
-  | "metrobus"
-  | "durban-transport";
+  | "rapid-rail"
+  | "commuter-rail"
+  | "bus-rapid-transit"
+  | "bus";
 
 export type LayerType = "choropleth" | "line" | "point";
 

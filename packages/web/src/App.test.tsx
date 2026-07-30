@@ -101,11 +101,15 @@ describe("App", () => {
     fireEvent.click(minimise);
 
     expect(screen.getByRole("heading", { name: "Buffer Zones" })).toBeVisible();
-    expect(screen.getByText(/how tshwane's spatial legacy/i)).not.toBeVisible();
+    expect(
+      screen.getByText(/how south africa's spatial legacy/i),
+    ).not.toBeVisible();
     fireEvent.click(
       screen.getByRole("button", { name: "Expand introduction" }),
     );
-    expect(screen.getByText(/how tshwane's spatial legacy/i)).toBeVisible();
+    expect(
+      screen.getByText(/how south africa's spatial legacy/i),
+    ).toBeVisible();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );

@@ -1,20 +1,16 @@
 import styles from "./EvidenceSummary.module.css";
 
 interface EvidenceSummaryProps {
-  metroName: string;
   jobCenterCount: number;
 }
 
-export function EvidenceSummary({
-  metroName,
-  jobCenterCount,
-}: EvidenceSummaryProps) {
+export function EvidenceSummary({ jobCenterCount }: EvidenceSummaryProps) {
   return (
     <div className={styles.summary}>
       <p className={styles.context}>
         Apartheid law controlled where Black, Coloured and Indian people could
-        live. Around {metroName}, Black townships were deliberately separated
-        from economic centres; those distances still shape access to work.
+        live. Black townships were deliberately separated from economic centres;
+        those distances still shape access to work.
       </p>
       <div className={styles.limitation}>
         <strong>Car time is only a baseline proxy.</strong>

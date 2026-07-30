@@ -50,7 +50,6 @@ export function App() {
   const [dataError, setDataError] = useState(false);
   const [loadAttempt, setLoadAttempt] = useState(0);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
-  const metroId = useMapUiStore((state) => state.metroId);
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
   const panelView = useMapUiStore((state) => state.panelView);
@@ -58,7 +57,6 @@ export function App() {
   const selectedTownshipId = useMapUiStore((state) => state.selectedTownshipId);
   const toggleLayer = useMapUiStore((state) => state.toggleLayer);
   const setBasemap = useMapUiStore((state) => state.setBasemap);
-  const setMetro = useMapUiStore((state) => state.setMetro);
   const setPanelOpen = useMapUiStore((state) => state.setPanelOpen);
   const setPanelView = useMapUiStore((state) => state.setPanelView);
   const setTitleExpanded = useMapUiStore((state) => state.setTitleExpanded);
@@ -68,7 +66,6 @@ export function App() {
   const themePreference = useThemePreference();
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const metroDefinition = getMetroDefinition(metroId);
 
   useEffect(() => {
     let cancelled = false;
@@ -77,12 +74,12 @@ export function App() {
     setTownshipAreas([]);
     const cacheBust = loadAttempt > 0 ? `?retry=${loadAttempt}` : "";
     const repository = createTownshipDataRepository(
-      `/data/${metroId}/townships.display.v1.geojson${cacheBust}`,
+      `/data/national/townships.display.v1.geojson${cacheBust}`,
     );
     Promise.all([
       repository.getTownships(),
       fetchFeatureCollection(
-        `/data/${metroId}/township-areas.display.v1.geojson${cacheBust}`,
+        `/data/national/township-areas.display.v1.geojson${cacheBust}`,
       ),
     ])
       .then(([features, areas]) => {
@@ -99,7 +96,7 @@ export function App() {
     return () => {
       cancelled = true;
     };
-  }, [loadAttempt, metroId]);
+  }, [loadAttempt]);
 
   function handlePanelToggle() {
     if (panelOpen) {
@@ -148,7 +145,6 @@ export function App() {
             townships={townships}
             townshipAreas={townshipAreas}
             visibleLayerIds={visibleLayerIds}
-            metroId={metroId}
             basemap={basemap}
             selectedTownshipId={selectedTownshipId}
             onTownshipSelect={setSelectedTownshipId}
@@ -192,12 +188,8 @@ export function App() {
           )}
         </button>
         <div id="title-context" hidden={!titleExpanded}>
-          <p className={styles.eyebrow}>
-            {metroDefinition.shortName} spatial access atlas
-          </p>
-          <p className={styles.tagline}>
-            {getAppTagline(metroDefinition.shortName)}
-          </p>
+          <p className={styles.eyebrow}>South African spatial access atlas</p>
+          <p className={styles.tagline}>{getAppTagline()}</p>
           <p className={styles.framing}>
             Townships were planned apart from work and services. This baseline
             makes the distance visible.
@@ -255,10 +247,7 @@ export function App() {
           {panelView === "story" ? (
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Why this map exists</h2>
-              <EvidenceSummary
-                metroName={metroDefinition.shortName}
-                jobCenterCount={metroDefinition.jobCenterCount}
-              />
+              <EvidenceSummary jobCenterCount={12} />
               <details className={styles.panelSources}>
                 <summary>Data sources and method</summary>
                 <div className={styles.panelSourceList}>
@@ -283,7 +272,6 @@ export function App() {
               <TownshipBrowser
                 townships={townships}
                 selectedTownshipId={selectedTownshipId}
-                metroName={metroDefinition.shortName}
                 onSelect={(township) =>
                   setSelectedTownshipId(township.properties.id)
                 }
@@ -294,13 +282,12 @@ export function App() {
             <div className={styles.panelContent}>
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Map legend</h2>
-                <Legend metroId={metroId} />
+                <Legend />
               </section>
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Layers</h2>
                 <LayerToggles
                   visibleLayerIds={visibleLayerIds}
-                  metroId={metroId}
                   onToggle={toggleLayer}
                 />
               </section>
@@ -315,8 +302,6 @@ export function App() {
           onBasemapChange={setBasemap}
           themePreference={themePreference}
           onThemePreferenceChange={setThemePreference}
-          metroId={metroId}
-          onMetroChange={setMetro}
         />
       </div>
     </div>

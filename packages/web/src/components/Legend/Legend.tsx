@@ -1,4 +1,3 @@
-import type { MetroId } from "@buffer-zones/shared";
 import {
   COMMUTE_BUCKET_COLORS,
   TRANSIT_DISTANCE_BUCKET_COLORS,
@@ -26,8 +25,8 @@ const TRANSIT_DISTANCE_ENTRIES = [
   { label: "No data", color: TRANSIT_DISTANCE_BUCKET_COLORS.noData },
 ] as const;
 
-function getTransitEntries(metroId: MetroId) {
-  return getLayerDefinitions(metroId).flatMap((layer) =>
+function getTransitEntries() {
+  return getLayerDefinitions().flatMap((layer) =>
     layer.available && layer.style?.kind === "line"
       ? [
           {
@@ -40,12 +39,8 @@ function getTransitEntries(metroId: MetroId) {
   );
 }
 
-interface LegendProps {
-  metroId: MetroId;
-}
-
-export function Legend({ metroId }: LegendProps) {
-  const transitEntries = getTransitEntries(metroId);
+export function Legend() {
+  const transitEntries = getTransitEntries();
 
   return (
     <div className={styles.groups}>

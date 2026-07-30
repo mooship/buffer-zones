@@ -7,6 +7,8 @@ coverage
 *.log
 .tmp-*
 data-pipeline/downloads/
+data-pipeline/osm-data/
+data-pipeline/osrm-data/
 *.tsbuildinfo
 lighthouse-report*.json
 test-results/
