@@ -15,7 +15,6 @@ import {
 import styles from "./App.module.css";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
-import { Legend } from "./components/Legend/Legend";
 import { MobileLegend } from "./components/MobileLegend/MobileLegend";
 import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
@@ -353,7 +352,7 @@ export function App() {
         {panelOpen ? "Close" : "Explore"}
       </button>
 
-      <MobileLegend visibleLayerIds={visibleLayerIds} suppressed={panelOpen} />
+      <MobileLegend visibleLayerIds={visibleLayerIds} suppressed={false} />
 
       <aside
         id="map-controls"
@@ -455,12 +454,6 @@ export function App() {
           ) : null}
           {panelView === "layers" ? (
             <div className={styles.panelContent}>
-              <section className={styles.section}>
-                <div data-testid="panel-legend" data-e2e="panel-legend">
-                  <h2 className={styles.sectionTitle}>Map legend</h2>
-                  <Legend />
-                </div>
-              </section>
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Layers</h2>
                 <LayerToggles

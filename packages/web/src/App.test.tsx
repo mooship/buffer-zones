@@ -130,14 +130,11 @@ describe("App", () => {
     );
   });
 
-  it("shows the legend and layer controls", async () => {
+  it("shows layer controls immediately in the layers tab", async () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
 
-    expect(
-      screen.getByRole("list", { name: /modeled car time/i }),
-    ).toBeInTheDocument();
     expect(
       await screen.findByRole("checkbox", { name: "Modeled car time" }),
     ).toBeChecked();
@@ -156,7 +153,7 @@ describe("App", () => {
 
     expect(screen.getByText(/apartheid law controlled/i)).toBeInTheDocument();
     expect(
-      screen.queryByRole("list", { name: /modeled car time/i }),
+      screen.queryByRole("checkbox", { name: "Modeled car time" }),
     ).not.toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
@@ -260,17 +257,38 @@ describe("App", () => {
     fireEvent.click(trigger);
 
     expect(
-      screen.queryByRole("list", { name: /modeled car time/i }),
+      screen.queryByRole("checkbox", { name: "Modeled car time" }),
     ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /explore/i }));
 
     expect(
-      screen.getByRole("list", { name: /modeled car time/i }),
+      screen.getByRole("checkbox", { name: "Modeled car time" }),
     ).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );
+  });
+
+  it("keeps the legend toggle available while layer controls are open", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
+
+    expect(
+      await screen.findByRole("checkbox", { name: "Modeled car time" }),
+    ).toBeInTheDocument();
+
+    const legendTrigger = screen.getByRole("button", {
+      name: /open map legend/i,
+    });
+    fireEvent.click(legendTrigger);
+
+    expect(legendTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("mobile-legend-content")).toBeVisible();
+    expect(
+      screen.getByRole("list", { name: /active map layers legend/i }),
+    ).toBeInTheDocument();
   });
 
   it("provides one-tap mobile legend access while the panel is closed", async () => {

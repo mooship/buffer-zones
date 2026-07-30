@@ -26,7 +26,7 @@ test.describe("app shell", () => {
     ).toBeVisible();
   });
 
-  test("shows the map legend and layer controls by default via the layers tab", async ({
+  test("shows layer controls in the layers tab and keeps legend toggle available", async ({
     page,
   }) => {
     await page.goto("/");
@@ -36,6 +36,10 @@ test.describe("app shell", () => {
     await page.getByTestId(E2E.panelTab.layers).click();
 
     await expect(page.getByTestId(E2E.layerToggle.townships)).toBeChecked();
-    await expect(page.getByTestId(E2E.panelLegend)).toBeVisible();
+
+    const legendTrigger = page.getByTestId(E2E.mobileLegendTrigger);
+    await expect(legendTrigger).toBeVisible();
+    await legendTrigger.click();
+    await expect(page.getByTestId(E2E.mobileLegendContent)).toBeVisible();
   });
 });

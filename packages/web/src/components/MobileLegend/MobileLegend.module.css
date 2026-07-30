@@ -1,9 +1,9 @@
 .container {
   position: absolute;
-  right: 0.75rem;
-  bottom: calc(1.5rem + env(safe-area-inset-bottom) + 48px + 0.5rem);
+  left: 1.25rem;
+  bottom: calc(3.25rem + 44px + 0.75rem);
   z-index: 1240;
-  display: none;
+  display: block;
 }
 
 .trigger {
@@ -37,7 +37,7 @@
 
 .sheet {
   position: absolute;
-  right: 0;
+  left: 0;
   bottom: calc(100% + 0.5rem);
   width: min(21rem, calc(100vw - 1.5rem));
   max-height: min(46dvh, 24rem);
@@ -83,7 +83,14 @@
 
 @media (max-width: 768px) {
   .container {
-    display: block;
+    left: auto;
+    right: 0.75rem;
+    bottom: calc(1.5rem + env(safe-area-inset-bottom) + 48px + 0.5rem);
+  }
+
+  .sheet {
+    left: auto;
+    right: 0;
   }
 }
 

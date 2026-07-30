@@ -4,6 +4,39 @@ import { E2E } from "./selectors";
 test.describe("responsive panel", () => {
   test.use({ viewport: { width: 375, height: 667 } });
 
+  test("keeps the settings button clear of the distance scale on mobile", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const settingsTrigger = page.getByTestId(E2E.settingsMenuTrigger);
+    const scale = page.locator(".leaflet-control-scale");
+
+    await expect(settingsTrigger).toBeVisible();
+    await expect(scale).toBeVisible();
+
+    const settingsBox = await settingsTrigger.boundingBox();
+    const scaleBox = await scale.boundingBox();
+
+    expect(settingsBox).not.toBeNull();
+    expect(scaleBox).not.toBeNull();
+
+    if (!settingsBox || !scaleBox) {
+      throw new Error(
+        "Expected both settings trigger and scale control bounds",
+      );
+    }
+
+    const overlapsHorizontally =
+      settingsBox.x < scaleBox.x + scaleBox.width &&
+      settingsBox.x + settingsBox.width > scaleBox.x;
+    const overlapsVertically =
+      settingsBox.y < scaleBox.y + scaleBox.height &&
+      settingsBox.y + settingsBox.height > scaleBox.y;
+
+    expect(overlapsHorizontally && overlapsVertically).toBe(false);
+  });
+
   test("defaults the controls panel closed on a mobile viewport, and Explore opens it", async ({
     page,
   }) => {
