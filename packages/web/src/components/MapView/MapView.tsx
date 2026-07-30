@@ -8,11 +8,11 @@ import { getMetroDefinition } from "@buffer-zones/shared";
 import type { Feature, FeatureCollection } from "geojson";
 import {
   type LatLng,
+  type LatLngBounds,
   type Layer,
-  type GeoJSON as LeafletGeoJSON,
   circleMarker,
 } from "leaflet";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   GeoJSON,
@@ -53,6 +53,14 @@ const TOWNSHIP_OUTLINE_PANE = "township-outlines";
 const TRANSIT_PANE = "transit";
 const MOBILE_BREAKPOINT_PX = 768;
 
+type TownshipFeatureLayer = Layer & {
+  feature?: Feature;
+  bindPopup?: (content: string) => TownshipFeatureLayer;
+  getPopup?: () => unknown;
+  openPopup?: () => void;
+  getBounds?: () => LatLngBounds;
+};
+
 function getBoundsOptions(desktop: boolean) {
   return desktop
     ? {
@@ -63,28 +71,46 @@ function getBoundsOptions(desktop: boolean) {
 }
 
 function bindTownshipPopup(
+  featureLayer: TownshipFeatureLayer,
+  properties: TownshipProperties,
+) {
+  if (featureLayer.getPopup?.()) {
+    return;
+  }
+  featureLayer.bindPopup?.(
+    renderToStaticMarkup(<TownshipPopup properties={properties} />),
+  );
+}
+
+function bindTownshipFeatureInteractions(
   feature: Feature,
   layer: Layer,
+  townshipLayerById: Map<string, TownshipFeatureLayer>,
   onTownshipSelect?: (townshipId: string) => void,
 ) {
   const properties = feature.properties as TownshipProperties | null;
   if (!properties) {
     return;
   }
-  layer.bindPopup(
-    renderToStaticMarkup(<TownshipPopup properties={properties} />),
-  );
-  layer.on("click", () => onTownshipSelect?.(properties.id));
+  if (typeof properties.id === "string") {
+    townshipLayerById.set(properties.id, layer as TownshipFeatureLayer);
+  }
+  layer.on("click", () => {
+    const featureLayer = layer as TownshipFeatureLayer;
+    bindTownshipPopup(featureLayer, properties);
+    featureLayer.openPopup?.();
+    onTownshipSelect?.(properties.id);
+  });
 }
 
 interface TownshipSelectionProps {
   selectedTownshipId: string | null;
-  townshipLayer: React.RefObject<LeafletGeoJSON | null>;
+  townshipLayerById: React.RefObject<Map<string, TownshipFeatureLayer>>;
 }
 
 function TownshipSelection({
   selectedTownshipId,
-  townshipLayer,
+  townshipLayerById,
 }: TownshipSelectionProps) {
   const map = useMap();
 
@@ -92,26 +118,27 @@ function TownshipSelection({
     if (!selectedTownshipId) {
       return;
     }
-    townshipLayer.current?.eachLayer((layer) => {
-      const featureLayer = layer as Layer & {
-        feature?: Feature;
-        getBounds?: () => L.LatLngBounds;
-        openPopup?: () => void;
-      };
-      if (featureLayer.feature?.properties?.id !== selectedTownshipId) {
-        return;
-      }
-      const bounds = featureLayer.getBounds?.();
-      if (bounds) {
-        map.fitBounds(bounds, {
-          animate: false,
-          maxZoom: 12,
-          padding: [40, 40],
-        });
-      }
-      featureLayer.openPopup?.();
-    });
-  }, [map, selectedTownshipId, townshipLayer]);
+    const featureLayer = townshipLayerById.current.get(selectedTownshipId);
+    if (!featureLayer) {
+      return;
+    }
+    const properties = featureLayer.feature?.properties as
+      | TownshipProperties
+      | null
+      | undefined;
+    if (properties) {
+      bindTownshipPopup(featureLayer, properties);
+    }
+    const bounds = featureLayer.getBounds?.();
+    if (bounds) {
+      map.fitBounds(bounds, {
+        animate: false,
+        maxZoom: 12,
+        padding: [40, 40],
+      });
+    }
+    featureLayer.openPopup?.();
+  }, [map, selectedTownshipId, townshipLayerById]);
 
   return null;
 }
@@ -193,9 +220,14 @@ export function MapView({
   selectedTownshipId = null,
   onTownshipSelect,
 }: MapViewProps) {
-  const townshipLayerRef = useRef<LeafletGeoJSON | null>(null);
-  const visibleLayers = getLayerDefinitions().filter(
-    (layer) => layer.available && visibleLayerIds.includes(layer.id),
+  const townshipLayerById = useRef(new Map<string, TownshipFeatureLayer>());
+
+  const visibleLayers = useMemo(
+    () =>
+      getLayerDefinitions().filter(
+        (layer) => layer.available && visibleLayerIds.includes(layer.id),
+      ),
+    [visibleLayerIds],
   );
   const overlayData = useLayerData(
     visibleLayers
@@ -216,13 +248,18 @@ export function MapView({
   const showAreaLabels =
     visibleLayerIds.includes("townships") ||
     visibleLayerIds.includes("nearest-transit");
-  const townshipAreaData: FeatureCollection = {
-    type: "FeatureCollection",
-    features: townshipAreas,
-  };
+  const townshipAreaData = useMemo<FeatureCollection>(
+    () => ({
+      type: "FeatureCollection",
+      features: townshipAreas,
+    }),
+    [townshipAreas],
+  );
   const boundsOptions = getBoundsOptions(
     window.innerWidth > MOBILE_BREAKPOINT_PX,
   );
+  const useRetinaTiles =
+    window.devicePixelRatio > 1.25 && window.innerWidth > MOBILE_BREAKPOINT_PX;
 
   return (
     <section
@@ -235,6 +272,7 @@ export function MapView({
         bounds={NATIONAL_BOUNDS}
         boundsOptions={boundsOptions}
         className={styles.map}
+        preferCanvas
         scrollWheelZoom
         zoomControl={false}
       >
@@ -244,7 +282,7 @@ export function MapView({
           key={`${basemap}-${useDarkTiles ? "dark" : "light"}`}
           url={tileUrl}
           attribution={tileAttribution}
-          detectRetina
+          detectRetina={useRetinaTiles}
           className={useDarkTiles ? styles.darkTile : undefined}
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
@@ -282,7 +320,6 @@ export function MapView({
           return (
             <GeoJSON
               key={layer.id}
-              ref={isChoropleth ? townshipLayerRef : undefined}
               data={data}
               style={config.styleFn}
               pathOptions={{
@@ -292,7 +329,12 @@ export function MapView({
               onEachFeature={
                 isChoropleth
                   ? (feature: Feature, featureLayer: Layer) =>
-                      bindTownshipPopup(feature, featureLayer, onTownshipSelect)
+                      bindTownshipFeatureInteractions(
+                        feature,
+                        featureLayer,
+                        townshipLayerById.current,
+                        onTownshipSelect,
+                      )
                   : undefined
               }
               pointToLayer={(_feature: Feature, latlng: LatLng) =>
@@ -310,7 +352,7 @@ export function MapView({
         })}
         <TownshipSelection
           selectedTownshipId={selectedTownshipId}
-          townshipLayer={townshipLayerRef}
+          townshipLayerById={townshipLayerById}
         />
         <AreaLabelVisibility />
         <ResponsiveMapBounds />

@@ -1,11 +1,49 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { type ReactNode, forwardRef } from "react";
+import { type ReactNode, forwardRef, useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mapMocks = vi.hoisted(() => ({
   fitBounds: vi.fn(),
   invalidateSize: vi.fn(),
+  featureLayers: [] as Array<{
+    feature: { properties?: { id?: string } | null };
+    bindPopup: ReturnType<typeof vi.fn>;
+    getPopup: ReturnType<typeof vi.fn>;
+    openPopup: ReturnType<typeof vi.fn>;
+    getBounds: ReturnType<typeof vi.fn>;
+    on: (eventName: string, handler: () => void) => void;
+    __handlers: Record<string, () => void>;
+  }>,
 }));
+
+const popupMocks = vi.hoisted(() => ({
+  renderToStaticMarkup: vi.fn().mockReturnValue("<div>Popup</div>"),
+}));
+
+vi.mock("react-dom/server", () => ({
+  renderToStaticMarkup: popupMocks.renderToStaticMarkup,
+}));
+
+function createMockLayer(feature: { properties?: { id?: string } | null }) {
+  const handlers: Record<string, () => void> = {};
+  let popupContent: string | null = null;
+  const layer = {
+    feature,
+    bindPopup: vi.fn((content: string) => {
+      popupContent = content;
+      return layer;
+    }),
+    getPopup: vi.fn(() => popupContent),
+    openPopup: vi.fn(),
+    bindTooltip: vi.fn(),
+    getBounds: vi.fn(() => ({ north: -25, south: -26, east: 28, west: 27 })),
+    on: (eventName: string, handler: () => void) => {
+      handlers[eventName] = handler;
+    },
+    __handlers: handlers,
+  };
+  return layer;
+}
 
 vi.mock("react-leaflet", () => ({
   MapContainer: ({
@@ -33,13 +71,47 @@ vi.mock("react-leaflet", () => ({
     </div>
   ),
   GeoJSON: forwardRef<
-    never,
-    { data: { features: unknown[] }; pathOptions?: { pane?: string } }
-  >(({ data, pathOptions }, _ref) => (
-    <div data-testid="geojson-layer" data-pane={pathOptions?.pane}>
-      {data.features.length} features
-    </div>
-  )),
+    { eachLayer: (cb: (layer: unknown) => void) => void } | null,
+    {
+      data: { features: Array<{ properties?: { id?: string } | null }> };
+      pathOptions?: { pane?: string };
+      onEachFeature?: (
+        feature: { properties?: { id?: string } | null },
+        layer: ReturnType<typeof createMockLayer>,
+      ) => void;
+    }
+  >(({ data, pathOptions, onEachFeature }, ref) => {
+    useEffect(() => {
+      const layers = data.features.map((feature) => createMockLayer(feature));
+      mapMocks.featureLayers = layers;
+      for (const [index, feature] of data.features.entries()) {
+        const layer = layers[index];
+        if (layer) {
+          onEachFeature?.(feature, layer);
+        }
+      }
+      if (ref && typeof ref === "object") {
+        ref.current = {
+          eachLayer: (cb: (layer: unknown) => void) => {
+            for (const layer of layers) {
+              cb(layer);
+            }
+          },
+        };
+      }
+      return () => {
+        if (ref && typeof ref === "object") {
+          ref.current = null;
+        }
+      };
+    }, [data.features, onEachFeature, ref]);
+
+    return (
+      <div data-testid="geojson-layer" data-pane={pathOptions?.pane}>
+        {data.features.length} features
+      </div>
+    );
+  }),
   useMap: () => ({
     fitBounds: mapMocks.fitBounds,
     invalidateSize: mapMocks.invalidateSize,
@@ -80,6 +152,8 @@ describe("MapView", () => {
   afterEach(() => {
     mapMocks.fitBounds.mockReset();
     mapMocks.invalidateSize.mockReset();
+    mapMocks.featureLayers = [];
+    popupMocks.renderToStaticMarkup.mockClear();
     vi.unstubAllGlobals();
     setThemePreference("system");
   });
@@ -95,9 +169,63 @@ describe("MapView", () => {
     expect(screen.getByTestId("tile-layer")).toBeInTheDocument();
     expect(screen.getByTestId("tile-layer")).toHaveAttribute(
       "data-retina",
-      "true",
+      "false",
     );
     expect(screen.getAllByTestId("geojson-layer")).toHaveLength(1);
+  });
+
+  it("enables retina tile loading on high-DPI desktop screens", () => {
+    vi.stubGlobal("innerWidth", 1440);
+    Object.defineProperty(window, "devicePixelRatio", {
+      configurable: true,
+      value: 2,
+    });
+
+    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+
+    expect(screen.getByTestId("tile-layer")).toHaveAttribute(
+      "data-retina",
+      "true",
+    );
+  });
+
+  it("binds township popup markup lazily on first click", () => {
+    const onTownshipSelect = vi.fn();
+
+    render(
+      <MapView
+        townships={townships}
+        visibleLayerIds={["townships"]}
+        onTownshipSelect={onTownshipSelect}
+      />,
+    );
+
+    expect(popupMocks.renderToStaticMarkup).not.toHaveBeenCalled();
+
+    const firstLayer = mapMocks.featureLayers[0];
+    expect(firstLayer).toBeDefined();
+    firstLayer?.__handlers.click?.();
+
+    expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
+    expect(onTownshipSelect).toHaveBeenCalledWith("A");
+
+    firstLayer?.__handlers.click?.();
+    expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
+    expect(onTownshipSelect).toHaveBeenCalledTimes(2);
+  });
+
+  it("opens the selected township popup without scanning every layer", () => {
+    render(
+      <MapView
+        townships={townships}
+        visibleLayerIds={["townships"]}
+        selectedTownshipId="A"
+      />,
+    );
+
+    expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
+    expect(mapMocks.fitBounds).toHaveBeenCalledTimes(1);
+    expect(mapMocks.featureLayers[0]?.openPopup).toHaveBeenCalledTimes(1);
   });
 
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
