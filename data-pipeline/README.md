@@ -10,27 +10,44 @@ npm install
 npm run run
 ```
 
-Runs once per metro defined in `@buffer-zones/shared`'s `METROS` (currently Tshwane and Johannesburg), writing each metro's output into its own subfolder: `packages/web/public/data/<metroId>/townships.v1.geojson`, `township-areas.v1.geojson`, `gautrain.v1.geojson`, `gautrain-bus.v1.geojson`, `prasa.v1.geojson`, plus whichever single-city operator is real for that metro (Tshwane: `a-re-yeng.v1.geojson`; Johannesburg: `rea-vaya.v1.geojson`).
+Runs one national build. Internally, it loops over `@buffer-zones/shared`'s `METROS` (currently Tshwane and Johannesburg) to fetch and process each metro's boundaries and job-center routing, then writes a combined output to `packages/web/public/data/national/`.
 
-`townships.v1.geojson` and `township-areas.v1.geojson` remain the full-resolution
-source artifacts. The pipeline also writes compact `.display.v1.geojson`
-versions: topology-preserving, quantized and simplified copies used by the
-browser. To rebuild only those display artifacts from the committed
-full-resolution data, run `npm run display` in this directory.
+The national output currently includes: `townships.v1.geojson`,
+`township-areas.v1.geojson`, `rapid-rail.v1.geojson`,
+`bus-rapid-transit.v1.geojson`, `commuter-rail.v1.geojson`, and
+`bus.v1.geojson` plus their `.display.v1.geojson` variants.
+
+`townships.v1.geojson` and `township-areas.v1.geojson` remain the
+full-resolution source artifacts. The pipeline also writes compact
+`.display.v1.geojson` versions used by the browser.
 
 ## Adding a new metro
 
-Add an entry to `METROS` in `packages/shared/src/constants/metros.ts` (id, name, `municipalityCode` from the Stats SA Census 2011 sub-place shapefile, map centre/zoom), add a bounding box to `METRO_BBOX` in `src/constants/metroBbox.ts`, add that metro's job centres to `JOB_CENTERS` in `src/constants/jobCenters.ts`, and add its township area definitions to `packages/shared/src/constants/townships.ts` (see `docs/data/tshwane-area-classification.md` and `docs/data/johannesburg-area-classification.md` for the selection methodology). `run.ts` loops over `METROS` automatically — no other pipeline code needs to change unless the new metro needs its own transit operator (see below).
+Add an entry to `METROS` in `packages/shared/src/constants/metros.ts` (id,
+name, `municipalityCode` from the Stats SA Census 2011 sub-place shapefile,
+map centre/zoom), add a bounding box to `METRO_BBOX` in
+`src/constants/metroBbox.ts`, add that metro's job centres to `JOB_CENTERS` in
+`src/constants/jobCenters.ts`, and add its township area definitions to
+`packages/shared/src/constants/townships.ts` (see
+`docs/data/tshwane-area-classification.md` and
+`docs/data/johannesburg-area-classification.md` for the selection
+methodology). `run.ts` loops over `METROS` automatically and merges them into
+the national output.
 
 ## Adding a new transit operator
 
-Follow `src/adapters/gautrain.ts`, `src/adapters/aReYeng.ts`, or `src/adapters/reaVaya.ts` as a template: one adapter file with a `fetchX(bbox)` + `normalizeX()` pair, normalizing into the shared `TransitLayerFeatureCollection` shape. Add a registry entry in `packages/web/src/layers/registry.ts` (scoped to the right metro via `getLayerDefinitions`'s `isTshwane`/`isJohannesburg` flags), wire the fetch into the relevant metro branch of `runMetro()` in `run.ts`, and re-run the pipeline.
+Follow `src/adapters/gautrain.ts`, `src/adapters/aReYeng.ts`, or
+`src/adapters/reaVaya.ts` as a template: one adapter file with a
+`fetchX(bbox)` + `normalizeX()` pair, normalizing into the shared
+`TransitLayerFeatureCollection` shape. Wire the adapter into `run.ts` and map
+it to the appropriate national layer file(s), then re-run the pipeline.
 
-Gautrain rail, Gautrain Bus, and PRASA/Metrorail are Gauteng-wide networks fetched for every metro; A Re Yeng (Tshwane only) and Rea Vaya (Johannesburg only) are each a single city's own BRT operator, entirely absent from the other metro's layer list rather than shown disabled (`packages/web/src/layers/registry.ts`). All five are real, live layers. MyCiTi (Cape Town) and Durban Transport belong to metros not in `METROS` yet, so they're withheld from every current metro the same way, until those cities are added. Metrobus (Johannesburg's own conventional bus operator) was tried as a real Overpass adapter on 2026-07-29 but OSM coverage turned out to be a single verified stop with no route geometry, too sparse to ship.
-
-## Running a single metro
-
-`npm run run -- <metroId>` (e.g. `npm run run -- johannesburg`) runs only that metro instead of looping over all of `METROS` — useful when re-running after a failure partway through, to avoid re-fetching a metro that already succeeded and burning through rate-limit budget for no reason.
+Gautrain rail, Gautrain Bus, and PRASA/Metrorail are treated as shared
+networks. A Re Yeng (Tshwane) and Rea Vaya (Johannesburg) are city-specific
+sources that currently contribute to the national `bus-rapid-transit` layer.
+Metrobus (Johannesburg's own conventional bus operator) was tried as a real
+Overpass adapter on 2026-07-29 but OSM coverage turned out to be too sparse to
+ship.
 
 ## Rate limits
 

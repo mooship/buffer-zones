@@ -1,9 +1,9 @@
 # Contributing to Buffer Zones
 
 Thanks for your interest. Buffer Zones is a public-interest mapping project
-about the spatial legacy of apartheid-era planning in Tshwane. Contributions are
-welcome — especially better data sources, accessibility improvements, and
-corrections to how areas are classified or described.
+about the spatial legacy of apartheid-era planning across South African cities.
+Contributions are welcome — especially better data sources, accessibility
+improvements, and corrections to how areas are classified or described.
 
 Please read [`README.md`](README.md) first for what the project is, what v1
 deliberately does not claim, and where the documentation lives.
@@ -29,7 +29,7 @@ its own install step:
 cd data-pipeline
 npm install
 npm run run       # full pipeline: boundaries, transit, OSRM routing, join, write output
-npm run display   # rebuild only the compact .display.v1.geojson artifacts
+npm run display   # legacy helper: rebuilds compact display files for per-metro source directories when present
 ```
 
 See [`data-pipeline/README.md`](data-pipeline/README.md) before running the full
@@ -37,7 +37,7 @@ pipeline — it calls public third-party APIs.
 
 A lefthook pre-commit hook runs Biome on staged files and the full Vitest suite,
 so expect both on every commit. CI runs lint, typecheck, test, and build on every
-pull request; all four must pass.
+pull request, and Playwright end-to-end tests run in a dedicated workflow.
 
 ## How the project is put together
 
@@ -89,7 +89,8 @@ meaning rather than its code:
   reproducible.
 - Changes to which areas count as included township areas belong in
   `packages/shared/src/constants/townships.ts`, and the reasoning belongs in
-  [`docs/data/tshwane-area-classification.md`](docs/data/tshwane-area-classification.md).
+  [`docs/data/tshwane-area-classification.md`](docs/data/tshwane-area-classification.md)
+  and/or [`docs/data/johannesburg-area-classification.md`](docs/data/johannesburg-area-classification.md).
 - Don't overstate what the data supports. Keep copy within the limits the README
   already sets out.
 - Never contribute personally identifying or household-level data.

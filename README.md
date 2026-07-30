@@ -1,8 +1,8 @@
 # Buffer Zones
 
-Apartheid-era spatial planning still shapes access to economic opportunity in South African cities today. **Buffer Zones** maps recognized township areas, formal transit routes, and modeled car time to selected job centers across multiple metros. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
+Apartheid-era spatial planning still shapes access to economic opportunity in South African cities today. **Buffer Zones** maps recognized township areas, formal transit routes, and modeled car time to selected job centers in a single national view. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
 
-**Current scope: Tshwane/Pretoria and Johannesburg, switchable in the app.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to each metro's own selected job centers, and real transit route overlays: Gautrain rail, Gautrain Bus, A Re Yeng (trunk, complementary, and feeder), and PRASA in Tshwane; Gautrain, PRASA, and Rea Vaya in Johannesburg. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros (Cape Town, Durban) are scaffolded for future data work.
+**Current scope: a combined national layer for Tshwane/Pretoria and Johannesburg.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to each metro's selected job centers, and transit overlays sourced from Gautrain rail, Gautrain Bus, PRASA rail, A Re Yeng, and Rea Vaya. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros (Cape Town, Durban) are not yet included in the published national layer.
 
 ## Why
 
