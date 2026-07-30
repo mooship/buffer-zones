@@ -11,8 +11,8 @@ const mapMocks = vi.hoisted(() => ({
     getPopup: ReturnType<typeof vi.fn>;
     openPopup: ReturnType<typeof vi.fn>;
     getBounds: ReturnType<typeof vi.fn>;
-    on: (eventName: string, handler: () => void) => void;
-    __handlers: Record<string, () => void>;
+    on: (eventName: string, handler: (...args: unknown[]) => void) => void;
+    __handlers: Record<string, (...args: unknown[]) => void>;
   }>,
 }));
 
@@ -25,7 +25,7 @@ vi.mock("react-dom/server", () => ({
 }));
 
 function createMockLayer(feature: { properties?: { id?: string } | null }) {
-  const handlers: Record<string, () => void> = {};
+  const handlers: Record<string, (...args: unknown[]) => void> = {};
   let popupContent: string | null = null;
   const layer = {
     feature,
@@ -37,7 +37,7 @@ function createMockLayer(feature: { properties?: { id?: string } | null }) {
     openPopup: vi.fn(),
     bindTooltip: vi.fn(),
     getBounds: vi.fn(() => ({ north: -25, south: -26, east: 28, west: 27 })),
-    on: (eventName: string, handler: () => void) => {
+    on: (eventName: string, handler: (...args: unknown[]) => void) => {
       handlers[eventName] = handler;
     },
     __handlers: handlers,
@@ -155,6 +155,7 @@ describe("MapView", () => {
     mapMocks.featureLayers = [];
     popupMocks.renderToStaticMarkup.mockClear();
     vi.unstubAllGlobals();
+    vi.useRealTimers();
     setThemePreference("system");
   });
 
@@ -190,6 +191,7 @@ describe("MapView", () => {
   });
 
   it("binds township popup markup lazily on first click", () => {
+    vi.useFakeTimers();
     const onTownshipSelect = vi.fn();
 
     render(
@@ -204,14 +206,40 @@ describe("MapView", () => {
 
     const firstLayer = mapMocks.featureLayers[0];
     expect(firstLayer).toBeDefined();
-    firstLayer?.__handlers.click?.();
+    firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
+    vi.advanceTimersByTime(220);
 
     expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
     expect(onTownshipSelect).toHaveBeenCalledWith("A");
 
-    firstLayer?.__handlers.click?.();
+    firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
+    vi.advanceTimersByTime(220);
     expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
     expect(onTownshipSelect).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not open popup or select township on double-click", () => {
+    vi.useFakeTimers();
+    const onTownshipSelect = vi.fn();
+
+    render(
+      <MapView
+        townships={townships}
+        visibleLayerIds={["townships"]}
+        onTownshipSelect={onTownshipSelect}
+      />,
+    );
+
+    const firstLayer = mapMocks.featureLayers[0];
+    expect(firstLayer).toBeDefined();
+
+    firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
+    firstLayer?.__handlers.dblclick?.();
+    vi.advanceTimersByTime(220);
+
+    expect(popupMocks.renderToStaticMarkup).not.toHaveBeenCalled();
+    expect(onTownshipSelect).not.toHaveBeenCalled();
+    expect(firstLayer?.openPopup).not.toHaveBeenCalled();
   });
 
   it("opens the selected township popup without scanning every layer", () => {

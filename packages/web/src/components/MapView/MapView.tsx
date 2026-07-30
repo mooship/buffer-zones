@@ -10,6 +10,7 @@ import {
   type LatLng,
   type LatLngBounds,
   type Layer,
+  type LeafletMouseEvent,
   circleMarker,
 } from "leaflet";
 import { useEffect, useMemo, useRef } from "react";
@@ -52,6 +53,7 @@ const TOWNSHIP_PANE = "townships";
 const TOWNSHIP_OUTLINE_PANE = "township-outlines";
 const TRANSIT_PANE = "transit";
 const MOBILE_BREAKPOINT_PX = 768;
+const TOWNSHIP_CLICK_DELAY_MS = 220;
 
 type TownshipFeatureLayer = Layer & {
   feature?: Feature;
@@ -95,11 +97,40 @@ function bindTownshipFeatureInteractions(
   if (typeof properties.id === "string") {
     townshipLayerById.set(properties.id, layer as TownshipFeatureLayer);
   }
-  layer.on("click", () => {
-    const featureLayer = layer as TownshipFeatureLayer;
-    bindTownshipPopup(featureLayer, properties);
-    featureLayer.openPopup?.();
-    onTownshipSelect?.(properties.id);
+  let pendingClickTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  layer.on("click", (event: LeafletMouseEvent) => {
+    if (pendingClickTimeout !== null) {
+      clearTimeout(pendingClickTimeout);
+      pendingClickTimeout = null;
+    }
+
+    const clickCount = event.originalEvent?.detail ?? 1;
+    if (clickCount > 1) {
+      return;
+    }
+
+    pendingClickTimeout = setTimeout(() => {
+      pendingClickTimeout = null;
+      const featureLayer = layer as TownshipFeatureLayer;
+      bindTownshipPopup(featureLayer, properties);
+      featureLayer.openPopup?.();
+      onTownshipSelect?.(properties.id);
+    }, TOWNSHIP_CLICK_DELAY_MS);
+  });
+
+  layer.on("dblclick", () => {
+    if (pendingClickTimeout !== null) {
+      clearTimeout(pendingClickTimeout);
+      pendingClickTimeout = null;
+    }
+  });
+
+  layer.on("remove", () => {
+    if (pendingClickTimeout !== null) {
+      clearTimeout(pendingClickTimeout);
+      pendingClickTimeout = null;
+    }
   });
 }
 
