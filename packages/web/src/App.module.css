@@ -530,7 +530,7 @@
     bottom: calc(
       var(--mobile-control-bottom) +
       var(--mobile-control-size) +
-      1rem
+      1.5rem
     );
   }
 
