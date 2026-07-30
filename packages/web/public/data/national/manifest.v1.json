@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-30T10:18:32.829Z",
+  "generatedAt": "2026-07-30T11:29:18.032Z",
   "metroIds": [
     "tshwane",
     "johannesburg",
@@ -10,14 +10,14 @@
     {
       "fileName": "townships.v1.geojson",
       "featureCount": 2057,
-      "sha256": "e23faa22e78139145633c6b794a2a332ab76146dfe7a4eb3d155fc5e12bfcbf4",
-      "bytes": 23573360
+      "sha256": "0fe3bcd940254593716113dede346d1c9ca166948b98e19196362fc0244d68fd",
+      "bytes": 23573418
     },
     {
       "fileName": "townships.display.v1.geojson",
       "featureCount": 2057,
-      "sha256": "2bd61ae29313b314513197b5d922ecc84d64513bbf2d22b902bc2bd8d006a478",
-      "bytes": 2153900
+      "sha256": "4a0ef84c7cd4bd42f4660f80f31b962e1ec4ffad720e982a2f8ecde161408cc4",
+      "bytes": 2153958
     },
     {
       "fileName": "township-areas.v1.geojson",
@@ -57,15 +57,15 @@
     },
     {
       "fileName": "bus-rapid-transit.v1.geojson",
-      "featureCount": 854,
-      "sha256": "5115f1720a08e90e55dd8bb75732ac5b03b69a6f979d1924efb864b63cab0f11",
-      "bytes": 1166141
+      "featureCount": 862,
+      "sha256": "e54fc475b567ea5d3b30f5a49dbe30918086be9bdf3a5efd5ff9aa0aa6c6ebc9",
+      "bytes": 1237693
     },
     {
       "fileName": "bus-rapid-transit.display.v1.geojson",
-      "featureCount": 854,
-      "sha256": "9a5fac9c1bf54279c7c8514ddffa23301d3bbe021c7e66a7f7c84653a3e19b42",
-      "bytes": 418021
+      "featureCount": 862,
+      "sha256": "9876360bf79bb4a934afd9ebbf43aee3d87b07687ced133cb111906aec9fd765",
+      "bytes": 437139
     },
     {
       "fileName": "bus.v1.geojson",
@@ -85,6 +85,7 @@
     "PRASA": 1121,
     "A Re Yeng": 18,
     "Rea Vaya": 836,
+    "Ekurhuleni IRPTN": 8,
     "Gautrain Bus": 3428,
     "Tshwane Bus Services": 235
   }

@@ -59,6 +59,33 @@ interface SharedTransit {
   prasa: TransitLayerFeatureCollection;
 }
 
+function formatDuration(ms: number): string {
+  if (ms < 1000) {
+    return `${ms}ms`;
+  }
+  return `${(ms / 1000).toFixed(2)}s`;
+}
+
+async function timedStep<T>(
+  label: string,
+  work: () => Promise<T>,
+  successMessage?: (result: T) => string,
+): Promise<T> {
+  const startedAt = Date.now();
+  console.log(`${label}...`);
+  try {
+    const result = await work();
+    const elapsed = Date.now() - startedAt;
+    const suffix = successMessage ? ` ${successMessage(result)}` : "";
+    console.log(`  done in ${formatDuration(elapsed)}${suffix}`);
+    return result;
+  } catch (error) {
+    const elapsed = Date.now() - startedAt;
+    console.log(`  failed after ${formatDuration(elapsed)}`);
+    throw error;
+  }
+}
+
 function emptyTransitCollection(): TransitLayerFeatureCollection {
   return { type: "FeatureCollection", features: [] };
 }
@@ -175,35 +202,16 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
   const bbox = getSharedTransitBbox();
   const publishedOutputDir = resolve(OUTPUT_ROOT, "national");
 
-  console.log("Fetching Gautrain rail via Overpass (Gauteng-wide)...");
-  console.log("Fetching PRASA rail via Overpass (Gauteng-wide)...");
-  console.log("Fetching Gautrain bus routes via Overpass (Gauteng-wide)...");
-
-  const [gautrainResult, prasaResult, gautrainBusResult] =
-    await Promise.allSettled([
-      fetchGautrainRail(bbox),
-      fetchPrasaRail(bbox),
-      fetchGautrainBusRoutes(bbox),
-    ]);
-
-  let gautrain =
-    gautrainResult.status === "fulfilled"
-      ? normalizeGautrainOverpass(gautrainResult.value)
-      : emptyTransitCollection();
-  let prasa =
-    prasaResult.status === "fulfilled"
-      ? normalizePrasaOverpass(prasaResult.value)
-      : emptyTransitCollection();
-  let gautrainBus =
-    gautrainBusResult.status === "fulfilled"
-      ? normalizeGautrainBusOverpass(gautrainBusResult.value)
-      : emptyTransitCollection();
-
-  if (gautrainResult.status === "rejected") {
-    console.warn(
-      "Skipping Gautrain rail due to fetch failure",
-      gautrainResult.reason,
+  let gautrain = emptyTransitCollection();
+  try {
+    const gautrainRaw = await timedStep(
+      "Fetching Gautrain rail via Overpass (Gauteng-wide)",
+      () => fetchGautrainRail(bbox),
+      (raw) => `(${raw.elements.length} elements)`,
     );
+    gautrain = normalizeGautrainOverpass(gautrainRaw);
+  } catch (error) {
+    console.warn("Skipping Gautrain rail due to fetch failure", error);
     const fallback = await readExistingTransitLayer(
       publishedOutputDir,
       "rapid-rail",
@@ -216,11 +224,16 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
     gautrain = fallback;
   }
 
-  if (prasaResult.status === "rejected") {
-    console.warn(
-      "Skipping PRASA rail due to fetch failure",
-      prasaResult.reason,
+  let prasa = emptyTransitCollection();
+  try {
+    const prasaRaw = await timedStep(
+      "Fetching PRASA rail via Overpass (Gauteng-wide)",
+      () => fetchPrasaRail(bbox),
+      (raw) => `(${raw.elements.length} elements)`,
     );
+    prasa = normalizePrasaOverpass(prasaRaw);
+  } catch (error) {
+    console.warn("Skipping PRASA rail due to fetch failure", error);
     const fallback = await readExistingTransitLayer(
       publishedOutputDir,
       "commuter-rail",
@@ -233,11 +246,16 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
     prasa = fallback;
   }
 
-  if (gautrainBusResult.status === "rejected") {
-    console.warn(
-      "Skipping Gautrain Bus due to fetch failure",
-      gautrainBusResult.reason,
+  let gautrainBus = emptyTransitCollection();
+  try {
+    const gautrainBusRaw = await timedStep(
+      "Fetching Gautrain bus routes via Overpass (Gauteng-wide)",
+      () => fetchGautrainBusRoutes(bbox),
+      (raw) => `(${raw.elements.length} elements)`,
     );
+    gautrainBus = normalizeGautrainBusOverpass(gautrainBusRaw);
+  } catch (error) {
+    console.warn("Skipping Gautrain Bus due to fetch failure", error);
     const fallback = await readExistingTransitLayer(publishedOutputDir, "bus");
     if (!fallback) {
       throw new Error(
@@ -295,8 +313,10 @@ async function runNational(): Promise<void> {
 
     for (const metro of METROS) {
       console.log(`\n=== ${metro.id} ===`);
-      console.log(`Fetching ${metro.id} sub-place boundaries...`);
-      const rawBoundaries = await fetchMetroBoundaries(metro.id);
+      const rawBoundaries = await timedStep(
+        `Fetching ${metro.id} sub-place boundaries`,
+        () => fetchMetroBoundaries(metro.id),
+      );
       const townships = normalizeBoundaries(rawBoundaries);
       console.log(`  ${townships.length} sub-places loaded`);
 
@@ -305,10 +325,11 @@ async function runNational(): Promise<void> {
         throw new Error(`No job centers configured for ${metro.id}`);
       }
 
-      console.log("Computing drive times...");
-      const nearestJobCenters = await getNearestJobCenter(
-        townships.map((township) => township.centroid),
-        jobCenters,
+      const nearestJobCenters = await timedStep("Computing drive times", () =>
+        getNearestJobCenter(
+          townships.map((township) => township.centroid),
+          jobCenters,
+        ),
       );
 
       const transitCollections = [
@@ -319,13 +340,15 @@ async function runNational(): Promise<void> {
 
       if (metro.id === "tshwane") {
         const bbox = getMetroBbox(metro.id);
-        console.log("Fetching A Re Yeng routes...");
-        console.log("Fetching Tshwane Bus Services routes via Overpass...");
-
-        const [rawAReYeng, tshwaneBusRaw] = await Promise.all([
+        const rawAReYeng = await timedStep("Fetching A Re Yeng routes", () =>
           fetchAReYengRoutes(),
-          fetchTshwaneBusRoutes(bbox),
-        ]);
+        );
+
+        const tshwaneBusRaw = await timedStep(
+          "Fetching Tshwane Bus Services routes via Overpass",
+          () => fetchTshwaneBusRoutes(bbox),
+          (raw) => `(${raw.elements.length} elements)`,
+        );
 
         const aReYeng =
           "elements" in rawAReYeng
@@ -341,26 +364,34 @@ async function runNational(): Promise<void> {
 
       if (metro.id === "johannesburg") {
         const bbox = getMetroBbox(metro.id);
-        console.log("Fetching Rea Vaya routes via Overpass...");
-
-        const reaVayaRaw = await fetchReaVayaRoutes(bbox);
+        const reaVayaRaw = await timedStep(
+          "Fetching Rea Vaya routes via Overpass",
+          () => fetchReaVayaRoutes(bbox),
+          (raw) => `(${raw.elements.length} elements)`,
+        );
         const reaVaya = normalizeReaVayaOverpass(reaVayaRaw);
         brtCollections.push(...reaVaya.features);
         transitCollections.push(reaVaya);
       }
 
       if (metro.id === "ekurhuleni") {
-        console.log("Fetching Ekurhuleni IRPTN routes...");
-
-        const ekurhuleniIrptnRaw = await fetchEkurhuleniIrptnRoutes();
+        const ekurhuleniIrptnRaw = await timedStep(
+          "Fetching Ekurhuleni IRPTN routes",
+          () => fetchEkurhuleniIrptnRoutes(),
+          (raw) => `(${raw.features.length} features)`,
+        );
         const ekurhuleniIrptn = normalizeEkurhuleniIrptn(ekurhuleniIrptnRaw);
         brtCollections.push(...ekurhuleniIrptn.features);
         transitCollections.push(ekurhuleniIrptn);
       }
 
-      const nearestTransitKm = computeNearestTransitKm(
-        townships.map((township) => township.centroid),
-        transitCollections,
+      const nearestTransitKm = await timedStep(
+        "Computing nearest-transit distances",
+        async () =>
+          computeNearestTransitKm(
+            townships.map((township) => township.centroid),
+            transitCollections,
+          ),
       );
 
       const townshipFeatures = joinTownshipData(

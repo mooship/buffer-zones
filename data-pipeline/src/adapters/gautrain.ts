@@ -7,6 +7,10 @@ import { getOverpassUrls } from "../constants/serviceUrls";
 
 const OVERPASS_TIMEOUT_MS = 45_000;
 const OVERPASS_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
+const OVERPASS_MIN_GAP_MS = 1_200;
+
+let overpassRequestQueue = Promise.resolve();
+let nextOverpassRequestAt = 0;
 
 function gautrainQuery(bbox: string): string {
   return `
@@ -153,6 +157,22 @@ function backoffDelayMs(attempt: number): number {
   return 2000 * attempt + jitter;
 }
 
+async function waitForOverpassSlot(): Promise<void> {
+  const waitTurn = overpassRequestQueue.then(async () => {
+    const waitMs = Math.max(0, nextOverpassRequestAt - Date.now());
+    if (waitMs > 0) {
+      await sleep(waitMs);
+    }
+    nextOverpassRequestAt = Date.now() + OVERPASS_MIN_GAP_MS;
+  });
+
+  overpassRequestQueue = waitTurn.catch(() => {
+    return;
+  });
+
+  await waitTurn;
+}
+
 // Retries with backoff on a single mirror before rotating to the next one
 // (see constants/serviceUrls.ts) on repeated 429/504 responses, since a
 // single public Overpass instance can be temporarily rate-limited or
@@ -170,10 +190,17 @@ export async function fetchOverpass(
       : null;
 
   const urls = getOverpassUrls();
-  const url =
-    urls[(attempt - 1) % urls.length] ??
-    urls[0] ??
-    "https://overpass-api.de/api/interpreter";
+  if (urls.length === 0) {
+    throw new Error("No Overpass endpoints are configured");
+  }
+
+  const url = urls[(attempt - 1) % urls.length];
+  if (!url) {
+    throw new Error("No Overpass endpoint available for this attempt");
+  }
+
+  await waitForOverpassSlot();
+
   const controller = new AbortController();
   const timeout = setTimeout(() => {
     controller.abort();

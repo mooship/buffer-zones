@@ -12,6 +12,8 @@ import type {
 const EKURHULENI_IRPTN_URL =
   "https://gis.ekurhuleni.gov.za/arcgis/rest/services/Ekurhuleni/Ekurhuleni_Transportation_Map_v1/MapServer/2/query";
 const PAGE_SIZE = 1000;
+const REQUEST_TIMEOUT_MS = 90_000;
+const PAGE_DELAY_MS = 1_500;
 
 interface RawIrptnProperties {
   OBJECTID?: number;
@@ -21,6 +23,10 @@ interface RawIrptnProperties {
 
 interface ArcGisGeoJsonResponse extends FeatureCollection {
   exceededTransferLimit?: boolean;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function createQueryUrl(resultOffset: number): string {
@@ -116,7 +122,21 @@ export async function fetchEkurhuleniIrptnRoutes(): Promise<FeatureCollection> {
   let exceededTransferLimit = false;
 
   do {
-    const response = await fetch(createQueryUrl(resultOffset));
+    if (resultOffset > 0) {
+      await sleep(PAGE_DELAY_MS);
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, REQUEST_TIMEOUT_MS);
+
+    const response = await fetch(createQueryUrl(resultOffset), {
+      signal: controller.signal,
+    }).finally(() => {
+      clearTimeout(timeout);
+    });
+
     if (!response.ok) {
       throw new Error(
         `Ekurhuleni IRPTN request failed with status ${response.status}`,
