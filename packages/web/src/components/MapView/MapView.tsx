@@ -221,6 +221,8 @@ export function MapView({
   return (
     <section
       className={styles.mapWrapper}
+      data-testid="map-view"
+      data-e2e="map-view"
       aria-label="Map of South African township access to job centres"
     >
       <MapContainer

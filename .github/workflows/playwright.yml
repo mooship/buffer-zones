@@ -42,7 +42,7 @@ jobs:
         run: npm run playwright:install --workspace @buffer-zones/web
 
       - name: Run Playwright tests
-        run: npm run test:e2e
+        run: npm run test:e2e:all --workspace @buffer-zones/web
 
       - name: Upload Playwright report
         if: always()
