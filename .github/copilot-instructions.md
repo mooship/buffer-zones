@@ -62,7 +62,6 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 - **Expanded `if` statements with braces**, never single-line/braceless conditionals. Biome's `useBlockStatements: error` rule enforces this — don't disable it.
 - **Accessibility is a priority**, not an afterthought — semantic HTML, keyboard navigation, focus states, and contrast should be considered in every UI change, in step with the Lighthouse-100 bar above.
 - **British English spelling and grammar** in all user-facing copy (UI text, labels, error messages) — not in code identifiers.
-- Use **superpowers** skills for their intended workflows (brainstorming before creative/design work, TDD, systematic debugging, etc.) rather than working ad hoc.
 
 ## Design system
 
