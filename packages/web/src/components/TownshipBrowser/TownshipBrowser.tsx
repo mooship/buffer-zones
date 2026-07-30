@@ -4,10 +4,23 @@ import {
   getTownshipGroup,
 } from "@buffer-zones/shared";
 import { Search } from "lucide-react";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { formatCommuteTime } from "../../utils/formatCommuteTime";
 import { TownshipPopup } from "../TownshipPopup/TownshipPopup";
 import styles from "./TownshipBrowser.module.css";
+
+interface GroupSummary {
+  name: string;
+  allFeatures: TownshipFeature[];
+  shortestTime: number | undefined;
+  longestTime: number | undefined;
+  subPlaceLabel: string;
+  searchName: string;
+}
+
+interface VisibleGroup extends GroupSummary {
+  features: TownshipFeature[];
+}
 
 interface TownshipBrowserProps {
   townships: TownshipFeature[];
@@ -25,53 +38,104 @@ export function TownshipBrowser({
   const deferredQuery = useDeferredValue(
     query.trim().toLocaleLowerCase("en-ZA"),
   );
-  const groups = TOWNSHIP_GROUPS.flatMap((name) => {
-    const allFeatures = townships.filter(
-      (township) =>
-        getTownshipGroup(township.properties.name, township.properties.id) ===
-        name,
-    );
-    const groupMatches = name
-      .toLocaleLowerCase("en-ZA")
-      .includes(deferredQuery);
-    const features = (
-      groupMatches
-        ? allFeatures
-        : allFeatures.filter((township) =>
+  const { groupSummaries, townshipSubPlaceCount, townshipById } =
+    useMemo(() => {
+      const grouped = new Map<string, TownshipFeature[]>();
+      const byId = new Map<string, TownshipFeature>();
+      let subPlaceCount = 0;
+
+      for (const township of townships) {
+        byId.set(township.properties.id, township);
+        const group = getTownshipGroup(
+          township.properties.name,
+          township.properties.id,
+        );
+        if (!group) {
+          continue;
+        }
+        subPlaceCount += 1;
+        const current = grouped.get(group);
+        if (current) {
+          current.push(township);
+        } else {
+          grouped.set(group, [township]);
+        }
+      }
+
+      const summaries = TOWNSHIP_GROUPS.flatMap((name) => {
+        const features = grouped.get(name);
+        if (!features || features.length === 0) {
+          return [];
+        }
+
+        const allFeatures = [...features].sort((first, second) => {
+          const timeDifference =
+            (second.properties.commuteMinutes ?? -1) -
+            (first.properties.commuteMinutes ?? -1);
+          return (
+            timeDifference ||
+            first.properties.name.localeCompare(second.properties.name, "en-ZA")
+          );
+        });
+        const times = allFeatures
+          .map((township) => township.properties.commuteMinutes)
+          .filter((time): time is number => time !== null)
+          .sort((first, second) => first - second);
+        const shortestTime = times[0];
+        const longestTime = times.at(-1);
+
+        return [
+          {
+            name,
+            allFeatures,
+            shortestTime,
+            longestTime,
+            subPlaceLabel: `${allFeatures.length} Census ${
+              allFeatures.length === 1 ? "sub-place" : "sub-places"
+            }`,
+            searchName: name.toLocaleLowerCase("en-ZA"),
+          },
+        ];
+      });
+
+      return {
+        groupSummaries: summaries,
+        townshipSubPlaceCount: subPlaceCount,
+        townshipById: byId,
+      };
+    }, [townships]);
+
+  const groups = useMemo<VisibleGroup[]>(() => {
+    return groupSummaries.flatMap((groupSummary) => {
+      const groupMatches = groupSummary.searchName.includes(deferredQuery);
+      const features = groupMatches
+        ? groupSummary.allFeatures
+        : groupSummary.allFeatures.filter((township) =>
             township.properties.name
               .toLocaleLowerCase("en-ZA")
               .includes(deferredQuery),
-          )
-    ).sort((first, second) => {
-      const timeDifference =
-        (second.properties.commuteMinutes ?? -1) -
-        (first.properties.commuteMinutes ?? -1);
-      return (
-        timeDifference ||
-        first.properties.name.localeCompare(second.properties.name, "en-ZA")
-      );
+          );
+
+      if (features.length === 0) {
+        return [];
+      }
+
+      return [{ ...groupSummary, features }];
     });
-    return features.length > 0 ? [{ name, features, allFeatures }] : [];
-  });
-  const resultCount = groups.reduce(
-    (count, group) => count + group.features.length,
-    0,
-  );
-  const townshipSubPlaceCount = townships.filter(
-    (township) =>
-      getTownshipGroup(township.properties.name, township.properties.id) !==
-      undefined,
-  ).length;
-  const includedGroupCount = TOWNSHIP_GROUPS.filter((name) =>
-    townships.some(
-      (township) =>
-        getTownshipGroup(township.properties.name, township.properties.id) ===
-        name,
-    ),
-  ).length;
-  const selectedTownship = townships.find(
-    (township) => township.properties.id === selectedTownshipId,
-  );
+  }, [deferredQuery, groupSummaries]);
+
+  const resultCount = useMemo(() => {
+    return groups.reduce((count, group) => count + group.features.length, 0);
+  }, [groups]);
+
+  const includedGroupCount = groupSummaries.length;
+
+  const selectedTownship = useMemo(() => {
+    if (!selectedTownshipId) {
+      return undefined;
+    }
+    return townshipById.get(selectedTownshipId);
+  }, [selectedTownshipId, townshipById]);
 
   useEffect(() => {
     if (!selectedTownship) {
@@ -135,21 +199,12 @@ export function TownshipBrowser({
         {groups.map((group) => {
           const isExpanded =
             deferredQuery.length > 0 || expandedGroup === group.name;
-          const times = group.allFeatures
-            .map((township) => township.properties.commuteMinutes)
-            .filter((time): time is number => time !== null)
-            .sort((first, second) => first - second);
-          const shortestTime = times[0];
-          const longestTime = times.at(-1);
-          const subPlaceLabel = `${group.allFeatures.length} Census ${
-            group.allFeatures.length === 1 ? "sub-place" : "sub-places"
-          }`;
           const timeRange =
-            shortestTime === undefined || longestTime === undefined
+            group.shortestTime === undefined || group.longestTime === undefined
               ? "No modeled time"
-              : shortestTime === longestTime
-                ? formatCommuteTime(shortestTime)
-                : `${formatCommuteTime(shortestTime)}–${formatCommuteTime(longestTime)}`;
+              : group.shortestTime === group.longestTime
+                ? formatCommuteTime(group.shortestTime)
+                : `${formatCommuteTime(group.shortestTime)}–${formatCommuteTime(group.longestTime)}`;
           return (
             <li key={group.name} className={styles.group}>
               <button
@@ -159,7 +214,7 @@ export function TownshipBrowser({
                 data-e2e={`township-group-${group.name.toLocaleLowerCase("en-ZA").replaceAll(" ", "-")}`}
                 aria-expanded={isExpanded}
                 aria-controls={`township-group-${group.name.replaceAll(" ", "-")}`}
-                aria-label={`Browse ${group.name}, ${subPlaceLabel}`}
+                aria-label={`Browse ${group.name}, ${group.subPlaceLabel}`}
                 onClick={() =>
                   setExpandedGroup((current) =>
                     current === group.name ? null : group.name,
@@ -168,7 +223,7 @@ export function TownshipBrowser({
               >
                 <span className={styles.groupName}>{group.name}</span>
                 <span className={styles.groupTime}>{timeRange}</span>
-                <span className={styles.groupMeta}>{subPlaceLabel}</span>
+                <span className={styles.groupMeta}>{group.subPlaceLabel}</span>
               </button>
               {isExpanded ? (
                 <ul
