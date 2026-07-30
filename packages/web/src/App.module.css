@@ -5,6 +5,8 @@
   overflow: hidden;
   --mobile-safe-top: env(safe-area-inset-top);
   --mobile-control-edge: 0.75rem;
+  --mobile-control-size: 44px;
+  --mobile-control-gap: 0.625rem;
   --mobile-control-bottom: calc(1.5rem + env(safe-area-inset-bottom));
 }
 
@@ -77,10 +79,15 @@
 .ticked {
   position: relative;
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--color-line) 40%, transparent);
-  background: color-mix(in srgb, var(--color-panel) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-line) 52%, transparent);
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--color-panel) 96%, var(--color-paper) 4%) 0%,
+    color-mix(in srgb, var(--color-panel) 90%, var(--color-ink) 10%) 100%
+  );
   backdrop-filter: blur(8px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--color-paper) 20%, transparent), var(--shadow-lg);
 }
 
 .titleBlock {
@@ -241,7 +248,9 @@
   letter-spacing: 0;
   text-transform: uppercase;
   cursor: pointer;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .panelTab[aria-selected="true"] {
@@ -286,22 +295,29 @@
   gap: 0.5rem;
   min-height: 48px;
   padding: 0 1.125rem;
-  border: none;
+  border: 1px solid color-mix(in srgb, var(--color-line) 52%, transparent);
   border-radius: 999px;
-  background: var(--color-surface);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-surface) 92%, var(--color-paper) 8%) 0%,
+    var(--color-surface) 100%
+  );
   color: var(--color-paper);
   font-family: var(--font-body);
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   cursor: pointer;
-  box-shadow: var(--shadow-md);
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--color-paper) 16%, transparent), var(--shadow-md);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform
+    0.15s ease;
 }
 
 .panelTrigger:hover {
   background: var(--color-surface-hover);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
 }
 
 .panelTrigger svg {
@@ -389,7 +405,7 @@
     top: calc(0.75rem + var(--mobile-safe-top));
     left: 0.75rem;
     padding: 0.625rem 3.5rem 0.625rem 0.875rem;
-    max-width: calc(100% - 1.5rem);
+    max-width: min(23rem, calc(100% - 1.5rem));
   }
 
   .eyebrow,
@@ -438,10 +454,36 @@
 
   .app[data-panel-open="true"][data-panel-size="medium"] .panelTrigger {
     bottom: calc(min(66dvh, 36rem) + 0.75rem + env(safe-area-inset-bottom));
+    display: grid;
+    place-items: center;
+    width: var(--mobile-control-size);
+    min-width: var(--mobile-control-size);
+    min-height: var(--mobile-control-size);
+    padding: 0;
+    line-height: 0;
+    overflow: hidden;
+    border-radius: 999px;
+    font-size: 0;
   }
 
   .app[data-panel-open="true"][data-panel-size="full"] .panelTrigger {
     bottom: calc(min(84dvh, 45rem) + 0.75rem + env(safe-area-inset-bottom));
+    display: grid;
+    place-items: center;
+    width: var(--mobile-control-size);
+    min-width: var(--mobile-control-size);
+    min-height: var(--mobile-control-size);
+    padding: 0;
+    line-height: 0;
+    overflow: hidden;
+    border-radius: 999px;
+    font-size: 0;
+  }
+
+  .app[data-panel-open="true"] .panelTrigger svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    stroke-width: 2.4;
   }
 
   .sheetHandleButton {
@@ -485,7 +527,27 @@
 
   .settingsControl {
     left: var(--mobile-control-edge);
-    bottom: calc(var(--mobile-control-bottom) + 3.75rem);
+    bottom: calc(
+      var(--mobile-control-bottom) +
+      var(--mobile-control-size) +
+      1rem
+    );
+  }
+
+  .panelTab {
+    padding: 0.625rem 0.5rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+@media (max-width: 360px) {
+  .panelTab {
+    min-height: 52px;
+    font-size: 0.5625rem;
+    line-height: 1.15;
+    white-space: normal;
+    text-wrap: balance;
   }
 }
 

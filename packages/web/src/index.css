@@ -18,9 +18,9 @@
   --radius-md: 12px;
   --radius-lg: 20px;
 
-  --shadow-sm: 0 1px 2px rgb(15 23 42 / 8%), 0 1px 3px rgb(15 23 42 / 6%);
-  --shadow-md: 0 2px 6px rgb(15 23 42 / 10%), 0 6px 16px rgb(15 23 42 / 8%);
-  --shadow-lg: 0 4px 12px rgb(15 23 42 / 12%), 0 10px 28px rgb(15 23 42 / 10%);
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 10%), 0 2px 4px rgb(15 23 42 / 8%);
+  --shadow-md: 0 3px 8px rgb(15 23 42 / 14%), 0 8px 20px rgb(15 23 42 / 10%);
+  --shadow-lg: 0 6px 16px rgb(15 23 42 / 18%), 0 14px 34px rgb(15 23 42 / 12%);
 
   color-scheme: light;
 }
@@ -38,9 +38,9 @@
     --color-surface: #33373e;
     --color-surface-hover: #3d424a;
 
-    --shadow-sm: 0 1px 2px rgb(0 0 0 / 45%), 0 1px 3px rgb(0 0 0 / 30%);
-    --shadow-md: 0 2px 6px rgb(0 0 0 / 45%), 0 6px 16px rgb(0 0 0 / 35%);
-    --shadow-lg: 0 4px 12px rgb(0 0 0 / 50%), 0 10px 28px rgb(0 0 0 / 40%);
+    --shadow-sm: 0 2px 4px rgb(0 0 0 / 40%), 0 1px 2px rgb(0 0 0 / 28%);
+    --shadow-md: 0 3px 8px rgb(0 0 0 / 45%), 0 8px 20px rgb(0 0 0 / 34%);
+    --shadow-lg: 0 7px 18px rgb(0 0 0 / 52%), 0 16px 36px rgb(0 0 0 / 40%);
 
     color-scheme: dark;
   }
@@ -58,9 +58,9 @@
   --color-surface: #33373e;
   --color-surface-hover: #3d424a;
 
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 45%), 0 1px 3px rgb(0 0 0 / 30%);
-  --shadow-md: 0 2px 6px rgb(0 0 0 / 45%), 0 6px 16px rgb(0 0 0 / 35%);
-  --shadow-lg: 0 4px 12px rgb(0 0 0 / 50%), 0 10px 28px rgb(0 0 0 / 40%);
+  --shadow-sm: 0 2px 4px rgb(0 0 0 / 40%), 0 1px 2px rgb(0 0 0 / 28%);
+  --shadow-md: 0 3px 8px rgb(0 0 0 / 45%), 0 8px 20px rgb(0 0 0 / 34%);
+  --shadow-lg: 0 7px 18px rgb(0 0 0 / 52%), 0 16px 36px rgb(0 0 0 / 40%);
 
   color-scheme: dark;
 }
@@ -163,7 +163,7 @@ body {
   }
 
   .leaflet-control-scale {
-    margin-bottom: 3.75rem !important;
+    margin-bottom: 4.5rem !important;
   }
 }
 
