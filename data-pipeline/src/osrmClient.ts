@@ -1,3 +1,4 @@
+import { hashKey, readJsonCache, writeJsonCache } from "./cache";
 import type { JobCenter } from "./constants/jobCenters";
 import { getOsrmBaseUrl } from "./constants/serviceUrls";
 
@@ -15,6 +16,7 @@ export interface NearestJobCenterResult {
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
 const OSRM_TIMEOUT_MS = 30_000;
+const OSRM_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 3;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,6 +35,19 @@ async function fetchTable(
     .map((_, i) => origins.length + i)
     .join(";");
   const url = `${getOsrmBaseUrl()}/table/v1/driving/${coords}?sources=${sourceIndices}&destinations=${destinationIndices}`;
+  const cacheKey = hashKey([
+    "osrm-table",
+    getOsrmBaseUrl(),
+    coords,
+    sourceIndices,
+    destinationIndices,
+  ]);
+  const cached =
+    attempt === 1
+      ? await readJsonCache<(number | null)[][]>("osrm", cacheKey, {
+          maxAgeMs: OSRM_CACHE_MAX_AGE_MS,
+        })
+      : null;
 
   const controller = new AbortController();
   const timeout = setTimeout(() => {
@@ -56,11 +71,16 @@ async function fetchTable(
     if (body.code !== "Ok") {
       throw new Error(`OSRM table returned code ${body.code}`);
     }
+    await writeJsonCache("osrm", cacheKey, body.durations);
     return body.durations;
   } catch (error) {
     if (attempt < 3) {
       await sleep(BATCH_DELAY_MS * attempt);
       return fetchTable(origins, destinations, attempt + 1);
+    }
+
+    if (cached) {
+      return cached;
     }
 
     if (error instanceof Error && error.name === "AbortError") {

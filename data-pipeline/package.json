@@ -6,8 +6,11 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "cache:clean": "tsx src/cleanCache.ts --all",
+    "cache:prune": "tsx src/cleanCache.ts",
     "display": "tsx src/buildDisplayData.ts",
     "run": "tsx src/run.ts",
+    "validate": "tsx src/validateOutput.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

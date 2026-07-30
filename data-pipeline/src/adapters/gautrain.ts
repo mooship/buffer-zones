@@ -2,9 +2,11 @@ import type {
   TransitLayerFeatureCollection,
   TransitStop,
 } from "@buffer-zones/shared";
+import { hashKey, readJsonCache, writeJsonCache } from "../cache";
 import { getOverpassUrls } from "../constants/serviceUrls";
 
 const OVERPASS_TIMEOUT_MS = 45_000;
+const OVERPASS_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
 
 function gautrainQuery(bbox: string): string {
   return `
@@ -146,6 +148,11 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function backoffDelayMs(attempt: number): number {
+  const jitter = Math.floor(Math.random() * 500);
+  return 2000 * attempt + jitter;
+}
+
 // Retries with backoff on a single mirror before rotating to the next one
 // (see constants/serviceUrls.ts) on repeated 429/504 responses, since a
 // single public Overpass instance can be temporarily rate-limited or
@@ -154,6 +161,14 @@ export async function fetchOverpass(
   query: string,
   attempt = 1,
 ): Promise<OverpassResponse> {
+  const cacheKey = hashKey(["overpass", query]);
+  const cached =
+    attempt === 1
+      ? await readJsonCache<OverpassResponse>("overpass", cacheKey, {
+          maxAgeMs: OVERPASS_CACHE_MAX_AGE_MS,
+        })
+      : null;
+
   const urls = getOverpassUrls();
   const url =
     urls[(attempt - 1) % urls.length] ??
@@ -179,21 +194,27 @@ export async function fetchOverpass(
         (response.status === 504 || response.status === 429) &&
         attempt < urls.length * 2
       ) {
-        await sleep(2000 * attempt);
+        await sleep(backoffDelayMs(attempt));
         return fetchOverpass(query, attempt + 1);
       }
       throw new Error(`Overpass query failed: ${response.status}`);
     }
 
-    return (await response.json()) as OverpassResponse;
+    const body = (await response.json()) as OverpassResponse;
+    await writeJsonCache("overpass", cacheKey, body);
+    return body;
   } catch (error) {
     const shouldRetry =
       (error instanceof Error && error.name === "AbortError") ||
       error instanceof TypeError;
 
     if (shouldRetry && attempt < urls.length * 2) {
-      await sleep(2000 * attempt);
+      await sleep(backoffDelayMs(attempt));
       return fetchOverpass(query, attempt + 1);
+    }
+
+    if (cached) {
+      return cached;
     }
 
     if (error instanceof Error && error.name === "AbortError") {

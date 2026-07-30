@@ -25,7 +25,13 @@ describe("township groups", () => {
       "Olievenhoutbosch",
     );
     expect(getTownshipGroup("Plastic View", "799014063")).toBe("Plastic View");
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(67);
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(104);
+  });
+
+  it("includes Ekurhuleni township and settlement aliases", () => {
+    expect(getTownshipGroup("Thembisa Ext 11", "797001001")).toBe("Tembisa");
+    expect(getTownshipGroup("Tokoza Ext 2", "797002001")).toBe("Thokoza");
+    expect(getTownshipGroup("Dukathole", "797003001")).toBe("Dukathole");
   });
 
   it("uses exact names for township areas inside mixed Census main places", () => {

@@ -5,14 +5,26 @@ export function getOsrmBaseUrl(): string {
 }
 
 // overpass-api.de alone rate-limits/times out under sustained use, so these
-// mirrors are tried in turn on failure. OVERPASS_URL overrides to one URL.
+// mirrors are tried in turn on failure. OVERPASS_URL overrides to one URL,
+// and OVERPASS_URLS can provide a comma-separated priority list.
 const PUBLIC_OVERPASS_MIRRORS: readonly string[] = [
-  "https://overpass-api.de/api/interpreter",
-  "https://overpass.kumi.systems/api/interpreter",
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
   "https://overpass.private.coffee/api/interpreter",
+  "https://overpass-api.de/api/interpreter",
 ];
 
 export function getOverpassUrls(): readonly string[] {
+  const listOverride = process.env.OVERPASS_URLS;
+  if (listOverride) {
+    const urls = listOverride
+      .split(",")
+      .map((value) => value.trim())
+      .filter((value) => value.length > 0);
+    if (urls.length > 0) {
+      return urls;
+    }
+  }
+
   const override = process.env.OVERPASS_URL;
   return override ? [override] : PUBLIC_OVERPASS_MIRRORS;
 }

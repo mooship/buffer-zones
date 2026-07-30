@@ -13786,8 +13786,8 @@
             -25.7486414
           ],
           [
-            28.2325531,
-            -25.7486156
+            28.2325478,
+            -25.748566
           ],
           [
             28.2325404,
@@ -43664,8 +43664,8 @@
             -25.8777615
           ],
           [
-            28.1615431,
-            -25.8778089
+            28.1615253,
+            -25.8778119
           ]
         ]
       }
@@ -43681,12 +43681,12 @@
         "type": "LineString",
         "coordinates": [
           [
-            28.1615431,
-            -25.8778089
+            28.1615253,
+            -25.8778119
           ],
           [
-            28.1615491,
-            -25.8777196
+            28.1615307,
+            -25.8777191
           ]
         ]
       }
@@ -43702,12 +43702,12 @@
         "type": "LineString",
         "coordinates": [
           [
-            28.1615491,
-            -25.8777196
+            28.1615307,
+            -25.8777191
           ],
           [
-            28.1615645,
-            -25.8772207
+            28.1615662,
+            -25.8771676
           ]
         ]
       }
@@ -43723,8 +43723,8 @@
         "type": "LineString",
         "coordinates": [
           [
-            28.1615645,
-            -25.8772207
+            28.1615662,
+            -25.8771676
           ],
           [
             28.1615927,
@@ -67236,2109 +67236,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0441461,
-            -26.1465973
-          ],
-          [
-            28.0441213,
-            -26.1464394
-          ],
-          [
-            28.04412,
-            -26.1463852
-          ],
-          [
-            28.044118,
-            -26.1462973
-          ],
-          [
-            28.044124,
-            -26.1462708
-          ],
-          [
-            28.0441397,
-            -26.1462448
-          ],
-          [
-            28.0441862,
-            -26.146201
-          ],
-          [
-            28.0442215,
-            -26.1461719
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0442215,
-            -26.1461719
-          ],
-          [
-            28.0441673,
-            -26.1458736
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0441673,
-            -26.1458736
-          ],
-          [
-            28.0441639,
-            -26.1458547
-          ],
-          [
-            28.044156,
-            -26.1458139
-          ],
-          [
-            28.0441034,
-            -26.145543
-          ],
-          [
-            28.044072,
-            -26.1453814
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.044072,
-            -26.1453814
-          ],
-          [
-            28.0439797,
-            -26.1449245
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0439797,
-            -26.1449245
-          ],
-          [
-            28.0439525,
-            -26.1447959
-          ],
-          [
-            28.043934,
-            -26.1447086
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.043934,
-            -26.1447086
-          ],
-          [
-            28.0438649,
-            -26.1444136
-          ],
-          [
-            28.0437493,
-            -26.1438377
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0437493,
-            -26.1438377
-          ],
-          [
-            28.0436761,
-            -26.1435071
-          ],
-          [
-            28.0436147,
-            -26.1431537
-          ],
-          [
-            28.0436119,
-            -26.1431376
-          ],
-          [
-            28.0435956,
-            -26.1430436
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0435956,
-            -26.1430436
-          ],
-          [
-            28.0435747,
-            -26.1429089
-          ],
-          [
-            28.0435444,
-            -26.142714
-          ],
-          [
-            28.0435294,
-            -26.1423776
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0435294,
-            -26.1423776
-          ],
-          [
-            28.0435368,
-            -26.1422155
-          ],
-          [
-            28.0435404,
-            -26.1421377
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0435404,
-            -26.1421377
-          ],
-          [
-            28.0435505,
-            -26.1420473
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0435505,
-            -26.1420473
-          ],
-          [
-            28.0435794,
-            -26.1419359
-          ],
-          [
-            28.0435903,
-            -26.141879
-          ],
-          [
-            28.0436432,
-            -26.1417442
-          ],
-          [
-            28.043757,
-            -26.1414937
-          ],
-          [
-            28.0439233,
-            -26.1412231
-          ],
-          [
-            28.0441133,
-            -26.1409099
-          ],
-          [
-            28.0441194,
-            -26.1408999
-          ],
-          [
-            28.0441743,
-            -26.1408175
-          ],
-          [
-            28.0443317,
-            -26.1405888
-          ],
-          [
-            28.0444181,
-            -26.1404653
-          ],
-          [
-            28.0448721,
-            -26.1398028
-          ],
-          [
-            28.0448744,
-            -26.1397997
-          ],
-          [
-            28.0449267,
-            -26.1397216
-          ],
-          [
-            28.0451788,
-            -26.1393454
-          ],
-          [
-            28.0454035,
-            -26.1390083
-          ],
-          [
-            28.0455699,
-            -26.1387557
-          ],
-          [
-            28.0455845,
-            -26.138735
-          ],
-          [
-            28.04561,
-            -26.1386991
-          ],
-          [
-            28.0456599,
-            -26.1386239
-          ],
-          [
-            28.0458561,
-            -26.1383334
-          ],
-          [
-            28.0459379,
-            -26.1382149
-          ],
-          [
-            28.0462061,
-            -26.1378115
-          ],
-          [
-            28.0463389,
-            -26.1376333
-          ],
-          [
-            28.0464267,
-            -26.1374955
-          ],
-          [
-            28.0465541,
-            -26.1373011
-          ],
-          [
-            28.0466527,
-            -26.1371512
-          ],
-          [
-            28.0468062,
-            -26.136911
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0468062,
-            -26.136911
-          ],
-          [
-            28.046874,
-            -26.1367972
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.046874,
-            -26.1367972
-          ],
-          [
-            28.0470452,
-            -26.1365162
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0470452,
-            -26.1365162
-          ],
-          [
-            28.0469808,
-            -26.1364881
-          ],
-          [
-            28.0464381,
-            -26.1362578
-          ],
-          [
-            28.0459754,
-            -26.136061
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0460291,
-            -26.1359785
-          ],
-          [
-            28.0459754,
-            -26.136061
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0461923,
-            -26.135632
-          ],
-          [
-            28.0460592,
-            -26.1359255
-          ],
-          [
-            28.0460291,
-            -26.1359785
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0461923,
-            -26.135632
-          ],
-          [
-            28.04619,
-            -26.1356095
-          ],
-          [
-            28.0462213,
-            -26.1355316
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0462213,
-            -26.1355316
-          ],
-          [
-            28.0462109,
-            -26.1355158
-          ],
-          [
-            28.0462057,
-            -26.135498
-          ],
-          [
-            28.046206,
-            -26.1354796
-          ],
-          [
-            28.0462112,
-            -26.1354635
-          ],
-          [
-            28.0462205,
-            -26.1354491
-          ],
-          [
-            28.0462321,
-            -26.1354383
-          ],
-          [
-            28.046246,
-            -26.1354301
-          ],
-          [
-            28.0462617,
-            -26.1354249
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0462617,
-            -26.1354249
-          ],
-          [
-            28.0462963,
-            -26.1353009
-          ],
-          [
-            28.0463171,
-            -26.1352793
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0465273,
-            -26.1343188
-          ],
-          [
-            28.0465231,
-            -26.1343381
-          ],
-          [
-            28.0464066,
-            -26.1348768
-          ],
-          [
-            28.0463171,
-            -26.1352793
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0465273,
-            -26.1343188
-          ],
-          [
-            28.0465105,
-            -26.1342303
-          ],
-          [
-            28.0464998,
-            -26.1341695
-          ],
-          [
-            28.0464951,
-            -26.1341256
-          ],
-          [
-            28.0464958,
-            -26.1340888
-          ],
-          [
-            28.0465045,
-            -26.1340353
-          ],
-          [
-            28.0465923,
-            -26.133644
-          ],
-          [
-            28.0466795,
-            -26.1332599
-          ],
-          [
-            28.0467016,
-            -26.1331599
-          ],
-          [
-            28.046709,
-            -26.1331419
-          ],
-          [
-            28.0467224,
-            -26.1331178
-          ],
-          [
-            28.0467466,
-            -26.1330865
-          ],
-          [
-            28.0467734,
-            -26.1330522
-          ],
-          [
-            28.0467874,
-            -26.1330299
-          ],
-          [
-            28.046831,
-            -26.1329703
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0471798,
-            -26.1314725
-          ],
-          [
-            28.0470763,
-            -26.1319038
-          ],
-          [
-            28.047055,
-            -26.1320011
-          ],
-          [
-            28.0469477,
-            -26.1324556
-          ],
-          [
-            28.0469247,
-            -26.1325555
-          ],
-          [
-            28.0468535,
-            -26.1328644
-          ],
-          [
-            28.046838,
-            -26.1329392
-          ],
-          [
-            28.046831,
-            -26.1329703
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0471798,
-            -26.1314725
-          ],
-          [
-            28.0471737,
-            -26.1314593
-          ],
-          [
-            28.0471648,
-            -26.1313657
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0471648,
-            -26.1313657
-          ],
-          [
-            28.0471277,
-            -26.1313431
-          ],
-          [
-            28.0471044,
-            -26.1313134
-          ],
-          [
-            28.0470939,
-            -26.1312784
-          ],
-          [
-            28.0470954,
-            -26.1312507
-          ],
-          [
-            28.0471049,
-            -26.1312245
-          ],
-          [
-            28.047127,
-            -26.1311965
-          ],
-          [
-            28.047158,
-            -26.1311766
-          ],
-          [
-            28.0471792,
-            -26.1311686
-          ],
-          [
-            28.0472172,
-            -26.1311654
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0472172,
-            -26.1311654
-          ],
-          [
-            28.0472334,
-            -26.1310505
-          ],
-          [
-            28.0472622,
-            -26.1310186
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0474981,
-            -26.1300043
-          ],
-          [
-            28.0474105,
-            -26.1303825
-          ],
-          [
-            28.0473651,
-            -26.1305774
-          ],
-          [
-            28.0472622,
-            -26.1310186
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0474981,
-            -26.1300043
-          ],
-          [
-            28.047473,
-            -26.1298399
-          ],
-          [
-            28.0474694,
-            -26.1298025
-          ],
-          [
-            28.0474683,
-            -26.1297675
-          ],
-          [
-            28.0475371,
-            -26.1294492
-          ],
-          [
-            28.0476316,
-            -26.1289978
-          ],
-          [
-            28.0476733,
-            -26.1288026
-          ],
-          [
-            28.047694,
-            -26.1287694
-          ],
-          [
-            28.0477121,
-            -26.1287472
-          ],
-          [
-            28.0477363,
-            -26.1287201
-          ],
-          [
-            28.0477611,
-            -26.1286846
-          ],
-          [
-            28.0477852,
-            -26.1286382
-          ],
-          [
-            28.0478063,
-            -26.1285911
-          ],
-          [
-            28.0478289,
-            -26.1285379
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.048003,
-            -26.1277728
-          ],
-          [
-            28.0479012,
-            -26.12822
-          ],
-          [
-            28.0478862,
-            -26.128286
-          ],
-          [
-            28.0478697,
-            -26.1283584
-          ],
-          [
-            28.0478289,
-            -26.1285379
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.048003,
-            -26.1277728
-          ],
-          [
-            28.0472491,
-            -26.1276352
-          ],
-          [
-            28.046289,
-            -26.12746
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0466774,
-            -26.1203285
-          ],
-          [
-            28.0466835,
-            -26.1204088
-          ],
-          [
-            28.0466643,
-            -26.1205128
-          ],
-          [
-            28.0466525,
-            -26.1206593
-          ],
-          [
-            28.0466378,
-            -26.1209001
-          ],
-          [
-            28.0465928,
-            -26.1217552
-          ],
-          [
-            28.0465896,
-            -26.1218147
-          ],
-          [
-            28.0465508,
-            -26.1225522
-          ],
-          [
-            28.0465213,
-            -26.1231127
-          ],
-          [
-            28.046488,
-            -26.1236315
-          ],
-          [
-            28.0464811,
-            -26.1238765
-          ],
-          [
-            28.0464609,
-            -26.1242603
-          ],
-          [
-            28.0463894,
-            -26.1256316
-          ],
-          [
-            28.0463857,
-            -26.1257036
-          ],
-          [
-            28.0463747,
-            -26.1259151
-          ],
-          [
-            28.0463222,
-            -26.1269214
-          ],
-          [
-            28.046289,
-            -26.12746
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0466774,
-            -26.1203285
-          ],
-          [
-            28.0468715,
-            -26.1202764
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0468715,
-            -26.1202764
-          ],
-          [
-            28.0469806,
-            -26.1202243
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0469806,
-            -26.1202243
-          ],
-          [
-            28.0470959,
-            -26.1201954
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0470959,
-            -26.1201954
-          ],
-          [
-            28.0471174,
-            -26.120261
-          ],
-          [
-            28.0471554,
-            -26.1203896
-          ],
-          [
-            28.0473394,
-            -26.1210032
-          ],
-          [
-            28.0477604,
-            -26.1221832
-          ],
-          [
-            28.047786,
-            -26.1222599
-          ],
-          [
-            28.0478347,
-            -26.122389
-          ],
-          [
-            28.0481908,
-            -26.1233999
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0481908,
-            -26.1233999
-          ],
-          [
-            28.048423,
-            -26.124095
-          ],
-          [
-            28.0484617,
-            -26.1242109
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0484617,
-            -26.1242109
-          ],
-          [
-            28.0484971,
-            -26.1243093
-          ],
-          [
-            28.0489512,
-            -26.1255722
-          ],
-          [
-            28.0490648,
-            -26.1258835
-          ],
-          [
-            28.0493555,
-            -26.1266754
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0493555,
-            -26.1266754
-          ],
-          [
-            28.0494121,
-            -26.1268528
-          ],
-          [
-            28.0494666,
-            -26.1270237
-          ],
-          [
-            28.0496242,
-            -26.1275176
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0496242,
-            -26.1275176
-          ],
-          [
-            28.0496565,
-            -26.1276142
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0496565,
-            -26.1276142
-          ],
-          [
-            28.0497425,
-            -26.1278722
-          ],
-          [
-            28.0497527,
-            -26.1280015
-          ],
-          [
-            28.0497548,
-            -26.1281259
-          ],
-          [
-            28.0497261,
-            -26.1283365
-          ],
-          [
-            28.0497163,
-            -26.128412
-          ],
-          [
-            28.0496895,
-            -26.1285297
-          ],
-          [
-            28.0496505,
-            -26.1287063
-          ],
-          [
-            28.0495796,
-            -26.1290268
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0495796,
-            -26.1290268
-          ],
-          [
-            28.0494721,
-            -26.1295133
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0494721,
-            -26.1295133
-          ],
-          [
-            28.0493932,
-            -26.1298784
-          ],
-          [
-            28.0493255,
-            -26.1301812
-          ],
-          [
-            28.0492182,
-            -26.1306074
-          ],
-          [
-            28.049186,
-            -26.1307254
-          ],
-          [
-            28.0491714,
-            -26.1307805
-          ],
-          [
-            28.0490948,
-            -26.1310704
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0490948,
-            -26.1310704
-          ],
-          [
-            28.0490673,
-            -26.1311992
-          ],
-          [
-            28.0489875,
-            -26.1315857
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0489875,
-            -26.1315857
-          ],
-          [
-            28.0492717,
-            -26.1316363
-          ],
-          [
-            28.0499826,
-            -26.1317627
-          ],
-          [
-            28.050686,
-            -26.1318909
-          ],
-          [
-            28.051026,
-            -26.1319535
-          ],
-          [
-            28.0511937,
-            -26.1319764
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0511937,
-            -26.1319764
-          ],
-          [
-            28.051368,
-            -26.1324761
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.051368,
-            -26.1324761
-          ],
-          [
-            28.0517397,
-            -26.1334832
-          ],
-          [
-            28.0517542,
-            -26.1335224
-          ],
-          [
-            28.0518857,
-            -26.1338786
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0518857,
-            -26.1338786
-          ],
-          [
-            28.0519578,
-            -26.1340781
-          ],
-          [
-            28.0519836,
-            -26.1341496
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0519836,
-            -26.1341496
-          ],
-          [
-            28.0520161,
-            -26.1342411
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0520161,
-            -26.1342411
-          ],
-          [
-            28.0520373,
-            -26.1343055
-          ],
-          [
-            28.0521606,
-            -26.1346803
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0521606,
-            -26.1346803
-          ],
-          [
-            28.0523528,
-            -26.1352718
-          ],
-          [
-            28.0524422,
-            -26.135536
-          ],
-          [
-            28.0526318,
-            -26.1360579
-          ],
-          [
-            28.052677,
-            -26.1362117
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.052677,
-            -26.1362117
-          ],
-          [
-            28.0523104,
-            -26.1362062
-          ],
-          [
-            28.0519514,
-            -26.1361904
-          ],
-          [
-            28.0516751,
-            -26.1361814
-          ],
-          [
-            28.0508785,
-            -26.1361504
-          ],
-          [
-            28.0505164,
-            -26.136141
-          ],
-          [
-            28.0498324,
-            -26.1361067
-          ],
-          [
-            28.0493993,
-            -26.1360953
-          ],
-          [
-            28.0487636,
-            -26.136073
-          ],
-          [
-            28.0481158,
-            -26.1360531
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0481158,
-            -26.1360531
-          ],
-          [
-            28.0480166,
-            -26.1360856
-          ],
-          [
-            28.0479287,
-            -26.1361121
-          ],
-          [
-            28.0478396,
-            -26.136138
-          ],
-          [
-            28.0477812,
-            -26.1361476
-          ],
-          [
-            28.0476914,
-            -26.1361537
-          ],
-          [
-            28.0475861,
-            -26.1361519
-          ],
-          [
-            28.0474721,
-            -26.1361434
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0474721,
-            -26.1361434
-          ],
-          [
-            28.0472615,
-            -26.1364637
-          ],
-          [
-            28.0472311,
-            -26.13651
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0472311,
-            -26.13651
-          ],
-          [
-            28.0471777,
-            -26.1365901
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0471777,
-            -26.1365901
-          ],
-          [
-            28.047057,
-            -26.1367737
-          ],
-          [
-            28.0468954,
-            -26.1370121
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0468954,
-            -26.1370121
-          ],
-          [
-            28.046762,
-            -26.137215
-          ],
-          [
-            28.0466963,
-            -26.1373167
-          ],
-          [
-            28.0466708,
-            -26.1373558
-          ],
-          [
-            28.0465367,
-            -26.1375479
-          ],
-          [
-            28.0464857,
-            -26.1376297
-          ],
-          [
-            28.0464415,
-            -26.1376923
-          ],
-          [
-            28.046365,
-            -26.1377983
-          ],
-          [
-            28.0460559,
-            -26.1382715
-          ],
-          [
-            28.0459908,
-            -26.1383629
-          ],
-          [
-            28.0457716,
-            -26.1386832
-          ],
-          [
-            28.0457367,
-            -26.1387404
-          ],
-          [
-            28.0456944,
-            -26.1388009
-          ],
-          [
-            28.0456807,
-            -26.1388205
-          ],
-          [
-            28.0455194,
-            -26.1390793
-          ],
-          [
-            28.0452519,
-            -26.1394646
-          ],
-          [
-            28.0450433,
-            -26.1397872
-          ],
-          [
-            28.0449968,
-            -26.1398579
-          ],
-          [
-            28.0449889,
-            -26.1398702
-          ],
-          [
-            28.0445408,
-            -26.1405472
-          ],
-          [
-            28.0444546,
-            -26.1406774
-          ],
-          [
-            28.0443267,
-            -26.1408703
-          ],
-          [
-            28.0442531,
-            -26.1409722
-          ],
-          [
-            28.0440094,
-            -26.1413216
-          ],
-          [
-            28.0439255,
-            -26.1414565
-          ],
-          [
-            28.0438826,
-            -26.1415263
-          ],
-          [
-            28.0438498,
-            -26.1415847
-          ],
-          [
-            28.0437941,
-            -26.1417093
-          ],
-          [
-            28.0437545,
-            -26.1418092
-          ],
-          [
-            28.0437157,
-            -26.1419242
-          ],
-          [
-            28.0437105,
-            -26.1419589
-          ],
-          [
-            28.0436955,
-            -26.1420601
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0436955,
-            -26.1420601
-          ],
-          [
-            28.0436775,
-            -26.1421402
-          ],
-          [
-            28.0436727,
-            -26.1422118
-          ],
-          [
-            28.0436654,
-            -26.1422757
-          ],
-          [
-            28.0436573,
-            -26.1423841
-          ],
-          [
-            28.0436593,
-            -26.1425298
-          ],
-          [
-            28.0436841,
-            -26.1427218
-          ],
-          [
-            28.0437189,
-            -26.1428967
-          ],
-          [
-            28.0437456,
-            -26.1430155
-          ],
-          [
-            28.0437646,
-            -26.1431074
-          ],
-          [
-            28.0437681,
-            -26.1431244
-          ],
-          [
-            28.0440956,
-            -26.1446923
-          ],
-          [
-            28.0441277,
-            -26.144867
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0441277,
-            -26.144867
-          ],
-          [
-            28.0442293,
-            -26.1453615
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0442293,
-            -26.1453615
-          ],
-          [
-            28.0444252,
-            -26.1463376
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284809",
-        "name": "Rosebank-Illovo(Gautrain RB3)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0444252,
-            -26.1463376
-          ],
-          [
-            28.0444828,
-            -26.1464334
-          ],
-          [
-            28.0445002,
-            -26.1464623
-          ],
-          [
-            28.0445129,
-            -26.1465038
-          ],
-          [
-            28.0445828,
-            -26.1467858
-          ],
-          [
-            28.0445944,
-            -26.1468462
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "relation/3284813",
         "name": "Rosebank - Hyde Park (Gautrain RB4)",
         "network": "Gautrain Bus"
@@ -78204,16 +76101,16 @@
             -25.968564
           ],
           [
-            28.1344984,
-            -25.9685046
+            28.1345081,
+            -25.9684416
           ],
           [
-            28.1345728,
-            -25.9683285
+            28.1345446,
+            -25.9683191
           ],
           [
-            28.1345914,
-            -25.9682774
+            28.1345616,
+            -25.9682629
           ],
           [
             28.134866,
@@ -85267,8 +83164,8 @@
             -25.7486414
           ],
           [
-            28.2325531,
-            -25.7486156
+            28.2325478,
+            -25.748566
           ],
           [
             28.2325404,
@@ -101342,8 +99239,46 @@
             -26.0598589
           ],
           [
-            28.0591626,
-            -26.0590935
+            28.0591913,
+            -26.0596321
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19452565",
+        "name": "Sandton - Rivonia (Gautrain S3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0591913,
+            -26.0596321
+          ],
+          [
+            28.059143,
+            -26.0587243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/19452565",
+        "name": "Sandton - Rivonia (Gautrain S3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.059143,
+            -26.0587243
           ],
           [
             28.0591226,
@@ -106335,6 +104270,2109 @@
           [
             27.9849076,
             -26.0955672
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0441461,
+            -26.1465973
+          ],
+          [
+            28.0441213,
+            -26.1464394
+          ],
+          [
+            28.04412,
+            -26.1463852
+          ],
+          [
+            28.044118,
+            -26.1462973
+          ],
+          [
+            28.044124,
+            -26.1462708
+          ],
+          [
+            28.0441397,
+            -26.1462448
+          ],
+          [
+            28.0441862,
+            -26.146201
+          ],
+          [
+            28.0442215,
+            -26.1461719
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0442215,
+            -26.1461719
+          ],
+          [
+            28.0441673,
+            -26.1458736
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0441673,
+            -26.1458736
+          ],
+          [
+            28.0441639,
+            -26.1458547
+          ],
+          [
+            28.044156,
+            -26.1458139
+          ],
+          [
+            28.0441034,
+            -26.145543
+          ],
+          [
+            28.044072,
+            -26.1453814
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.044072,
+            -26.1453814
+          ],
+          [
+            28.0439797,
+            -26.1449245
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0439797,
+            -26.1449245
+          ],
+          [
+            28.0439525,
+            -26.1447959
+          ],
+          [
+            28.043934,
+            -26.1447086
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.043934,
+            -26.1447086
+          ],
+          [
+            28.0438649,
+            -26.1444136
+          ],
+          [
+            28.0437493,
+            -26.1438377
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0437493,
+            -26.1438377
+          ],
+          [
+            28.0436761,
+            -26.1435071
+          ],
+          [
+            28.0436147,
+            -26.1431537
+          ],
+          [
+            28.0436119,
+            -26.1431376
+          ],
+          [
+            28.0435956,
+            -26.1430436
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0435956,
+            -26.1430436
+          ],
+          [
+            28.0435747,
+            -26.1429089
+          ],
+          [
+            28.0435444,
+            -26.142714
+          ],
+          [
+            28.0435294,
+            -26.1423776
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0435294,
+            -26.1423776
+          ],
+          [
+            28.0435368,
+            -26.1422155
+          ],
+          [
+            28.0435404,
+            -26.1421377
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0435404,
+            -26.1421377
+          ],
+          [
+            28.0435505,
+            -26.1420473
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0435505,
+            -26.1420473
+          ],
+          [
+            28.0435794,
+            -26.1419359
+          ],
+          [
+            28.0435903,
+            -26.141879
+          ],
+          [
+            28.0436432,
+            -26.1417442
+          ],
+          [
+            28.043757,
+            -26.1414937
+          ],
+          [
+            28.0439233,
+            -26.1412231
+          ],
+          [
+            28.0441133,
+            -26.1409099
+          ],
+          [
+            28.0441194,
+            -26.1408999
+          ],
+          [
+            28.0441743,
+            -26.1408175
+          ],
+          [
+            28.0443317,
+            -26.1405888
+          ],
+          [
+            28.0444181,
+            -26.1404653
+          ],
+          [
+            28.0448721,
+            -26.1398028
+          ],
+          [
+            28.0448744,
+            -26.1397997
+          ],
+          [
+            28.0449267,
+            -26.1397216
+          ],
+          [
+            28.0451788,
+            -26.1393454
+          ],
+          [
+            28.0454035,
+            -26.1390083
+          ],
+          [
+            28.0455699,
+            -26.1387557
+          ],
+          [
+            28.0455845,
+            -26.138735
+          ],
+          [
+            28.04561,
+            -26.1386991
+          ],
+          [
+            28.0456599,
+            -26.1386239
+          ],
+          [
+            28.0458561,
+            -26.1383334
+          ],
+          [
+            28.0459379,
+            -26.1382149
+          ],
+          [
+            28.0462061,
+            -26.1378115
+          ],
+          [
+            28.0463389,
+            -26.1376333
+          ],
+          [
+            28.0464267,
+            -26.1374955
+          ],
+          [
+            28.0465541,
+            -26.1373011
+          ],
+          [
+            28.0466527,
+            -26.1371512
+          ],
+          [
+            28.0468062,
+            -26.136911
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0468062,
+            -26.136911
+          ],
+          [
+            28.046874,
+            -26.1367972
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.046874,
+            -26.1367972
+          ],
+          [
+            28.0470452,
+            -26.1365162
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0470452,
+            -26.1365162
+          ],
+          [
+            28.0469808,
+            -26.1364881
+          ],
+          [
+            28.0464381,
+            -26.1362578
+          ],
+          [
+            28.0459754,
+            -26.136061
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0460291,
+            -26.1359785
+          ],
+          [
+            28.0459754,
+            -26.136061
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0461923,
+            -26.135632
+          ],
+          [
+            28.0460592,
+            -26.1359255
+          ],
+          [
+            28.0460291,
+            -26.1359785
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0461923,
+            -26.135632
+          ],
+          [
+            28.04619,
+            -26.1356095
+          ],
+          [
+            28.0462213,
+            -26.1355316
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0462213,
+            -26.1355316
+          ],
+          [
+            28.0462109,
+            -26.1355158
+          ],
+          [
+            28.0462057,
+            -26.135498
+          ],
+          [
+            28.046206,
+            -26.1354796
+          ],
+          [
+            28.0462112,
+            -26.1354635
+          ],
+          [
+            28.0462205,
+            -26.1354491
+          ],
+          [
+            28.0462321,
+            -26.1354383
+          ],
+          [
+            28.046246,
+            -26.1354301
+          ],
+          [
+            28.0462617,
+            -26.1354249
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0462617,
+            -26.1354249
+          ],
+          [
+            28.0462963,
+            -26.1353009
+          ],
+          [
+            28.0463171,
+            -26.1352793
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0465273,
+            -26.1343188
+          ],
+          [
+            28.0465231,
+            -26.1343381
+          ],
+          [
+            28.0464066,
+            -26.1348768
+          ],
+          [
+            28.0463171,
+            -26.1352793
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0465273,
+            -26.1343188
+          ],
+          [
+            28.0465105,
+            -26.1342303
+          ],
+          [
+            28.0464998,
+            -26.1341695
+          ],
+          [
+            28.0464951,
+            -26.1341256
+          ],
+          [
+            28.0464958,
+            -26.1340888
+          ],
+          [
+            28.0465045,
+            -26.1340353
+          ],
+          [
+            28.0465923,
+            -26.133644
+          ],
+          [
+            28.0466795,
+            -26.1332599
+          ],
+          [
+            28.0467016,
+            -26.1331599
+          ],
+          [
+            28.046709,
+            -26.1331419
+          ],
+          [
+            28.0467224,
+            -26.1331178
+          ],
+          [
+            28.0467466,
+            -26.1330865
+          ],
+          [
+            28.0467734,
+            -26.1330522
+          ],
+          [
+            28.0467874,
+            -26.1330299
+          ],
+          [
+            28.046831,
+            -26.1329703
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0471798,
+            -26.1314725
+          ],
+          [
+            28.0470763,
+            -26.1319038
+          ],
+          [
+            28.047055,
+            -26.1320011
+          ],
+          [
+            28.0469477,
+            -26.1324556
+          ],
+          [
+            28.0469247,
+            -26.1325555
+          ],
+          [
+            28.0468535,
+            -26.1328644
+          ],
+          [
+            28.046838,
+            -26.1329392
+          ],
+          [
+            28.046831,
+            -26.1329703
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0471798,
+            -26.1314725
+          ],
+          [
+            28.0471737,
+            -26.1314593
+          ],
+          [
+            28.0471648,
+            -26.1313657
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0471648,
+            -26.1313657
+          ],
+          [
+            28.0471277,
+            -26.1313431
+          ],
+          [
+            28.0471044,
+            -26.1313134
+          ],
+          [
+            28.0470939,
+            -26.1312784
+          ],
+          [
+            28.0470954,
+            -26.1312507
+          ],
+          [
+            28.0471049,
+            -26.1312245
+          ],
+          [
+            28.047127,
+            -26.1311965
+          ],
+          [
+            28.047158,
+            -26.1311766
+          ],
+          [
+            28.0471792,
+            -26.1311686
+          ],
+          [
+            28.0472172,
+            -26.1311654
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0472172,
+            -26.1311654
+          ],
+          [
+            28.0472334,
+            -26.1310505
+          ],
+          [
+            28.0472622,
+            -26.1310186
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0474981,
+            -26.1300043
+          ],
+          [
+            28.0474105,
+            -26.1303825
+          ],
+          [
+            28.0473651,
+            -26.1305774
+          ],
+          [
+            28.0472622,
+            -26.1310186
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0474981,
+            -26.1300043
+          ],
+          [
+            28.047473,
+            -26.1298399
+          ],
+          [
+            28.0474694,
+            -26.1298025
+          ],
+          [
+            28.0474683,
+            -26.1297675
+          ],
+          [
+            28.0475371,
+            -26.1294492
+          ],
+          [
+            28.0476316,
+            -26.1289978
+          ],
+          [
+            28.0476733,
+            -26.1288026
+          ],
+          [
+            28.047694,
+            -26.1287694
+          ],
+          [
+            28.0477121,
+            -26.1287472
+          ],
+          [
+            28.0477363,
+            -26.1287201
+          ],
+          [
+            28.0477611,
+            -26.1286846
+          ],
+          [
+            28.0477852,
+            -26.1286382
+          ],
+          [
+            28.0478063,
+            -26.1285911
+          ],
+          [
+            28.0478289,
+            -26.1285379
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.048003,
+            -26.1277728
+          ],
+          [
+            28.0479012,
+            -26.12822
+          ],
+          [
+            28.0478862,
+            -26.128286
+          ],
+          [
+            28.0478697,
+            -26.1283584
+          ],
+          [
+            28.0478289,
+            -26.1285379
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.048003,
+            -26.1277728
+          ],
+          [
+            28.0472491,
+            -26.1276352
+          ],
+          [
+            28.046289,
+            -26.12746
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159998",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0466774,
+            -26.1203285
+          ],
+          [
+            28.0466835,
+            -26.1204088
+          ],
+          [
+            28.0466643,
+            -26.1205128
+          ],
+          [
+            28.0466525,
+            -26.1206593
+          ],
+          [
+            28.0466378,
+            -26.1209001
+          ],
+          [
+            28.0465928,
+            -26.1217552
+          ],
+          [
+            28.0465896,
+            -26.1218147
+          ],
+          [
+            28.0465508,
+            -26.1225522
+          ],
+          [
+            28.0465213,
+            -26.1231127
+          ],
+          [
+            28.046488,
+            -26.1236315
+          ],
+          [
+            28.0464811,
+            -26.1238765
+          ],
+          [
+            28.0464609,
+            -26.1242603
+          ],
+          [
+            28.0463894,
+            -26.1256316
+          ],
+          [
+            28.0463857,
+            -26.1257036
+          ],
+          [
+            28.0463747,
+            -26.1259151
+          ],
+          [
+            28.0463222,
+            -26.1269214
+          ],
+          [
+            28.046289,
+            -26.12746
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0466774,
+            -26.1203285
+          ],
+          [
+            28.0468715,
+            -26.1202764
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0468715,
+            -26.1202764
+          ],
+          [
+            28.0469806,
+            -26.1202243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0469806,
+            -26.1202243
+          ],
+          [
+            28.0470959,
+            -26.1201954
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0470959,
+            -26.1201954
+          ],
+          [
+            28.0471174,
+            -26.120261
+          ],
+          [
+            28.0471554,
+            -26.1203896
+          ],
+          [
+            28.0473394,
+            -26.1210032
+          ],
+          [
+            28.0477604,
+            -26.1221832
+          ],
+          [
+            28.047786,
+            -26.1222599
+          ],
+          [
+            28.0478347,
+            -26.122389
+          ],
+          [
+            28.0481908,
+            -26.1233999
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0481908,
+            -26.1233999
+          ],
+          [
+            28.048423,
+            -26.124095
+          ],
+          [
+            28.0484617,
+            -26.1242109
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0484617,
+            -26.1242109
+          ],
+          [
+            28.0484971,
+            -26.1243093
+          ],
+          [
+            28.0489512,
+            -26.1255722
+          ],
+          [
+            28.0490648,
+            -26.1258835
+          ],
+          [
+            28.0493555,
+            -26.1266754
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0493555,
+            -26.1266754
+          ],
+          [
+            28.0494121,
+            -26.1268528
+          ],
+          [
+            28.0494666,
+            -26.1270237
+          ],
+          [
+            28.0496242,
+            -26.1275176
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0496242,
+            -26.1275176
+          ],
+          [
+            28.0496565,
+            -26.1276142
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0496565,
+            -26.1276142
+          ],
+          [
+            28.0497425,
+            -26.1278722
+          ],
+          [
+            28.0497527,
+            -26.1280015
+          ],
+          [
+            28.0497548,
+            -26.1281259
+          ],
+          [
+            28.0497261,
+            -26.1283365
+          ],
+          [
+            28.0497163,
+            -26.128412
+          ],
+          [
+            28.0496895,
+            -26.1285297
+          ],
+          [
+            28.0496505,
+            -26.1287063
+          ],
+          [
+            28.0495796,
+            -26.1290268
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0495796,
+            -26.1290268
+          ],
+          [
+            28.0494721,
+            -26.1295133
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0494721,
+            -26.1295133
+          ],
+          [
+            28.0493932,
+            -26.1298784
+          ],
+          [
+            28.0493255,
+            -26.1301812
+          ],
+          [
+            28.0492182,
+            -26.1306074
+          ],
+          [
+            28.049186,
+            -26.1307254
+          ],
+          [
+            28.0491714,
+            -26.1307805
+          ],
+          [
+            28.0490948,
+            -26.1310704
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0490948,
+            -26.1310704
+          ],
+          [
+            28.0490673,
+            -26.1311992
+          ],
+          [
+            28.0489875,
+            -26.1315857
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0489875,
+            -26.1315857
+          ],
+          [
+            28.0492717,
+            -26.1316363
+          ],
+          [
+            28.0499826,
+            -26.1317627
+          ],
+          [
+            28.050686,
+            -26.1318909
+          ],
+          [
+            28.051026,
+            -26.1319535
+          ],
+          [
+            28.0511937,
+            -26.1319764
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0511937,
+            -26.1319764
+          ],
+          [
+            28.051368,
+            -26.1324761
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.051368,
+            -26.1324761
+          ],
+          [
+            28.0517397,
+            -26.1334832
+          ],
+          [
+            28.0517542,
+            -26.1335224
+          ],
+          [
+            28.0518857,
+            -26.1338786
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0518857,
+            -26.1338786
+          ],
+          [
+            28.0519578,
+            -26.1340781
+          ],
+          [
+            28.0519836,
+            -26.1341496
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0519836,
+            -26.1341496
+          ],
+          [
+            28.0520161,
+            -26.1342411
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0520161,
+            -26.1342411
+          ],
+          [
+            28.0520373,
+            -26.1343055
+          ],
+          [
+            28.0521606,
+            -26.1346803
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0521606,
+            -26.1346803
+          ],
+          [
+            28.0523528,
+            -26.1352718
+          ],
+          [
+            28.0524422,
+            -26.135536
+          ],
+          [
+            28.0526318,
+            -26.1360579
+          ],
+          [
+            28.052677,
+            -26.1362117
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.052677,
+            -26.1362117
+          ],
+          [
+            28.0523104,
+            -26.1362062
+          ],
+          [
+            28.0519514,
+            -26.1361904
+          ],
+          [
+            28.0516751,
+            -26.1361814
+          ],
+          [
+            28.0508785,
+            -26.1361504
+          ],
+          [
+            28.0505164,
+            -26.136141
+          ],
+          [
+            28.0498324,
+            -26.1361067
+          ],
+          [
+            28.0493993,
+            -26.1360953
+          ],
+          [
+            28.0487636,
+            -26.136073
+          ],
+          [
+            28.0481158,
+            -26.1360531
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0481158,
+            -26.1360531
+          ],
+          [
+            28.0480166,
+            -26.1360856
+          ],
+          [
+            28.0479287,
+            -26.1361121
+          ],
+          [
+            28.0478396,
+            -26.136138
+          ],
+          [
+            28.0477812,
+            -26.1361476
+          ],
+          [
+            28.0476914,
+            -26.1361537
+          ],
+          [
+            28.0475861,
+            -26.1361519
+          ],
+          [
+            28.0474721,
+            -26.1361434
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0474721,
+            -26.1361434
+          ],
+          [
+            28.0472615,
+            -26.1364637
+          ],
+          [
+            28.0472311,
+            -26.13651
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0472311,
+            -26.13651
+          ],
+          [
+            28.0471777,
+            -26.1365901
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0471777,
+            -26.1365901
+          ],
+          [
+            28.047057,
+            -26.1367737
+          ],
+          [
+            28.0468954,
+            -26.1370121
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0468954,
+            -26.1370121
+          ],
+          [
+            28.046762,
+            -26.137215
+          ],
+          [
+            28.0466963,
+            -26.1373167
+          ],
+          [
+            28.0466708,
+            -26.1373558
+          ],
+          [
+            28.0465367,
+            -26.1375479
+          ],
+          [
+            28.0464857,
+            -26.1376297
+          ],
+          [
+            28.0464415,
+            -26.1376923
+          ],
+          [
+            28.046365,
+            -26.1377983
+          ],
+          [
+            28.0460559,
+            -26.1382715
+          ],
+          [
+            28.0459908,
+            -26.1383629
+          ],
+          [
+            28.0457716,
+            -26.1386832
+          ],
+          [
+            28.0457367,
+            -26.1387404
+          ],
+          [
+            28.0456944,
+            -26.1388009
+          ],
+          [
+            28.0456807,
+            -26.1388205
+          ],
+          [
+            28.0455194,
+            -26.1390793
+          ],
+          [
+            28.0452519,
+            -26.1394646
+          ],
+          [
+            28.0450433,
+            -26.1397872
+          ],
+          [
+            28.0449968,
+            -26.1398579
+          ],
+          [
+            28.0449889,
+            -26.1398702
+          ],
+          [
+            28.0445408,
+            -26.1405472
+          ],
+          [
+            28.0444546,
+            -26.1406774
+          ],
+          [
+            28.0443267,
+            -26.1408703
+          ],
+          [
+            28.0442531,
+            -26.1409722
+          ],
+          [
+            28.0440094,
+            -26.1413216
+          ],
+          [
+            28.0439255,
+            -26.1414565
+          ],
+          [
+            28.0438826,
+            -26.1415263
+          ],
+          [
+            28.0438498,
+            -26.1415847
+          ],
+          [
+            28.0437941,
+            -26.1417093
+          ],
+          [
+            28.0437545,
+            -26.1418092
+          ],
+          [
+            28.0437157,
+            -26.1419242
+          ],
+          [
+            28.0437105,
+            -26.1419589
+          ],
+          [
+            28.0436955,
+            -26.1420601
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0436955,
+            -26.1420601
+          ],
+          [
+            28.0436775,
+            -26.1421402
+          ],
+          [
+            28.0436727,
+            -26.1422118
+          ],
+          [
+            28.0436654,
+            -26.1422757
+          ],
+          [
+            28.0436573,
+            -26.1423841
+          ],
+          [
+            28.0436593,
+            -26.1425298
+          ],
+          [
+            28.0436841,
+            -26.1427218
+          ],
+          [
+            28.0437189,
+            -26.1428967
+          ],
+          [
+            28.0437456,
+            -26.1430155
+          ],
+          [
+            28.0437646,
+            -26.1431074
+          ],
+          [
+            28.0437681,
+            -26.1431244
+          ],
+          [
+            28.0440956,
+            -26.1446923
+          ],
+          [
+            28.0441277,
+            -26.144867
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0441277,
+            -26.144867
+          ],
+          [
+            28.0442293,
+            -26.1453615
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0442293,
+            -26.1453615
+          ],
+          [
+            28.0444252,
+            -26.1463376
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21159999",
+        "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0444252,
+            -26.1463376
+          ],
+          [
+            28.0444828,
+            -26.1464334
+          ],
+          [
+            28.0445002,
+            -26.1464623
+          ],
+          [
+            28.0445129,
+            -26.1465038
+          ],
+          [
+            28.0445828,
+            -26.1467858
+          ],
+          [
+            28.0445944,
+            -26.1468462
           ]
         ]
       }

@@ -8,6 +8,6 @@ export function getAppTagline(): string {
 
 export const DATA_SOURCES = [
   "Boundaries: Statistics South Africa Census 2011 sub-places",
-  "Transit: OpenStreetMap contributors, City of Tshwane, City of Johannesburg",
+  "Transit: OpenStreetMap contributors, City of Tshwane, City of Johannesburg, City of Ekurhuleni",
   "Modeled car routing: OSRM",
 ];
