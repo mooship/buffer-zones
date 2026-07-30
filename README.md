@@ -26,6 +26,8 @@ npm run dev --workspace @buffer-zones/web
 ```
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) covers the full setup, the project conventions, and how to propose data changes. [`SECURITY.md`](SECURITY.md) covers reporting a suspected vulnerability privately.
+[`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) sets expectations for respectful,
+inclusive participation in project spaces.
 
 ## License
 

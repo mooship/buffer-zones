@@ -8,6 +8,9 @@ improvements, and corrections to how areas are classified or described.
 Please read [`README.md`](README.md) first for what the project is, what v1
 deliberately does not claim, and where the documentation lives.
 
+This project follows [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md). By
+participating, you agree to uphold those standards.
+
 ## Getting set up
 
 ```bash
