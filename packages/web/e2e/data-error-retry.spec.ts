@@ -6,7 +6,7 @@ test.describe("data load error and retry", () => {
   }) => {
     let requestCount = 0;
     await page.route(
-      "**/data/tshwane/townships.display.v1.geojson*",
+      "**/data/national/townships.display.v1.geojson*",
       (route) => {
         requestCount += 1;
         if (requestCount === 1) {

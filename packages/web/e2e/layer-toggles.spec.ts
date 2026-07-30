@@ -7,23 +7,23 @@ test.describe("layer toggles", () => {
     await page.goto("/");
     await page.getByRole("tab", { name: "Map layers" }).click();
 
-    const gautrainCheckbox = page.getByRole("checkbox", {
-      name: "Gautrain",
+    const rapidRailCheckbox = page.getByRole("checkbox", {
+      name: "Rapid Rail",
       exact: true,
     });
-    await expect(gautrainCheckbox).not.toBeChecked();
+    await expect(rapidRailCheckbox).not.toBeChecked();
 
     const paneBefore = page.locator(".leaflet-transit-pane path");
     await expect(paneBefore).toHaveCount(0);
 
-    await gautrainCheckbox.check();
-    await expect(gautrainCheckbox).toBeChecked();
+    await rapidRailCheckbox.check();
+    await expect(rapidRailCheckbox).toBeChecked();
     await expect(
       page.locator(".leaflet-transit-pane path").first(),
     ).toBeVisible();
 
-    await gautrainCheckbox.uncheck();
-    await expect(gautrainCheckbox).not.toBeChecked();
+    await rapidRailCheckbox.uncheck();
+    await expect(rapidRailCheckbox).not.toBeChecked();
     await expect(page.locator(".leaflet-transit-pane path")).toHaveCount(0);
   });
 });
