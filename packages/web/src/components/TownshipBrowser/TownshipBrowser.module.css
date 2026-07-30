@@ -66,13 +66,29 @@
 }
 
 .sortSelect {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   min-height: 44px;
-  padding: 0 0.75rem;
+  padding: 0 2rem 0 0.75rem;
   border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
   background: var(--color-ink);
+  background-image: linear-gradient(
+      45deg,
+      transparent 50%,
+      var(--color-paper) 50%
+    ), linear-gradient(135deg, var(--color-paper) 50%, transparent 50%);
+  background-position: calc(100% - 1rem) calc(50% - 2px), calc(100% - 0.7rem)
+    calc(50% - 2px);
+  background-repeat: no-repeat;
+  background-size: 0.3rem 0.3rem, 0.3rem 0.3rem;
   color: var(--color-paper);
   font: inherit;
+}
+
+.sortSelect:hover {
+  border-color: var(--color-paper);
 }
 
 .sortSelect:focus-visible {
