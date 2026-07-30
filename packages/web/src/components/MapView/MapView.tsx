@@ -272,7 +272,6 @@ export function MapView({
         bounds={NATIONAL_BOUNDS}
         boundsOptions={boundsOptions}
         className={styles.map}
-        preferCanvas
         scrollWheelZoom
         zoomControl={false}
       >
