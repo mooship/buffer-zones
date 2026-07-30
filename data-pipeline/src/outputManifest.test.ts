@@ -21,6 +21,16 @@ function collection(featureCount: number): string {
 }
 
 describe("output manifest", () => {
+  it("fails validation when the manifest file is missing", async () => {
+    const dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-manifest-"));
+    await mkdir(dir, { recursive: true });
+
+    const issues = await validateOutputDirectory(dir);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0]).toContain("Missing or unreadable manifest");
+  });
+
   it("builds and validates a complete output directory", async () => {
     const dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-manifest-"));
     await mkdir(dir, { recursive: true });
@@ -127,5 +137,111 @@ describe("output manifest", () => {
       "utf8",
     );
     expect(manifestRaw.length).toBeGreaterThan(0);
+  });
+
+  it("fails validation when an output file has invalid JSON", async () => {
+    const dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-manifest-"));
+    await mkdir(dir, { recursive: true });
+
+    for (const rule of OUTPUT_LAYER_RULES) {
+      await writeFile(
+        resolve(dir, rule.fileName),
+        collection(Math.max(1, rule.minFeatures)),
+      );
+    }
+
+    const networkCoverage = Object.fromEntries(
+      REQUIRED_TRANSIT_NETWORKS.map((network) => [network, 2]),
+    );
+    const manifest = await buildOutputManifest(
+      dir,
+      ["tshwane", "johannesburg"],
+      networkCoverage,
+    );
+    await writeFile(
+      resolve(dir, "manifest.v1.json"),
+      JSON.stringify(manifest, null, 2),
+    );
+
+    const firstFile = OUTPUT_LAYER_RULES[0]?.fileName;
+    if (!firstFile) {
+      throw new Error("Expected at least one output layer rule");
+    }
+    await writeFile(resolve(dir, firstFile), "not-json");
+
+    const issues = await validateOutputDirectory(dir);
+
+    expect(issues).toContain(`Invalid GeoJSON JSON content: ${firstFile}`);
+  });
+
+  it("fails validation when the manifest is missing a file entry", async () => {
+    const dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-manifest-"));
+    await mkdir(dir, { recursive: true });
+
+    for (const rule of OUTPUT_LAYER_RULES) {
+      await writeFile(
+        resolve(dir, rule.fileName),
+        collection(Math.max(1, rule.minFeatures)),
+      );
+    }
+
+    const networkCoverage = Object.fromEntries(
+      REQUIRED_TRANSIT_NETWORKS.map((network) => [network, 2]),
+    );
+    const manifest = await buildOutputManifest(
+      dir,
+      ["tshwane", "johannesburg"],
+      networkCoverage,
+    );
+
+    const firstFile = OUTPUT_LAYER_RULES[0]?.fileName;
+    if (!firstFile) {
+      throw new Error("Expected at least one output layer rule");
+    }
+
+    await writeFile(
+      resolve(dir, "manifest.v1.json"),
+      JSON.stringify(
+        {
+          ...manifest,
+          files: manifest.files.filter((entry) => entry.fileName !== firstFile),
+        },
+        null,
+        2,
+      ),
+    );
+
+    const issues = await validateOutputDirectory(dir);
+
+    expect(issues).toContain(`Manifest missing file entry for ${firstFile}`);
+  });
+
+  it("fails validation when manifest version is unsupported", async () => {
+    const dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-manifest-"));
+    await mkdir(dir, { recursive: true });
+
+    for (const rule of OUTPUT_LAYER_RULES) {
+      await writeFile(
+        resolve(dir, rule.fileName),
+        collection(Math.max(1, rule.minFeatures)),
+      );
+    }
+
+    const networkCoverage = Object.fromEntries(
+      REQUIRED_TRANSIT_NETWORKS.map((network) => [network, 2]),
+    );
+    const manifest = await buildOutputManifest(
+      dir,
+      ["tshwane", "johannesburg"],
+      networkCoverage,
+    );
+    await writeFile(
+      resolve(dir, "manifest.v1.json"),
+      JSON.stringify({ ...manifest, version: 2 }, null, 2),
+    );
+
+    const issues = await validateOutputDirectory(dir);
+
+    expect(issues).toContain("Unsupported manifest version: 2");
   });
 });
