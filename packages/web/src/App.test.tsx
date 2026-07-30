@@ -44,7 +44,14 @@ import { App } from "./App";
 import { useMapUiStore } from "./stores/useMapUiStore";
 
 describe("App", () => {
+  const originalInnerWidth = window.innerWidth;
+
   beforeEach(() => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: originalInnerWidth,
+      writable: true,
+    });
     useMapUiStore.getState().reset();
     dataMocks.getTownships.mockReset().mockResolvedValue([
       {
@@ -64,6 +71,14 @@ describe("App", () => {
     dataMocks.fetchAreas.mockReset().mockResolvedValue({
       type: "FeatureCollection",
       features: [],
+    });
+  });
+
+  afterEach(() => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: originalInnerWidth,
+      writable: true,
     });
   });
   it("provides skip navigation and a main landmark", async () => {
@@ -256,6 +271,143 @@ describe("App", () => {
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );
+  });
+
+  it("provides one-tap mobile legend access while the panel is closed", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    render(<App />);
+
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+
+    const exploreButton = screen.getByRole("button", { name: /explore/i });
+    expect(exploreButton).toHaveAttribute("aria-expanded", "false");
+
+    const openLegend = screen.getByRole("button", { name: /open map legend/i });
+    expect(openLegend).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(openLegend);
+
+    expect(openLegend).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("mobile-legend-content")).toBeVisible();
+    expect(
+      screen.getByRole("list", { name: /active map layers legend/i }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("mobile-legend-close"));
+    expect(
+      screen.queryByTestId("mobile-legend-content"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("lets mobile users snap the panel between medium and full height", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    render(<App />);
+
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+
+    const openPanel = screen.getByRole("button", { name: /explore/i });
+    fireEvent.click(openPanel);
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle");
+
+    expect(panel).toHaveAttribute("data-panel-size", "medium");
+    expect(handle).toHaveAttribute("aria-pressed", "false");
+
+    fireEvent.click(handle);
+
+    expect(panel).toHaveAttribute("data-panel-size", "full");
+    expect(handle).toHaveAttribute("aria-pressed", "true");
+
+    fireEvent.click(handle);
+
+    expect(panel).toHaveAttribute("data-panel-size", "medium");
+    expect(handle).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("supports drag gestures on the mobile sheet handle", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    render(<App />);
+
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 7,
+      clientY: 220,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 7,
+      clientY: 150,
+    });
+
+    await waitFor(() =>
+      expect(panel).toHaveAttribute("data-panel-dragging", "true"),
+    );
+    expect(handle).toHaveAttribute("data-dragging", "true");
+
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 7,
+      clientY: 130,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-size", "full");
+    await waitFor(() =>
+      expect(panel).toHaveAttribute("data-panel-dragging", "false"),
+    );
+    expect(panel).toHaveAttribute("data-panel-drag-direction", "none");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 8,
+      clientY: 140,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 8,
+      clientY: 210,
+    });
+
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 8,
+      clientY: 230,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-size", "medium");
   });
 
   it("shows a data error and retries the validated requests", async () => {

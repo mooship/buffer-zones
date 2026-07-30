@@ -3,7 +3,9 @@ import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, Minus, Plus, X } from "lucide-react";
 import {
+  type CSSProperties,
   type KeyboardEvent,
+  type PointerEvent,
   Suspense,
   lazy,
   useEffect,
@@ -14,6 +16,7 @@ import styles from "./App.module.css";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { Legend } from "./components/Legend/Legend";
+import { MobileLegend } from "./components/MobileLegend/MobileLegend";
 import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import {
@@ -37,6 +40,9 @@ const MapView = lazy(async () => {
 });
 
 const PANEL_VIEWS = ["story", "places", "layers"] as const;
+const MOBILE_BREAKPOINT_PX = 768;
+const SHEET_DRAG_THRESHOLD_PX = 36;
+const SHEET_DRAG_PREVIEW_LIMIT_PX = 96;
 
 const PANEL_LABELS: Record<PanelView, string> = {
   story: "The pattern",
@@ -54,6 +60,9 @@ export function App() {
   const [townshipAreas, setTownshipAreas] = useState<Feature[]>([]);
   const [dataError, setDataError] = useState(false);
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
+  const [mobileSheetDragOffset, setMobileSheetDragOffset] = useState(0);
+  const [mobileSheetDragging, setMobileSheetDragging] = useState(false);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
@@ -71,6 +80,10 @@ export function App() {
   const themePreference = useThemePreference();
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const suppressNextHandleClickRef = useRef(false);
+  const activeSheetPointerIdRef = useRef<number | null>(null);
+  const pendingSheetDragOffsetRef = useRef(0);
+  const sheetDragFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -103,13 +116,123 @@ export function App() {
     };
   }, [loadAttempt]);
 
+  useEffect(() => {
+    if (!panelOpen) {
+      setMobilePanelExpanded(false);
+      setMobileSheetDragging(false);
+      setMobileSheetDragOffset(0);
+      activeSheetPointerIdRef.current = null;
+    }
+  }, [panelOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (sheetDragFrameRef.current !== null) {
+        cancelAnimationFrame(sheetDragFrameRef.current);
+      }
+    };
+  }, []);
+
+  const mobileSheetDragDirection =
+    mobileSheetDragOffset < -4
+      ? "up"
+      : mobileSheetDragOffset > 4
+        ? "down"
+        : "none";
+  const mobilePanelDragStyle = {
+    "--panel-drag-offset": `${mobileSheetDragOffset}px`,
+  } as CSSProperties;
+
+  function scheduleSheetDragOffset(nextOffset: number) {
+    pendingSheetDragOffsetRef.current = nextOffset;
+    if (sheetDragFrameRef.current !== null) {
+      return;
+    }
+    sheetDragFrameRef.current = requestAnimationFrame(() => {
+      setMobileSheetDragOffset(pendingSheetDragOffsetRef.current);
+      sheetDragFrameRef.current = null;
+    });
+  }
+
   function handlePanelToggle() {
     if (panelOpen) {
       setPanelOpen(false);
       requestAnimationFrame(() => panelTriggerRef.current?.focus());
       return;
     }
+    setMobilePanelExpanded(false);
     setPanelOpen(true);
+  }
+
+  function handleSheetHeightToggle() {
+    if (suppressNextHandleClickRef.current) {
+      suppressNextHandleClickRef.current = false;
+      return;
+    }
+    if (window.innerWidth > MOBILE_BREAKPOINT_PX) {
+      return;
+    }
+    setMobilePanelExpanded((value) => !value);
+  }
+
+  function handleSheetHandlePointerDown(
+    event: PointerEvent<HTMLButtonElement>,
+  ) {
+    if (window.innerWidth > MOBILE_BREAKPOINT_PX) {
+      return;
+    }
+    if (event.pointerType === "mouse" && event.button !== 0) {
+      return;
+    }
+
+    const handleElement = event.currentTarget;
+    const startY = event.clientY;
+    activeSheetPointerIdRef.current = event.pointerId;
+    setMobileSheetDragging(true);
+    scheduleSheetDragOffset(0);
+    handleElement.setPointerCapture(event.pointerId);
+
+    function handlePointerMove(pointerEvent: globalThis.PointerEvent) {
+      if (pointerEvent.pointerId !== activeSheetPointerIdRef.current) {
+        return;
+      }
+      const delta = pointerEvent.clientY - startY;
+      const clampedDelta = Math.max(
+        -SHEET_DRAG_PREVIEW_LIMIT_PX,
+        Math.min(SHEET_DRAG_PREVIEW_LIMIT_PX, delta),
+      );
+      scheduleSheetDragOffset(clampedDelta);
+    }
+
+    function cleanup() {
+      setMobileSheetDragging(false);
+      scheduleSheetDragOffset(0);
+      activeSheetPointerIdRef.current = null;
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointercancel", cleanup);
+      if (handleElement.hasPointerCapture(event.pointerId)) {
+        handleElement.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    function handlePointerUp(pointerEvent: globalThis.PointerEvent) {
+      if (pointerEvent.pointerId !== activeSheetPointerIdRef.current) {
+        return;
+      }
+      const delta = pointerEvent.clientY - startY;
+      if (Math.abs(delta) < SHEET_DRAG_THRESHOLD_PX) {
+        cleanup();
+        return;
+      }
+      suppressNextHandleClickRef.current = true;
+      setMobilePanelExpanded(delta < 0);
+      cleanup();
+    }
+
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointercancel", cleanup);
   }
 
   function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
@@ -137,7 +260,13 @@ export function App() {
   }
 
   return (
-    <div className={styles.app}>
+    <div
+      className={styles.app}
+      data-panel-open={panelOpen ? "true" : "false"}
+      data-panel-size={mobilePanelExpanded ? "full" : "medium"}
+      data-panel-dragging={mobileSheetDragging ? "true" : "false"}
+      data-panel-drag-direction={mobileSheetDragDirection}
+    >
       <a className={styles.skipLink} href="#map-information">
         Skip to map information
       </a>
@@ -224,12 +353,35 @@ export function App() {
         {panelOpen ? "Close" : "Explore"}
       </button>
 
+      <MobileLegend visibleLayerIds={visibleLayerIds} suppressed={panelOpen} />
+
       <aside
         id="map-controls"
         className={clsx(styles.panel, styles.ticked)}
+        data-testid="panel-container"
+        data-e2e="panel-container"
+        data-panel-size={mobilePanelExpanded ? "full" : "medium"}
+        data-panel-dragging={mobileSheetDragging ? "true" : "false"}
+        data-panel-drag-direction={mobileSheetDragDirection}
+        style={mobilePanelDragStyle}
         hidden={!panelOpen}
       >
-        <span className={styles.sheetHandle} aria-hidden="true" />
+        <button
+          type="button"
+          className={styles.sheetHandleButton}
+          data-testid="panel-sheet-handle"
+          data-e2e="panel-sheet-handle"
+          data-dragging={mobileSheetDragging ? "true" : "false"}
+          data-drag-direction={mobileSheetDragDirection}
+          aria-pressed={mobilePanelExpanded}
+          aria-label={
+            mobilePanelExpanded ? "Reduce panel height" : "Expand panel height"
+          }
+          onPointerDown={handleSheetHandlePointerDown}
+          onClick={handleSheetHeightToggle}
+        >
+          <span className={styles.sheetHandle} aria-hidden="true" />
+        </button>
         <div
           className={styles.panelTabs}
           role="tablist"
@@ -265,6 +417,7 @@ export function App() {
           role="tabpanel"
           aria-labelledby={`panel-tab-${panelView}`}
           className={styles.panelViewport}
+          data-view={panelView}
         >
           {panelView === "story" ? (
             <section className={styles.section}>

@@ -147,7 +147,11 @@ body {
 @media (max-width: 768px) {
   .leaflet-control-zoom {
     margin-right: 0.75rem !important;
-    transform: translateY(-5rem);
+    transform: translateY(-9.5rem);
+  }
+
+  .leaflet-control-scale {
+    margin-bottom: 3.75rem !important;
   }
 }
 

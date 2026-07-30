@@ -36,7 +36,7 @@ function createInitialState() {
     basemap: "street" as const,
     panelOpen: window.innerWidth > MOBILE_BREAKPOINT_PX,
     panelView: "story" as const,
-    titleExpanded: true,
+    titleExpanded: window.innerWidth > MOBILE_BREAKPOINT_PX,
     selectedTownshipId: null,
   };
 }

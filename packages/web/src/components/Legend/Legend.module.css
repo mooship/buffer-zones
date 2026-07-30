@@ -3,6 +3,10 @@
   gap: 1rem;
 }
 
+.groups[data-compact="true"] {
+  gap: 0.75rem;
+}
+
 @media (min-width: 769px) {
   .groups {
     grid-template-columns: 1fr 1fr;
@@ -80,4 +84,14 @@
 .label {
   font-size: 0.8125rem;
   color: var(--color-paper);
+}
+
+.groups[data-compact="true"] .label {
+  font-size: 0.75rem;
+}
+
+.empty {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
 }

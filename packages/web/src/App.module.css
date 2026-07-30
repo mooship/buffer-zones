@@ -3,6 +3,8 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
+  --mobile-control-edge: 0.75rem;
+  --mobile-control-bottom: calc(1.5rem + env(safe-area-inset-bottom));
 }
 
 .mapLoading {
@@ -178,12 +180,22 @@
   gap: 1.5rem;
 }
 
+.sheetHandleButton {
+  display: none;
+}
+
 .panelViewport {
   min-height: 0;
   padding-right: 0.25rem;
   overflow-y: auto;
   scrollbar-color: var(--color-line) transparent;
   scrollbar-width: thin;
+}
+
+.panelViewport[data-view="story"],
+.panelViewport[data-view="places"],
+.panelViewport[data-view="layers"] {
+  animation: panelViewportIn 180ms ease;
 }
 
 .panelViewport::-webkit-scrollbar {
@@ -304,7 +316,7 @@
   position: absolute;
   bottom: 3.25rem;
   left: 1.25rem;
-  z-index: 1100;
+  z-index: 1240;
 }
 
 .panelSources {
@@ -386,17 +398,14 @@
   .framing {
     max-width: 30ch;
     margin-top: 0.4rem;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
+    line-height: 1.45;
   }
 
   .panelTrigger {
     top: auto;
-    right: 0.75rem;
-    bottom: 1.75rem;
-  }
-
-  .panelTrigger[aria-expanded="true"] {
-    bottom: calc(46dvh + 0.75rem);
+    right: var(--mobile-control-edge);
+    bottom: var(--mobile-control-bottom);
   }
 
   .panel {
@@ -406,12 +415,60 @@
     bottom: 0;
     width: auto;
     max-width: none;
-    height: min(62dvh, 34rem);
+    height: min(66dvh, 36rem);
     max-height: none;
     padding: 0.5rem 1rem max(1.25rem, env(safe-area-inset-bottom));
     gap: 0.75rem;
     border-inline: 0;
     border-bottom: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    transform: translateY(calc(var(--panel-drag-offset, 0px) * 0.14));
+    transition: height 220ms ease, transform 130ms linear, box-shadow 130ms ease;
+  }
+
+  .panel[data-panel-dragging="true"] {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .panel[data-panel-size="full"] {
+    height: min(84dvh, 45rem);
+  }
+
+  .app[data-panel-open="true"][data-panel-size="medium"] .panelTrigger {
+    bottom: calc(min(66dvh, 36rem) + 0.75rem + env(safe-area-inset-bottom));
+  }
+
+  .app[data-panel-open="true"][data-panel-size="full"] .panelTrigger {
+    bottom: calc(min(84dvh, 45rem) + 0.75rem + env(safe-area-inset-bottom));
+  }
+
+  .sheetHandleButton {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .sheetHandleButton[data-dragging="true"] .sheetHandle {
+    width: 3rem;
+  }
+
+  .sheetHandleButton[data-drag-direction="up"] .sheetHandle {
+    background: color-mix(in srgb, var(--color-ochre) 38%, var(--color-line));
+  }
+
+  .sheetHandleButton[data-drag-direction="down"] .sheetHandle {
+    background: color-mix(in srgb, var(--color-paper) 20%, var(--color-line));
+  }
+
+  .sheetHandleButton:focus-visible {
+    outline: 2px solid var(--color-paper);
+    outline-offset: 2px;
   }
 
   .sheetHandle {
@@ -421,15 +478,23 @@
     margin: 0 auto;
     border-radius: 999px;
     background: var(--color-line);
-  }
-
-  .panelTrigger[aria-expanded="true"] {
-    right: 0.75rem;
-    bottom: calc(min(62dvh, 34rem) + 0.75rem);
+    transition: width 120ms ease, background-color 120ms ease;
   }
 
   .settingsControl {
-    left: 0.75rem;
-    bottom: 3rem;
+    left: var(--mobile-control-edge);
+    bottom: var(--mobile-control-bottom);
+  }
+}
+
+@keyframes panelViewportIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

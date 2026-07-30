@@ -1,7 +1,12 @@
 export const E2E = {
   panelToggle: "panel-toggle",
+  panelContainer: "panel-container",
+  panelSheetHandle: "panel-sheet-handle",
   panelTablist: "panel-tablist",
   panelLegend: "panel-legend",
+  mobileLegendTrigger: "mobile-legend-trigger",
+  mobileLegendContent: "mobile-legend-content",
+  mobileLegendClose: "mobile-legend-close",
   panelTab: {
     story: "panel-tab-story",
     places: "panel-tab-places",
