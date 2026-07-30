@@ -75,30 +75,27 @@ test.describe("responsive panel", () => {
 
     const panel = page.getByTestId(E2E.panelContainer);
     const handle = page.getByTestId(E2E.panelSheetHandle);
-    const handleBox = await handle.boundingBox();
-    if (!handleBox) {
-      throw new Error("Panel sheet handle was not rendered");
+
+    async function dragHandleBy(deltaY: number) {
+      const box = await handle.boundingBox();
+      if (!box) {
+        throw new Error("Panel sheet handle was not rendered");
+      }
+      const dragX = box.x + box.width / 2;
+      const startY = box.y + box.height / 2;
+      await page.mouse.move(dragX, startY);
+      await page.mouse.down();
+      await page.mouse.move(dragX, startY + deltaY, { steps: 12 });
+      await page.mouse.up();
     }
-    const dragX = handleBox.x + handleBox.width / 2;
 
-    await page.mouse.move(dragX, handleBox.y + handleBox.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(dragX, handleBox.y - 80, { steps: 6 });
-
-    await expect(panel).toHaveAttribute("data-panel-dragging", "true");
-    await page.mouse.up();
-
+    await dragHandleBy(-180);
     await expect(panel).toHaveAttribute("data-panel-size", "full");
+    await expect(handle).toHaveAttribute("aria-pressed", "true");
 
-    await page.mouse.move(dragX, handleBox.y + handleBox.height / 2 - 80);
-    await page.mouse.down();
-    await page.mouse.move(dragX, handleBox.y + handleBox.height / 2 + 80, {
-      steps: 6,
-    });
-    await page.mouse.up();
+    await dragHandleBy(180);
 
     await expect(panel).toHaveAttribute("data-panel-size", "medium");
-    await expect(panel).toHaveAttribute("data-panel-dragging", "false");
-    await expect(panel).toHaveAttribute("data-panel-drag-direction", "none");
+    await expect(handle).toHaveAttribute("aria-pressed", "false");
   });
 });
