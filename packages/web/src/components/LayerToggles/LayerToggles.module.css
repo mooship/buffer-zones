@@ -1,3 +1,37 @@
+.groups {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.group {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.groupTitle {
+  margin: 0;
+  padding: 0 0.625rem;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.groupHint {
+  margin: 0;
+  padding: 0 0.625rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+}
+
+.divider {
+  height: 1px;
+  margin: 0.125rem 0.625rem;
+  background: color-mix(in srgb, var(--color-line) 45%, transparent);
+}
+
 .list {
   list-style: none;
   margin: 0;

@@ -31,4 +31,22 @@ describe("useMapUiStore", () => {
       "rapid-rail",
     );
   });
+
+  it("keeps modeled car time and nearest-transit mutually exclusive", () => {
+    act(() => {
+      useMapUiStore.getState().toggleLayer("nearest-transit");
+    });
+    expect(useMapUiStore.getState().visibleLayerIds).toContain(
+      "nearest-transit",
+    );
+    expect(useMapUiStore.getState().visibleLayerIds).not.toContain("townships");
+
+    act(() => {
+      useMapUiStore.getState().toggleLayer("townships");
+    });
+    expect(useMapUiStore.getState().visibleLayerIds).toContain("townships");
+    expect(useMapUiStore.getState().visibleLayerIds).not.toContain(
+      "nearest-transit",
+    );
+  });
 });

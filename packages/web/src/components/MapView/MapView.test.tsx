@@ -180,6 +180,30 @@ describe("MapView", () => {
     ).toBe(true);
   });
 
+  it("renders dissolved township borders when nearest-transit is active", () => {
+    const townshipAreas = [
+      {
+        type: "Feature",
+        properties: { name: "Mamelodi" },
+        geometry: null,
+      },
+    ] as never;
+
+    render(
+      <MapView
+        townships={townships}
+        townshipAreas={townshipAreas}
+        visibleLayerIds={["nearest-transit"]}
+      />,
+    );
+
+    expect(
+      screen
+        .getAllByTestId("geojson-layer")
+        .some((layer) => layer.dataset.pane === "township-outlines"),
+    ).toBe(true);
+  });
+
   it("switches tile source when the satellite basemap is selected", () => {
     render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
 

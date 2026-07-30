@@ -207,7 +207,9 @@ export function MapView({
   const tileAttribution = useDarkTiles
     ? BASEMAPS.street.darkAttribution
     : tiles.attribution;
-  const showTownships = visibleLayerIds.includes("townships");
+  const showAreaLabels =
+    visibleLayerIds.includes("townships") ||
+    visibleLayerIds.includes("nearest-transit");
   const townshipAreaData: FeatureCollection = {
     type: "FeatureCollection",
     features: townshipAreas,
@@ -240,7 +242,7 @@ export function MapView({
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />
         <Pane name={TRANSIT_PANE} style={{ zIndex: 450 }} />
-        {showTownships && townshipAreas.length > 0 ? (
+        {showAreaLabels && townshipAreas.length > 0 ? (
           <GeoJSON
             data={townshipAreaData}
             pathOptions={{

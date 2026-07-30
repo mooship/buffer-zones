@@ -4,6 +4,11 @@ import type { Basemap } from "../constants/basemaps";
 import { getLayerDefinitions } from "../layers/registry";
 
 const MOBILE_BREAKPOINT_PX = 768;
+const ACCESS_LAYER_IDS: readonly LayerId[] = ["townships", "nearest-transit"];
+
+function isAccessLayer(id: LayerId): boolean {
+  return ACCESS_LAYER_IDS.includes(id);
+}
 
 export type PanelView = "story" | "places" | "layers";
 
@@ -39,11 +44,28 @@ function createInitialState() {
 export const useMapUiStore = create<MapUiState>()((set) => ({
   ...createInitialState(),
   toggleLayer: (id) =>
-    set((state) => ({
-      visibleLayerIds: state.visibleLayerIds.includes(id)
-        ? state.visibleLayerIds.filter((existing) => existing !== id)
-        : [...state.visibleLayerIds, id],
-    })),
+    set((state) => {
+      if (state.visibleLayerIds.includes(id)) {
+        return {
+          visibleLayerIds: state.visibleLayerIds.filter(
+            (existing) => existing !== id,
+          ),
+        };
+      }
+
+      if (isAccessLayer(id)) {
+        return {
+          visibleLayerIds: [
+            ...state.visibleLayerIds.filter(
+              (existing) => !isAccessLayer(existing),
+            ),
+            id,
+          ],
+        };
+      }
+
+      return { visibleLayerIds: [...state.visibleLayerIds, id] };
+    }),
   setBasemap: (basemap) => set({ basemap }),
   setPanelOpen: (panelOpen) => set({ panelOpen }),
   setPanelView: (panelView) => set({ panelView }),
