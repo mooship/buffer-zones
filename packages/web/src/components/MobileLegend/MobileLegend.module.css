@@ -69,6 +69,26 @@
     );
   }
 
+  .container[data-panel-open="true"][data-panel-size="medium"] {
+    bottom: calc(
+      min(66dvh, 36rem) +
+      0.75rem +
+      env(safe-area-inset-bottom) +
+      var(--mobile-control-size) +
+      var(--mobile-control-gap)
+    );
+  }
+
+  .container[data-panel-open="true"][data-panel-size="full"] {
+    bottom: calc(
+      min(84dvh, 45rem) +
+      0.75rem +
+      env(safe-area-inset-bottom) +
+      var(--mobile-control-size) +
+      var(--mobile-control-gap)
+    );
+  }
+
   .sheet {
     left: auto;
     right: 0;

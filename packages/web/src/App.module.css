@@ -86,8 +86,7 @@
     color-mix(in srgb, var(--color-panel) 90%, var(--color-ink) 10%) 100%
   );
   backdrop-filter: blur(8px);
-  box-shadow: inset 0 1px 0
-    color-mix(in srgb, var(--color-paper) 20%, transparent), var(--shadow-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 .titleBlock {
@@ -281,6 +280,10 @@
   height: 1.125rem;
 }
 
+.panelTriggerLabel {
+  display: inline;
+}
+
 .settingsControl {
   position: absolute;
   bottom: 3.25rem;
@@ -411,10 +414,11 @@
     min-width: var(--mobile-control-size);
     min-height: var(--mobile-control-size);
     padding: 0;
-    line-height: 0;
     overflow: hidden;
     border-radius: 999px;
-    font-size: 0;
+    gap: 0;
+    justify-content: center;
+    align-items: center;
   }
 
   .app[data-panel-open="true"][data-panel-size="full"] .panelTrigger {
@@ -425,16 +429,21 @@
     min-width: var(--mobile-control-size);
     min-height: var(--mobile-control-size);
     padding: 0;
-    line-height: 0;
     overflow: hidden;
     border-radius: 999px;
-    font-size: 0;
+    gap: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .app[data-panel-open="true"] .panelTriggerLabel {
+    display: none;
   }
 
   .app[data-panel-open="true"] .panelTrigger svg {
-    width: 0.9rem;
-    height: 0.9rem;
-    stroke-width: 2.4;
+    width: 0.8rem;
+    height: 0.8rem;
+    stroke-width: 1.9;
   }
 
   .sheetHandleButton {

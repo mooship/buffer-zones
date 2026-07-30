@@ -8,11 +8,15 @@ import styles from "./MobileLegend.module.css";
 interface MobileLegendProps {
   visibleLayerIds: LayerId[];
   suppressed: boolean;
+  panelOpen: boolean;
+  panelExpanded: boolean;
 }
 
 export function MobileLegend({
   visibleLayerIds,
   suppressed,
+  panelOpen,
+  panelExpanded,
 }: MobileLegendProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,7 +60,12 @@ export function MobileLegend({
   }
 
   return (
-    <div className={styles.container} ref={containerRef}>
+    <div
+      className={styles.container}
+      ref={containerRef}
+      data-panel-open={panelOpen ? "true" : "false"}
+      data-panel-size={panelExpanded ? "full" : "medium"}
+    >
       <IconButton
         ref={triggerRef}
         className={styles.trigger}

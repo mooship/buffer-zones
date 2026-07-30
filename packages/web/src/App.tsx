@@ -351,10 +351,17 @@ export function App() {
         onClick={handlePanelToggle}
       >
         {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
-        {panelOpen ? "Close" : "Explore"}
+        <span className={styles.panelTriggerLabel}>
+          {panelOpen ? "Close" : "Explore"}
+        </span>
       </ControlButton>
 
-      <MobileLegend visibleLayerIds={visibleLayerIds} suppressed={false} />
+      <MobileLegend
+        visibleLayerIds={visibleLayerIds}
+        suppressed={false}
+        panelOpen={panelOpen}
+        panelExpanded={mobilePanelExpanded}
+      />
 
       <aside
         id="map-controls"
