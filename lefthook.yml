@@ -3,5 +3,3 @@ pre-commit:
     biome:
       run: npx biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
-    test:
-      run: npx vitest run
