@@ -3,24 +3,37 @@ import { fileURLToPath } from "node:url";
 import { validateOutputDirectory } from "./outputManifest";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT_DIR = resolve(
+export const OUTPUT_DIR = resolve(
   __dirname,
   "../../packages/web/public/data/national",
 );
 
-async function main(): Promise<void> {
-  const issues = await validateOutputDirectory(OUTPUT_DIR);
+export async function runOutputValidation(
+  outputDir = OUTPUT_DIR,
+): Promise<void> {
+  const issues = await validateOutputDirectory(outputDir);
   if (issues.length > 0) {
     for (const issue of issues) {
       console.error(issue);
     }
-    process.exit(1);
+    throw new Error("Output validation failed.");
   }
 
   console.log("National output validation passed.");
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+function isDirectExecution(argv: readonly string[]): boolean {
+  const commandPath = argv[1];
+  if (!commandPath) {
+    return false;
+  }
+
+  return resolve(commandPath) === fileURLToPath(import.meta.url);
+}
+
+if (isDirectExecution(process.argv)) {
+  runOutputValidation().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

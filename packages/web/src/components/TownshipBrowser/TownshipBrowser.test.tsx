@@ -85,14 +85,14 @@ describe("TownshipBrowser", () => {
     expect(group).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("orders same-group places by commute time, breaking ties alphabetically, and shows a time range that tolerates missing data", () => {
+  it("sorts places by commute by default and lets users switch sorting", () => {
     const mamelodiTownships = [
       {
         type: "Feature",
         geometry: null,
         properties: {
           id: "mamelodi-b",
-          name: "Mamelodi Ext 12",
+          name: "Mamelodi Beta",
           commuteMinutes: 30,
           nearestJobCenter: "Hatfield",
           distanceKm: 18.2,
@@ -104,8 +104,8 @@ describe("TownshipBrowser", () => {
         geometry: null,
         properties: {
           id: "mamelodi-a",
-          name: "Mamelodi Ext 5",
-          commuteMinutes: 30,
+          name: "Mamelodi Alpha",
+          commuteMinutes: 12,
           nearestJobCenter: "Hatfield",
           distanceKm: 18.2,
           nearestTransitKm: null,
@@ -116,7 +116,7 @@ describe("TownshipBrowser", () => {
         geometry: null,
         properties: {
           id: "mamelodi-c",
-          name: "Mamelodi Ext 20",
+          name: "Mamelodi Charlie",
           commuteMinutes: null,
           nearestJobCenter: "Hatfield",
           distanceKm: null,
@@ -135,15 +135,42 @@ describe("TownshipBrowser", () => {
 
     fireEvent.click(screen.getByTestId("township-group-mamelodi"));
 
-    const placeButtons = [
-      screen.getByTestId("township-place-mamelodi-b"),
-      screen.getByTestId("township-place-mamelodi-a"),
-      screen.getByTestId("township-place-mamelodi-c"),
-    ];
-    expect(placeButtons.map((button) => button.textContent)).toEqual([
-      expect.stringContaining("Mamelodi Ext 12"),
-      expect.stringContaining("Mamelodi Ext 5"),
-      expect.stringContaining("Mamelodi Ext 20"),
+    expect(
+      screen
+        .getAllByTestId(/township-place-mamelodi-(a|b|c)/)
+        .map((button) => button.textContent),
+    ).toEqual([
+      expect.stringContaining("Mamelodi Beta"),
+      expect.stringContaining("Mamelodi Alpha"),
+      expect.stringContaining("Mamelodi Charlie"),
+    ]);
+
+    fireEvent.change(screen.getByTestId("township-sort"), {
+      target: { value: "name-asc" },
+    });
+
+    expect(
+      screen
+        .getAllByTestId(/township-place-mamelodi-(a|b|c)/)
+        .map((button) => button.textContent),
+    ).toEqual([
+      expect.stringContaining("Mamelodi Alpha"),
+      expect.stringContaining("Mamelodi Beta"),
+      expect.stringContaining("Mamelodi Charlie"),
+    ]);
+
+    fireEvent.change(screen.getByTestId("township-sort"), {
+      target: { value: "commute-asc" },
+    });
+
+    expect(
+      screen
+        .getAllByTestId(/township-place-mamelodi-(a|b|c)/)
+        .map((button) => button.textContent),
+    ).toEqual([
+      expect.stringContaining("Mamelodi Alpha"),
+      expect.stringContaining("Mamelodi Beta"),
+      expect.stringContaining("Mamelodi Charlie"),
     ]);
   });
 });

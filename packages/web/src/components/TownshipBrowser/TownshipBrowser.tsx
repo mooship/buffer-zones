@@ -22,6 +22,73 @@ interface VisibleGroup extends GroupSummary {
   features: TownshipFeature[];
 }
 
+type TownshipSortMode =
+  | "commute-desc"
+  | "commute-asc"
+  | "name-asc"
+  | "name-desc";
+
+interface TownshipSortOption {
+  value: TownshipSortMode;
+  label: string;
+}
+
+const SORT_OPTIONS: readonly TownshipSortOption[] = [
+  { value: "commute-desc", label: "Longest commute first" },
+  { value: "commute-asc", label: "Shortest commute first" },
+  { value: "name-asc", label: "Name A-Z" },
+  { value: "name-desc", label: "Name Z-A" },
+];
+
+function compareByName(
+  first: TownshipFeature,
+  second: TownshipFeature,
+  direction: "asc" | "desc",
+): number {
+  const comparison = first.properties.name.localeCompare(
+    second.properties.name,
+    "en-ZA",
+  );
+  return direction === "asc" ? comparison : comparison * -1;
+}
+
+function compareTownships(
+  first: TownshipFeature,
+  second: TownshipFeature,
+  mode: TownshipSortMode,
+): number {
+  if (mode === "name-asc") {
+    return compareByName(first, second, "asc");
+  }
+
+  if (mode === "name-desc") {
+    return compareByName(first, second, "desc");
+  }
+
+  const firstMinutes = first.properties.commuteMinutes;
+  const secondMinutes = second.properties.commuteMinutes;
+
+  if (firstMinutes === null && secondMinutes === null) {
+    return compareByName(first, second, "asc");
+  }
+  if (firstMinutes === null) {
+    return 1;
+  }
+  if (secondMinutes === null) {
+    return -1;
+  }
+
+  const difference =
+    mode === "commute-desc"
+      ? secondMinutes - firstMinutes
+      : firstMinutes - secondMinutes;
+  if (difference !== 0) {
+    return difference;
+  }
+
+  return compareByName(first, second, "asc");
+}
+
 interface TownshipBrowserProps {
   townships: TownshipFeature[];
   selectedTownshipId: string | null;
@@ -34,6 +101,7 @@ export function TownshipBrowser({
   onSelect,
 }: TownshipBrowserProps) {
   const [query, setQuery] = useState("");
+  const [sortMode, setSortMode] = useState<TownshipSortMode>("commute-desc");
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
   const deferredQuery = useDeferredValue(
     query.trim().toLocaleLowerCase("en-ZA"),
@@ -68,15 +136,7 @@ export function TownshipBrowser({
           return [];
         }
 
-        const allFeatures = [...features].sort((first, second) => {
-          const timeDifference =
-            (second.properties.commuteMinutes ?? -1) -
-            (first.properties.commuteMinutes ?? -1);
-          return (
-            timeDifference ||
-            first.properties.name.localeCompare(second.properties.name, "en-ZA")
-          );
-        });
+        const allFeatures = [...features];
         const times = allFeatures
           .map((township) => township.properties.commuteMinutes)
           .filter((time): time is number => time !== null)
@@ -108,7 +168,7 @@ export function TownshipBrowser({
   const groups = useMemo<VisibleGroup[]>(() => {
     return groupSummaries.flatMap((groupSummary) => {
       const groupMatches = groupSummary.searchName.includes(deferredQuery);
-      const features = groupMatches
+      const matchingFeatures = groupMatches
         ? groupSummary.allFeatures
         : groupSummary.allFeatures.filter((township) =>
             township.properties.name
@@ -116,13 +176,17 @@ export function TownshipBrowser({
               .includes(deferredQuery),
           );
 
+      const features = [...matchingFeatures].sort((first, second) =>
+        compareTownships(first, second, sortMode),
+      );
+
       if (features.length === 0) {
         return [];
       }
 
       return [{ ...groupSummary, features }];
     });
-  }, [deferredQuery, groupSummaries]);
+  }, [deferredQuery, groupSummaries, sortMode]);
 
   const resultCount = useMemo(() => {
     return groups.reduce((count, group) => count + group.features.length, 0);
@@ -171,6 +235,25 @@ export function TownshipBrowser({
           placeholder="Search townships"
           onChange={(event) => setQuery(event.target.value)}
         />
+      </label>
+
+      <label className={styles.sortControl}>
+        <span className={styles.sortLabel}>Sort places</span>
+        <select
+          className={styles.sortSelect}
+          data-testid="township-sort"
+          data-e2e="township-sort"
+          value={sortMode}
+          onChange={(event) =>
+            setSortMode(event.target.value as TownshipSortMode)
+          }
+        >
+          {SORT_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </label>
 
       {selectedTownship ? (
