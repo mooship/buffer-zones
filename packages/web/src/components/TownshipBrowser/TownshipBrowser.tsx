@@ -284,21 +284,23 @@ export function TownshipBrowser({
 
       <label className={styles.sortControl}>
         <span className={styles.sortLabel}>Sort included areas and places</span>
-        <select
-          className={styles.sortSelect}
-          data-testid="township-sort"
-          data-e2e="township-sort"
-          value={sortMode}
-          onChange={(event) =>
-            setSortMode(event.target.value as TownshipSortMode)
-          }
-        >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <span className={styles.sortField}>
+          <select
+            className={styles.sortSelect}
+            data-testid="township-sort"
+            data-e2e="township-sort"
+            value={sortMode}
+            onChange={(event) =>
+              setSortMode(event.target.value as TownshipSortMode)
+            }
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </span>
       </label>
 
       {selectedTownship ? (
