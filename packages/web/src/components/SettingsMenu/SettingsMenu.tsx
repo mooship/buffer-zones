@@ -50,11 +50,18 @@ export function SettingsMenu({
   }, [open]);
 
   return (
-    <div className={styles.container} ref={containerRef}>
+    <div
+      className={styles.container}
+      ref={containerRef}
+      data-testid="settings-menu-root"
+      data-e2e="settings-menu-root"
+    >
       <button
         type="button"
         ref={triggerRef}
         className={styles.trigger}
+        data-testid="settings-menu-trigger"
+        data-e2e="settings-menu-trigger"
         aria-expanded={open}
         aria-controls="map-settings-menu"
         aria-label={open ? "Close map settings" : "Map settings"}
@@ -63,7 +70,13 @@ export function SettingsMenu({
         {open ? <X aria-hidden="true" /> : <Settings aria-hidden="true" />}
       </button>
       {open ? (
-        <div id="map-settings-menu" className={styles.menu} role="menu">
+        <div
+          id="map-settings-menu"
+          className={styles.menu}
+          role="menu"
+          data-testid="settings-menu-content"
+          data-e2e="settings-menu-content"
+        >
           <BasemapToggle basemap={basemap} onChange={onBasemapChange} />
           <ThemeToggle
             preference={themePreference}

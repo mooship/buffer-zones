@@ -151,10 +151,17 @@ export function App() {
           />
         </Suspense>
         {dataError ? (
-          <div className={styles.dataError} role="alert">
+          <div
+            className={styles.dataError}
+            role="alert"
+            data-testid="data-load-error"
+            data-e2e="data-load-error"
+          >
             <p>Map data could not be loaded.</p>
             <button
               type="button"
+              data-testid="retry-data-load"
+              data-e2e="retry-data-load"
               onClick={() => setLoadAttempt((value) => value + 1)}
             >
               Retry
@@ -202,6 +209,8 @@ export function App() {
         type="button"
         ref={panelTriggerRef}
         className={styles.panelTrigger}
+        data-testid="panel-toggle"
+        data-e2e="panel-toggle"
         aria-expanded={panelOpen}
         aria-controls="map-controls"
         onClick={handlePanelToggle}
@@ -216,11 +225,19 @@ export function App() {
         hidden={!panelOpen}
       >
         <span className={styles.sheetHandle} aria-hidden="true" />
-        <div className={styles.panelTabs} role="tablist" aria-label="Map panel">
+        <div
+          className={styles.panelTabs}
+          role="tablist"
+          aria-label="Map panel"
+          data-testid="panel-tablist"
+          data-e2e="panel-tablist"
+        >
           {PANEL_VIEWS.map((view, index) => (
             <button
               key={view}
               type="button"
+              data-testid={`panel-tab-${view}`}
+              data-e2e={`panel-tab-${view}`}
               ref={(element) => {
                 tabRefs.current[index] = element;
               }}
@@ -281,8 +298,10 @@ export function App() {
           {panelView === "layers" ? (
             <div className={styles.panelContent}>
               <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Map legend</h2>
-                <Legend />
+                <div data-testid="panel-legend" data-e2e="panel-legend">
+                  <h2 className={styles.sectionTitle}>Map legend</h2>
+                  <Legend />
+                </div>
               </section>
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Layers</h2>

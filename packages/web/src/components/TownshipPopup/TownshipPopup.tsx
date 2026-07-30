@@ -8,7 +8,11 @@ interface TownshipPopupProps {
 
 export function TownshipPopup({ properties }: TownshipPopupProps) {
   return (
-    <div className={styles.popup}>
+    <div
+      className={styles.popup}
+      data-testid="township-popup"
+      data-e2e="township-popup"
+    >
       <h2 className={styles.name}>{properties.name}</h2>
       <dl className={styles.rows}>
         <dt>Modeled car time</dt>

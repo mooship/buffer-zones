@@ -1,4 +1,6 @@
 import { expect, test } from "./fixtures";
+import { E2E } from "./selectors";
+import { ensurePanelOpen } from "./ui";
 
 test.describe("app shell", () => {
   test("loads with the expected landmarks and a rendered map", async ({
@@ -29,11 +31,11 @@ test.describe("app shell", () => {
   }) => {
     await page.goto("/");
 
-    await page.getByRole("tab", { name: "Map layers" }).click();
+    await ensurePanelOpen(page);
 
-    await expect(
-      page.getByRole("checkbox", { name: "Modeled car time" }),
-    ).toBeChecked();
-    await expect(page.getByText("Map legend")).toBeVisible();
+    await page.getByTestId(E2E.panelTab.layers).click();
+
+    await expect(page.getByTestId(E2E.layerToggle.townships)).toBeChecked();
+    await expect(page.getByTestId(E2E.panelLegend)).toBeVisible();
   });
 });

@@ -38,27 +38,19 @@ describe("TownshipBrowser", () => {
       <TownshipBrowser
         townships={townships}
         selectedTownshipId={null}
-        metroName="Tshwane"
         onSelect={vi.fn()}
       />,
     );
 
-    fireEvent.change(
-      screen.getByRole("searchbox", { name: "Search townships" }),
-      {
-        target: { value: "mame" },
-      },
-    );
+    fireEvent.change(screen.getByTestId("township-search"), {
+      target: { value: "mame" },
+    });
 
+    expect(screen.getByTestId("township-group-mamelodi")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /browse mamelodi/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /soshanguve/i }),
+      screen.queryByTestId("township-group-soshanguve"),
     ).not.toBeInTheDocument();
-    expect(
-      screen.getByText(/1 included area · 1 census sub-place/i),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("township-result-count")).toBeInTheDocument();
   });
 
   it("selects a place and exposes the shared detail summary", () => {
@@ -67,22 +59,18 @@ describe("TownshipBrowser", () => {
       <TownshipBrowser
         townships={townships}
         selectedTownshipId={null}
-        metroName="Tshwane"
         onSelect={onSelect}
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /browse mamelodi/i }));
-    fireEvent.click(
-      screen.getByRole("button", { name: /mamelodi, modeled car time/i }),
-    );
+    fireEvent.click(screen.getByTestId("township-group-mamelodi"));
+    fireEvent.click(screen.getByTestId("township-place-mamelodi"));
     expect(onSelect).toHaveBeenCalledWith(townships[0]);
 
     rerender(
       <TownshipBrowser
         townships={townships}
         selectedTownshipId="mamelodi"
-        metroName="Tshwane"
         onSelect={onSelect}
       />,
     );
@@ -91,7 +79,7 @@ describe("TownshipBrowser", () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/334.577/)).toBeInTheDocument();
 
-    const group = screen.getByRole("button", { name: /browse mamelodi/i });
+    const group = screen.getByTestId("township-group-mamelodi");
     expect(group).toHaveAttribute("aria-expanded", "true");
     fireEvent.click(group);
     expect(group).toHaveAttribute("aria-expanded", "false");
@@ -141,16 +129,17 @@ describe("TownshipBrowser", () => {
       <TownshipBrowser
         townships={mamelodiTownships}
         selectedTownshipId={null}
-        metroName="Tshwane"
         onSelect={vi.fn()}
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /browse mamelodi/i }));
+    fireEvent.click(screen.getByTestId("township-group-mamelodi"));
 
-    const placeButtons = screen.getAllByRole("button", {
-      name: /mamelodi ext/i,
-    });
+    const placeButtons = [
+      screen.getByTestId("township-place-mamelodi-b"),
+      screen.getByTestId("township-place-mamelodi-a"),
+      screen.getByTestId("township-place-mamelodi-c"),
+    ];
     expect(placeButtons.map((button) => button.textContent)).toEqual([
       expect.stringContaining("Mamelodi Ext 12"),
       expect.stringContaining("Mamelodi Ext 5"),

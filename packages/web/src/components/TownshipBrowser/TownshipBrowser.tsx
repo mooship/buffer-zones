@@ -101,6 +101,8 @@ export function TownshipBrowser({
         <Search aria-hidden="true" />
         <input
           type="search"
+          data-testid="township-search"
+          data-e2e="township-search"
           value={query}
           placeholder="Search townships"
           onChange={(event) => setQuery(event.target.value)}
@@ -108,12 +110,22 @@ export function TownshipBrowser({
       </label>
 
       {selectedTownship ? (
-        <section className={styles.selection} aria-live="polite">
+        <section
+          className={styles.selection}
+          aria-live="polite"
+          data-testid="township-selection"
+          data-e2e="township-selection"
+        >
           <TownshipPopup properties={selectedTownship.properties} />
         </section>
       ) : null}
 
-      <p className={styles.resultCount} aria-live="polite">
+      <p
+        className={styles.resultCount}
+        aria-live="polite"
+        data-testid="township-result-count"
+        data-e2e="township-result-count"
+      >
         {groups.length}{" "}
         {groups.length === 1 ? "included area" : "included areas"}
         {" · "}
@@ -143,6 +155,8 @@ export function TownshipBrowser({
               <button
                 type="button"
                 className={styles.groupButton}
+                data-testid={`township-group-${group.name.toLocaleLowerCase("en-ZA").replaceAll(" ", "-")}`}
+                data-e2e={`township-group-${group.name.toLocaleLowerCase("en-ZA").replaceAll(" ", "-")}`}
                 aria-expanded={isExpanded}
                 aria-controls={`township-group-${group.name.replaceAll(" ", "-")}`}
                 aria-label={`Browse ${group.name}, ${subPlaceLabel}`}
@@ -171,6 +185,8 @@ export function TownshipBrowser({
                         <button
                           type="button"
                           className={styles.place}
+                          data-testid={`township-place-${properties.id}`}
+                          data-e2e={`township-place-${properties.id}`}
                           aria-label={`${properties.name}, modeled car time ${commuteTime}, nearest selected centre ${properties.nearestJobCenter}`}
                           aria-pressed={properties.id === selectedTownshipId}
                           onClick={() => onSelect(township)}

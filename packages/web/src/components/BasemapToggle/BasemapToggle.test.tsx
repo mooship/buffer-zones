@@ -7,7 +7,7 @@ describe("BasemapToggle", () => {
     const onChange = vi.fn();
     render(<BasemapToggle basemap="street" onChange={onChange} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /satellite/i }));
+    fireEvent.click(screen.getByTestId("basemap-option-satellite"));
 
     expect(onChange).toHaveBeenCalledWith("satellite");
   });
@@ -15,11 +15,11 @@ describe("BasemapToggle", () => {
   it("marks the active basemap as pressed", () => {
     render(<BasemapToggle basemap="street" onChange={vi.fn()} />);
 
-    expect(screen.getByRole("button", { name: /street/i })).toHaveAttribute(
+    expect(screen.getByTestId("basemap-option-street")).toHaveAttribute(
       "aria-pressed",
       "true",
     );
-    expect(screen.getByRole("button", { name: /satellite/i })).toHaveAttribute(
+    expect(screen.getByTestId("basemap-option-satellite")).toHaveAttribute(
       "aria-pressed",
       "false",
     );

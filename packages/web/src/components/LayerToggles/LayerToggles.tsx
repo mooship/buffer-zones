@@ -17,15 +17,20 @@ export function LayerToggles({ visibleLayerIds, onToggle }: LayerTogglesProps) {
   );
 
   function renderLayer(layer: (typeof layers)[number]) {
+    const layerTestId = `layer-toggle-${layer.id}`;
     return (
       <li key={layer.id}>
         <label
           className={styles.row}
           data-unavailable={layer.available ? undefined : "true"}
+          data-testid={`${layerTestId}-row`}
+          data-e2e={`${layerTestId}-row`}
         >
           <input
             type="checkbox"
             className={styles.checkbox}
+            data-testid={layerTestId}
+            data-e2e={layerTestId}
             checked={visibleLayerIds.includes(layer.id)}
             disabled={!layer.available}
             onChange={() => onToggle(layer.id)}

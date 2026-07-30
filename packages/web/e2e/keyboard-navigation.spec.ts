@@ -1,4 +1,6 @@
 import { expect, test } from "./fixtures";
+import { E2E } from "./selectors";
+import { ensurePanelOpen } from "./ui";
 
 test.describe("keyboard navigation", () => {
   test("supports arrow-key, Home, and End navigation between panel tabs", async ({
@@ -6,9 +8,11 @@ test.describe("keyboard navigation", () => {
   }) => {
     await page.goto("/");
 
-    const storyTab = page.getByRole("tab", { name: "The pattern" });
-    const placesTab = page.getByRole("tab", { name: "Browse places" });
-    const layersTab = page.getByRole("tab", { name: "Map layers" });
+    await ensurePanelOpen(page);
+
+    const storyTab = page.getByTestId(E2E.panelTab.story);
+    const placesTab = page.getByTestId(E2E.panelTab.places);
+    const layersTab = page.getByTestId(E2E.panelTab.layers);
 
     await storyTab.focus();
     await expect(storyTab).toHaveAttribute("aria-selected", "true");

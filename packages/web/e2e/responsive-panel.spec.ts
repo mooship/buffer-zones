@@ -1,4 +1,5 @@
 import { expect, test } from "./fixtures";
+import { E2E } from "./selectors";
 
 test.describe("responsive panel", () => {
   test.use({ viewport: { width: 375, height: 667 } });
@@ -8,18 +9,14 @@ test.describe("responsive panel", () => {
   }) => {
     await page.goto("/");
 
-    const trigger = page.getByRole("button", { name: /explore/i });
+    const trigger = page.getByTestId(E2E.panelToggle);
+    const tablist = page.getByTestId(E2E.panelTablist);
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
-    await expect(page.getByRole("tablist", { name: "Map panel" })).toBeHidden();
+    await expect(tablist).toBeHidden();
 
     await trigger.click();
 
-    await expect(page.getByRole("button", { name: /close/i })).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
-    await expect(
-      page.getByRole("tablist", { name: "Map panel" }),
-    ).toBeVisible();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await expect(tablist).toBeVisible();
   });
 });
