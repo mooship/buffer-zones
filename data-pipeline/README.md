@@ -10,7 +10,7 @@ npm install
 npm run run
 ```
 
-Runs one national build. Internally, it loops over `@buffer-zones/shared`'s `METROS` (currently Tshwane, Johannesburg, and Ekurhuleni) to fetch and process each metro's boundaries and job-center routing, then writes a combined output to `packages/web/public/data/national/`.
+Runs one national build. Internally, it loops over `@buffer-zones/shared`'s `METROS` (currently Tshwane, Johannesburg, Ekurhuleni, and Emfuleni) to fetch and process each metro's boundaries and job-center routing, then writes a combined output to `packages/web/public/data/national/`.
 
 The national output currently includes: `townships.v1.geojson`,
 `township-areas.v1.geojson`, `rapid-rail.v1.geojson`,
@@ -67,10 +67,11 @@ sources that currently contribute to the national `bus-rapid-transit` layer.
 Tshwane Bus Services is a city-specific source that contributes to the
 national `bus` layer alongside Gautrain Bus.
 
-Ekurhuleni currently contributes boundaries and job-centre routing only:
-OpenStreetMap has no mapped route geometry for Harambee BRT, so no adapter
-exists for it. Its townships are still covered by the Gauteng-wide Gautrain,
-Gautrain Bus and PRASA/Metrorail layers.
+Ekurhuleni and Emfuleni currently contribute boundaries and job-centre routing
+only: OpenStreetMap has no sufficiently complete city-operator route geometry
+for their local bus systems, so no city-specific adapter exists yet. Their
+townships are still covered by the Gauteng-wide Gautrain, Gautrain Bus and
+PRASA/Metrorail layers.
 
 ## Rate limits
 

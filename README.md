@@ -2,7 +2,7 @@
 
 Apartheid-era spatial planning still shapes access to economic opportunity in South African cities today. **Buffer Zones** maps recognized township areas, formal transit routes, and modeled car time to selected job centers in a single national view. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
 
-**Current scope: a combined national layer for Tshwane/Pretoria and Johannesburg.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to each metro's selected job centers, and transit overlays sourced from Gautrain rail, Gautrain Bus, PRASA rail, A Re Yeng, and Rea Vaya. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros (Cape Town, Durban) are not yet included in the published national layer.
+**Current scope: a combined national layer for Tshwane/Pretoria, Johannesburg, Ekurhuleni, and Emfuleni.** The app uses Stats SA Census 2011 boundaries, modeled OSRM car routing to each metro's selected job centers, and transit overlays sourced from Gautrain rail, Gautrain Bus, PRASA rail, A Re Yeng, and Rea Vaya. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros (Cape Town, Durban) are not yet included in the published national layer.
 
 ## Why
 
@@ -13,6 +13,7 @@ Under apartheid, townships were deliberately separated from economic centers by 
 - [`docs/design-system.md`](docs/design-system.md) — the app's Material-informed local design system, tokens, and shared UI primitives
 - [`docs/data/tshwane-area-classification.md`](docs/data/tshwane-area-classification.md) — how included Tshwane township and settlement areas are selected and displayed
 - [`docs/data/johannesburg-area-classification.md`](docs/data/johannesburg-area-classification.md) — the same, for Johannesburg
+- [`docs/data/emfuleni-area-classification.md`](docs/data/emfuleni-area-classification.md) — the same, for Emfuleni
 - [`data-pipeline/README.md`](data-pipeline/README.md) — how to (re-)run the data pipeline
 
 ## Stack

@@ -1,35 +1,36 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-30T11:29:18.032Z",
+  "generatedAt": "2026-07-30T19:32:22.888Z",
   "metroIds": [
     "tshwane",
     "johannesburg",
-    "ekurhuleni"
+    "ekurhuleni",
+    "emfuleni"
   ],
   "files": [
     {
       "fileName": "townships.v1.geojson",
-      "featureCount": 2057,
-      "sha256": "0fe3bcd940254593716113dede346d1c9ca166948b98e19196362fc0244d68fd",
-      "bytes": 23573418
+      "featureCount": 2212,
+      "sha256": "2b2116cf9b902285c5fa18fc2794bb94adac3afe4fc28cec2445a37e05aa0fbf",
+      "bytes": 25122569
     },
     {
       "fileName": "townships.display.v1.geojson",
-      "featureCount": 2057,
-      "sha256": "4a0ef84c7cd4bd42f4660f80f31b962e1ec4ffad720e982a2f8ecde161408cc4",
-      "bytes": 2153958
+      "featureCount": 2212,
+      "sha256": "e85c47805ca41952c38eb103fd03f9e2b502b565dc62e44e0e1175448d8e231f",
+      "bytes": 2333407
     },
     {
       "fileName": "township-areas.v1.geojson",
-      "featureCount": 94,
-      "sha256": "c39101efbb1067dfd25eed7a4dbcc4c72673df5f1631e4b4d8bb8186d86b11db",
-      "bytes": 2301381
+      "featureCount": 102,
+      "sha256": "6674601fc270056c8e5a4935fec7ab67fc8fd30df12e1fa2f3500817437f87da",
+      "bytes": 2499939
     },
     {
       "fileName": "township-areas.display.v1.geojson",
-      "featureCount": 94,
-      "sha256": "72b5f60f96aa4fa7b2e6869f8585c2154886a896a2657ed54f9b2406620f2ca9",
-      "bytes": 180022
+      "featureCount": 102,
+      "sha256": "7ca12b64c980b4dfdc4d2f40a0508d2bbea7385daadebe0121b34a90dab14c28",
+      "bytes": 196986
     },
     {
       "fileName": "rapid-rail.v1.geojson",
@@ -45,15 +46,15 @@
     },
     {
       "fileName": "commuter-rail.v1.geojson",
-      "featureCount": 1121,
-      "sha256": "3d14ebb9a589a2a5a26d6a00053d769bbdefaa676bae1ef825060ab02dcaa5b2",
-      "bytes": 1456567
+      "featureCount": 1133,
+      "sha256": "e9d5da59f8850746d85345fca1693e989fff380fc635244a9945fb678802bf4b",
+      "bytes": 1460037
     },
     {
       "fileName": "commuter-rail.display.v1.geojson",
-      "featureCount": 1121,
-      "sha256": "e8bb33bca9d01e9c675aed0579584f042ee463ab16523a66bb2a6bf21076d417",
-      "bytes": 526370
+      "featureCount": 1133,
+      "sha256": "735a358728e028db0862afed35efb41f2639a57c1652b0977f90d3f7a59082ee",
+      "bytes": 528269
     },
     {
       "fileName": "bus-rapid-transit.v1.geojson",
@@ -69,24 +70,24 @@
     },
     {
       "fileName": "bus.v1.geojson",
-      "featureCount": 3663,
-      "sha256": "759a57a1af5b3a42969762301c2415a5c7f73271d961ea43ab134ad4a3ff7401",
-      "bytes": 2249453
+      "featureCount": 3661,
+      "sha256": "fd5ab2a61d6a0c284222e3c735308315035245be955e0f4265f4a04dc80b7170",
+      "bytes": 2248262
     },
     {
       "fileName": "bus.display.v1.geojson",
-      "featureCount": 3663,
-      "sha256": "dbfe2db6f3568a6927d00ade02892dd386abb2962360763f0a7add1ef6370a83",
-      "bytes": 1018303
+      "featureCount": 3661,
+      "sha256": "18c9650af17cc6dc59aed63f71cd6672eebffcc8738a2e7e33ec67bd18e48a6b",
+      "bytes": 1017818
     }
   ],
   "networkCoverage": {
     "Gautrain": 293,
-    "PRASA": 1121,
+    "PRASA": 1133,
     "A Re Yeng": 18,
     "Rea Vaya": 836,
     "Ekurhuleni IRPTN": 8,
-    "Gautrain Bus": 3428,
+    "Gautrain Bus": 3426,
     "Tshwane Bus Services": 235
   }
 }

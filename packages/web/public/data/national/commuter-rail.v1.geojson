@@ -454,6 +454,21 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "node/247644704",
+        "name": "Kookrus",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.993958,
+          -26.5866707
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "node/247644705",
         "name": "Koedoespoort",
         "network": "PRASA"
@@ -754,6 +769,21 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "node/847157718",
+        "name": "Alloy",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9437242,
+          -26.6565669
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "node/847234038",
         "name": "Schuttestraat",
         "network": "PRASA"
@@ -943,6 +973,21 @@
         "coordinates": [
           28.1676767,
           -26.2097999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/7055183244",
+        "name": "Vereeniging",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9353056,
+          -26.6741584
         ]
       }
     },
@@ -1153,6 +1198,36 @@
         "coordinates": [
           28.1711548,
           -25.7012375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/7298985598",
+        "name": "Redan",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9675356,
+          -26.6266086
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/7298985622",
+        "name": "Meyerton",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.0099305,
+          -26.5549659
         ]
       }
     },
@@ -2248,6 +2323,111 @@
         "coordinates": [
           27.8881515,
           -26.5381986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9165976959",
+        "name": "Eatonside",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.8785825,
+          -26.5577136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9165976960",
+        "name": "Kwaggastroom",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.8637463,
+          -26.5663844
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9165976961",
+        "name": "Houtheuwel",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.8534817,
+          -26.6031588
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9165976962",
+        "name": "Kleigrond",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.8715279,
+          -26.6235909
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9165976963",
+        "name": "Leeuhof",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9061221,
+          -26.6551044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9165976964",
+        "name": "Duncanville",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.9291864,
+          -26.6642033
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9166519542",
+        "name": "Goudryk",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.5795485,
+          -26.3163111
         ]
       }
     },

@@ -6,10 +6,14 @@ describe("getJobCentersForMetro", () => {
     const tshwane = getJobCentersForMetro("tshwane");
     const johannesburg = getJobCentersForMetro("johannesburg");
     const ekurhuleni = getJobCentersForMetro("ekurhuleni");
+    const emfuleni = getJobCentersForMetro("emfuleni");
 
-    expect(tshwane.length + johannesburg.length + ekurhuleni.length).toBe(
-      JOB_CENTERS.length,
-    );
+    expect(
+      tshwane.length +
+        johannesburg.length +
+        ekurhuleni.length +
+        emfuleni.length,
+    ).toBe(JOB_CENTERS.length);
     expect(tshwane.every((jobCenter) => jobCenter.metroId === "tshwane")).toBe(
       true,
     );
@@ -19,7 +23,13 @@ describe("getJobCentersForMetro", () => {
     expect(
       ekurhuleni.every((jobCenter) => jobCenter.metroId === "ekurhuleni"),
     ).toBe(true);
+    expect(
+      emfuleni.every((jobCenter) => jobCenter.metroId === "emfuleni"),
+    ).toBe(true);
     expect(johannesburg.map((jobCenter) => jobCenter.id)).toContain("sandton");
     expect(ekurhuleni.map((jobCenter) => jobCenter.id)).toContain("germiston");
+    expect(emfuleni.map((jobCenter) => jobCenter.id)).toContain(
+      "vereeniging-cbd",
+    );
   });
 });

@@ -6,9 +6,10 @@ describe("metroBbox", () => {
     expect(getMetroBbox("tshwane")).toBe(METRO_BBOX.tshwane);
     expect(getMetroBbox("johannesburg")).toBe(METRO_BBOX.johannesburg);
     expect(getMetroBbox("ekurhuleni")).toBe(METRO_BBOX.ekurhuleni);
+    expect(getMetroBbox("emfuleni")).toBe(METRO_BBOX.emfuleni);
   });
 
   it("builds one shared bbox that fully contains every metro bbox", () => {
-    expect(getSharedTransitBbox()).toBe("-26.55,27.65,-25.55,28.65");
+    expect(getSharedTransitBbox()).toBe("-26.79929,27.56909,-25.55,28.65");
   });
 });

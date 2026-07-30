@@ -6,6 +6,7 @@ export const METRO_BBOX: Record<MetroId, string> = {
   tshwane: "-25.95,28.05,-25.55,28.40",
   johannesburg: "-26.55,27.65,-25.85,28.35",
   ekurhuleni: "-26.45,28.10,-25.95,28.65",
+  emfuleni: "-26.79929,27.56909,-26.41898,28.02492",
 };
 
 export function getMetroBbox(metroId: MetroId): string {

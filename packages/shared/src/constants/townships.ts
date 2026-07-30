@@ -770,6 +770,80 @@ const EKURHULENI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput
     },
   ];
 
+const EMFULENI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
+  [
+    {
+      id: "emfuleni-sebokeng",
+      name: "Sebokeng",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["760004"],
+    },
+    {
+      id: "emfuleni-evaton",
+      name: "Evaton",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["760002"],
+    },
+    {
+      id: "emfuleni-boipatong",
+      name: "Boipatong",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["760008"],
+    },
+    {
+      id: "emfuleni-sharpeville",
+      name: "Sharpeville",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["760013"],
+    },
+    {
+      id: "emfuleni-bophelong",
+      name: "Bophelong",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760014"],
+    },
+    {
+      id: "emfuleni-tshepiso",
+      name: "Tshepiso",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760007"],
+    },
+    {
+      id: "emfuleni-tshepong",
+      name: "Tshepong",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760005"],
+    },
+    {
+      id: "emfuleni-stretford",
+      name: "Stretford",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760001"],
+    },
+    {
+      id: "emfuleni-lakeside",
+      name: "Lakeside",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760003"],
+    },
+    {
+      id: "emfuleni-golden-gardens",
+      name: "Golden Gardens",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760012"],
+    },
+  ];
+
 export const TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinition[] = [
   ...TSHWANE_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
     ...definition,
@@ -782,6 +856,10 @@ export const TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinition[] = [
   ...EKURHULENI_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
     ...definition,
     metroId: "ekurhuleni" as const,
+  })),
+  ...EMFULENI_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
+    ...definition,
+    metroId: "emfuleni" as const,
   })),
 ];
 

@@ -163,6 +163,48 @@ export const JOB_CENTERS = [
     lon: 28.1211,
     metroId: "ekurhuleni",
   },
+  {
+    id: "vereeniging-cbd",
+    name: "Vereeniging CBD",
+    lat: -26.6731,
+    lon: 27.9314,
+    metroId: "emfuleni",
+  },
+  {
+    id: "vanderbijlpark-cbd",
+    name: "Vanderbijlpark CBD",
+    lat: -26.7052,
+    lon: 27.8374,
+    metroId: "emfuleni",
+  },
+  {
+    id: "vanderbijlpark-se",
+    name: "Vanderbijlpark SE",
+    lat: -26.7124,
+    lon: 27.8544,
+    metroId: "emfuleni",
+  },
+  {
+    id: "sebokeng-zone-6",
+    name: "Sebokeng Zone 6",
+    lat: -26.6003,
+    lon: 27.8415,
+    metroId: "emfuleni",
+  },
+  {
+    id: "sharpeville",
+    name: "Sharpeville",
+    lat: -26.6898,
+    lon: 27.8727,
+    metroId: "emfuleni",
+  },
+  {
+    id: "evaton",
+    name: "Evaton",
+    lat: -26.5196,
+    lon: 27.8528,
+    metroId: "emfuleni",
+  },
 ] as const satisfies readonly JobCenter[];
 
 export function getJobCentersForMetro(metroId: MetroId): JobCenter[] {

@@ -67236,3166 +67236,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0441461,
-            -26.1465973
-          ],
-          [
-            28.0441213,
-            -26.1464394
-          ],
-          [
-            28.04412,
-            -26.1463852
-          ],
-          [
-            28.044118,
-            -26.1462973
-          ],
-          [
-            28.044124,
-            -26.1462708
-          ],
-          [
-            28.0441397,
-            -26.1462448
-          ],
-          [
-            28.0441862,
-            -26.146201
-          ],
-          [
-            28.0442215,
-            -26.1461719
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0442215,
-            -26.1461719
-          ],
-          [
-            28.0441673,
-            -26.1458736
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0441673,
-            -26.1458736
-          ],
-          [
-            28.0441639,
-            -26.1458547
-          ],
-          [
-            28.044156,
-            -26.1458139
-          ],
-          [
-            28.0441034,
-            -26.145543
-          ],
-          [
-            28.044072,
-            -26.1453814
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.044072,
-            -26.1453814
-          ],
-          [
-            28.0439797,
-            -26.1449245
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0439797,
-            -26.1449245
-          ],
-          [
-            28.0439525,
-            -26.1447959
-          ],
-          [
-            28.043934,
-            -26.1447086
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.043934,
-            -26.1447086
-          ],
-          [
-            28.0438649,
-            -26.1444136
-          ],
-          [
-            28.0437493,
-            -26.1438377
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0437493,
-            -26.1438377
-          ],
-          [
-            28.0436761,
-            -26.1435071
-          ],
-          [
-            28.0436147,
-            -26.1431537
-          ],
-          [
-            28.0436119,
-            -26.1431376
-          ],
-          [
-            28.0435956,
-            -26.1430436
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0437456,
-            -26.1430155
-          ],
-          [
-            28.0435956,
-            -26.1430436
-          ],
-          [
-            28.0434552,
-            -26.1430663
-          ],
-          [
-            28.0432633,
-            -26.1430974
-          ],
-          [
-            28.0425474,
-            -26.1432313
-          ],
-          [
-            28.0418431,
-            -26.1433565
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.041825,
-            -26.1433542
-          ],
-          [
-            28.0418431,
-            -26.1433565
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0417614,
-            -26.143346
-          ],
-          [
-            28.041825,
-            -26.1433542
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0416255,
-            -26.14337
-          ],
-          [
-            28.0417614,
-            -26.143346
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0400539,
-            -26.1436416
-          ],
-          [
-            28.040142,
-            -26.1436271
-          ],
-          [
-            28.040662,
-            -26.1435418
-          ],
-          [
-            28.0408373,
-            -26.1435097
-          ],
-          [
-            28.0408866,
-            -26.1435007
-          ],
-          [
-            28.0409644,
-            -26.1434866
-          ],
-          [
-            28.0409702,
-            -26.1434855
-          ],
-          [
-            28.0416255,
-            -26.14337
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0400539,
-            -26.1436416
-          ],
-          [
-            28.0400716,
-            -26.1437139
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0406784,
-            -26.1436081
-          ],
-          [
-            28.0401597,
-            -26.1436985
-          ],
-          [
-            28.0400716,
-            -26.1437139
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0416368,
-            -26.143438
-          ],
-          [
-            28.0409813,
-            -26.1435575
-          ],
-          [
-            28.0409077,
-            -26.1435696
-          ],
-          [
-            28.0406784,
-            -26.1436081
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0417713,
-            -26.1434091
-          ],
-          [
-            28.0416832,
-            -26.1434296
-          ],
-          [
-            28.0416368,
-            -26.143438
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0418283,
-            -26.1433674
-          ],
-          [
-            28.0417713,
-            -26.1434091
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0418431,
-            -26.1433565
-          ],
-          [
-            28.0418283,
-            -26.1433674
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0400716,
-            -26.1437139
-          ],
-          [
-            28.0400808,
-            -26.1437605
-          ],
-          [
-            28.040139,
-            -26.1440538
-          ],
-          [
-            28.0402629,
-            -26.1446634
-          ],
-          [
-            28.0402758,
-            -26.1447271
-          ],
-          [
-            28.0403756,
-            -26.1452208
-          ],
-          [
-            28.0403935,
-            -26.1453093
-          ],
-          [
-            28.0404128,
-            -26.1454093
-          ],
-          [
-            28.0404986,
-            -26.1458526
-          ],
-          [
-            28.0405295,
-            -26.145977
-          ],
-          [
-            28.04053,
-            -26.1459791
-          ],
-          [
-            28.0405565,
-            -26.146109
-          ],
-          [
-            28.0407724,
-            -26.1471689
-          ],
-          [
-            28.0408056,
-            -26.1473316
-          ],
-          [
-            28.0408845,
-            -26.1477189
-          ],
-          [
-            28.0409101,
-            -26.1478446
-          ],
-          [
-            28.0409292,
-            -26.1479381
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0409292,
-            -26.1479381
-          ],
-          [
-            28.0411099,
-            -26.1488242
-          ],
-          [
-            28.0411768,
-            -26.1491418
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0411768,
-            -26.1491418
-          ],
-          [
-            28.0411985,
-            -26.1492628
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0411985,
-            -26.1492628
-          ],
-          [
-            28.0397403,
-            -26.1492232
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0397403,
-            -26.1492232
-          ],
-          [
-            28.0393274,
-            -26.1492076
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0393274,
-            -26.1492076
-          ],
-          [
-            28.0384517,
-            -26.1491799
-          ],
-          [
-            28.0375062,
-            -26.149151
-          ],
-          [
-            28.0358393,
-            -26.1490835
-          ],
-          [
-            28.0353184,
-            -26.1490411
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0353184,
-            -26.1490411
-          ],
-          [
-            28.0347026,
-            -26.1490325
-          ],
-          [
-            28.0345414,
-            -26.1490358
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0345414,
-            -26.1490358
-          ],
-          [
-            28.0345865,
-            -26.1489533
-          ],
-          [
-            28.0346778,
-            -26.1487155
-          ],
-          [
-            28.0347123,
-            -26.1486254
-          ],
-          [
-            28.0349317,
-            -26.1480539
-          ],
-          [
-            28.0350861,
-            -26.1476568
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0350861,
-            -26.1476568
-          ],
-          [
-            28.035125,
-            -26.1475697
-          ],
-          [
-            28.0351965,
-            -26.1473626
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0351965,
-            -26.1473626
-          ],
-          [
-            28.0356766,
-            -26.1460684
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0356766,
-            -26.1460684
-          ],
-          [
-            28.0357634,
-            -26.1458048
-          ],
-          [
-            28.0358327,
-            -26.1456083
-          ],
-          [
-            28.0358825,
-            -26.145467
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0358825,
-            -26.145467
-          ],
-          [
-            28.0359521,
-            -26.1452029
-          ],
-          [
-            28.0359761,
-            -26.1449381
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0359761,
-            -26.1449381
-          ],
-          [
-            28.0359744,
-            -26.1447149
-          ],
-          [
-            28.0358986,
-            -26.1441916
-          ],
-          [
-            28.0358675,
-            -26.143993
-          ],
-          [
-            28.0357856,
-            -26.1434703
-          ],
-          [
-            28.0357793,
-            -26.1434301
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0357793,
-            -26.1434301
-          ],
-          [
-            28.0357623,
-            -26.1433012
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0357623,
-            -26.1433012
-          ],
-          [
-            28.0356647,
-            -26.1424375
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0356647,
-            -26.1424375
-          ],
-          [
-            28.0355753,
-            -26.1418437
-          ],
-          [
-            28.0355933,
-            -26.1415243
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0354477,
-            -26.1336605
-          ],
-          [
-            28.0353572,
-            -26.1340244
-          ],
-          [
-            28.0352516,
-            -26.1344371
-          ],
-          [
-            28.0351368,
-            -26.1348601
-          ],
-          [
-            28.0349352,
-            -26.1356524
-          ],
-          [
-            28.0349116,
-            -26.135725
-          ],
-          [
-            28.0346125,
-            -26.1369638
-          ],
-          [
-            28.0344993,
-            -26.1374121
-          ],
-          [
-            28.0344601,
-            -26.1376107
-          ],
-          [
-            28.0344537,
-            -26.1378098
-          ],
-          [
-            28.0344649,
-            -26.1379573
-          ],
-          [
-            28.0345129,
-            -26.1381915
-          ],
-          [
-            28.0345593,
-            -26.1383362
-          ],
-          [
-            28.0347911,
-            -26.1391065
-          ],
-          [
-            28.0353673,
-            -26.1408646
-          ],
-          [
-            28.0355933,
-            -26.1415243
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0355933,
-            -26.1415243
-          ],
-          [
-            28.0356574,
-            -26.1418239
-          ],
-          [
-            28.035788,
-            -26.1424296
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.035788,
-            -26.1424296
-          ],
-          [
-            28.035886,
-            -26.1432918
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.035886,
-            -26.1432918
-          ],
-          [
-            28.0359071,
-            -26.1434218
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0359071,
-            -26.1434218
-          ],
-          [
-            28.0359346,
-            -26.1436295
-          ],
-          [
-            28.035945,
-            -26.1437043
-          ],
-          [
-            28.0360051,
-            -26.1441369
-          ],
-          [
-            28.0360392,
-            -26.144382
-          ],
-          [
-            28.0360834,
-            -26.1447214
-          ],
-          [
-            28.036097,
-            -26.1449947
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.036097,
-            -26.1449947
-          ],
-          [
-            28.036097,
-            -26.1451954
-          ],
-          [
-            28.0360033,
-            -26.1455194
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0360033,
-            -26.1455194
-          ],
-          [
-            28.0354729,
-            -26.1469935
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0354477,
-            -26.1336605
-          ],
-          [
-            28.0354377,
-            -26.1335446
-          ],
-          [
-            28.0354739,
-            -26.1333454
-          ],
-          [
-            28.0354866,
-            -26.1332316
-          ],
-          [
-            28.0354967,
-            -26.1331148
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0354967,
-            -26.1331148
-          ],
-          [
-            28.0355304,
-            -26.1322353
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0355304,
-            -26.1322353
-          ],
-          [
-            28.0355463,
-            -26.1319686
-          ],
-          [
-            28.0355356,
-            -26.1317447
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0355356,
-            -26.1317447
-          ],
-          [
-            28.0355066,
-            -26.1315509
-          ],
-          [
-            28.0354791,
-            -26.1314152
-          ],
-          [
-            28.0354266,
-            -26.1312553
-          ],
-          [
-            28.0353525,
-            -26.1310794
-          ],
-          [
-            28.03526,
-            -26.130894
-          ],
-          [
-            28.0351675,
-            -26.1307471
-          ],
-          [
-            28.0350494,
-            -26.1305701
-          ],
-          [
-            28.0349317,
-            -26.130411
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0349317,
-            -26.130411
-          ],
-          [
-            28.0347595,
-            -26.1302008
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0347595,
-            -26.1302008
-          ],
-          [
-            28.0346558,
-            -26.1300866
-          ],
-          [
-            28.0346011,
-            -26.1300276
-          ],
-          [
-            28.0343697,
-            -26.129778
-          ],
-          [
-            28.0340962,
-            -26.1294829
-          ],
-          [
-            28.033992,
-            -26.1293533
-          ],
-          [
-            28.0338907,
-            -26.1292095
-          ],
-          [
-            28.0337848,
-            -26.1290325
-          ],
-          [
-            28.033711,
-            -26.1288579
-          ],
-          [
-            28.0336957,
-            -26.1288116
-          ],
-          [
-            28.0336466,
-            -26.1286629
-          ],
-          [
-            28.0336027,
-            -26.1284908
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0336027,
-            -26.1284908
-          ],
-          [
-            28.0335382,
-            -26.1282047
-          ],
-          [
-            28.0335058,
-            -26.1280669
-          ],
-          [
-            28.0334589,
-            -26.1278971
-          ],
-          [
-            28.0334173,
-            -26.127761
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0334173,
-            -26.127761
-          ],
-          [
-            28.0333737,
-            -26.1276467
-          ],
-          [
-            28.0333154,
-            -26.1275142
-          ],
-          [
-            28.0332202,
-            -26.127319
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0332202,
-            -26.127319
-          ],
-          [
-            28.0331589,
-            -26.1272162
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0331589,
-            -26.1272162
-          ],
-          [
-            28.0331952,
-            -26.1272003
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0331952,
-            -26.1272003
-          ],
-          [
-            28.0332865,
-            -26.1271524
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0332865,
-            -26.1271524
-          ],
-          [
-            28.0333325,
-            -26.1270737
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0333325,
-            -26.1270737
-          ],
-          [
-            28.0334348,
-            -26.1268986
-          ],
-          [
-            28.0334782,
-            -26.1268111
-          ],
-          [
-            28.033731,
-            -26.1262887
-          ],
-          [
-            28.0337456,
-            -26.1262583
-          ],
-          [
-            28.0341044,
-            -26.1255093
-          ],
-          [
-            28.0342834,
-            -26.1251674
-          ],
-          [
-            28.0343388,
-            -26.1250617
-          ],
-          [
-            28.034403,
-            -26.1249254
-          ],
-          [
-            28.0344325,
-            -26.1248532
-          ],
-          [
-            28.0344526,
-            -26.1247695
-          ],
-          [
-            28.0344756,
-            -26.1246321
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0346584,
-            -26.1244919
-          ],
-          [
-            28.0346646,
-            -26.1245277
-          ],
-          [
-            28.0346583,
-            -26.1245635
-          ],
-          [
-            28.0346405,
-            -26.1245953
-          ],
-          [
-            28.0346128,
-            -26.1246209
-          ],
-          [
-            28.0345812,
-            -26.1246367
-          ],
-          [
-            28.034546,
-            -26.1246441
-          ],
-          [
-            28.0345098,
-            -26.1246425
-          ],
-          [
-            28.0344756,
-            -26.1246321
-          ],
-          [
-            28.0344491,
-            -26.1246162
-          ],
-          [
-            28.0344305,
-            -26.1245984
-          ],
-          [
-            28.0344163,
-            -26.1245776
-          ],
-          [
-            28.0344074,
-            -26.1245546
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0344074,
-            -26.1245546
-          ],
-          [
-            28.0344039,
-            -26.1245304
-          ],
-          [
-            28.034405,
-            -26.124512
-          ],
-          [
-            28.0344093,
-            -26.1244939
-          ],
-          [
-            28.0344168,
-            -26.1244767
-          ],
-          [
-            28.0344271,
-            -26.1244608
-          ],
-          [
-            28.034462,
-            -26.1244301
-          ],
-          [
-            28.034507,
-            -26.1244131
-          ],
-          [
-            28.0345415,
-            -26.1244107
-          ],
-          [
-            28.0345754,
-            -26.1244165
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0345754,
-            -26.1244165
-          ],
-          [
-            28.0346115,
-            -26.1244333
-          ],
-          [
-            28.0346401,
-            -26.1244593
-          ],
-          [
-            28.0346584,
-            -26.1244919
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0345754,
-            -26.1244165
-          ],
-          [
-            28.0346833,
-            -26.1243116
-          ],
-          [
-            28.034789,
-            -26.1242027
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.034789,
-            -26.1242027
-          ],
-          [
-            28.0349946,
-            -26.123773
-          ],
-          [
-            28.0350106,
-            -26.1237395
-          ],
-          [
-            28.0350189,
-            -26.123723
-          ],
-          [
-            28.0351893,
-            -26.123383
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0351893,
-            -26.123383
-          ],
-          [
-            28.0352533,
-            -26.1232349
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0352533,
-            -26.1232349
-          ],
-          [
-            28.0354258,
-            -26.1228574
-          ],
-          [
-            28.0356972,
-            -26.1222764
-          ],
-          [
-            28.0357374,
-            -26.1221464
-          ],
-          [
-            28.0357951,
-            -26.1219705
-          ],
-          [
-            28.0358064,
-            -26.1218315
-          ],
-          [
-            28.0358005,
-            -26.1216279
-          ],
-          [
-            28.0357455,
-            -26.1214131
-          ],
-          [
-            28.035728,
-            -26.1212373
-          ],
-          [
-            28.0357267,
-            -26.1210916
-          ],
-          [
-            28.0357388,
-            -26.1209314
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0357388,
-            -26.1209314
-          ],
-          [
-            28.0357629,
-            -26.120805
-          ],
-          [
-            28.0358085,
-            -26.1206761
-          ],
-          [
-            28.0358742,
-            -26.1205304
-          ],
-          [
-            28.0359748,
-            -26.1203667
-          ],
-          [
-            28.0361505,
-            -26.1200753
-          ],
-          [
-            28.0364737,
-            -26.1195743
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0364737,
-            -26.1195743
-          ],
-          [
-            28.0365815,
-            -26.1193978
-          ],
-          [
-            28.0366571,
-            -26.1192627
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0339745,
-            -26.1177952
-          ],
-          [
-            28.0341982,
-            -26.1180085
-          ],
-          [
-            28.0342302,
-            -26.118039
-          ],
-          [
-            28.0343778,
-            -26.1181797
-          ],
-          [
-            28.0347459,
-            -26.1184832
-          ],
-          [
-            28.0349019,
-            -26.1185899
-          ],
-          [
-            28.0349559,
-            -26.1186207
-          ],
-          [
-            28.0350066,
-            -26.1186447
-          ],
-          [
-            28.0355108,
-            -26.1188356
-          ],
-          [
-            28.0366571,
-            -26.1192627
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0339745,
-            -26.1177952
-          ],
-          [
-            28.033942,
-            -26.1177823
-          ],
-          [
-            28.0339291,
-            -26.1177761
-          ],
-          [
-            28.0339159,
-            -26.1177687
-          ],
-          [
-            28.033904,
-            -26.1177616
-          ],
-          [
-            28.0338942,
-            -26.1177538
-          ],
-          [
-            28.0336842,
-            -26.1175664
-          ],
-          [
-            28.033589,
-            -26.1174815
-          ],
-          [
-            28.0331706,
-            -26.1171221
-          ],
-          [
-            28.0331149,
-            -26.1170667
-          ],
-          [
-            28.0330633,
-            -26.1170221
-          ],
-          [
-            28.0329955,
-            -26.1169703
-          ],
-          [
-            28.0329493,
-            -26.1169354
-          ],
-          [
-            28.0328889,
-            -26.1169053
-          ],
-          [
-            28.0328299,
-            -26.1168854
-          ],
-          [
-            28.0327548,
-            -26.116871
-          ],
-          [
-            28.0325181,
-            -26.1168258
-          ],
-          [
-            28.0324036,
-            -26.116806
-          ],
-          [
-            28.0322105,
-            -26.1167649
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0322105,
-            -26.1167649
-          ],
-          [
-            28.0321265,
-            -26.116747
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0321265,
-            -26.116747
-          ],
-          [
-            28.0321397,
-            -26.1168618
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0321397,
-            -26.1168618
-          ],
-          [
-            28.0321634,
-            -26.1170685
-          ],
-          [
-            28.0322187,
-            -26.1180054
-          ],
-          [
-            28.0322375,
-            -26.1188146
-          ],
-          [
-            28.0322515,
-            -26.1196832
-          ],
-          [
-            28.0322428,
-            -26.120551
-          ],
-          [
-            28.0322723,
-            -26.1231061
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0322723,
-            -26.1231061
-          ],
-          [
-            28.0322831,
-            -26.1244547
-          ],
-          [
-            28.0322801,
-            -26.1245389
-          ],
-          [
-            28.0323153,
-            -26.1250423
-          ],
-          [
-            28.0324118,
-            -26.1254854
-          ],
-          [
-            28.0325235,
-            -26.1258923
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0325235,
-            -26.1258923
-          ],
-          [
-            28.0328413,
-            -26.1264613
-          ],
-          [
-            28.0329244,
-            -26.1265918
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0329244,
-            -26.1265918
-          ],
-          [
-            28.0329935,
-            -26.1267099
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0329935,
-            -26.1267099
-          ],
-          [
-            28.0331332,
-            -26.1269157
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0331332,
-            -26.1269157
-          ],
-          [
-            28.0332325,
-            -26.1270647
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0332325,
-            -26.1270647
-          ],
-          [
-            28.0332865,
-            -26.1271524
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0332865,
-            -26.1271524
-          ],
-          [
-            28.0333508,
-            -26.1272598
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0333508,
-            -26.1272598
-          ],
-          [
-            28.033428,
-            -26.1274275
-          ],
-          [
-            28.0334884,
-            -26.1275636
-          ],
-          [
-            28.0335541,
-            -26.127755
-          ],
-          [
-            28.0336158,
-            -26.1279609
-          ],
-          [
-            28.03367,
-            -26.1281902
-          ],
-          [
-            28.0337422,
-            -26.12851
-          ],
-          [
-            28.033829,
-            -26.1287869
-          ],
-          [
-            28.0339474,
-            -26.1290494
-          ],
-          [
-            28.0340014,
-            -26.1291475
-          ],
-          [
-            28.0340946,
-            -26.1292956
-          ],
-          [
-            28.0341952,
-            -26.1294251
-          ],
-          [
-            28.0343124,
-            -26.1295658
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0343124,
-            -26.1295658
-          ],
-          [
-            28.0347508,
-            -26.1300652
-          ],
-          [
-            28.0348462,
-            -26.1301579
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0348462,
-            -26.1301579
-          ],
-          [
-            28.0349509,
-            -26.1302576
-          ],
-          [
-            28.0350809,
-            -26.1304002
-          ],
-          [
-            28.035205,
-            -26.1305635
-          ],
-          [
-            28.0353382,
-            -26.1307774
-          ],
-          [
-            28.0354342,
-            -26.1309822
-          ],
-          [
-            28.0355148,
-            -26.1311716
-          ],
-          [
-            28.0355528,
-            -26.1312993
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0355528,
-            -26.1312993
-          ],
-          [
-            28.035568,
-            -26.1313502
-          ],
-          [
-            28.0356194,
-            -26.1315488
-          ],
-          [
-            28.0356395,
-            -26.1316676
-          ],
-          [
-            28.03565,
-            -26.131775
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.03565,
-            -26.131775
-          ],
-          [
-            28.0356603,
-            -26.1319036
-          ],
-          [
-            28.0356556,
-            -26.1320263
-          ],
-          [
-            28.0356468,
-            -26.1321954
-          ],
-          [
-            28.0355932,
-            -26.1331375
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0355932,
-            -26.1331375
-          ],
-          [
-            28.0355684,
-            -26.133302
-          ],
-          [
-            28.0355443,
-            -26.1334176
-          ],
-          [
-            28.0355054,
-            -26.1335549
-          ],
-          [
-            28.0354477,
-            -26.1336605
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0354729,
-            -26.1469935
-          ],
-          [
-            28.0355154,
-            -26.14722
-          ],
-          [
-            28.0355537,
-            -26.1473816
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0355537,
-            -26.1473816
-          ],
-          [
-            28.0356,
-            -26.147574
-          ],
-          [
-            28.0356186,
-            -26.1476401
-          ],
-          [
-            28.0356684,
-            -26.1479201
-          ],
-          [
-            28.0356934,
-            -26.1480447
-          ],
-          [
-            28.0357066,
-            -26.1481122
-          ],
-          [
-            28.0357086,
-            -26.1481489
-          ],
-          [
-            28.0356972,
-            -26.1482048
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0356972,
-            -26.1482048
-          ],
-          [
-            28.0357133,
-            -26.1483258
-          ],
-          [
-            28.0358326,
-            -26.1487171
-          ],
-          [
-            28.0358809,
-            -26.148758
-          ],
-          [
-            28.0359466,
-            -26.1487761
-          ],
-          [
-            28.0375235,
-            -26.1485179
-          ],
-          [
-            28.0379864,
-            -26.1484448
-          ],
-          [
-            28.0384673,
-            -26.1483682
-          ],
-          [
-            28.0386992,
-            -26.1483312
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0386992,
-            -26.1483312
-          ],
-          [
-            28.0391936,
-            -26.1482264
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0391936,
-            -26.1482264
-          ],
-          [
-            28.0391046,
-            -26.1477997
-          ],
-          [
-            28.0390991,
-            -26.1477733
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0390991,
-            -26.1477733
-          ],
-          [
-            28.0390871,
-            -26.1477041
-          ],
-          [
-            28.0390551,
-            -26.1475327
-          ],
-          [
-            28.0388977,
-            -26.1466888
-          ],
-          [
-            28.0388907,
-            -26.146651
-          ],
-          [
-            28.0387979,
-            -26.1461513
-          ],
-          [
-            28.0387872,
-            -26.1460938
-          ],
-          [
-            28.0386934,
-            -26.1455933
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0386934,
-            -26.1455933
-          ],
-          [
-            28.0386471,
-            -26.1453477
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0386471,
-            -26.1453477
-          ],
-          [
-            28.0386041,
-            -26.1451361
-          ],
-          [
-            28.0385022,
-            -26.1446349
-          ],
-          [
-            28.0382335,
-            -26.1433127
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0382335,
-            -26.1433127
-          ],
-          [
-            28.038171,
-            -26.1430313
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0381434,
-            -26.1429405
-          ],
-          [
-            28.038171,
-            -26.1430313
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0381434,
-            -26.1429405
-          ],
-          [
-            28.038161,
-            -26.1429381
-          ],
-          [
-            28.0386855,
-            -26.1428569
-          ],
-          [
-            28.0392313,
-            -26.1427726
-          ],
-          [
-            28.0393659,
-            -26.1427502
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0393659,
-            -26.1427502
-          ],
-          [
-            28.0397908,
-            -26.1426813
-          ],
-          [
-            28.0398546,
-            -26.1426734
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0398546,
-            -26.1426734
-          ],
-          [
-            28.0399338,
-            -26.1426579
-          ],
-          [
-            28.0402937,
-            -26.1425958
-          ],
-          [
-            28.0415613,
-            -26.1423783
-          ],
-          [
-            28.0434435,
-            -26.1420653
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0434435,
-            -26.1420653
-          ],
-          [
-            28.0435505,
-            -26.1420473
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0435505,
-            -26.1420473
-          ],
-          [
-            28.0436955,
-            -26.1420601
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0436955,
-            -26.1420601
-          ],
-          [
-            28.0436775,
-            -26.1421402
-          ],
-          [
-            28.0436727,
-            -26.1422118
-          ],
-          [
-            28.0436654,
-            -26.1422757
-          ],
-          [
-            28.0436573,
-            -26.1423841
-          ],
-          [
-            28.0436593,
-            -26.1425298
-          ],
-          [
-            28.0436841,
-            -26.1427218
-          ],
-          [
-            28.0437189,
-            -26.1428967
-          ],
-          [
-            28.0437456,
-            -26.1430155
-          ],
-          [
-            28.0437646,
-            -26.1431074
-          ],
-          [
-            28.0437681,
-            -26.1431244
-          ],
-          [
-            28.0440956,
-            -26.1446923
-          ],
-          [
-            28.0441277,
-            -26.144867
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0441277,
-            -26.144867
-          ],
-          [
-            28.0442293,
-            -26.1453615
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0442293,
-            -26.1453615
-          ],
-          [
-            28.0444252,
-            -26.1463376
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "relation/3284813",
-        "name": "Rosebank - Hyde Park (Gautrain RB4)",
-        "network": "Gautrain Bus"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            28.0444252,
-            -26.1463376
-          ],
-          [
-            28.0444828,
-            -26.1464334
-          ],
-          [
-            28.0445002,
-            -26.1464623
-          ],
-          [
-            28.0445129,
-            -26.1465038
-          ],
-          [
-            28.0445828,
-            -26.1467858
-          ],
-          [
-            28.0445944,
-            -26.1468462
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "relation/3284815",
         "name": "Rosebank - Killarney (Gautrain RB5)",
         "network": "Gautrain Bus"
@@ -106345,6 +103185,3100 @@
       "properties": {
         "id": "relation/21159999",
         "name": "Rosebank - Illovo (Gautrain RB3)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0444252,
+            -26.1463376
+          ],
+          [
+            28.0444828,
+            -26.1464334
+          ],
+          [
+            28.0445002,
+            -26.1464623
+          ],
+          [
+            28.0445129,
+            -26.1465038
+          ],
+          [
+            28.0445828,
+            -26.1467858
+          ],
+          [
+            28.0445944,
+            -26.1468462
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0441461,
+            -26.1465973
+          ],
+          [
+            28.0441213,
+            -26.1464394
+          ],
+          [
+            28.04412,
+            -26.1463852
+          ],
+          [
+            28.044118,
+            -26.1462973
+          ],
+          [
+            28.044124,
+            -26.1462708
+          ],
+          [
+            28.0441397,
+            -26.1462448
+          ],
+          [
+            28.0441862,
+            -26.146201
+          ],
+          [
+            28.0442215,
+            -26.1461719
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0442215,
+            -26.1461719
+          ],
+          [
+            28.0441673,
+            -26.1458736
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0441673,
+            -26.1458736
+          ],
+          [
+            28.0441639,
+            -26.1458547
+          ],
+          [
+            28.044156,
+            -26.1458139
+          ],
+          [
+            28.0441034,
+            -26.145543
+          ],
+          [
+            28.044072,
+            -26.1453814
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.044072,
+            -26.1453814
+          ],
+          [
+            28.0439797,
+            -26.1449245
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0439797,
+            -26.1449245
+          ],
+          [
+            28.0439525,
+            -26.1447959
+          ],
+          [
+            28.043934,
+            -26.1447086
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.043934,
+            -26.1447086
+          ],
+          [
+            28.0438649,
+            -26.1444136
+          ],
+          [
+            28.0437493,
+            -26.1438377
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0437493,
+            -26.1438377
+          ],
+          [
+            28.0436761,
+            -26.1435071
+          ],
+          [
+            28.0436147,
+            -26.1431537
+          ],
+          [
+            28.0436119,
+            -26.1431376
+          ],
+          [
+            28.0435956,
+            -26.1430436
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0435956,
+            -26.1430436
+          ],
+          [
+            28.0434552,
+            -26.1430663
+          ],
+          [
+            28.0432633,
+            -26.1430974
+          ],
+          [
+            28.0425474,
+            -26.1432313
+          ],
+          [
+            28.0418431,
+            -26.1433565
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0418283,
+            -26.1433674
+          ],
+          [
+            28.0417713,
+            -26.1434091
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0417713,
+            -26.1434091
+          ],
+          [
+            28.0416832,
+            -26.1434296
+          ],
+          [
+            28.0416368,
+            -26.143438
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0416368,
+            -26.143438
+          ],
+          [
+            28.0409813,
+            -26.1435575
+          ],
+          [
+            28.0409077,
+            -26.1435696
+          ],
+          [
+            28.0406784,
+            -26.1436081
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0406784,
+            -26.1436081
+          ],
+          [
+            28.0401597,
+            -26.1436985
+          ],
+          [
+            28.0400716,
+            -26.1437139
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0400716,
+            -26.1437139
+          ],
+          [
+            28.0400808,
+            -26.1437605
+          ],
+          [
+            28.040139,
+            -26.1440538
+          ],
+          [
+            28.0402629,
+            -26.1446634
+          ],
+          [
+            28.0402758,
+            -26.1447271
+          ],
+          [
+            28.0403756,
+            -26.1452208
+          ],
+          [
+            28.0403935,
+            -26.1453093
+          ],
+          [
+            28.0404128,
+            -26.1454093
+          ],
+          [
+            28.0404986,
+            -26.1458526
+          ],
+          [
+            28.0405295,
+            -26.145977
+          ],
+          [
+            28.04053,
+            -26.1459791
+          ],
+          [
+            28.0405565,
+            -26.146109
+          ],
+          [
+            28.0407724,
+            -26.1471689
+          ],
+          [
+            28.0408056,
+            -26.1473316
+          ],
+          [
+            28.0408845,
+            -26.1477189
+          ],
+          [
+            28.0409101,
+            -26.1478446
+          ],
+          [
+            28.0409292,
+            -26.1479381
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0409292,
+            -26.1479381
+          ],
+          [
+            28.0411099,
+            -26.1488242
+          ],
+          [
+            28.0411768,
+            -26.1491418
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0411768,
+            -26.1491418
+          ],
+          [
+            28.0411985,
+            -26.1492628
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0411985,
+            -26.1492628
+          ],
+          [
+            28.0397403,
+            -26.1492232
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0397403,
+            -26.1492232
+          ],
+          [
+            28.0393274,
+            -26.1492076
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0393274,
+            -26.1492076
+          ],
+          [
+            28.0384517,
+            -26.1491799
+          ],
+          [
+            28.0375062,
+            -26.149151
+          ],
+          [
+            28.0358393,
+            -26.1490835
+          ],
+          [
+            28.0353184,
+            -26.1490411
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0353184,
+            -26.1490411
+          ],
+          [
+            28.0347026,
+            -26.1490325
+          ],
+          [
+            28.0345414,
+            -26.1490358
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0345414,
+            -26.1490358
+          ],
+          [
+            28.0345865,
+            -26.1489533
+          ],
+          [
+            28.0346778,
+            -26.1487155
+          ],
+          [
+            28.0347123,
+            -26.1486254
+          ],
+          [
+            28.0349317,
+            -26.1480539
+          ],
+          [
+            28.0350861,
+            -26.1476568
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0350861,
+            -26.1476568
+          ],
+          [
+            28.035125,
+            -26.1475697
+          ],
+          [
+            28.0351965,
+            -26.1473626
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0351965,
+            -26.1473626
+          ],
+          [
+            28.0356766,
+            -26.1460684
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0356766,
+            -26.1460684
+          ],
+          [
+            28.0357634,
+            -26.1458048
+          ],
+          [
+            28.0358327,
+            -26.1456083
+          ],
+          [
+            28.0358825,
+            -26.145467
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0358825,
+            -26.145467
+          ],
+          [
+            28.0359521,
+            -26.1452029
+          ],
+          [
+            28.0359761,
+            -26.1449381
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0359761,
+            -26.1449381
+          ],
+          [
+            28.0359744,
+            -26.1447149
+          ],
+          [
+            28.0358986,
+            -26.1441916
+          ],
+          [
+            28.0358675,
+            -26.143993
+          ],
+          [
+            28.0357856,
+            -26.1434703
+          ],
+          [
+            28.0357793,
+            -26.1434301
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0357793,
+            -26.1434301
+          ],
+          [
+            28.0357623,
+            -26.1433012
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0357623,
+            -26.1433012
+          ],
+          [
+            28.0356647,
+            -26.1424375
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0356647,
+            -26.1424375
+          ],
+          [
+            28.0355753,
+            -26.1418437
+          ],
+          [
+            28.0355933,
+            -26.1415243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0354477,
+            -26.1336605
+          ],
+          [
+            28.0353572,
+            -26.1340244
+          ],
+          [
+            28.0352516,
+            -26.1344371
+          ],
+          [
+            28.0351368,
+            -26.1348601
+          ],
+          [
+            28.0349352,
+            -26.1356524
+          ],
+          [
+            28.0349116,
+            -26.135725
+          ],
+          [
+            28.0346125,
+            -26.1369638
+          ],
+          [
+            28.0344993,
+            -26.1374121
+          ],
+          [
+            28.0344601,
+            -26.1376107
+          ],
+          [
+            28.0344537,
+            -26.1378098
+          ],
+          [
+            28.0344649,
+            -26.1379573
+          ],
+          [
+            28.0345129,
+            -26.1381915
+          ],
+          [
+            28.0345593,
+            -26.1383362
+          ],
+          [
+            28.0347911,
+            -26.1391065
+          ],
+          [
+            28.0353673,
+            -26.1408646
+          ],
+          [
+            28.0355933,
+            -26.1415243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0354477,
+            -26.1336605
+          ],
+          [
+            28.0354377,
+            -26.1335446
+          ],
+          [
+            28.0354739,
+            -26.1333454
+          ],
+          [
+            28.0354866,
+            -26.1332316
+          ],
+          [
+            28.0354967,
+            -26.1331148
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0354967,
+            -26.1331148
+          ],
+          [
+            28.0355304,
+            -26.1322353
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0355304,
+            -26.1322353
+          ],
+          [
+            28.0355463,
+            -26.1319686
+          ],
+          [
+            28.0355356,
+            -26.1317447
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0355356,
+            -26.1317447
+          ],
+          [
+            28.0355066,
+            -26.1315509
+          ],
+          [
+            28.0354791,
+            -26.1314152
+          ],
+          [
+            28.0354266,
+            -26.1312553
+          ],
+          [
+            28.0353525,
+            -26.1310794
+          ],
+          [
+            28.03526,
+            -26.130894
+          ],
+          [
+            28.0351675,
+            -26.1307471
+          ],
+          [
+            28.0350494,
+            -26.1305701
+          ],
+          [
+            28.0349317,
+            -26.130411
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0349317,
+            -26.130411
+          ],
+          [
+            28.0347595,
+            -26.1302008
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0347595,
+            -26.1302008
+          ],
+          [
+            28.0346558,
+            -26.1300866
+          ],
+          [
+            28.0346011,
+            -26.1300276
+          ],
+          [
+            28.0343697,
+            -26.129778
+          ],
+          [
+            28.0340962,
+            -26.1294829
+          ],
+          [
+            28.033992,
+            -26.1293533
+          ],
+          [
+            28.0338907,
+            -26.1292095
+          ],
+          [
+            28.0337848,
+            -26.1290325
+          ],
+          [
+            28.033711,
+            -26.1288579
+          ],
+          [
+            28.0336957,
+            -26.1288116
+          ],
+          [
+            28.0336466,
+            -26.1286629
+          ],
+          [
+            28.0336027,
+            -26.1284908
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0336027,
+            -26.1284908
+          ],
+          [
+            28.0335382,
+            -26.1282047
+          ],
+          [
+            28.0335058,
+            -26.1280669
+          ],
+          [
+            28.0334589,
+            -26.1278971
+          ],
+          [
+            28.0334173,
+            -26.127761
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0334173,
+            -26.127761
+          ],
+          [
+            28.0333737,
+            -26.1276467
+          ],
+          [
+            28.0333154,
+            -26.1275142
+          ],
+          [
+            28.0332202,
+            -26.127319
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0332202,
+            -26.127319
+          ],
+          [
+            28.0331589,
+            -26.1272162
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0331589,
+            -26.1272162
+          ],
+          [
+            28.0331952,
+            -26.1272003
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0331952,
+            -26.1272003
+          ],
+          [
+            28.0332865,
+            -26.1271524
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0332865,
+            -26.1271524
+          ],
+          [
+            28.0333325,
+            -26.1270737
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0333325,
+            -26.1270737
+          ],
+          [
+            28.0334348,
+            -26.1268986
+          ],
+          [
+            28.0334782,
+            -26.1268111
+          ],
+          [
+            28.033731,
+            -26.1262887
+          ],
+          [
+            28.0337456,
+            -26.1262583
+          ],
+          [
+            28.0341044,
+            -26.1255093
+          ],
+          [
+            28.0342834,
+            -26.1251674
+          ],
+          [
+            28.0343388,
+            -26.1250617
+          ],
+          [
+            28.034403,
+            -26.1249254
+          ],
+          [
+            28.0344325,
+            -26.1248532
+          ],
+          [
+            28.0344526,
+            -26.1247695
+          ],
+          [
+            28.0344756,
+            -26.1246321
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0344756,
+            -26.1246321
+          ],
+          [
+            28.0344491,
+            -26.1246162
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0344491,
+            -26.1246162
+          ],
+          [
+            28.0344305,
+            -26.1245984
+          ],
+          [
+            28.0344163,
+            -26.1245776
+          ],
+          [
+            28.0344074,
+            -26.1245546
+          ],
+          [
+            28.0344039,
+            -26.1245304
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0344039,
+            -26.1245304
+          ],
+          [
+            28.034405,
+            -26.124512
+          ],
+          [
+            28.0344093,
+            -26.1244939
+          ],
+          [
+            28.0344168,
+            -26.1244767
+          ],
+          [
+            28.0344271,
+            -26.1244608
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0344271,
+            -26.1244608
+          ],
+          [
+            28.034462,
+            -26.1244301
+          ],
+          [
+            28.034507,
+            -26.1244131
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.034507,
+            -26.1244131
+          ],
+          [
+            28.0345415,
+            -26.1244107
+          ],
+          [
+            28.0345754,
+            -26.1244165
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0345754,
+            -26.1244165
+          ],
+          [
+            28.0346833,
+            -26.1243116
+          ],
+          [
+            28.034789,
+            -26.1242027
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.034789,
+            -26.1242027
+          ],
+          [
+            28.0349946,
+            -26.123773
+          ],
+          [
+            28.0350106,
+            -26.1237395
+          ],
+          [
+            28.0350189,
+            -26.123723
+          ],
+          [
+            28.0351893,
+            -26.123383
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0351893,
+            -26.123383
+          ],
+          [
+            28.0352533,
+            -26.1232349
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0352533,
+            -26.1232349
+          ],
+          [
+            28.0354258,
+            -26.1228574
+          ],
+          [
+            28.0356972,
+            -26.1222764
+          ],
+          [
+            28.0357374,
+            -26.1221464
+          ],
+          [
+            28.0357951,
+            -26.1219705
+          ],
+          [
+            28.0358064,
+            -26.1218315
+          ],
+          [
+            28.0358005,
+            -26.1216279
+          ],
+          [
+            28.0357455,
+            -26.1214131
+          ],
+          [
+            28.035728,
+            -26.1212373
+          ],
+          [
+            28.0357267,
+            -26.1210916
+          ],
+          [
+            28.0357388,
+            -26.1209314
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0357388,
+            -26.1209314
+          ],
+          [
+            28.0357629,
+            -26.120805
+          ],
+          [
+            28.0358085,
+            -26.1206761
+          ],
+          [
+            28.0358742,
+            -26.1205304
+          ],
+          [
+            28.0359748,
+            -26.1203667
+          ],
+          [
+            28.0361505,
+            -26.1200753
+          ],
+          [
+            28.0364737,
+            -26.1195743
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0364737,
+            -26.1195743
+          ],
+          [
+            28.0365815,
+            -26.1193978
+          ],
+          [
+            28.0366571,
+            -26.1192627
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0339745,
+            -26.1177952
+          ],
+          [
+            28.0341982,
+            -26.1180085
+          ],
+          [
+            28.0342302,
+            -26.118039
+          ],
+          [
+            28.0343778,
+            -26.1181797
+          ],
+          [
+            28.0347459,
+            -26.1184832
+          ],
+          [
+            28.0349019,
+            -26.1185899
+          ],
+          [
+            28.0349559,
+            -26.1186207
+          ],
+          [
+            28.0350066,
+            -26.1186447
+          ],
+          [
+            28.0355108,
+            -26.1188356
+          ],
+          [
+            28.0366571,
+            -26.1192627
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0339745,
+            -26.1177952
+          ],
+          [
+            28.033942,
+            -26.1177823
+          ],
+          [
+            28.0339291,
+            -26.1177761
+          ],
+          [
+            28.0339159,
+            -26.1177687
+          ],
+          [
+            28.033904,
+            -26.1177616
+          ],
+          [
+            28.0338942,
+            -26.1177538
+          ],
+          [
+            28.0336842,
+            -26.1175664
+          ],
+          [
+            28.033589,
+            -26.1174815
+          ],
+          [
+            28.0331706,
+            -26.1171221
+          ],
+          [
+            28.0331149,
+            -26.1170667
+          ],
+          [
+            28.0330633,
+            -26.1170221
+          ],
+          [
+            28.0329955,
+            -26.1169703
+          ],
+          [
+            28.0329493,
+            -26.1169354
+          ],
+          [
+            28.0328889,
+            -26.1169053
+          ],
+          [
+            28.0328299,
+            -26.1168854
+          ],
+          [
+            28.0327548,
+            -26.116871
+          ],
+          [
+            28.0325181,
+            -26.1168258
+          ],
+          [
+            28.0324036,
+            -26.116806
+          ],
+          [
+            28.0322105,
+            -26.1167649
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0322105,
+            -26.1167649
+          ],
+          [
+            28.0321265,
+            -26.116747
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0321265,
+            -26.116747
+          ],
+          [
+            28.0321397,
+            -26.1168618
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0321397,
+            -26.1168618
+          ],
+          [
+            28.0321634,
+            -26.1170685
+          ],
+          [
+            28.0322187,
+            -26.1180054
+          ],
+          [
+            28.0322375,
+            -26.1188146
+          ],
+          [
+            28.0322515,
+            -26.1196832
+          ],
+          [
+            28.0322428,
+            -26.120551
+          ],
+          [
+            28.0322723,
+            -26.1231061
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165276",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0322723,
+            -26.1231061
+          ],
+          [
+            28.0322826,
+            -26.1243926
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0322826,
+            -26.1243926
+          ],
+          [
+            28.0322831,
+            -26.1244547
+          ],
+          [
+            28.0322801,
+            -26.1245389
+          ],
+          [
+            28.0323153,
+            -26.1250423
+          ],
+          [
+            28.0324118,
+            -26.1254854
+          ],
+          [
+            28.0325235,
+            -26.1258923
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0325235,
+            -26.1258923
+          ],
+          [
+            28.0328413,
+            -26.1264613
+          ],
+          [
+            28.0329244,
+            -26.1265918
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0329244,
+            -26.1265918
+          ],
+          [
+            28.0329935,
+            -26.1267099
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0329935,
+            -26.1267099
+          ],
+          [
+            28.0331332,
+            -26.1269157
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0331332,
+            -26.1269157
+          ],
+          [
+            28.0332325,
+            -26.1270647
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0332325,
+            -26.1270647
+          ],
+          [
+            28.0332865,
+            -26.1271524
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0332865,
+            -26.1271524
+          ],
+          [
+            28.0333508,
+            -26.1272598
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0333508,
+            -26.1272598
+          ],
+          [
+            28.033428,
+            -26.1274275
+          ],
+          [
+            28.0334884,
+            -26.1275636
+          ],
+          [
+            28.0335541,
+            -26.127755
+          ],
+          [
+            28.0336158,
+            -26.1279609
+          ],
+          [
+            28.03367,
+            -26.1281902
+          ],
+          [
+            28.0337422,
+            -26.12851
+          ],
+          [
+            28.033829,
+            -26.1287869
+          ],
+          [
+            28.0339474,
+            -26.1290494
+          ],
+          [
+            28.0340014,
+            -26.1291475
+          ],
+          [
+            28.0340946,
+            -26.1292956
+          ],
+          [
+            28.0341952,
+            -26.1294251
+          ],
+          [
+            28.0343124,
+            -26.1295658
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0343124,
+            -26.1295658
+          ],
+          [
+            28.0347508,
+            -26.1300652
+          ],
+          [
+            28.0348462,
+            -26.1301579
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0348462,
+            -26.1301579
+          ],
+          [
+            28.0349509,
+            -26.1302576
+          ],
+          [
+            28.0350809,
+            -26.1304002
+          ],
+          [
+            28.035205,
+            -26.1305635
+          ],
+          [
+            28.0353382,
+            -26.1307774
+          ],
+          [
+            28.0354342,
+            -26.1309822
+          ],
+          [
+            28.0355148,
+            -26.1311716
+          ],
+          [
+            28.0355528,
+            -26.1312993
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0355528,
+            -26.1312993
+          ],
+          [
+            28.035568,
+            -26.1313502
+          ],
+          [
+            28.0356194,
+            -26.1315488
+          ],
+          [
+            28.0356395,
+            -26.1316676
+          ],
+          [
+            28.03565,
+            -26.131775
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.03565,
+            -26.131775
+          ],
+          [
+            28.0356603,
+            -26.1319036
+          ],
+          [
+            28.0356556,
+            -26.1320263
+          ],
+          [
+            28.0356468,
+            -26.1321954
+          ],
+          [
+            28.0355932,
+            -26.1331375
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0355932,
+            -26.1331375
+          ],
+          [
+            28.0355684,
+            -26.133302
+          ],
+          [
+            28.0355443,
+            -26.1334176
+          ],
+          [
+            28.0355054,
+            -26.1335549
+          ],
+          [
+            28.0354477,
+            -26.1336605
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0354477,
+            -26.1336605
+          ],
+          [
+            28.0353572,
+            -26.1340244
+          ],
+          [
+            28.0352516,
+            -26.1344371
+          ],
+          [
+            28.0351368,
+            -26.1348601
+          ],
+          [
+            28.0349352,
+            -26.1356524
+          ],
+          [
+            28.0349116,
+            -26.135725
+          ],
+          [
+            28.0346125,
+            -26.1369638
+          ],
+          [
+            28.0344993,
+            -26.1374121
+          ],
+          [
+            28.0344601,
+            -26.1376107
+          ],
+          [
+            28.0344537,
+            -26.1378098
+          ],
+          [
+            28.0344649,
+            -26.1379573
+          ],
+          [
+            28.0345129,
+            -26.1381915
+          ],
+          [
+            28.0345593,
+            -26.1383362
+          ],
+          [
+            28.0347911,
+            -26.1391065
+          ],
+          [
+            28.0353673,
+            -26.1408646
+          ],
+          [
+            28.0355933,
+            -26.1415243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0355933,
+            -26.1415243
+          ],
+          [
+            28.0356574,
+            -26.1418239
+          ],
+          [
+            28.035788,
+            -26.1424296
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.035788,
+            -26.1424296
+          ],
+          [
+            28.035886,
+            -26.1432918
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.035886,
+            -26.1432918
+          ],
+          [
+            28.0359071,
+            -26.1434218
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0359071,
+            -26.1434218
+          ],
+          [
+            28.0359346,
+            -26.1436295
+          ],
+          [
+            28.035945,
+            -26.1437043
+          ],
+          [
+            28.0360051,
+            -26.1441369
+          ],
+          [
+            28.0360392,
+            -26.144382
+          ],
+          [
+            28.0360834,
+            -26.1447214
+          ],
+          [
+            28.036097,
+            -26.1449947
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.036097,
+            -26.1449947
+          ],
+          [
+            28.036097,
+            -26.1451954
+          ],
+          [
+            28.0360033,
+            -26.1455194
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0360033,
+            -26.1455194
+          ],
+          [
+            28.0354729,
+            -26.1469935
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0354729,
+            -26.1469935
+          ],
+          [
+            28.0355154,
+            -26.14722
+          ],
+          [
+            28.0355537,
+            -26.1473816
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0355537,
+            -26.1473816
+          ],
+          [
+            28.0356,
+            -26.147574
+          ],
+          [
+            28.0356186,
+            -26.1476401
+          ],
+          [
+            28.0356684,
+            -26.1479201
+          ],
+          [
+            28.0356934,
+            -26.1480447
+          ],
+          [
+            28.0357066,
+            -26.1481122
+          ],
+          [
+            28.0357086,
+            -26.1481489
+          ],
+          [
+            28.0356972,
+            -26.1482048
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0356972,
+            -26.1482048
+          ],
+          [
+            28.0357133,
+            -26.1483258
+          ],
+          [
+            28.0358326,
+            -26.1487171
+          ],
+          [
+            28.0358809,
+            -26.148758
+          ],
+          [
+            28.0359466,
+            -26.1487761
+          ],
+          [
+            28.0375235,
+            -26.1485179
+          ],
+          [
+            28.0379864,
+            -26.1484448
+          ],
+          [
+            28.0384673,
+            -26.1483682
+          ],
+          [
+            28.0386992,
+            -26.1483312
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0386992,
+            -26.1483312
+          ],
+          [
+            28.0391936,
+            -26.1482264
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0391936,
+            -26.1482264
+          ],
+          [
+            28.0391046,
+            -26.1477997
+          ],
+          [
+            28.0390991,
+            -26.1477733
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0390991,
+            -26.1477733
+          ],
+          [
+            28.0390871,
+            -26.1477041
+          ],
+          [
+            28.0390551,
+            -26.1475327
+          ],
+          [
+            28.0388977,
+            -26.1466888
+          ],
+          [
+            28.0388907,
+            -26.146651
+          ],
+          [
+            28.0387979,
+            -26.1461513
+          ],
+          [
+            28.0387872,
+            -26.1460938
+          ],
+          [
+            28.0386934,
+            -26.1455933
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0386934,
+            -26.1455933
+          ],
+          [
+            28.0386471,
+            -26.1453477
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0386471,
+            -26.1453477
+          ],
+          [
+            28.0386041,
+            -26.1451361
+          ],
+          [
+            28.0385022,
+            -26.1446349
+          ],
+          [
+            28.0382335,
+            -26.1433127
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0382335,
+            -26.1433127
+          ],
+          [
+            28.038171,
+            -26.1430313
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0381434,
+            -26.1429405
+          ],
+          [
+            28.038171,
+            -26.1430313
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0381434,
+            -26.1429405
+          ],
+          [
+            28.038161,
+            -26.1429381
+          ],
+          [
+            28.0386855,
+            -26.1428569
+          ],
+          [
+            28.0392313,
+            -26.1427726
+          ],
+          [
+            28.0393659,
+            -26.1427502
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0393659,
+            -26.1427502
+          ],
+          [
+            28.0397908,
+            -26.1426813
+          ],
+          [
+            28.0398546,
+            -26.1426734
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0398546,
+            -26.1426734
+          ],
+          [
+            28.0399338,
+            -26.1426579
+          ],
+          [
+            28.0402937,
+            -26.1425958
+          ],
+          [
+            28.0415613,
+            -26.1423783
+          ],
+          [
+            28.0434435,
+            -26.1420653
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0434435,
+            -26.1420653
+          ],
+          [
+            28.0435505,
+            -26.1420473
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0435505,
+            -26.1420473
+          ],
+          [
+            28.0436955,
+            -26.1420601
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0436955,
+            -26.1420601
+          ],
+          [
+            28.0436775,
+            -26.1421402
+          ],
+          [
+            28.0436727,
+            -26.1422118
+          ],
+          [
+            28.0436654,
+            -26.1422757
+          ],
+          [
+            28.0436573,
+            -26.1423841
+          ],
+          [
+            28.0436593,
+            -26.1425298
+          ],
+          [
+            28.0436841,
+            -26.1427218
+          ],
+          [
+            28.0437189,
+            -26.1428967
+          ],
+          [
+            28.0437456,
+            -26.1430155
+          ],
+          [
+            28.0437646,
+            -26.1431074
+          ],
+          [
+            28.0437681,
+            -26.1431244
+          ],
+          [
+            28.0440956,
+            -26.1446923
+          ],
+          [
+            28.0441277,
+            -26.144867
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0441277,
+            -26.144867
+          ],
+          [
+            28.0442293,
+            -26.1453615
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
+        "network": "Gautrain Bus"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.0442293,
+            -26.1453615
+          ],
+          [
+            28.0444252,
+            -26.1463376
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "relation/21165277",
+        "name": "Rosebank - Hyde Park (Gautrain RB4)",
         "network": "Gautrain Bus"
       },
       "geometry": {

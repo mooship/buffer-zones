@@ -1,4 +1,4 @@
-export type MetroId = "tshwane" | "johannesburg" | "ekurhuleni";
+export type MetroId = "tshwane" | "johannesburg" | "ekurhuleni" | "emfuleni";
 
 export interface MetroDefinition {
   id: MetroId;
@@ -39,6 +39,15 @@ export const METROS: readonly MetroDefinition[] = [
     shortName: "Ekurhuleni",
     municipalityCode: 797,
     center: { lat: -26.175, lon: 28.29 },
+    zoom: 10,
+    jobCenterCount: 6,
+  },
+  {
+    id: "emfuleni",
+    name: "Emfuleni Local Municipality",
+    shortName: "Emfuleni",
+    municipalityCode: 760,
+    center: { lat: -26.67, lon: 27.86 },
     zoom: 10,
     jobCenterCount: 6,
   },
