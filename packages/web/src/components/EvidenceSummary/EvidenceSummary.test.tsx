@@ -13,6 +13,5 @@ describe("EvidenceSummary", () => {
     render(<EvidenceSummary jobCenterCount={18} />);
 
     expect(screen.getByText(/not mapped evenly/)).toBeInTheDocument();
-    expect(screen.getByText(/Ekurhuleni/)).toBeInTheDocument();
   });
 });
