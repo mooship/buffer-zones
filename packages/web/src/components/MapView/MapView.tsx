@@ -269,13 +269,14 @@ export function MapView({
   const themePreference = useThemePreference();
   const resolvedDark =
     themePreference === "dark" || (themePreference === "system" && prefersDark);
-  const useDarkTiles =
-    basemap === "street" && resolvedDark && "darkUrl" in BASEMAPS.street;
   const tiles = BASEMAPS[basemap];
-  const tileUrl = useDarkTiles ? BASEMAPS.street.darkUrl : tiles.url;
-  const tileAttribution = useDarkTiles
-    ? BASEMAPS.street.darkAttribution
-    : tiles.attribution;
+  const useDarkTiles =
+    resolvedDark && "darkUrl" in tiles && typeof tiles.darkUrl === "string";
+  const tileUrl = useDarkTiles ? tiles.darkUrl : tiles.url;
+  const tileAttribution =
+    useDarkTiles && "darkAttribution" in tiles
+      ? tiles.darkAttribution
+      : tiles.attribution;
   const showAreaLabels =
     visibleLayerIds.includes("townships") ||
     visibleLayerIds.includes("nearest-transit");
@@ -313,7 +314,6 @@ export function MapView({
           url={tileUrl}
           attribution={tileAttribution}
           detectRetina={useRetinaTiles}
-          className={useDarkTiles ? styles.darkTile : undefined}
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />

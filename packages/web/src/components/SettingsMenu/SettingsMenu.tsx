@@ -1,6 +1,6 @@
 import { Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { Basemap } from "../../constants/basemaps";
+import { BASEMAPS, type Basemap } from "../../constants/basemaps";
 import type { ThemePreference } from "../../hooks/useThemePreference";
 import { BasemapToggle } from "../BasemapToggle/BasemapToggle";
 import { IconButton } from "../IconButton/IconButton";
@@ -78,6 +78,13 @@ export function SettingsMenu({
           data-e2e="settings-menu-content"
         >
           <BasemapToggle basemap={basemap} onChange={onBasemapChange} />
+          <p
+            className={styles.basemapHint}
+            data-testid="settings-basemap-hint"
+            aria-live="polite"
+          >
+            {BASEMAPS[basemap].description}
+          </p>
           <ThemeToggle
             preference={themePreference}
             onChange={onThemePreferenceChange}

@@ -84,10 +84,39 @@ describe("SettingsMenu", () => {
     );
 
     fireEvent.click(screen.getByTestId("settings-menu-trigger"));
-    fireEvent.click(screen.getByTestId("basemap-option-satellite"));
+    fireEvent.click(screen.getByTestId("basemap-option-analysis"));
     fireEvent.click(screen.getByTestId("theme-option-dark"));
 
-    expect(onBasemapChange).toHaveBeenCalledWith("satellite");
+    expect(onBasemapChange).toHaveBeenCalledWith("analysis");
     expect(onThemePreferenceChange).toHaveBeenCalledWith("dark");
+  });
+
+  it("shows contextual guidance for the active basemap", () => {
+    const { rerender } = render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+    expect(screen.getByTestId("settings-basemap-hint")).toHaveTextContent(
+      "Best for place names, streets, and everyday orientation.",
+    );
+
+    rerender(
+      <SettingsMenu
+        basemap="analysis"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByTestId("settings-basemap-hint")).toHaveTextContent(
+      "Low-clutter base to compare layer colours and patterns.",
+    );
   });
 });

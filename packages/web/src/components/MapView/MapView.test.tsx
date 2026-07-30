@@ -60,13 +60,8 @@ vi.mock("react-leaflet", () => ({
   TileLayer: ({
     url,
     detectRetina,
-    className,
-  }: { url: string; detectRetina?: boolean; className?: string }) => (
-    <div
-      data-testid="tile-layer"
-      data-retina={String(detectRetina)}
-      data-classname={className ?? ""}
-    >
+  }: { url: string; detectRetina?: boolean }) => (
+    <div data-testid="tile-layer" data-retina={String(detectRetina)}>
       {url}
     </div>
   ),
@@ -366,46 +361,58 @@ describe("MapView", () => {
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
   });
 
-  it("applies the dark tile filter class to street tiles when the OS prefers dark mode", () => {
+  it("switches tile source when the analysis basemap is selected", () => {
+    render(<MapView townships={[]} visibleLayerIds={[]} basemap="analysis" />);
+
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
+      /light_nolabels/i,
+    );
+  });
+
+  it("uses the dark street tile source when the OS prefers dark mode", () => {
     stubMatchMedia(true);
 
     render(<MapView townships={[]} visibleLayerIds={[]} />);
 
-    expect(screen.getByTestId("tile-layer").dataset.classname).not.toBe("");
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(/dark_all/i);
   });
 
-  it("does not apply the dark tile filter class when the OS prefers light mode", () => {
+  it("uses the light street tile source when the OS prefers light mode", () => {
     stubMatchMedia(false);
 
     render(<MapView townships={[]} visibleLayerIds={[]} />);
 
-    expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
   });
 
-  it("does not apply the dark tile filter class to the satellite basemap in dark mode", () => {
+  it("does not swap to a dark variant for satellite in dark mode", () => {
     stubMatchMedia(true);
 
     render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
 
-    expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
   });
 
-  it("applies the dark tile filter class when the theme is explicitly dark, regardless of OS preference", () => {
+  it("uses dark analysis tiles when the theme is explicitly dark", () => {
     stubMatchMedia(false);
     setThemePreference("dark");
 
-    render(<MapView townships={[]} visibleLayerIds={[]} />);
+    render(<MapView townships={[]} visibleLayerIds={[]} basemap="analysis" />);
 
-    expect(screen.getByTestId("tile-layer").dataset.classname).not.toBe("");
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
+      /dark_nolabels/i,
+    );
   });
 
-  it("does not apply the dark tile filter class when the theme is explicitly light, regardless of OS preference", () => {
+  it("uses light analysis tiles when the theme is explicitly light", () => {
     stubMatchMedia(true);
     setThemePreference("light");
 
-    render(<MapView townships={[]} visibleLayerIds={[]} />);
+    render(<MapView townships={[]} visibleLayerIds={[]} basemap="analysis" />);
 
-    expect(screen.getByTestId("tile-layer").dataset.classname).toBe("");
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
+      /light_nolabels/i,
+    );
   });
 
   it("refits the full area bounds when crossing the mobile breakpoint", () => {
