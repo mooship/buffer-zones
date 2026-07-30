@@ -10,6 +10,7 @@ Under apartheid, townships were deliberately separated from economic centers by 
 
 ## Documentation
 
+- [`docs/design-system.md`](docs/design-system.md) — the app's Material-informed local design system, tokens, and shared UI primitives
 - [`docs/data/tshwane-area-classification.md`](docs/data/tshwane-area-classification.md) — how included Tshwane township and settlement areas are selected and displayed
 - [`docs/data/johannesburg-area-classification.md`](docs/data/johannesburg-area-classification.md) — the same, for Johannesburg
 - [`data-pipeline/README.md`](data-pipeline/README.md) — how to (re-)run the data pipeline

@@ -1,6 +1,7 @@
 import type { LayerId } from "@buffer-zones/shared";
 import { BookOpen, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { IconButton } from "../IconButton/IconButton";
 import { Legend } from "../Legend/Legend";
 import styles from "./MobileLegend.module.css";
 
@@ -56,19 +57,18 @@ export function MobileLegend({
 
   return (
     <div className={styles.container} ref={containerRef}>
-      <button
-        type="button"
+      <IconButton
         ref={triggerRef}
         className={styles.trigger}
         data-testid="mobile-legend-trigger"
         data-e2e="mobile-legend-trigger"
         aria-expanded={open}
         aria-controls="mobile-legend-content"
-        aria-label={open ? "Close map legend" : "Open map legend"}
+        label={open ? "Close map legend" : "Open map legend"}
         onClick={() => setOpen((value) => !value)}
       >
         {open ? <X aria-hidden="true" /> : <BookOpen aria-hidden="true" />}
-      </button>
+      </IconButton>
       {open ? (
         <section
           id="mobile-legend-content"

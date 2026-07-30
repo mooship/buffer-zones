@@ -18,9 +18,37 @@
   --radius-md: 12px;
   --radius-lg: 20px;
 
+  --shape-small: var(--radius-sm);
+  --shape-medium: var(--radius-md);
+  --shape-large: var(--radius-lg);
+
   --shadow-sm: 0 1px 2px rgb(15 23 42 / 10%), 0 2px 4px rgb(15 23 42 / 8%);
   --shadow-md: 0 3px 8px rgb(15 23 42 / 14%), 0 8px 20px rgb(15 23 42 / 10%);
   --shadow-lg: 0 6px 16px rgb(15 23 42 / 18%), 0 14px 34px rgb(15 23 42 / 12%);
+
+  --elevation-raised: var(--shadow-md);
+  --elevation-overlay: var(--shadow-lg);
+
+  --color-primary: var(--color-ochre);
+  --color-on-primary: var(--color-ink);
+  --color-on-surface: var(--color-paper);
+  --color-on-surface-variant: var(--color-muted);
+  --color-outline: color-mix(in srgb, var(--color-line) 52%, transparent);
+  --color-surface-container-low: var(--color-surface);
+  --color-state-hover: var(--color-surface-hover);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+
+  --control-height: 44px;
+  --control-height-compact: 40px;
+  --control-gap: var(--space-1);
+  --control-padding: var(--space-1);
+
+  --motion-duration-short: 150ms;
+  --motion-duration-medium: 180ms;
 
   color-scheme: light;
 }

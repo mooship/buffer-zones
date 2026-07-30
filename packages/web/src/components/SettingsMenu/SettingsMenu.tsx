@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Basemap } from "../../constants/basemaps";
 import type { ThemePreference } from "../../hooks/useThemePreference";
 import { BasemapToggle } from "../BasemapToggle/BasemapToggle";
+import { IconButton } from "../IconButton/IconButton";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import styles from "./SettingsMenu.module.css";
 
@@ -56,19 +57,18 @@ export function SettingsMenu({
       data-testid="settings-menu-root"
       data-e2e="settings-menu-root"
     >
-      <button
-        type="button"
+      <IconButton
         ref={triggerRef}
         className={styles.trigger}
         data-testid="settings-menu-trigger"
         data-e2e="settings-menu-trigger"
         aria-expanded={open}
         aria-controls="map-settings-menu"
-        aria-label={open ? "Close map settings" : "Map settings"}
+        label={open ? "Close map settings" : "Map settings"}
         onClick={() => setOpen((value) => !value)}
       >
         {open ? <X aria-hidden="true" /> : <Settings aria-hidden="true" />}
-      </button>
+      </IconButton>
       {open ? (
         <div
           id="map-settings-menu"
