@@ -89,6 +89,47 @@ function compareTownships(
   return compareByName(first, second, "asc");
 }
 
+function compareGroups(
+  first: GroupSummary,
+  second: GroupSummary,
+  mode: TownshipSortMode,
+): number {
+  if (mode === "name-asc") {
+    return first.name.localeCompare(second.name, "en-ZA");
+  }
+
+  if (mode === "name-desc") {
+    return second.name.localeCompare(first.name, "en-ZA");
+  }
+
+  const firstMinutes =
+    mode === "commute-desc" ? first.longestTime : first.shortestTime;
+  const secondMinutes =
+    mode === "commute-desc" ? second.longestTime : second.shortestTime;
+
+  if (firstMinutes === undefined && secondMinutes === undefined) {
+    return first.name.localeCompare(second.name, "en-ZA");
+  }
+
+  if (firstMinutes === undefined) {
+    return 1;
+  }
+
+  if (secondMinutes === undefined) {
+    return -1;
+  }
+
+  const difference =
+    mode === "commute-desc"
+      ? secondMinutes - firstMinutes
+      : firstMinutes - secondMinutes;
+  if (difference !== 0) {
+    return difference;
+  }
+
+  return first.name.localeCompare(second.name, "en-ZA");
+}
+
 interface TownshipBrowserProps {
   townships: TownshipFeature[];
   selectedTownshipId: string | null;
@@ -166,7 +207,7 @@ export function TownshipBrowser({
     }, [townships]);
 
   const groups = useMemo<VisibleGroup[]>(() => {
-    return groupSummaries.flatMap((groupSummary) => {
+    const visibleGroups = groupSummaries.flatMap((groupSummary) => {
       const groupMatches = groupSummary.searchName.includes(deferredQuery);
       const matchingFeatures = groupMatches
         ? groupSummary.allFeatures
@@ -186,6 +227,10 @@ export function TownshipBrowser({
 
       return [{ ...groupSummary, features }];
     });
+
+    return visibleGroups.sort((first, second) =>
+      compareGroups(first, second, sortMode),
+    );
   }, [deferredQuery, groupSummaries, sortMode]);
 
   const resultCount = useMemo(() => {
@@ -238,7 +283,7 @@ export function TownshipBrowser({
       </label>
 
       <label className={styles.sortControl}>
-        <span className={styles.sortLabel}>Sort places</span>
+        <span className={styles.sortLabel}>Sort included areas and places</span>
         <select
           className={styles.sortSelect}
           data-testid="township-sort"

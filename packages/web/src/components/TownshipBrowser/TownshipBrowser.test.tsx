@@ -173,4 +173,36 @@ describe("TownshipBrowser", () => {
       expect.stringContaining("Mamelodi Charlie"),
     ]);
   });
+
+  it("reorders included areas when the sort option changes", () => {
+    render(
+      <TownshipBrowser
+        townships={townships}
+        selectedTownshipId={null}
+        onSelect={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen
+        .getAllByTestId(/township-group-(mamelodi|soshanguve)/)
+        .map((button) => button.textContent),
+    ).toEqual([
+      expect.stringContaining("Soshanguve"),
+      expect.stringContaining("Mamelodi"),
+    ]);
+
+    fireEvent.change(screen.getByTestId("township-sort"), {
+      target: { value: "name-asc" },
+    });
+
+    expect(
+      screen
+        .getAllByTestId(/township-group-(mamelodi|soshanguve)/)
+        .map((button) => button.textContent),
+    ).toEqual([
+      expect.stringContaining("Mamelodi"),
+      expect.stringContaining("Soshanguve"),
+    ]);
+  });
 });
