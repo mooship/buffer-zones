@@ -1,4 +1,4 @@
-import { type TownshipFeature, getMetroDefinition } from "@buffer-zones/shared";
+import { METROS, type TownshipFeature } from "@buffer-zones/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, Minus, Plus, X } from "lucide-react";
@@ -43,6 +43,11 @@ const PANEL_LABELS: Record<PanelView, string> = {
   places: "Browse places",
   layers: "Map layers",
 };
+
+const NATIONAL_JOB_CENTER_COUNT = METROS.reduce(
+  (total, metro) => total + metro.jobCenterCount,
+  0,
+);
 
 export function App() {
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
@@ -264,7 +269,7 @@ export function App() {
           {panelView === "story" ? (
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Why this map exists</h2>
-              <EvidenceSummary jobCenterCount={12} />
+              <EvidenceSummary jobCenterCount={NATIONAL_JOB_CENTER_COUNT} />
               <details className={styles.panelSources}>
                 <summary>Data sources and method</summary>
                 <div className={styles.panelSourceList}>

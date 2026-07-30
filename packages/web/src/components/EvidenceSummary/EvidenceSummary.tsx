@@ -31,6 +31,14 @@ export function EvidenceSummary({ jobCenterCount }: EvidenceSummaryProps) {
         classification built from Census 2011 main places and named sub-places,
         not an official Stats SA township category.
       </p>
+      <p className={styles.method}>
+        Transit is not mapped evenly across metros. Ekurhuleni is matched only
+        against the Gauteng-wide rail and Gautrain bus networks, because
+        OpenStreetMap carries no route geometry for its municipal bus or BRT
+        services. Its distances to transit therefore overstate the gap compared
+        with Tshwane and Johannesburg, which reflects a mapping gap rather than
+        a measured difference in service.
+      </p>
       <a
         className={styles.source}
         href="https://sahistory.org.za/ref/A-0098760"

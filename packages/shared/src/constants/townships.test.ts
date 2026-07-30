@@ -25,7 +25,7 @@ describe("township groups", () => {
       "Olievenhoutbosch",
     );
     expect(getTownshipGroup("Plastic View", "799014063")).toBe("Plastic View");
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(67);
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(104);
   });
 
   it("tags each area with its metro and includes Johannesburg's townships", () => {
@@ -44,6 +44,12 @@ describe("township groups", () => {
     expect(getTownshipAreaDefinition("Mamelodi SP", "799045001")).toMatchObject(
       { metroId: "tshwane" },
     );
+    expect(
+      getTownshipAreaDefinition("Thembisa Ext 11", "797001001"),
+    ).toMatchObject({ metroId: "ekurhuleni", name: "Tembisa" });
+    expect(
+      getTownshipAreaDefinition("Tokoza Ext 2", "797002001"),
+    ).toMatchObject({ metroId: "ekurhuleni", name: "Thokoza" });
   });
 
   it("uses exact names for township areas inside mixed Census main places", () => {

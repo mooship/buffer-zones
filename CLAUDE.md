@@ -10,7 +10,7 @@ Buffer Zones maps apartheid-era spatial planning legacy across South African met
 
 ```bash
 npm install
-npm run test        # vitest across all workspaces (packages/*, data-pipeline)
+npm run test        # vitest across the npm workspaces under packages/*
 npm run test:coverage # vitest run --coverage, same scope
 npm run typecheck   # shared package typecheck + web build + data-pipeline typecheck
 npm run build       # build all workspaces

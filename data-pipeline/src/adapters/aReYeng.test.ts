@@ -258,7 +258,7 @@ describe("fetchAReYengRoutes", () => {
 
   it("falls back to Overpass if a layer response has an unexpected shape", async () => {
     const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (url.includes("overpass-api.de")) {
+      if (url.includes("/api/interpreter")) {
         return Promise.resolve({
           ok: true,
           json: async () => ({ elements: [] }),
@@ -284,7 +284,7 @@ describe("fetchAReYengRoutes", () => {
 
   it("falls back to Overpass if any of the three layers fails to fetch", async () => {
     const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (url.includes("overpass-api.de")) {
+      if (url.includes("/api/interpreter")) {
         return Promise.resolve({
           ok: true,
           json: async () => ({ elements: [] }),

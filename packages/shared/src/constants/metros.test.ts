@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { METROS, getMetroDefinition } from "./metros";
 
 describe("metros", () => {
-  it("defines Tshwane and Johannesburg with distinct municipality codes", () => {
-    expect(METROS).toHaveLength(2);
+  it("defines Gauteng metros with distinct municipality codes", () => {
+    expect(METROS).toHaveLength(3);
     expect(getMetroDefinition("tshwane").municipalityCode).toBe(799);
     expect(getMetroDefinition("johannesburg").municipalityCode).toBe(798);
+    expect(getMetroDefinition("ekurhuleni").municipalityCode).toBe(797);
   });
 
   it("throws for an unknown metro id", () => {
