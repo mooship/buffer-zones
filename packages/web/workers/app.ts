@@ -1,8 +1,8 @@
 import { createRequestHandler } from "react-router";
 
 const requestHandler = createRequestHandler(
-  () => import("virtual:react-router/server-build"),
-  import.meta.env.MODE,
+  () => import("../build/server/index.js"),
+  import.meta.env?.MODE ?? "production",
 );
 
 export default {

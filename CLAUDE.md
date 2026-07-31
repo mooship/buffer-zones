@@ -50,7 +50,7 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 
 - **packages/web** — `layers/registry.ts` uses `getLayerDefinitions()` with no metro argument and points every layer to `/data/national/*.geojson`. UI state in `stores/useMapUiStore.ts` contains layer visibility, basemap, panel state, and selection only; there is no metro selector state. `App.tsx` and `hooks/useLayerData.ts` fetch national data paths.
 
-- **Deploy** — Cloudflare Workers runs the React Router server entry (`packages/web/workers/app.ts`) and serves built client assets from `packages/web/build/client` (`wrangler.jsonc`). Full/100 Lighthouse scores and mobile-friendliness are a hard requirement, not aspirational — this drives decisions like the `.display.v1.geojson` simplification step and self-hosted variable fonts.
+- **Deploy** — Cloudflare Workers runs the wrapper entry (`packages/web/workers/app.ts`) which imports the built React Router server bundle (`packages/web/build/server/index.js`), and serves built client assets from `packages/web/build/client` (`wrangler.jsonc`). Full/100 Lighthouse scores and mobile-friendliness are a hard requirement, not aspirational — this drives decisions like the `.display.v1.geojson` simplification step and self-hosted variable fonts.
 
 - **Testing** — vitest unit/component tests (gated in CI) deliberately mock `react-leaflet`, so real Leaflet rendering, tile requests, and popup/tooltip binding are untested there by design. `packages/web/e2e/` fills that gap with Playwright, run on demand against a production SSR preview (`npm run build && npm run preview --workspace @buffer-zones/web`) with basemap tile requests mocked to a 1x1 PNG so the suite doesn't depend on OSM/CARTO/Esri availability.
 
