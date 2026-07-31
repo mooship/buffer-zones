@@ -51,12 +51,18 @@ function createMockLayer(feature: { properties?: { id?: string } | null }) {
 vi.mock("react-leaflet", () => ({
   MapContainer: ({
     bounds,
+    preferCanvas,
     children,
   }: {
     bounds: unknown;
+    preferCanvas?: boolean;
     children: ReactNode;
   }) => (
-    <div data-testid="map-container" data-has-bounds={String(Boolean(bounds))}>
+    <div
+      data-testid="map-container"
+      data-has-bounds={String(Boolean(bounds))}
+      data-prefer-canvas={String(Boolean(preferCanvas))}
+    >
       {children}
     </div>
   ),
@@ -164,6 +170,10 @@ describe("MapView", () => {
     expect(screen.getByTestId("map-container")).toBeInTheDocument();
     expect(screen.getByTestId("map-container")).toHaveAttribute(
       "data-has-bounds",
+      "true",
+    );
+    expect(screen.getByTestId("map-container")).toHaveAttribute(
+      "data-prefer-canvas",
       "true",
     );
     expect(screen.getByTestId("tile-layer")).toBeInTheDocument();
@@ -450,8 +460,8 @@ describe("MapView", () => {
     expect(mapMocks.invalidateSize).toHaveBeenCalledWith({ animate: false });
     expect(mapMocks.fitBounds).toHaveBeenCalledWith(
       [
-        [-35, 16],
-        [-22, 33],
+        [-27.15, 27.1],
+        [-25.3, 28.75],
       ],
       { padding: [24, 24] },
     );

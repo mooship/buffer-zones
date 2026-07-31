@@ -49,6 +49,11 @@ const NATIONAL_BOUNDS: [[number, number], [number, number]] = [
   [-22.0, 33.0],
 ];
 
+const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
+  [-27.15, 27.1],
+  [-25.3, 28.75],
+];
+
 const STOP_RADIUS = 4;
 const TOWNSHIP_PANE = "townships";
 const TOWNSHIP_OUTLINE_PANE = "township-outlines";
@@ -252,7 +257,7 @@ function ResponsiveMapBounds() {
           return;
         }
         desktopRef.current = desktop;
-        map.fitBounds(NATIONAL_BOUNDS, getBoundsOptions(desktop));
+        map.fitBounds(GAUTENG_BOUNDS, getBoundsOptions(desktop));
       });
     };
 
@@ -399,10 +404,11 @@ function MapViewComponent({
       aria-label="Map of South African township access to job centres"
     >
       <MapContainer
-        bounds={NATIONAL_BOUNDS}
+        bounds={GAUTENG_BOUNDS}
         boundsOptions={boundsOptions}
         className={styles.map}
         scrollWheelZoom
+        preferCanvas
         zoomControl={false}
       >
         <ZoomControl position="bottomright" />
@@ -412,6 +418,7 @@ function MapViewComponent({
           url={tileUrl}
           attribution={tileAttribution}
           detectRetina={useRetinaTiles}
+          updateWhenZooming={false}
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />

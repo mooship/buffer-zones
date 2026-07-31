@@ -2,6 +2,9 @@ import { expect, test } from "./fixtures";
 import { E2E } from "./selectors";
 import { ensurePanelOpen } from "./ui";
 
+const MAP_GEOMETRY_SELECTOR =
+  ".leaflet-overlay-pane canvas, .leaflet-container path.leaflet-interactive";
+
 test.describe("app shell", () => {
   test("loads with the expected landmarks and a rendered map", async ({
     page,
@@ -21,9 +24,7 @@ test.describe("app shell", () => {
     ).toBeVisible();
 
     await expect(page.locator(".leaflet-container")).toBeVisible();
-    await expect(
-      page.locator(".leaflet-container path.leaflet-interactive").first(),
-    ).toBeVisible();
+    await expect(page.locator(MAP_GEOMETRY_SELECTOR).first()).toBeVisible();
   });
 
   test("shows layer controls in the layers tab and keeps legend toggle available", async ({

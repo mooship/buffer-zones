@@ -1,6 +1,9 @@
 import { expect, test } from "./fixtures";
 import { E2E } from "./selectors";
 
+const MAP_GEOMETRY_SELECTOR =
+  ".leaflet-overlay-pane canvas, .leaflet-container path.leaflet-interactive";
+
 test.describe("data load error and retry", () => {
   test("shows an error when township data fails to load, and recovers on retry", async ({
     page,
@@ -22,9 +25,7 @@ test.describe("data load error and retry", () => {
     await page.getByTestId(E2E.retryDataLoad).click();
 
     await expect(alert).not.toBeVisible();
-    await expect(
-      page.locator(".leaflet-container path.leaflet-interactive").first(),
-    ).toBeVisible();
+    await expect(page.locator(MAP_GEOMETRY_SELECTOR).first()).toBeVisible();
     expect(requestCount).toBe(2);
   });
 });
