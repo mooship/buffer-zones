@@ -263,7 +263,7 @@ describe("App", () => {
     );
   });
 
-  it("keeps the legend toggle available while layer controls are open", async () => {
+  it("keeps the legend visible on desktop while layer controls are open", async () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
@@ -272,13 +272,7 @@ describe("App", () => {
       await screen.findByRole("checkbox", { name: "Modeled car time" }),
     ).toBeInTheDocument();
 
-    const legendTrigger = screen.getByRole("button", {
-      name: /open map legend/i,
-    });
-    fireEvent.click(legendTrigger);
-
-    expect(legendTrigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByTestId("mobile-legend-content")).toBeVisible();
+    expect(screen.getByTestId("desktop-legend")).toBeVisible();
     expect(
       screen.getByRole("list", { name: /active map layers legend/i }),
     ).toBeInTheDocument();
@@ -312,7 +306,7 @@ describe("App", () => {
       screen.getByRole("list", { name: /active map layers legend/i }),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId("mobile-legend-close"));
+    fireEvent.click(openLegend);
     expect(
       screen.queryByTestId("mobile-legend-content"),
     ).not.toBeInTheDocument();

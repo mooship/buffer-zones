@@ -158,7 +158,7 @@
 
 .panel {
   position: absolute;
-  top: 5.25rem;
+  top: calc(1.25rem + var(--control-height) + 0.625rem);
   right: 1.25rem;
   z-index: 1245;
   width: 30rem;

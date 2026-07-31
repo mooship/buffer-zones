@@ -600,30 +600,7 @@ function MapViewComponent({
               key={layer.id}
               data={data}
               smoothFactor={0}
-              style={
-                isChoropleth
-                  ? (feature: Feature | undefined) => {
-                      const base = config.styleFn?.(feature);
-                      if (!base) {
-                        return {};
-                      }
-
-                      const fillColor =
-                        typeof base.fillColor === "string"
-                          ? base.fillColor
-                          : "#8a93a5";
-                      return {
-                        ...base,
-                        color: fillColor,
-                        fillColor,
-                        opacity: resolvedDark ? 0.9 : 0.85,
-                        weight: isOverviewZoom ? 0.7 : isDetailZoom ? 1 : 0.85,
-                        lineCap: "round",
-                        lineJoin: "round",
-                      };
-                    }
-                  : config.styleFn
-              }
+              style={config.styleFn}
               pathOptions={{
                 ...config.pathOptions,
                 pane: isChoropleth ? TOWNSHIP_PANE : TRANSIT_PANE,

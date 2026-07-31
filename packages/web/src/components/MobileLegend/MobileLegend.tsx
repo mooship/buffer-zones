@@ -86,18 +86,7 @@ export function MobileLegend({
           data-testid="mobile-legend-content"
           data-e2e="mobile-legend-content"
         >
-          <div className={styles.header}>
-            <h2 className={styles.title}>Map legend</h2>
-            <button
-              type="button"
-              className={styles.closeButton}
-              data-testid="mobile-legend-close"
-              data-e2e="mobile-legend-close"
-              onClick={() => setOpen(false)}
-            >
-              Close map legend
-            </button>
-          </div>
+          <h2 className={styles.title}>Map legend</h2>
           <Legend mode="active" visibleLayerIds={visibleLayerIds} compact />
         </section>
       ) : null}

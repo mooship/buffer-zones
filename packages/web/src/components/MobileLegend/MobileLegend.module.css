@@ -6,11 +6,6 @@
   display: block;
 }
 
-.closeButton:focus-visible {
-  outline: 2px solid var(--color-paper);
-  outline-offset: 2px;
-}
-
 .sheet {
   position: absolute;
   left: 0;
@@ -28,16 +23,8 @@
   animation: mobileLegendIn 170ms ease;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-}
-
 .title {
-  margin: 0;
+  margin: 0 0 var(--space-3);
   color: var(--color-paper);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -45,25 +32,13 @@
   text-transform: uppercase;
 }
 
-.closeButton {
-  min-height: var(--control-height-compact);
-  padding: 0 var(--space-3);
-  border: 1px solid color-mix(in srgb, var(--color-line) 62%, transparent);
-  border-radius: var(--shape-small);
-  background: color-mix(in srgb, var(--color-surface) 85%, transparent);
-  color: var(--color-paper);
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
 @media (max-width: 768px) {
   .container {
-    left: auto;
-    right: 0.75rem;
+    left: var(--mobile-control-edge);
     bottom: calc(
       var(--mobile-control-bottom) +
+      var(--mobile-control-size) +
+      3rem +
       var(--mobile-control-size) +
       var(--mobile-control-gap)
     );
@@ -87,11 +62,6 @@
       var(--mobile-control-size) +
       var(--mobile-control-gap)
     );
-  }
-
-  .sheet {
-    left: auto;
-    right: 0;
   }
 }
 

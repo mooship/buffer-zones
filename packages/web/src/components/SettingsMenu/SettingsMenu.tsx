@@ -74,9 +74,13 @@ export function SettingsMenu({
           id="map-settings-menu"
           className={styles.menu}
           role="menu"
+          aria-labelledby="map-settings-menu-title"
           data-testid="settings-menu-content"
           data-e2e="settings-menu-content"
         >
+          <h2 id="map-settings-menu-title" className={styles.title}>
+            Map settings
+          </h2>
           <BasemapToggle basemap={basemap} onChange={onBasemapChange} />
           <p
             className={styles.basemapHint}

@@ -15,6 +15,7 @@ import {
 import { useWindowSize } from "usehooks-ts";
 import styles from "./App.module.css";
 import { ControlButton } from "./components/ControlButton/ControlButton";
+import { DesktopLegend } from "./components/DesktopLegend/DesktopLegend";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { LocationSearchControl } from "./components/LocationSearchControl/LocationSearchControl";
@@ -349,12 +350,16 @@ export function App() {
         </span>
       </ControlButton>
 
-      <MobileLegend
-        visibleLayerIds={visibleLayerIds}
-        suppressed={false}
-        panelOpen={panelOpen}
-        panelExpanded={mobilePanelExpanded}
-      />
+      {isDesktopViewport ? (
+        <DesktopLegend visibleLayerIds={visibleLayerIds} />
+      ) : (
+        <MobileLegend
+          visibleLayerIds={visibleLayerIds}
+          suppressed={false}
+          panelOpen={panelOpen}
+          panelExpanded={mobilePanelExpanded}
+        />
+      )}
 
       <aside
         id="map-controls"

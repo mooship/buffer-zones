@@ -4,6 +4,12 @@
   width: min(28rem, calc(100vw - 7rem));
 }
 
+@media (max-width: 768px) {
+  .root {
+    width: calc(100vw - 2rem);
+  }
+}
+
 .label {
   display: inline-flex;
   align-items: center;
@@ -29,6 +35,7 @@
   background: var(--color-surface);
   color: var(--color-paper);
   font: inherit;
+  text-overflow: ellipsis;
 }
 
 .input:focus-visible,

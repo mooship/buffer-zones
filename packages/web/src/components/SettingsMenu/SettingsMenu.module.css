@@ -15,6 +15,21 @@
   flex-direction: column;
   gap: var(--space-2);
   min-width: max-content;
+  width: min(21rem, calc(100vw - 2.5rem));
+  padding: 0.875rem;
+  border: 1px solid color-mix(in srgb, var(--color-line) 40%, transparent);
+  border-radius: var(--radius-lg);
+  background: var(--color-panel);
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  margin: 0;
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .basemapHint {

@@ -70,7 +70,7 @@ test.describe("responsive panel", () => {
     await expect(legendTrigger).toHaveAttribute("aria-expanded", "true");
     await expect(page.getByTestId(E2E.mobileLegendContent)).toBeVisible();
 
-    await page.getByTestId(E2E.mobileLegendClose).click();
+    await legendTrigger.click();
     await expect(page.getByTestId(E2E.mobileLegendContent)).toBeHidden();
     await expect(legendTrigger).toHaveAttribute("aria-expanded", "false");
   });

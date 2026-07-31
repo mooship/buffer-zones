@@ -11,6 +11,27 @@ import {
   ScrollRestoration,
 } from "react-router";
 import appStylesHref from "./index.css?url";
+import { getLayerDefinitions } from "./layers/registry";
+
+function getGeoJsonPreloadLinks() {
+  const defaultVisibleByDataSource = new Map<string, boolean>();
+  for (const layer of getLayerDefinitions()) {
+    const isDefaultVisible =
+      defaultVisibleByDataSource.get(layer.dataSource) ?? false;
+    defaultVisibleByDataSource.set(
+      layer.dataSource,
+      isDefaultVisible || layer.defaultVisible,
+    );
+  }
+
+  return Array.from(defaultVisibleByDataSource, ([href, defaultVisible]) => ({
+    rel: "preload" as const,
+    href,
+    as: "fetch" as const,
+    crossOrigin: "anonymous" as const,
+    ...(defaultVisible ? {} : { fetchPriority: "low" as const }),
+  }));
+}
 
 export const meta: MetaFunction = () => {
   return [
@@ -49,6 +70,7 @@ export const links: LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
   { rel: "preconnect", href: "https://tile.openstreetmap.org" },
   { rel: "preconnect", href: "https://basemaps.cartocdn.com" },
+  ...getGeoJsonPreloadLinks(),
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
