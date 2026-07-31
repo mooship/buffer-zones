@@ -156,7 +156,11 @@ export interface RegionPipelineConfig {
 
 Interim domain: `stratum.timothybrits.co.za`. Final registrar/TLD decision deferred to a later, separate task — out of scope for this design.
 
-## 8. Explicitly out of scope
+## 8. Future roadmap (not in this design's scope)
+
+Candidate directions for "build your own ThinkGeo" beyond this refactor, to be brainstormed separately once Plans A-D are implemented: multiple simultaneous unrelated domains (not just multiple regions of one domain); a layer/domain registry UI; generic ingestion connectors (shapefile/CSV/WMS/vector-tile) beyond bespoke pipeline adapters; a public data-contribution path; versioned datasets; an embeddable widget/SDK for third-party sites; cookieless layer-usage analytics.
+
+## 9. Explicitly out of scope
 
 - Any second real domain/layer-group beyond the migrated Gauteng dataset (no concrete next use case was specified; the design targets general extensibility without over-fitting to a hypothetical).
 - True dynamic/runtime plugin loading (config-driven TS was chosen over a plugin runtime).
