@@ -25,7 +25,7 @@ describe("township groups", () => {
       "Olievenhoutbosch",
     );
     expect(getTownshipGroup("Plastic View", "799014063")).toBe("Plastic View");
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(138);
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(133);
   });
 
   it("includes Ekurhuleni township and settlement aliases", () => {

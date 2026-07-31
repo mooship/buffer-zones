@@ -34,6 +34,7 @@ The current version includes 33 areas:
 - Drie Ziek
 - Ebony Park
 - Ennerdale
+- Ivory Park
 - Kaalfontein
 - Kanana Park
 - Klipspruit

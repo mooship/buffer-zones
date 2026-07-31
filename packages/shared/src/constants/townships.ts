@@ -822,20 +822,6 @@ const EMFULENI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[]
       censusMainPlaceCodes: ["760005"],
     },
     {
-      id: "emfuleni-vereeniging",
-      name: "Vereeniging",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["760006"],
-    },
-    {
-      id: "emfuleni-vanderbijlpark",
-      name: "Vanderbijlpark",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["760009"],
-    },
-    {
       id: "emfuleni-stretford",
       name: "Stretford",
       selectionBasis: "census-main-place",
@@ -855,27 +841,6 @@ const EMFULENI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[]
       selectionBasis: "census-main-place",
       labelPriority: "secondary",
       censusMainPlaceCodes: ["760012"],
-    },
-    {
-      id: "emfuleni-johandeo",
-      name: "Johandeo",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["760010"],
-    },
-    {
-      id: "emfuleni-nu",
-      name: "Emfuleni NU",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["760011"],
-    },
-    {
-      id: "emfuleni-vaal-oewer",
-      name: "Vaal Oewer",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["760015"],
     },
   ];
 
