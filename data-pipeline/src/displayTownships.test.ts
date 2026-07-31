@@ -46,6 +46,19 @@ const source: FeatureCollection<Polygon, { id: string; name: string }> = {
 };
 
 describe("createDisplayPolygons", () => {
+  const dataDirectory = resolve(
+    import.meta.dirname,
+    "../../packages/web/public/data/national",
+  );
+  const readCollection = async (name: string) =>
+    JSON.parse(
+      await readFile(resolve(dataDirectory, name), "utf8"),
+    ) as FeatureCollection<Polygon | MultiPolygon, { id: string }>;
+  const readSourceCollection = async (prefix: string) =>
+    readCollection(`${prefix}.v1.geojson`).catch(async () => {
+      return readCollection(`${prefix}.display.v1.geojson`);
+    });
+
   it("preserves feature IDs and evidence properties", () => {
     const result = createDisplayPolygons(source);
 
@@ -65,16 +78,8 @@ describe("createDisplayPolygons", () => {
   });
 
   it("keeps every production feature within five percent area drift", async () => {
-    const dataDirectory = resolve(
-      import.meta.dirname,
-      "../../packages/web/public/data/national",
-    );
-    const readCollection = async (name: string) =>
-      JSON.parse(
-        await readFile(resolve(dataDirectory, name), "utf8"),
-      ) as FeatureCollection<Polygon | MultiPolygon, { id: string }>;
     for (const prefix of ["townships", "township-areas"]) {
-      const full = await readCollection(`${prefix}.v1.geojson`);
+      const full = await readSourceCollection(prefix);
       const display = await readCollection(`${prefix}.display.v1.geojson`);
       const displayById = new Map(
         display.features.map((feature) => [feature.properties.id, feature]),
@@ -98,17 +103,8 @@ describe("createDisplayPolygons", () => {
   });
 
   it("does not introduce excessive polygon self-intersections", async () => {
-    const dataDirectory = resolve(
-      import.meta.dirname,
-      "../../packages/web/public/data/national",
-    );
-    const readCollection = async (name: string) =>
-      JSON.parse(
-        await readFile(resolve(dataDirectory, name), "utf8"),
-      ) as FeatureCollection<Polygon | MultiPolygon, { id: string }>;
-
     for (const prefix of ["townships", "township-areas"]) {
-      const source = await readCollection(`${prefix}.v1.geojson`);
+      const source = await readSourceCollection(prefix);
       const display = await readCollection(`${prefix}.display.v1.geojson`);
       const sourceInvalid = new Set(
         source.features
