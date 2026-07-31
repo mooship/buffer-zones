@@ -1,36 +1,41 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-30T20:09:59.146Z",
+  "generatedAt": "2026-07-31T05:50:27.297Z",
   "metroIds": [
     "tshwane",
     "johannesburg",
     "ekurhuleni",
-    "emfuleni"
+    "emfuleni",
+    "midvaal",
+    "lesedi",
+    "mogale-city",
+    "rand-west-city",
+    "merafong-city"
   ],
   "files": [
     {
       "fileName": "townships.v1.geojson",
-      "featureCount": 2212,
-      "sha256": "2b2116cf9b902285c5fa18fc2794bb94adac3afe4fc28cec2445a37e05aa0fbf",
-      "bytes": 25122569
+      "featureCount": 2567,
+      "sha256": "8ef96414385d5cc1b78197f3f9ca818005ff0612d1138eeb8acc1be92a4b59a2",
+      "bytes": 30189258
     },
     {
       "fileName": "townships.display.v1.geojson",
-      "featureCount": 2212,
-      "sha256": "e85c47805ca41952c38eb103fd03f9e2b502b565dc62e44e0e1175448d8e231f",
-      "bytes": 2333407
+      "featureCount": 2567,
+      "sha256": "0903b66e27c17b637ec5afb283eb53317bc85edd2971f4dc92dc0012ecd6d5eb",
+      "bytes": 2867865
     },
     {
       "fileName": "township-areas.v1.geojson",
-      "featureCount": 109,
-      "sha256": "19a4750d8c1d547d21b3d2f084a0ba838d41ca70654ff8af973d16359781b215",
-      "bytes": 2978491
+      "featureCount": 138,
+      "sha256": "c5e6c9d5617b2cd525a89d9e81bde3f723b38fea3c06f44a04da4fcaa25a613c",
+      "bytes": 4153290
     },
     {
       "fileName": "township-areas.display.v1.geojson",
-      "featureCount": 109,
-      "sha256": "61ae4f9c6f3488ec92c8f3f0cbfcd17f0036d35ccd4c97e8d8f44603169d4b0d",
-      "bytes": 243625
+      "featureCount": 138,
+      "sha256": "11b81a58358a61bf714bbabe374d4a718929ded1ee5eca910a530e162fa13e6d",
+      "bytes": 345460
     },
     {
       "fileName": "rapid-rail.v1.geojson",
@@ -46,15 +51,15 @@
     },
     {
       "fileName": "commuter-rail.v1.geojson",
-      "featureCount": 1133,
-      "sha256": "e9d5da59f8850746d85345fca1693e989fff380fc635244a9945fb678802bf4b",
-      "bytes": 1460037
+      "featureCount": 1135,
+      "sha256": "1685c81eb1e1b3806d4541a7765facb3fbb448ad132cb9a1e94c3f81a53f0157",
+      "bytes": 1460609
     },
     {
       "fileName": "commuter-rail.display.v1.geojson",
-      "featureCount": 1133,
-      "sha256": "735a358728e028db0862afed35efb41f2639a57c1652b0977f90d3f7a59082ee",
-      "bytes": 528269
+      "featureCount": 1135,
+      "sha256": "d441b9fc5e53ad7c3f6ae0e843b5e09553d75f4cf1469347856bf4036a526597",
+      "bytes": 528578
     },
     {
       "fileName": "bus-rapid-transit.v1.geojson",
@@ -83,7 +88,7 @@
   ],
   "networkCoverage": {
     "Gautrain": 293,
-    "PRASA": 1133,
+    "PRASA": 1135,
     "A Re Yeng": 18,
     "Rea Vaya": 836,
     "Ekurhuleni IRPTN": 8,

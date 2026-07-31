@@ -1174,6 +1174,21 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "node/7220918921",
+        "name": "Oberholzer",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.3933811,
+          -26.3427486
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "node/7221453386",
         "name": "Inhlazane",
         "network": "PRASA"
@@ -2419,6 +2434,36 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "node/9166519540",
+        "name": "Maizelands",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.4411113,
+          -26.3293816
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "node/9166519541",
+        "name": "Bank",
+        "network": "PRASA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.5127743,
+          -26.3112727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "node/9166519542",
         "name": "Goudryk",
         "network": "PRASA"
@@ -2743,21 +2788,6 @@
         "coordinates": [
           28.3064556,
           -25.7206225
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "node/13903059565",
-        "name": "Germiston Lake",
-        "network": "PRASA"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          28.167376,
-          -26.2317094
         ]
       }
     },
