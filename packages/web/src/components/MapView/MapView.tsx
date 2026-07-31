@@ -14,7 +14,7 @@ import {
   type Path,
   circleMarker,
 } from "leaflet";
-import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   GeoJSON,
@@ -25,7 +25,7 @@ import {
   ZoomControl,
   useMap,
 } from "react-leaflet";
-import { BASEMAPS, type Basemap } from "../../constants/basemaps";
+import { type Basemap, getBasemapTileSources } from "../../constants/basemaps";
 import { TOWNSHIP_OUTLINE } from "../../constants/layerStyles";
 import { useLayerData } from "../../hooks/useLayerData";
 import { usePrefersDarkMode } from "../../hooks/usePrefersDarkMode";
@@ -60,6 +60,9 @@ const TOWNSHIP_OUTLINE_PANE = "township-outlines";
 const TRANSIT_PANE = "transit";
 const MOBILE_BREAKPOINT_PX = 768;
 const TOWNSHIP_CLICK_DELAY_MS = 220;
+const PRIMARY_LABEL_REVEAL_ZOOM = 10;
+const SECONDARY_LABEL_REVEAL_ZOOM = 12;
+const MAJOR_PRIMARY_LABEL_MIN_SUBPLACES = 12;
 
 type TownshipFeatureLayer = Layer & {
   feature?: Feature;
@@ -218,23 +221,34 @@ function TownshipSelection({
 
 function AreaLabelVisibility() {
   const map = useMap();
+  const primaryLabelsClass = styles.showPrimaryLabels;
   const secondaryLabelsClass = styles.showSecondaryLabels;
 
   useEffect(() => {
-    if (!secondaryLabelsClass) {
+    if (!primaryLabelsClass || !secondaryLabelsClass) {
       return;
     }
     const updateVisibility = () => {
+      const zoom = map.getZoom();
       map
         .getContainer()
-        .classList.toggle(secondaryLabelsClass, map.getZoom() >= 12);
+        .classList.toggle(
+          primaryLabelsClass,
+          zoom >= PRIMARY_LABEL_REVEAL_ZOOM,
+        );
+      map
+        .getContainer()
+        .classList.toggle(
+          secondaryLabelsClass,
+          zoom >= SECONDARY_LABEL_REVEAL_ZOOM,
+        );
     };
     map.on("zoomend", updateVisibility);
     updateVisibility();
     return () => {
       map.off("zoomend", updateVisibility);
     };
-  }, [map, secondaryLabelsClass]);
+  }, [map, primaryLabelsClass, secondaryLabelsClass]);
 
   return null;
 }
@@ -276,6 +290,7 @@ function ResponsiveMapBounds() {
 function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
   const name = feature.properties?.name;
   const labelPriority = feature.properties?.labelPriority;
+  const subPlaceCount = feature.properties?.subPlaceCount;
   const labelOffset = feature.properties?.labelOffset;
   const offset =
     Array.isArray(labelOffset) &&
@@ -287,6 +302,11 @@ function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
   if (typeof name !== "string") {
     return;
   }
+  const isMajorPrimaryLabel =
+    labelPriority !== "secondary" &&
+    typeof subPlaceCount === "number" &&
+    subPlaceCount >= MAJOR_PRIMARY_LABEL_MIN_SUBPLACES;
+
   layer.bindTooltip(name, {
     permanent: true,
     direction: "center",
@@ -294,7 +314,9 @@ function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
     className:
       labelPriority === "secondary"
         ? `${styles.townshipLabel} ${styles.townshipLabelSecondary}`
-        : styles.townshipLabel,
+        : isMajorPrimaryLabel
+          ? `${styles.townshipLabel} ${styles.townshipLabelMajor}`
+          : `${styles.townshipLabel} ${styles.townshipLabelPrimary}`,
   });
 }
 
@@ -335,14 +357,42 @@ function MapViewComponent({
   const themePreference = useThemePreference();
   const resolvedDark =
     themePreference === "dark" || (themePreference === "system" && prefersDark);
-  const tiles = BASEMAPS[basemap];
-  const useDarkTiles =
-    resolvedDark && "darkUrl" in tiles && typeof tiles.darkUrl === "string";
-  const tileUrl = useDarkTiles ? tiles.darkUrl : tiles.url;
-  const tileAttribution =
-    useDarkTiles && "darkAttribution" in tiles
-      ? tiles.darkAttribution
-      : tiles.attribution;
+  const useDarkTiles = basemap === "street" && resolvedDark;
+  const tileSourceMode = `${basemap}-${useDarkTiles ? "dark" : "light"}`;
+  const tileSources = useMemo(
+    () => getBasemapTileSources(basemap, useDarkTiles),
+    [basemap, useDarkTiles],
+  );
+  const [tileSourceState, setTileSourceState] = useState(() => ({
+    mode: tileSourceMode,
+    index: 0,
+  }));
+  const currentTileSourceIndex =
+    tileSourceState.mode === tileSourceMode ? tileSourceState.index : 0;
+  const safeTileSourceIndex = Math.min(
+    currentTileSourceIndex,
+    tileSources.length - 1,
+  );
+  const tileSource = tileSources[safeTileSourceIndex] ?? tileSources[0];
+  if (!tileSource) {
+    return null;
+  }
+  const handleTileError = useCallback(() => {
+    setTileSourceState((currentState) => {
+      const currentIndex =
+        currentState.mode === tileSourceMode ? currentState.index : 0;
+      if (currentIndex >= tileSources.length - 1) {
+        return {
+          mode: tileSourceMode,
+          index: currentIndex,
+        };
+      }
+      return {
+        mode: tileSourceMode,
+        index: currentIndex + 1,
+      };
+    });
+  }, [tileSourceMode, tileSources.length]);
   const showAreaLabels =
     visibleLayerIds.includes("townships") ||
     visibleLayerIds.includes("nearest-transit");
@@ -414,11 +464,12 @@ function MapViewComponent({
         <ZoomControl position="bottomright" />
         <ScaleControl position="bottomleft" imperial={false} />
         <TileLayer
-          key={`${basemap}-${useDarkTiles ? "dark" : "light"}`}
-          url={tileUrl}
-          attribution={tileAttribution}
+          key={`${tileSourceMode}-${tileSource.url}`}
+          url={tileSource.url}
+          attribution={tileSource.attribution}
           detectRetina={useRetinaTiles}
           updateWhenZooming={false}
+          eventHandlers={{ tileerror: handleTileError }}
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />

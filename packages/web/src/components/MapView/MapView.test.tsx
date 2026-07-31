@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { type ReactNode, forwardRef, useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mapMocks = vi.hoisted(() => ({
   fitBounds: vi.fn(),
   invalidateSize: vi.fn(),
+  tileErrorHandler: null as null | (() => void),
   featureLayers: [] as Array<{
     feature: { properties?: { id?: string } | null };
     bindPopup: ReturnType<typeof vi.fn>;
@@ -69,11 +70,19 @@ vi.mock("react-leaflet", () => ({
   TileLayer: ({
     url,
     detectRetina,
-  }: { url: string; detectRetina?: boolean }) => (
-    <div data-testid="tile-layer" data-retina={String(detectRetina)}>
-      {url}
-    </div>
-  ),
+    eventHandlers,
+  }: {
+    url: string;
+    detectRetina?: boolean;
+    eventHandlers?: { tileerror?: () => void };
+  }) => {
+    mapMocks.tileErrorHandler = eventHandlers?.tileerror ?? null;
+    return (
+      <div data-testid="tile-layer" data-retina={String(detectRetina)}>
+        {url}
+      </div>
+    );
+  },
   GeoJSON: forwardRef<
     { eachLayer: (cb: (layer: unknown) => void) => void } | null,
     {
@@ -157,6 +166,7 @@ describe("MapView", () => {
   afterEach(() => {
     mapMocks.fitBounds.mockReset();
     mapMocks.invalidateSize.mockReset();
+    mapMocks.tileErrorHandler = null;
     mapMocks.featureLayers = [];
     popupMocks.renderToStaticMarkup.mockClear();
     vi.unstubAllGlobals();
@@ -434,6 +444,38 @@ describe("MapView", () => {
     render(<MapView townships={[]} visibleLayerIds={[]} />);
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
+  });
+
+  it("falls back to OpenStreetMap when the light street tiles error", () => {
+    stubMatchMedia(false);
+
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
+
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
+    act(() => {
+      mapMocks.tileErrorHandler?.();
+    });
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
+      /tile\.openstreetmap\.org/i,
+    );
+  });
+
+  it("falls back from dark street tiles before using OpenStreetMap", () => {
+    stubMatchMedia(true);
+
+    render(<MapView townships={[]} visibleLayerIds={[]} />);
+
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(/dark_all/i);
+    act(() => {
+      mapMocks.tileErrorHandler?.();
+    });
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
+    act(() => {
+      mapMocks.tileErrorHandler?.();
+    });
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
+      /tile\.openstreetmap\.org/i,
+    );
   });
 
   it("does not swap to a dark variant for satellite in dark mode", () => {

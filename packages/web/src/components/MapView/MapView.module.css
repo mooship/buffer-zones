@@ -27,12 +27,24 @@
   display: none;
 }
 
+.townshipLabelPrimary {
+  display: none;
+}
+
+.townshipLabelMajor {
+  display: block;
+}
+
 .townshipLabelSecondary {
   display: none;
   background: var(--color-map-label-surface-secondary);
   font-size: 9px;
   font-weight: 600;
   opacity: 0.94;
+}
+
+.showPrimaryLabels .townshipLabelPrimary {
+  display: block;
 }
 
 .showSecondaryLabels .townshipLabelSecondary {
