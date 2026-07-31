@@ -22,9 +22,12 @@ describe("getLayerDefinitions", () => {
     );
   });
 
-  it("points every layers dataSource at a .geojson file under /data/national/", () => {
+  it("points every layer's dataSource at .geojson files under /data/<region>/", () => {
     for (const layer of getLayerDefinitions()) {
-      expect(layer.dataSource).toMatch(/^\/data\/national\/[\w.-]+\.geojson$/);
+      expect(layer.dataSource.length).toBeGreaterThan(0);
+      for (const source of layer.dataSource) {
+        expect(source).toMatch(/^\/data\/[\w-]+\/[\w.-]+\.geojson$/);
+      }
     }
   });
 
