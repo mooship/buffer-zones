@@ -17,6 +17,7 @@ export const E2E = {
   settingsMenuTrigger: "settings-menu-trigger",
   settingsMenuContent: "settings-menu-content",
   mapView: "map-view",
+  locationSearchInput: "location-search-input",
   basemapOption: {
     street: "basemap-option-street",
     satellite: "basemap-option-satellite",

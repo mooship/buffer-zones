@@ -27,9 +27,7 @@ test.describe("app shell", () => {
       "id",
       "map-information",
     );
-    await expect(
-      page.getByRole("heading", { name: "Buffer Zones", level: 1 }),
-    ).toBeVisible();
+    await expect(page.getByTestId(E2E.locationSearchInput)).toBeVisible();
 
     await expect(page.locator(".leaflet-container")).toBeVisible();
     await expect(page.locator(MAP_GEOMETRY_SELECTOR).first()).toBeVisible();
