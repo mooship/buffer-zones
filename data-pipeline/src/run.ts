@@ -103,18 +103,22 @@ async function readExistingTransitLayer(
   outputDir: string,
   layerName: string,
 ): Promise<TransitLayerFeatureCollection | null> {
-  try {
-    const raw = await readFile(
-      resolve(outputDir, `${layerName}.v1.geojson`),
-      "utf8",
-    );
-    const parsed = JSON.parse(raw) as TransitLayerFeatureCollection;
-    return Array.isArray(parsed.features) && parsed.features.length > 0
-      ? parsed
-      : null;
-  } catch {
-    return null;
+  const candidates = [
+    resolve(outputDir, `${layerName}.display.v1.geojson`),
+    resolve(outputDir, `${layerName}.v1.geojson`),
+  ];
+
+  for (const filePath of candidates) {
+    try {
+      const raw = await readFile(filePath, "utf8");
+      const parsed = JSON.parse(raw) as TransitLayerFeatureCollection;
+      if (Array.isArray(parsed.features) && parsed.features.length > 0) {
+        return parsed;
+      }
+    } catch {}
   }
+
+  return null;
 }
 
 function assertCompleteNetworkCoverage(
@@ -295,10 +299,6 @@ async function runNational(): Promise<void> {
       collection: TransitLayerFeatureCollection,
     ): Promise<void> {
       await writeGeoJsonFile(
-        resolve(outputDir, `${name}.v1.geojson`),
-        collection,
-      );
-      await writeGeoJsonFile(
         resolve(outputDir, `${name}.display.v1.geojson`),
         createDisplayTransit(collection),
         { compact: true },
@@ -411,20 +411,12 @@ async function runNational(): Promise<void> {
       features: allTownships,
     };
     await writeGeoJsonFile(
-      resolve(outputDir, "townships.v1.geojson"),
-      townshipCollection,
-    );
-    await writeGeoJsonFile(
       resolve(outputDir, "townships.display.v1.geojson"),
       createDisplayPolygons(townshipCollection),
       { compact: true },
     );
 
     const townshipAreas = createTownshipAreas(allNormalizedTownships);
-    await writeGeoJsonFile(
-      resolve(outputDir, "township-areas.v1.geojson"),
-      townshipAreas,
-    );
     await writeGeoJsonFile(
       resolve(outputDir, "township-areas.display.v1.geojson"),
       createDisplayPolygons(townshipAreas),

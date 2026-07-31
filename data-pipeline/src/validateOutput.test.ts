@@ -36,7 +36,7 @@ describe("validateOutput", () => {
 
   it("logs all issues and throws when validation fails", async () => {
     outputManifestMocks.validateOutputDirectory.mockResolvedValue([
-      "Missing required output file: townships.v1.geojson",
+      "Missing required output file: townships.display.v1.geojson",
       "Missing required transit network coverage: Gautrain",
     ]);
 
@@ -49,7 +49,7 @@ describe("validateOutput", () => {
     );
     expect(console.error).toHaveBeenNthCalledWith(
       1,
-      "Missing required output file: townships.v1.geojson",
+      "Missing required output file: townships.display.v1.geojson",
     );
     expect(console.error).toHaveBeenNthCalledWith(
       2,

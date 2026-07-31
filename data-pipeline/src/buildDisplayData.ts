@@ -28,12 +28,22 @@ async function rebuildTownshipDisplay(dataDir: string): Promise<boolean> {
   try {
     const source = await readPolygonCollection<TownshipFeature["properties"]>(
       dataDir,
-      "townships.v1.geojson",
-    );
+      "townships.display.v1.geojson",
+    ).catch(async () => {
+      return readPolygonCollection<TownshipFeature["properties"]>(
+        dataDir,
+        "townships.v1.geojson",
+      );
+    });
     const areas = await readPolygonCollection<Record<string, unknown>>(
       dataDir,
-      "township-areas.v1.geojson",
-    );
+      "township-areas.display.v1.geojson",
+    ).catch(async () => {
+      return readPolygonCollection<Record<string, unknown>>(
+        dataDir,
+        "township-areas.v1.geojson",
+      );
+    });
     await writeGeoJsonFile(
       resolve(dataDir, "townships.display.v1.geojson"),
       createDisplayPolygons(source),
@@ -57,7 +67,7 @@ async function rebuildTransitDisplay(
   for (const name of TRANSIT_OPERATOR_LAYER_NAMES) {
     try {
       const collection = JSON.parse(
-        await readFile(resolve(dataDir, `${name}.v1.geojson`), "utf8"),
+        await readFile(resolve(dataDir, `${name}.display.v1.geojson`), "utf8"),
       ) as TransitLayerFeatureCollection;
       await writeGeoJsonFile(
         resolve(dataDir, `${name}.display.v1.geojson`),
@@ -65,7 +75,18 @@ async function rebuildTransitDisplay(
         { compact: true },
       );
     } catch {
-      console.log(`  skipping ${metroId}/${name} (no source file)`);
+      try {
+        const collection = JSON.parse(
+          await readFile(resolve(dataDir, `${name}.v1.geojson`), "utf8"),
+        ) as TransitLayerFeatureCollection;
+        await writeGeoJsonFile(
+          resolve(dataDir, `${name}.display.v1.geojson`),
+          createDisplayTransit(collection),
+          { compact: true },
+        );
+      } catch {
+        console.log(`  skipping ${metroId}/${name} (no source file)`);
+      }
     }
   }
 }

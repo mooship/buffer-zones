@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-31T05:50:27.297Z",
+  "generatedAt": "2026-07-31T06:21:27.614Z",
   "metroIds": [
     "tshwane",
     "johannesburg",
@@ -14,22 +14,10 @@
   ],
   "files": [
     {
-      "fileName": "townships.v1.geojson",
-      "featureCount": 2567,
-      "sha256": "8ef96414385d5cc1b78197f3f9ca818005ff0612d1138eeb8acc1be92a4b59a2",
-      "bytes": 30189258
-    },
-    {
       "fileName": "townships.display.v1.geojson",
       "featureCount": 2567,
       "sha256": "0903b66e27c17b637ec5afb283eb53317bc85edd2971f4dc92dc0012ecd6d5eb",
       "bytes": 2867865
-    },
-    {
-      "fileName": "township-areas.v1.geojson",
-      "featureCount": 138,
-      "sha256": "c5e6c9d5617b2cd525a89d9e81bde3f723b38fea3c06f44a04da4fcaa25a613c",
-      "bytes": 4153290
     },
     {
       "fileName": "township-areas.display.v1.geojson",
@@ -38,46 +26,22 @@
       "bytes": 345460
     },
     {
-      "fileName": "rapid-rail.v1.geojson",
-      "featureCount": 293,
-      "sha256": "6957b43c7958b091a6ce7ee5037005927e68b4f367ac8139643c62d216ef6b5b",
-      "bytes": 250207
-    },
-    {
       "fileName": "rapid-rail.display.v1.geojson",
       "featureCount": 293,
       "sha256": "e37f95963fed969f36bfd396ead4013acc15659f0885971b93d15cf3250d485c",
       "bytes": 97302
     },
     {
-      "fileName": "commuter-rail.v1.geojson",
-      "featureCount": 1135,
-      "sha256": "1685c81eb1e1b3806d4541a7765facb3fbb448ad132cb9a1e94c3f81a53f0157",
-      "bytes": 1460609
-    },
-    {
       "fileName": "commuter-rail.display.v1.geojson",
-      "featureCount": 1135,
-      "sha256": "d441b9fc5e53ad7c3f6ae0e843b5e09553d75f4cf1469347856bf4036a526597",
-      "bytes": 528578
-    },
-    {
-      "fileName": "bus-rapid-transit.v1.geojson",
-      "featureCount": 862,
-      "sha256": "e54fc475b567ea5d3b30f5a49dbe30918086be9bdf3a5efd5ff9aa0aa6c6ebc9",
-      "bytes": 1237693
+      "featureCount": 1136,
+      "sha256": "06727ab1cf41f812c7412b7d989dc0c6b5617d8e05bd5c763cd27e0073705a48",
+      "bytes": 528743
     },
     {
       "fileName": "bus-rapid-transit.display.v1.geojson",
       "featureCount": 862,
       "sha256": "9876360bf79bb4a934afd9ebbf43aee3d87b07687ced133cb111906aec9fd765",
       "bytes": 437139
-    },
-    {
-      "fileName": "bus.v1.geojson",
-      "featureCount": 3661,
-      "sha256": "fd5ab2a61d6a0c284222e3c735308315035245be955e0f4265f4a04dc80b7170",
-      "bytes": 2248262
     },
     {
       "fileName": "bus.display.v1.geojson",
@@ -88,7 +52,7 @@
   ],
   "networkCoverage": {
     "Gautrain": 293,
-    "PRASA": 1135,
+    "PRASA": 1136,
     "A Re Yeng": 18,
     "Rea Vaya": 836,
     "Ekurhuleni IRPTN": 8,

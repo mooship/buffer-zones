@@ -12,10 +12,10 @@ npm run run
 
 Runs one national build. Internally, it loops over `@buffer-zones/shared`'s `METROS` (currently all Gauteng municipalities: Tshwane, Johannesburg, Ekurhuleni, Emfuleni, Midvaal, Lesedi, Mogale City, Rand West City, and Merafong City) to fetch and process each metro's boundaries and job-center routing, then writes a combined output to `packages/web/public/data/national/`.
 
-The national output currently includes: `townships.v1.geojson`,
-`township-areas.v1.geojson`, `rapid-rail.v1.geojson`,
-`bus-rapid-transit.v1.geojson`, `commuter-rail.v1.geojson`, and
-`bus.v1.geojson` plus their `.display.v1.geojson` variants.
+The national output currently includes display-optimized GeoJSON files only:
+`townships.display.v1.geojson`, `township-areas.display.v1.geojson`,
+`rapid-rail.display.v1.geojson`, `bus-rapid-transit.display.v1.geojson`,
+`commuter-rail.display.v1.geojson`, and `bus.display.v1.geojson`.
 
 Builds are fail-closed: the pipeline validates all required output files,
 required transit networks, and checksums before publishing. Artifacts are
@@ -36,9 +36,8 @@ npm run cache:clean               # remove the whole cache directory
 tsx src/cleanCache.ts --max-age-days 2
 ```
 
-`townships.v1.geojson` and `township-areas.v1.geojson` remain the
-full-resolution source artifacts. The pipeline also writes compact
-`.display.v1.geojson` versions used by the browser.
+All published files are display-optimized `.display.v1.geojson` artifacts used
+by the browser.
 
 ## Adding a new metro
 

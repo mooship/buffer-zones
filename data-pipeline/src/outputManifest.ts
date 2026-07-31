@@ -9,17 +9,11 @@ export interface OutputLayerRule {
 }
 
 export const OUTPUT_LAYER_RULES: readonly OutputLayerRule[] = [
-  { fileName: "townships.v1.geojson", minFeatures: 1 },
   { fileName: "townships.display.v1.geojson", minFeatures: 1 },
-  { fileName: "township-areas.v1.geojson", minFeatures: 1 },
   { fileName: "township-areas.display.v1.geojson", minFeatures: 1 },
-  { fileName: "rapid-rail.v1.geojson", minFeatures: 1 },
   { fileName: "rapid-rail.display.v1.geojson", minFeatures: 1 },
-  { fileName: "commuter-rail.v1.geojson", minFeatures: 1 },
   { fileName: "commuter-rail.display.v1.geojson", minFeatures: 1 },
-  { fileName: "bus-rapid-transit.v1.geojson", minFeatures: 1 },
   { fileName: "bus-rapid-transit.display.v1.geojson", minFeatures: 1 },
-  { fileName: "bus.v1.geojson", minFeatures: 1 },
   { fileName: "bus.display.v1.geojson", minFeatures: 1 },
 ];
 
