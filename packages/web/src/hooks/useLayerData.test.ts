@@ -26,7 +26,7 @@ describe("useLayerData", () => {
     });
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/data/national/townships.display.v1.geojson"),
+      expect.stringContaining("/data/gauteng/townships.display.v1.geojson"),
       expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
@@ -50,7 +50,7 @@ describe("useLayerData", () => {
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/data/national/rapid-rail.display.v1.geojson"),
+      expect.stringContaining("/data/gauteng/rapid-rail.display.v1.geojson"),
       expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
@@ -113,5 +113,54 @@ describe("useLayerData", () => {
     unmount();
 
     expect(capturedSignal?.aborted).toBe(true);
+  });
+
+  it("merges features from every region source configured for a layer", async () => {
+    vi.mocked(global.fetch)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          type: "FeatureCollection",
+          features: [
+            { type: "Feature", properties: { region: "a" }, geometry: null },
+          ],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          type: "FeatureCollection",
+          features: [
+            { type: "Feature", properties: { region: "b" }, geometry: null },
+          ],
+        }),
+      } as Response);
+
+    vi.doMock("../layers/registry", () => ({
+      getLayerDefinition: () => ({
+        id: "townships",
+        label: "Modeled car time",
+        dataSource: [
+          "/data/gauteng/townships.display.v1.geojson",
+          "/data/other/townships.display.v1.geojson",
+        ],
+        layerType: "choropleth",
+        defaultVisible: true,
+        available: true,
+      }),
+    }));
+    vi.resetModules();
+    const { useLayerData: useLayerDataWithTwoSources } = await import(
+      "./useLayerData"
+    );
+
+    const { result } = renderHook(() =>
+      useLayerDataWithTwoSources(["townships" as LayerId]),
+    );
+
+    await waitFor(() => {
+      expect(result.current.townships?.features).toHaveLength(2);
+    });
+    vi.doUnmock("../layers/registry");
   });
 });
