@@ -1,6 +1,12 @@
 {
   "name": "Buffer Zones",
   "short_name": "Buffer Zones",
+  "description": "Visualising how apartheid-era spatial planning still shapes commute times and access to jobs in Tshwane and Johannesburg.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#edeff2",
+  "background_color": "#edeff2",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -12,8 +18,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "theme_color": "#241934",
-  "background_color": "#241934",
-  "display": "standalone"
+  ]
 }
