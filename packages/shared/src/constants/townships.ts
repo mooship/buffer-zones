@@ -822,6 +822,20 @@ const EMFULENI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[]
       censusMainPlaceCodes: ["760005"],
     },
     {
+      id: "emfuleni-vereeniging",
+      name: "Vereeniging",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760006"],
+    },
+    {
+      id: "emfuleni-vanderbijlpark",
+      name: "Vanderbijlpark",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760009"],
+    },
+    {
       id: "emfuleni-stretford",
       name: "Stretford",
       selectionBasis: "census-main-place",
@@ -841,6 +855,27 @@ const EMFULENI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[]
       selectionBasis: "census-main-place",
       labelPriority: "secondary",
       censusMainPlaceCodes: ["760012"],
+    },
+    {
+      id: "emfuleni-johandeo",
+      name: "Johandeo",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760010"],
+    },
+    {
+      id: "emfuleni-nu",
+      name: "Emfuleni NU",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760011"],
+    },
+    {
+      id: "emfuleni-vaal-oewer",
+      name: "Vaal Oewer",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["760015"],
     },
   ];
 
@@ -871,20 +906,49 @@ export function getTownshipAreaDefinition(
   name: string,
   censusId?: string,
 ): TownshipAreaDefinition | undefined {
-  return TOWNSHIP_AREA_DEFINITIONS.find((area) => {
-    if (area.excludedSubPlaceNames?.includes(name)) {
-      return false;
+  const availableAreas = TOWNSHIP_AREA_DEFINITIONS.filter(
+    (area) => !area.excludedSubPlaceNames?.includes(name),
+  );
+
+  const prefixMatches = availableAreas.filter((area) =>
+    area.subPlaceNamePrefixes?.some((prefix) => name.startsWith(prefix)),
+  );
+  if (prefixMatches.length > 0) {
+    if (censusId) {
+      const prefixCodeMatch = prefixMatches.find((area) =>
+        area.censusMainPlaceCodes?.some((code) => censusId.startsWith(code)),
+      );
+      if (prefixCodeMatch) {
+        return prefixCodeMatch;
+      }
     }
-    if (area.subPlaceNamePrefixes?.some((prefix) => name.startsWith(prefix))) {
-      return true;
+
+    return prefixMatches[0];
+  }
+
+  const nameMatches = availableAreas.filter((area) =>
+    name.startsWith(area.name),
+  );
+  if (nameMatches.length > 0) {
+    if (censusId) {
+      const nameCodeMatch = nameMatches.find((area) =>
+        area.censusMainPlaceCodes?.some((code) => censusId.startsWith(code)),
+      );
+      if (nameCodeMatch) {
+        return nameCodeMatch;
+      }
     }
-    if (name.startsWith(area.name)) {
-      return true;
-    }
-    return area.censusMainPlaceCodes?.some((code) =>
-      censusId?.startsWith(code),
+
+    return nameMatches[0];
+  }
+
+  if (censusId) {
+    return availableAreas.find((area) =>
+      area.censusMainPlaceCodes?.some((code) => censusId.startsWith(code)),
     );
-  });
+  }
+
+  return undefined;
 }
 
 export function getTownshipGroup(

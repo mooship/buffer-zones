@@ -361,14 +361,6 @@ describe("MapView", () => {
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
   });
 
-  it("switches tile source when the analysis basemap is selected", () => {
-    render(<MapView townships={[]} visibleLayerIds={[]} basemap="analysis" />);
-
-    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
-      /light_nolabels/i,
-    );
-  });
-
   it("uses the dark street tile source when the OS prefers dark mode", () => {
     stubMatchMedia(true);
 
@@ -391,28 +383,6 @@ describe("MapView", () => {
     render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
-  });
-
-  it("uses dark analysis tiles when the theme is explicitly dark", () => {
-    stubMatchMedia(false);
-    setThemePreference("dark");
-
-    render(<MapView townships={[]} visibleLayerIds={[]} basemap="analysis" />);
-
-    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
-      /dark_nolabels/i,
-    );
-  });
-
-  it("uses light analysis tiles when the theme is explicitly light", () => {
-    stubMatchMedia(true);
-    setThemePreference("light");
-
-    render(<MapView townships={[]} visibleLayerIds={[]} basemap="analysis" />);
-
-    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
-      /light_nolabels/i,
-    );
   });
 
   it("refits the full area bounds when crossing the mobile breakpoint", () => {

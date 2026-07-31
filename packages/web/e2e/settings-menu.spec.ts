@@ -81,16 +81,14 @@ test.describe("settings menu", () => {
     page,
   }) => {
     await page.goto("/");
-    const tileLayerContainer = page.locator(
-      ".leaflet-tile-pane .leaflet-layer",
-    );
     await expect(page.locator(".leaflet-tile-pane img").first()).toBeVisible();
-    await expect(tileLayerContainer).not.toHaveClass(/darkTile/);
+    await expect(
+      page.locator(".leaflet-tile-pane img").first(),
+    ).toHaveAttribute("src", /cartocdn\.com\/light_all/);
 
     await page.getByTestId(E2E.settingsMenuTrigger).click();
     await page.getByTestId(E2E.themeOption.dark).click();
 
-    await expect(tileLayerContainer).toHaveClass(/darkTile/);
     await expect(
       page.locator(".leaflet-tile-pane img").first(),
     ).toHaveAttribute("src", /cartocdn\.com\/dark_all/);

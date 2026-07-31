@@ -84,10 +84,10 @@ describe("SettingsMenu", () => {
     );
 
     fireEvent.click(screen.getByTestId("settings-menu-trigger"));
-    fireEvent.click(screen.getByTestId("basemap-option-analysis"));
+    fireEvent.click(screen.getByTestId("basemap-option-satellite"));
     fireEvent.click(screen.getByTestId("theme-option-dark"));
 
-    expect(onBasemapChange).toHaveBeenCalledWith("analysis");
+    expect(onBasemapChange).toHaveBeenCalledWith("satellite");
     expect(onThemePreferenceChange).toHaveBeenCalledWith("dark");
   });
 
@@ -108,7 +108,7 @@ describe("SettingsMenu", () => {
 
     rerender(
       <SettingsMenu
-        basemap="analysis"
+        basemap="satellite"
         onBasemapChange={vi.fn()}
         themePreference="system"
         onThemePreferenceChange={vi.fn()}
@@ -116,7 +116,7 @@ describe("SettingsMenu", () => {
     );
 
     expect(screen.getByTestId("settings-basemap-hint")).toHaveTextContent(
-      "Low-clutter base to compare layer colours and patterns.",
+      "Imagery context for land use and built form checks.",
     );
   });
 });

@@ -25,7 +25,7 @@ describe("township groups", () => {
       "Olievenhoutbosch",
     );
     expect(getTownshipGroup("Plastic View", "799014063")).toBe("Plastic View");
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(114);
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(119);
   });
 
   it("tags each area with its metro and includes Johannesburg's townships", () => {
@@ -54,6 +54,22 @@ describe("township groups", () => {
       getTownshipAreaDefinition("Sebokeng Unit 7", "760004005"),
     ).toMatchObject({ metroId: "emfuleni", name: "Sebokeng" });
     expect(getTownshipGroup("Sharpeville SP", "760013001")).toBe("Sharpeville");
+    expect(getTownshipGroup("Vanderbijlpark CE 1", "760009033")).toBe(
+      "Vanderbijlpark",
+    );
+    expect(getTownshipGroup("Vereeniging Central", "760006031")).toBe(
+      "Vereeniging",
+    );
+  });
+
+  it("prefers a census-code match when two metros share the same area name", () => {
+    expect(getTownshipGroup("Stretford Ext 2", "760001001")).toBe("Stretford");
+    expect(
+      getTownshipAreaDefinition("Stretford Ext 2", "760001001"),
+    ).toMatchObject({ metroId: "emfuleni" });
+    expect(getTownshipAreaDefinition("Stretford", "798038001")).toMatchObject({
+      metroId: "johannesburg",
+    });
   });
 
   it("uses exact names for township areas inside mixed Census main places", () => {
