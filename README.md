@@ -24,7 +24,7 @@ Under apartheid, townships were deliberately separated from economic centers by 
 
 ## Stack
 
-React + TypeScript SPA (Vite, `react-leaflet`, Zustand, Zod, CSS Modules), a Node/TypeScript offline data pipeline (public OSRM for routing, Overpass API + open data portals for transit, no Docker/GDAL required), and Cloudflare Workers for static hosting. No backend, no accounts, no tracking beyond cookieless page views.
+React + TypeScript SSR app (React Router framework mode on Vite, `react-leaflet`, Zustand, Zod, CSS Modules), a Node/TypeScript offline data pipeline (public OSRM for routing, Overpass API + open data portals for transit, no Docker/GDAL required), and Cloudflare Workers for edge rendering and asset delivery. No accounts and no tracking beyond cookieless page views.
 
 ## Contributing
 

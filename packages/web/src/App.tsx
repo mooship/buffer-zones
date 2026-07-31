@@ -58,6 +58,7 @@ const NATIONAL_JOB_CENTER_COUNT = METROS.reduce(
 );
 
 export function App() {
+  const [hydrated, setHydrated] = useState(false);
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
   const [townshipAreas, setTownshipAreas] = useState<Feature[]>([]);
   const [dataError, setDataError] = useState(false);
@@ -80,14 +81,19 @@ export function App() {
     (state) => state.setSelectedTownshipId,
   );
   const themePreference = useThemePreference();
-  const { width } = useWindowSize();
-  const isDesktopViewport = (width ?? window.innerWidth) > MOBILE_BREAKPOINT_PX;
+  const { width } = useWindowSize({ initializeWithValue: false });
+  const isDesktopViewport =
+    (width ?? MOBILE_BREAKPOINT_PX) > MOBILE_BREAKPOINT_PX;
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const suppressNextHandleClickRef = useRef(false);
   const activeSheetPointerIdRef = useRef<number | null>(null);
   const pendingSheetDragOffsetRef = useRef(0);
   const sheetDragFrameRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -276,18 +282,24 @@ export function App() {
       </a>
 
       <main id="map-information" tabIndex={-1}>
-        <Suspense
-          fallback={<output className={styles.mapLoading}>Loading map</output>}
-        >
-          <MapView
-            townships={townships}
-            townshipAreas={townshipAreas}
-            visibleLayerIds={visibleLayerIds}
-            basemap={basemap}
-            selectedTownshipId={selectedTownshipId}
-            onTownshipSelect={setSelectedTownshipId}
-          />
-        </Suspense>
+        {hydrated ? (
+          <Suspense
+            fallback={
+              <output className={styles.mapLoading}>Loading map</output>
+            }
+          >
+            <MapView
+              townships={townships}
+              townshipAreas={townshipAreas}
+              visibleLayerIds={visibleLayerIds}
+              basemap={basemap}
+              selectedTownshipId={selectedTownshipId}
+              onTownshipSelect={setSelectedTownshipId}
+            />
+          </Suspense>
+        ) : (
+          <output className={styles.mapLoading}>Loading map</output>
+        )}
         {dataError ? (
           <div
             className={styles.dataError}

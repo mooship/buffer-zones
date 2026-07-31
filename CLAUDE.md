@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Buffer Zones maps apartheid-era spatial planning legacy across South African metros using one combined national map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. The published national layer currently combines Tshwane/Pretoria and Johannesburg. It is a static, public-interest SPA — no backend, no accounts, no tracking beyond cookieless page views.
+Buffer Zones maps apartheid-era spatial planning legacy across South African metros using one combined national map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. The published national layer currently combines Tshwane/Pretoria and Johannesburg. It is a public-interest SSR web app on Cloudflare Workers — no accounts and no tracking beyond cookieless page views.
 
 ## Commands
 
@@ -50,9 +50,9 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 
 - **packages/web** — `layers/registry.ts` uses `getLayerDefinitions()` with no metro argument and points every layer to `/data/national/*.geojson`. UI state in `stores/useMapUiStore.ts` contains layer visibility, basemap, panel state, and selection only; there is no metro selector state. `App.tsx` and `hooks/useLayerData.ts` fetch national data paths.
 
-- **Deploy** — Cloudflare Workers serving static assets only (`packages/web/dist`), no bindings/API routes (`wrangler.jsonc`). Full/100 Lighthouse scores and mobile-friendliness are a hard requirement, not aspirational — this drives decisions like the `.display.v1.geojson` simplification step and self-hosted variable fonts.
+- **Deploy** — Cloudflare Workers runs the React Router server entry (`packages/web/workers/app.ts`) and serves built client assets from `packages/web/build/client` (`wrangler.jsonc`). Full/100 Lighthouse scores and mobile-friendliness are a hard requirement, not aspirational — this drives decisions like the `.display.v1.geojson` simplification step and self-hosted variable fonts.
 
-- **Testing** — vitest unit/component tests (gated in CI) deliberately mock `react-leaflet`, so real Leaflet rendering, tile requests, and popup/tooltip binding are untested there by design. `packages/web/e2e/` fills that gap with Playwright, run on demand against a production preview build (`vite build && vite preview`, not the dev server, to avoid React StrictMode's dev-only double effect invocation) with basemap tile requests mocked to a 1x1 PNG so the suite doesn't depend on OSM/CARTO/Esri availability.
+- **Testing** — vitest unit/component tests (gated in CI) deliberately mock `react-leaflet`, so real Leaflet rendering, tile requests, and popup/tooltip binding are untested there by design. `packages/web/e2e/` fills that gap with Playwright, run on demand against a production SSR preview (`npm run build && npm run preview --workspace @buffer-zones/web`) with basemap tile requests mocked to a 1x1 PNG so the suite doesn't depend on OSM/CARTO/Esri availability.
 
 ## Conventions
 

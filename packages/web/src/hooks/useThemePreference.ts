@@ -16,11 +16,19 @@ function isExplicitTheme(value: string | null): value is "light" | "dark" {
 }
 
 function readStoredPreference(): ThemePreference {
+  if (typeof window === "undefined") {
+    return "system";
+  }
+
   const stored = localStorage.getItem(THEME_STORAGE_KEY);
   return isExplicitTheme(stored) ? stored : "system";
 }
 
 function syncThemeColorMeta(preference: ThemePreference) {
+  if (typeof document === "undefined") {
+    return;
+  }
+
   const existingOverride = document.querySelector(
     `meta[name="theme-color"][${THEME_COLOR_OVERRIDE_ATTR}]`,
   );
@@ -44,6 +52,10 @@ function syncThemeColorMeta(preference: ThemePreference) {
 }
 
 function applyThemeAttribute(preference: ThemePreference) {
+  if (typeof document === "undefined") {
+    return;
+  }
+
   if (preference === "system") {
     delete document.documentElement.dataset.theme;
   } else {
@@ -52,8 +64,11 @@ function applyThemeAttribute(preference: ThemePreference) {
   syncThemeColorMeta(preference);
 }
 
-let currentPreference = readStoredPreference();
-applyThemeAttribute(currentPreference);
+let currentPreference: ThemePreference = "system";
+if (typeof window !== "undefined") {
+  currentPreference = readStoredPreference();
+  applyThemeAttribute(currentPreference);
+}
 const listeners = new Set<() => void>();
 
 function subscribe(callback: () => void) {
@@ -67,10 +82,12 @@ function getSnapshot() {
 
 export function setThemePreference(preference: ThemePreference) {
   currentPreference = preference;
-  if (preference === "system") {
-    localStorage.removeItem(THEME_STORAGE_KEY);
-  } else {
-    localStorage.setItem(THEME_STORAGE_KEY, preference);
+  if (typeof window !== "undefined") {
+    if (preference === "system") {
+      localStorage.removeItem(THEME_STORAGE_KEY);
+    } else {
+      localStorage.setItem(THEME_STORAGE_KEY, preference);
+    }
   }
   applyThemeAttribute(preference);
   for (const listener of listeners) {
@@ -79,5 +96,5 @@ export function setThemePreference(preference: ThemePreference) {
 }
 
 export function useThemePreference() {
-  return useSyncExternalStore(subscribe, getSnapshot);
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }

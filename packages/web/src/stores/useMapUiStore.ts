@@ -29,14 +29,17 @@ interface MapUiState {
 }
 
 function createInitialState() {
+  const isDesktop =
+    typeof window !== "undefined" && window.innerWidth > MOBILE_BREAKPOINT_PX;
+
   return {
     visibleLayerIds: getLayerDefinitions()
       .filter((layer) => layer.defaultVisible)
       .map((layer) => layer.id),
     basemap: "street" as const,
-    panelOpen: window.innerWidth > MOBILE_BREAKPOINT_PX,
+    panelOpen: isDesktop,
     panelView: "story" as const,
-    titleExpanded: window.innerWidth > MOBILE_BREAKPOINT_PX,
+    titleExpanded: isDesktop,
     selectedTownshipId: null,
   };
 }

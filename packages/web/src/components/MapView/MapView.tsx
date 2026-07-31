@@ -73,6 +73,22 @@ type TownshipFeatureLayer = Layer & {
   getElement?: () => HTMLElement | null;
 };
 
+function getViewportWidth(): number {
+  if (typeof window === "undefined") {
+    return MOBILE_BREAKPOINT_PX;
+  }
+
+  return window.innerWidth;
+}
+
+function getDevicePixelRatio(): number {
+  if (typeof window === "undefined") {
+    return 1;
+  }
+
+  return window.devicePixelRatio;
+}
+
 function getBoundsOptions(desktop: boolean) {
   return desktop
     ? {
@@ -255,7 +271,7 @@ function AreaLabelVisibility() {
 
 function ResponsiveMapBounds() {
   const map = useMap();
-  const desktopRef = useRef(window.innerWidth > MOBILE_BREAKPOINT_PX);
+  const desktopRef = useRef(getViewportWidth() > MOBILE_BREAKPOINT_PX);
   const resizeFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -266,7 +282,7 @@ function ResponsiveMapBounds() {
       resizeFrameRef.current = requestAnimationFrame(() => {
         resizeFrameRef.current = null;
         map.invalidateSize({ animate: false });
-        const desktop = window.innerWidth > MOBILE_BREAKPOINT_PX;
+        const desktop = getViewportWidth() > MOBILE_BREAKPOINT_PX;
         if (desktop === desktopRef.current) {
           return;
         }
@@ -441,10 +457,10 @@ function MapViewComponent({
     [layerConfigById, visibleLayers],
   );
   const boundsOptions = getBoundsOptions(
-    window.innerWidth > MOBILE_BREAKPOINT_PX,
+    getViewportWidth() > MOBILE_BREAKPOINT_PX,
   );
   const useRetinaTiles =
-    window.devicePixelRatio > 1.25 && window.innerWidth > MOBILE_BREAKPOINT_PX;
+    getDevicePixelRatio() > 1.25 && getViewportWidth() > MOBILE_BREAKPOINT_PX;
 
   return (
     <section

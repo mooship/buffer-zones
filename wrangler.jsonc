@@ -2,9 +2,10 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "buffer-zones",
   "compatibility_date": "2026-07-27",
+  "main": "./packages/web/workers/app.ts",
   "workers_dev": true,
   "assets": {
-    "directory": "./packages/web/dist"
+    "directory": "./packages/web/build/client"
   },
   "observability": {
     "enabled": true

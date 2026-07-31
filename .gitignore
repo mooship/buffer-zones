@@ -1,6 +1,8 @@
 .claude/
 node_modules
 dist
+packages/web/build/
+packages/web/.react-router/
 coverage
 .wrangler
 *.log
