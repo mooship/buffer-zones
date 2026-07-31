@@ -78,11 +78,21 @@
 
 .glassPanel {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-panel-border);
   background: var(--glass-panel-bg);
-  backdrop-filter: blur(var(--glass-panel-blur)) saturate(165%);
+  backdrop-filter: blur(var(--glass-panel-blur)) saturate(182%);
   box-shadow: var(--shadow-lg);
+}
+
+.glassPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--glass-sheen);
 }
 
 .titleBlock {
@@ -215,7 +225,7 @@
 .panelTabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--glass-chip-border);
 }
 
 .panelTab {
@@ -224,7 +234,7 @@
   border: 0;
   border-bottom: 3px solid transparent;
   background: transparent;
-  color: var(--color-muted);
+  color: color-mix(in srgb, var(--color-muted) 84%, var(--color-paper));
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0;
@@ -237,7 +247,11 @@
 
 .panelTab[aria-selected="true"] {
   border-bottom-color: var(--color-ochre);
-  background: color-mix(in srgb, var(--color-ochre) 14%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-ochre) 24%, transparent) 0%,
+    color-mix(in srgb, var(--color-ochre) 10%, transparent) 100%
+  );
   color: var(--color-paper);
 }
 
@@ -490,7 +504,11 @@
     height: 0.25rem;
     margin: 0 auto;
     border-radius: 999px;
-    background: var(--color-line);
+    background: color-mix(
+      in srgb,
+      var(--glass-specular-top) 42%,
+      var(--color-line)
+    );
     transition: width 120ms ease, background-color 120ms ease;
   }
 

@@ -55,7 +55,7 @@
 }
 
 .row:hover {
-  background: var(--color-surface-hover);
+  background: color-mix(in srgb, var(--color-surface-hover) 52%, transparent);
 }
 
 .row[data-unavailable="true"] {
@@ -75,7 +75,7 @@
   height: 1.25rem;
   margin: 0;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-line) 35%, transparent);
+  background: color-mix(in srgb, var(--color-line) 42%, transparent);
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
@@ -93,7 +93,11 @@
 }
 
 .checkbox:checked {
-  background: var(--color-ochre);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--color-ochre) 82%, var(--color-panel)) 0%,
+    color-mix(in srgb, var(--color-ochre) 62%, var(--color-panel)) 100%
+  );
 }
 
 .checkbox:checked::before {

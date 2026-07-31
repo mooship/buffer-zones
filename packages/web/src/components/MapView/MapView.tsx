@@ -568,11 +568,21 @@ function MapViewComponent({
             }}
             style={(feature: Feature | undefined) => ({
               ...TOWNSHIP_OUTLINE,
-              color: resolvedDark ? "#7f8794" : TOWNSHIP_OUTLINE.color,
-              opacity:
-                feature?.properties?.labelPriority === "secondary" ? 0.72 : 1,
-              weight:
-                feature?.properties?.labelPriority === "secondary"
+              color: resolvedDark ? "#5b6476" : TOWNSHIP_OUTLINE.color,
+              opacity: resolvedDark
+                ? feature?.properties?.labelPriority === "secondary"
+                  ? 0.42
+                  : 0.62
+                : feature?.properties?.labelPriority === "secondary"
+                  ? 0.72
+                  : 1,
+              weight: resolvedDark
+                ? feature?.properties?.labelPriority === "secondary"
+                  ? 1
+                  : isOverviewZoom
+                    ? 1
+                    : 2
+                : feature?.properties?.labelPriority === "secondary"
                   ? isOverviewZoom
                     ? 1
                     : 2

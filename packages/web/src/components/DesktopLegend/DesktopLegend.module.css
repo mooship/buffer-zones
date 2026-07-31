@@ -6,11 +6,12 @@
   width: min(15rem, calc(100vw - 2.5rem));
   max-height: min(40dvh, 20rem);
   padding: 0.875rem;
-  border: 1px solid color-mix(in srgb, var(--color-line) 40%, transparent);
+  border: 1px solid var(--glass-panel-border);
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--color-panel) 96%, transparent);
-  backdrop-filter: blur(8px);
-  box-shadow: var(--shadow-lg);
+  background: var(--glass-panel-bg);
+  backdrop-filter: blur(var(--glass-panel-blur)) saturate(186%);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 var(--glass-specular-top), inset 0
+    -1px 0 var(--glass-specular-bottom);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }

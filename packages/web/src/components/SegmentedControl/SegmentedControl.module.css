@@ -4,8 +4,9 @@
   border: 1px solid var(--glass-nav-border);
   border-radius: var(--shape-medium);
   background: var(--glass-nav-bg);
-  backdrop-filter: blur(var(--glass-nav-blur)) saturate(150%);
-  box-shadow: var(--elevation-raised);
+  backdrop-filter: blur(var(--glass-nav-blur)) saturate(180%);
+  box-shadow: var(--elevation-raised), inset 0 1px 0 var(--glass-specular-top),
+    inset 0 -1px 0 var(--glass-specular-bottom);
   margin: 0;
   padding: var(--control-padding);
   min-width: 0;
@@ -26,9 +27,9 @@
   flex: 1;
   min-height: var(--control-height);
   padding: 0 var(--space-3);
+  border: 1px solid transparent;
   border-radius: var(--shape-small);
   background: transparent;
-  border: 0;
   color: var(--color-on-surface);
   font-family: var(--font-body);
   font-size: 0.8125rem;
@@ -39,11 +40,16 @@
 }
 
 .option:hover {
-  background: var(--color-state-hover);
+  background: color-mix(in srgb, var(--color-state-hover) 52%, transparent);
 }
 
 .option[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--color-primary) 84%, var(--color-panel));
+  border-color: color-mix(in srgb, var(--color-primary) 30%, var(--color-paper));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--color-primary) 54%, transparent) 0%,
+    color-mix(in srgb, var(--color-primary) 34%, transparent) 100%
+  );
   color: var(--color-paper);
   font-weight: 700;
 }

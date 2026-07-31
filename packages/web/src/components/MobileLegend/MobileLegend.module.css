@@ -10,14 +10,16 @@
   position: absolute;
   left: 0;
   bottom: calc(100% + 0.5rem);
+  isolation: isolate;
   width: min(21rem, calc(100vw - 1.5rem));
   max-height: min(46dvh, 24rem);
   padding: 0.875rem;
   border: 1px solid var(--glass-panel-border);
   border-radius: var(--radius-lg);
   background: var(--glass-panel-bg);
-  backdrop-filter: blur(var(--glass-panel-blur)) saturate(165%);
-  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(var(--glass-panel-blur)) saturate(186%);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 var(--glass-specular-top), inset 0
+    -1px 0 var(--glass-specular-bottom);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   animation: mobileLegendIn 170ms ease;

@@ -3,16 +3,16 @@
   --font-body: "Inter Variable", sans-serif;
   --font-mono: "Martian Mono Variable", monospace;
 
-  --color-ink: #edeff2;
+  --color-ink: #eaf0fb;
   --color-panel: #ffffff;
-  --color-line: #d7dbe2;
-  --color-paper: #20242b;
-  --color-ochre: #a6531d;
-  --color-redearth: #b3261e;
-  --color-muted: #62697a;
+  --color-line: #ccd6e7;
+  --color-paper: #101a2a;
+  --color-ochre: #5e87ff;
+  --color-redearth: #cc415c;
+  --color-muted: #5c6e8b;
 
-  --color-surface: #ffffff;
-  --color-surface-hover: #edeff2;
+  --color-surface: #f8faff;
+  --color-surface-hover: #edf3ff;
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -22,23 +22,45 @@
   --shape-medium: var(--radius-md);
   --shape-large: var(--radius-lg);
 
-  --shadow-sm: 0 1px 2px rgb(15 23 42 / 10%), 0 2px 4px rgb(15 23 42 / 8%);
-  --shadow-md: 0 3px 8px rgb(15 23 42 / 14%), 0 8px 20px rgb(15 23 42 / 10%);
-  --shadow-lg: 0 6px 16px rgb(15 23 42 / 18%), 0 14px 34px rgb(15 23 42 / 12%);
+  --shadow-sm: 0 1px 2px rgb(20 33 62 / 10%), 0 3px 8px rgb(16 31 65 / 8%);
+  --shadow-md: 0 8px 22px rgb(20 36 72 / 16%), 0 2px 8px rgb(16 31 65 / 10%);
+  --shadow-lg: 0 18px 44px rgb(20 38 75 / 22%), 0 6px 20px rgb(14 28 62 / 16%);
 
   --elevation-raised: var(--shadow-md);
   --elevation-overlay: var(--shadow-lg);
 
-  --glass-nav-bg: color-mix(in srgb, var(--color-panel) 76%, transparent);
-  --glass-nav-border: color-mix(in srgb, var(--color-line) 58%, transparent);
-  --glass-nav-blur: 16px;
-  --glass-panel-bg: color-mix(in srgb, var(--color-panel) 88%, transparent);
-  --glass-panel-border: color-mix(in srgb, var(--color-line) 72%, transparent);
-  --glass-panel-blur: 20px;
-  --glass-chip-bg: color-mix(in srgb, var(--color-panel) 64%, transparent);
-  --glass-chip-border: color-mix(in srgb, var(--color-line) 46%, transparent);
-  --glass-chip-blur: 12px;
-  --glass-overlay-scrim: rgb(19 24 33 / 18%);
+  --glass-nav-bg: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--color-panel) 74%, #ffffff) 0%,
+    color-mix(in srgb, var(--color-panel) 54%, transparent) 56%,
+    color-mix(in srgb, var(--color-panel) 40%, transparent) 100%
+  );
+  --glass-nav-border: color-mix(in srgb, #f2f7ff 56%, var(--color-line));
+  --glass-nav-blur: 22px;
+  --glass-panel-bg: linear-gradient(
+    158deg,
+    color-mix(in srgb, var(--color-panel) 82%, #ffffff) 0%,
+    color-mix(in srgb, var(--color-panel) 64%, transparent) 44%,
+    color-mix(in srgb, var(--color-panel) 50%, transparent) 100%
+  );
+  --glass-panel-border: color-mix(in srgb, #f5f8ff 64%, var(--color-line));
+  --glass-panel-blur: 26px;
+  --glass-chip-bg: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--color-panel) 70%, #ffffff) 0%,
+    color-mix(in srgb, var(--color-panel) 46%, transparent) 100%
+  );
+  --glass-chip-border: color-mix(in srgb, #f3f7ff 48%, var(--color-line));
+  --glass-chip-blur: 18px;
+  --glass-overlay-scrim: rgb(10 20 40 / 16%);
+  --glass-specular-top: color-mix(in srgb, #ffffff 76%, transparent);
+  --glass-specular-bottom: color-mix(in srgb, #90a8d4 18%, transparent);
+  --glass-sheen: linear-gradient(
+    180deg,
+    color-mix(in srgb, #ffffff 24%, transparent) 0%,
+    color-mix(in srgb, #ffffff 0%, transparent) 40%,
+    color-mix(in srgb, #89a0ce 16%, transparent) 100%
+  );
 
   --color-primary: var(--color-ochre);
   --color-on-primary: var(--color-ink);
@@ -82,62 +104,106 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-ink: #23262c;
-    --color-panel: #2f3339;
-    --color-line: #4c515b;
-    --color-paper: #f0f1f3;
-    --color-ochre: #e2954f;
-    --color-redearth: #e2685a;
-    --color-muted: #a9afba;
+    --color-ink: #090f18;
+    --color-panel: #1d2431;
+    --color-line: #4f5f7c;
+    --color-paper: #f3f6fe;
+    --color-ochre: #8aabff;
+    --color-redearth: #f08ca0;
+    --color-muted: #b5c1d8;
 
-    --color-surface: #33373e;
-    --color-surface-hover: #3d424a;
+    --color-surface: #1f2a3a;
+    --color-surface-hover: #2b384c;
 
-    --shadow-sm: 0 2px 4px rgb(0 0 0 / 40%), 0 1px 2px rgb(0 0 0 / 28%);
-    --shadow-md: 0 3px 8px rgb(0 0 0 / 45%), 0 8px 20px rgb(0 0 0 / 34%);
-    --shadow-lg: 0 7px 18px rgb(0 0 0 / 52%), 0 16px 36px rgb(0 0 0 / 40%);
+    --shadow-sm: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
+    --shadow-md: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
+    --shadow-lg: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
-    --glass-nav-bg: color-mix(in srgb, var(--color-panel) 60%, transparent);
-    --glass-nav-border: color-mix(in srgb, var(--color-line) 42%, transparent);
-    --glass-nav-blur: 16px;
-    --glass-panel-bg: color-mix(in srgb, var(--color-panel) 74%, transparent);
-    --glass-panel-border: color-mix(in srgb, var(--color-line) 52%, transparent);
-    --glass-panel-blur: 22px;
-    --glass-chip-bg: color-mix(in srgb, var(--color-panel) 58%, transparent);
-    --glass-chip-border: color-mix(in srgb, var(--color-line) 40%, transparent);
-    --glass-chip-blur: 14px;
-    --glass-overlay-scrim: rgb(2 5 10 / 42%);
+    --glass-nav-bg: linear-gradient(
+      165deg,
+      color-mix(in srgb, #2f3f59 52%, transparent) 0%,
+      color-mix(in srgb, #2b3a54 36%, transparent) 60%,
+      color-mix(in srgb, #24324a 28%, transparent) 100%
+    );
+    --glass-nav-border: color-mix(in srgb, #d0defd 24%, #4d5d7a);
+    --glass-nav-blur: 22px;
+    --glass-panel-bg: linear-gradient(
+      160deg,
+      color-mix(in srgb, #32415e 58%, transparent) 0%,
+      color-mix(in srgb, #2f3e59 44%, transparent) 54%,
+      color-mix(in srgb, #293750 34%, transparent) 100%
+    );
+    --glass-panel-border: color-mix(in srgb, #d8e4ff 28%, #4f607e);
+    --glass-panel-blur: 28px;
+    --glass-chip-bg: linear-gradient(
+      165deg,
+      color-mix(in srgb, #33405b 56%, transparent) 0%,
+      color-mix(in srgb, #2d3a54 36%, transparent) 100%
+    );
+    --glass-chip-border: color-mix(in srgb, #d6e4ff 22%, #4b5a74);
+    --glass-chip-blur: 18px;
+    --glass-overlay-scrim: rgb(0 4 12 / 34%);
+    --glass-specular-top: color-mix(in srgb, #e7efff 24%, transparent);
+    --glass-specular-bottom: color-mix(in srgb, #87a2d4 26%, transparent);
+    --glass-sheen: linear-gradient(
+      180deg,
+      color-mix(in srgb, #e4ecff 18%, transparent) 0%,
+      color-mix(in srgb, #e4ecff 0%, transparent) 40%,
+      color-mix(in srgb, #86a2d7 20%, transparent) 100%
+    );
 
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --color-ink: #23262c;
-  --color-panel: #2f3339;
-  --color-line: #4c515b;
-  --color-paper: #f0f1f3;
-  --color-ochre: #e2954f;
-  --color-redearth: #e2685a;
-  --color-muted: #a9afba;
+  --color-ink: #090f18;
+  --color-panel: #1d2431;
+  --color-line: #4f5f7c;
+  --color-paper: #f3f6fe;
+  --color-ochre: #8aabff;
+  --color-redearth: #f08ca0;
+  --color-muted: #b5c1d8;
 
-  --color-surface: #33373e;
-  --color-surface-hover: #3d424a;
+  --color-surface: #1f2a3a;
+  --color-surface-hover: #2b384c;
 
-  --shadow-sm: 0 2px 4px rgb(0 0 0 / 40%), 0 1px 2px rgb(0 0 0 / 28%);
-  --shadow-md: 0 3px 8px rgb(0 0 0 / 45%), 0 8px 20px rgb(0 0 0 / 34%);
-  --shadow-lg: 0 7px 18px rgb(0 0 0 / 52%), 0 16px 36px rgb(0 0 0 / 40%);
+  --shadow-sm: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
+  --shadow-md: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
+  --shadow-lg: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
-  --glass-nav-bg: color-mix(in srgb, var(--color-panel) 60%, transparent);
-  --glass-nav-border: color-mix(in srgb, var(--color-line) 42%, transparent);
-  --glass-nav-blur: 16px;
-  --glass-panel-bg: color-mix(in srgb, var(--color-panel) 74%, transparent);
-  --glass-panel-border: color-mix(in srgb, var(--color-line) 52%, transparent);
-  --glass-panel-blur: 22px;
-  --glass-chip-bg: color-mix(in srgb, var(--color-panel) 58%, transparent);
-  --glass-chip-border: color-mix(in srgb, var(--color-line) 40%, transparent);
-  --glass-chip-blur: 14px;
-  --glass-overlay-scrim: rgb(2 5 10 / 42%);
+  --glass-nav-bg: linear-gradient(
+    165deg,
+    color-mix(in srgb, #2f3f59 52%, transparent) 0%,
+    color-mix(in srgb, #2b3a54 36%, transparent) 60%,
+    color-mix(in srgb, #24324a 28%, transparent) 100%
+  );
+  --glass-nav-border: color-mix(in srgb, #d0defd 24%, #4d5d7a);
+  --glass-nav-blur: 22px;
+  --glass-panel-bg: linear-gradient(
+    160deg,
+    color-mix(in srgb, #32415e 58%, transparent) 0%,
+    color-mix(in srgb, #2f3e59 44%, transparent) 54%,
+    color-mix(in srgb, #293750 34%, transparent) 100%
+  );
+  --glass-panel-border: color-mix(in srgb, #d8e4ff 28%, #4f607e);
+  --glass-panel-blur: 28px;
+  --glass-chip-bg: linear-gradient(
+    165deg,
+    color-mix(in srgb, #33405b 56%, transparent) 0%,
+    color-mix(in srgb, #2d3a54 36%, transparent) 100%
+  );
+  --glass-chip-border: color-mix(in srgb, #d6e4ff 22%, #4b5a74);
+  --glass-chip-blur: 18px;
+  --glass-overlay-scrim: rgb(0 4 12 / 34%);
+  --glass-specular-top: color-mix(in srgb, #e7efff 24%, transparent);
+  --glass-specular-bottom: color-mix(in srgb, #87a2d4 26%, transparent);
+  --glass-sheen: linear-gradient(
+    180deg,
+    color-mix(in srgb, #e4ecff 18%, transparent) 0%,
+    color-mix(in srgb, #e4ecff 0%, transparent) 40%,
+    color-mix(in srgb, #86a2d7 20%, transparent) 100%
+  );
 
   color-scheme: dark;
 }
@@ -249,7 +315,7 @@ body {
   }
 
   .leaflet-control-scale {
-    margin-bottom: 5.75rem !important;
+    margin-bottom: calc(env(safe-area-inset-bottom) + 0.875rem) !important;
   }
 }
 
@@ -270,6 +336,7 @@ body {
   --glass-nav-blur: 0px;
   --glass-panel-blur: 0px;
   --glass-chip-blur: 0px;
+  --glass-sheen: none;
 }
 
 @media (prefers-contrast: more) {
