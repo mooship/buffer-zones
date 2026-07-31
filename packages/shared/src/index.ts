@@ -6,3 +6,4 @@ export * from "./types/layer";
 export * from "./types/genericLayer";
 export * from "./types/township";
 export * from "./types/transit";
+export * from "./domains/gauteng-spatial-legacy";
