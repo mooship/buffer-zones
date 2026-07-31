@@ -30,7 +30,7 @@ export type LayerStyle = ChoroplethStyle | LineStyle | PointStyle;
 export interface LayerDefinition {
   id: LayerId;
   label: string;
-  dataSource: string;
+  dataSource: readonly string[];
   layerType: LayerType;
   defaultVisible: boolean;
   available: boolean;
