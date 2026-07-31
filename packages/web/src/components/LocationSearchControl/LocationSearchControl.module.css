@@ -6,7 +6,7 @@
 
 @media (max-width: 768px) {
   .root {
-    width: calc(100vw - 2rem);
+    width: 100%;
   }
 }
 

@@ -149,7 +149,7 @@ export function LocationSearchControl({
         type="search"
         autoComplete="off"
         spellCheck={false}
-        placeholder="Search town, suburb, station or landmark"
+        placeholder="Search town, suburb or station"
         value={query}
         onChange={(event) => {
           setQuery(event.target.value);
