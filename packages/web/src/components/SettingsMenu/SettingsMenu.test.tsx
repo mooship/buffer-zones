@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const searchMocks = vi.hoisted(() => ({
@@ -139,7 +139,7 @@ describe("SettingsMenu", () => {
     );
   });
 
-  it("searches and applies a location result", async () => {
+  it("shows typeahead results and applies a selected location", async () => {
     const onLocationSelect = vi.fn();
     searchMocks.fetchLocationSearchResults.mockResolvedValue([
       {
@@ -164,7 +164,12 @@ describe("SettingsMenu", () => {
     fireEvent.change(screen.getByTestId("settings-location-search-input"), {
       target: { value: "Soweto" },
     });
-    fireEvent.click(screen.getByTestId("settings-location-search-submit"));
+    await waitFor(() => {
+      expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledWith(
+        "Soweto",
+        expect.any(AbortSignal),
+      );
+    });
 
     const resultButton = await screen.findByRole("button", {
       name: /soweto, johannesburg/i,
@@ -176,6 +181,57 @@ describe("SettingsMenu", () => {
         id: "123",
         latitude: -26.267,
         longitude: 27.854,
+      }),
+    );
+  });
+
+  it("supports keyboard selection from typeahead results", async () => {
+    const onLocationSelect = vi.fn();
+    searchMocks.fetchLocationSearchResults.mockResolvedValue([
+      {
+        id: "1",
+        label: "Pretoria, City of Tshwane, Gauteng, South Africa",
+        latitude: -25.746,
+        longitude: 28.188,
+      },
+      {
+        id: "2",
+        label: "Pretoria North, City of Tshwane, Gauteng, South Africa",
+        latitude: -25.67,
+        longitude: 28.17,
+      },
+    ]);
+
+    render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+        onLocationSelect={onLocationSelect}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+    const input = screen.getByTestId("settings-location-search-input");
+    fireEvent.change(input, {
+      target: { value: "Pretoria" },
+    });
+
+    await waitFor(() => {
+      expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledWith(
+        "Pretoria",
+        expect.any(AbortSignal),
+      );
+    });
+    await screen.findByRole("button", { name: /pretoria, city of tshwane/i });
+
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(onLocationSelect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: "1",
       }),
     );
   });

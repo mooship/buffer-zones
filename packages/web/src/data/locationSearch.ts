@@ -81,13 +81,19 @@ export async function fetchLocationSearchResults(
         return null;
       }
 
-      return {
+      const bounds = parseBounds(item.boundingbox);
+      const result: LocationSearchResult = {
         id: String(item.place_id),
         label: item.display_name,
         latitude,
         longitude,
-        bounds: parseBounds(item.boundingbox),
-      } satisfies LocationSearchResult;
+      };
+
+      if (bounds) {
+        result.bounds = bounds;
+      }
+
+      return result;
     })
     .filter((item): item is LocationSearchResult => item !== null);
 }

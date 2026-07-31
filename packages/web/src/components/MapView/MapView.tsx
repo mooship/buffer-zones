@@ -602,7 +602,7 @@ function MapViewComponent({
               smoothFactor={0}
               style={
                 isChoropleth
-                  ? (feature) => {
+                  ? (feature: Feature | undefined) => {
                       const base = config.styleFn?.(feature);
                       if (!base) {
                         return {};

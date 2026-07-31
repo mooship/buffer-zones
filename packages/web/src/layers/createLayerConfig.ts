@@ -9,7 +9,7 @@ import {
 } from "../utils/colorScale";
 
 export interface LeafletLayerConfig {
-  pathOptions?: PathOptions;
+  pathOptions?: PathOptions & { noClip?: boolean };
   styleFn?: (feature?: Feature) => PathOptions;
 }
 

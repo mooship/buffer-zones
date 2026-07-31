@@ -93,40 +93,19 @@ describe("App", () => {
     );
   });
 
-  it("renders the title block and data attribution", async () => {
+  it("does not render the top-left introduction card", async () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: /buffer zones/i, level: 1 }),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/statistics south africa/i)).toBeInTheDocument();
+      screen.queryByRole("button", { name: /minimise introduction/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: /buffer zones/i, level: 1 }),
+    ).not.toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toHaveTextContent(
         "1 features",
       ),
-    );
-  });
-
-  it("minimises and restores the title context", async () => {
-    render(<App />);
-
-    const minimise = screen.getByRole("button", {
-      name: "Minimise introduction",
-    });
-    fireEvent.click(minimise);
-
-    expect(screen.getByRole("heading", { name: "Buffer Zones" })).toBeVisible();
-    expect(
-      screen.getByText(/how south africa's spatial legacy/i),
-    ).not.toBeVisible();
-    fireEvent.click(
-      screen.getByRole("button", { name: "Expand introduction" }),
-    );
-    expect(
-      screen.getByText(/how south africa's spatial legacy/i),
-    ).toBeVisible();
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );
   });
 

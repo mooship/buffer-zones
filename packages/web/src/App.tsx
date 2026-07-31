@@ -1,7 +1,7 @@
 import { METROS, type TownshipFeature } from "@buffer-zones/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
-import { Layers, Minus, Plus, X } from "lucide-react";
+import { Layers, X } from "lucide-react";
 import {
   type CSSProperties,
   type KeyboardEvent,
@@ -16,18 +16,11 @@ import { useWindowSize } from "usehooks-ts";
 import styles from "./App.module.css";
 import { ControlButton } from "./components/ControlButton/ControlButton";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
-import { IconButton } from "./components/IconButton/IconButton";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { MobileLegend } from "./components/MobileLegend/MobileLegend";
 import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
-import {
-  APP_NAME,
-  DATA_AS_OF,
-  DATA_SOURCES,
-  REPOSITORY_URL,
-  getAppTagline,
-} from "./constants/metadata";
+import { DATA_SOURCES, REPOSITORY_URL } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
 import type { LocationSearchResult } from "./data/locationSearch";
@@ -78,13 +71,11 @@ export function App() {
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
   const panelView = useMapUiStore((state) => state.panelView);
-  const titleExpanded = useMapUiStore((state) => state.titleExpanded);
   const selectedTownshipId = useMapUiStore((state) => state.selectedTownshipId);
   const toggleLayer = useMapUiStore((state) => state.toggleLayer);
   const setBasemap = useMapUiStore((state) => state.setBasemap);
   const setPanelOpen = useMapUiStore((state) => state.setPanelOpen);
   const setPanelView = useMapUiStore((state) => state.setPanelView);
-  const setTitleExpanded = useMapUiStore((state) => state.setTitleExpanded);
   const setSelectedTownshipId = useMapUiStore(
     (state) => state.setSelectedTownshipId,
   );
@@ -328,41 +319,6 @@ export function App() {
           </div>
         ) : null}
       </main>
-
-      <header
-        className={clsx(
-          styles.titleBlock,
-          styles.ticked,
-          !titleExpanded && styles.titleBlockMinimised,
-        )}
-      >
-        <h1 className={styles.title}>{APP_NAME}</h1>
-        <IconButton
-          className={styles.titleToggle}
-          aria-expanded={titleExpanded}
-          aria-controls="title-context"
-          label={
-            titleExpanded ? "Minimise introduction" : "Expand introduction"
-          }
-          variant="embedded"
-          onClick={() => setTitleExpanded(!titleExpanded)}
-        >
-          {titleExpanded ? (
-            <Minus aria-hidden="true" />
-          ) : (
-            <Plus aria-hidden="true" />
-          )}
-        </IconButton>
-        <div id="title-context" hidden={!titleExpanded}>
-          <p className={styles.eyebrow}>South African spatial access atlas</p>
-          <p className={styles.tagline}>{getAppTagline()}</p>
-          <p className={styles.framing}>
-            Townships were planned apart from work and services. This baseline
-            makes the distance visible.
-          </p>
-          <p className={styles.stamp}>Data as of {DATA_AS_OF}</p>
-        </div>
-      </header>
 
       <ControlButton
         ref={panelTriggerRef}
