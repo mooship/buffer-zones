@@ -17,9 +17,10 @@
   min-width: max-content;
   width: min(21rem, calc(100vw - 2.5rem));
   padding: 0.875rem;
-  border: 1px solid color-mix(in srgb, var(--color-line) 40%, transparent);
+  border: 1px solid var(--glass-panel-border);
   border-radius: var(--radius-lg);
-  background: var(--color-panel);
+  background: var(--glass-panel-bg);
+  backdrop-filter: blur(var(--glass-panel-blur)) saturate(165%);
   box-shadow: var(--shadow-lg);
 }
 

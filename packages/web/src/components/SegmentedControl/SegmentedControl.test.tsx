@@ -49,4 +49,27 @@ describe("SegmentedControl", () => {
 
     expect(onChange).toHaveBeenCalledWith("dark");
   });
+
+  it("respects disabled options", () => {
+    const onChange = vi.fn();
+
+    render(
+      <SegmentedControl
+        label="Layer scope"
+        options={[
+          { id: "all", label: "All" },
+          { id: "future", label: "Future", disabled: true },
+        ]}
+        value="all"
+        onChange={onChange}
+        testId="scope"
+      />,
+    );
+
+    const disabledOption = screen.getByTestId("scope-option-future");
+    expect(disabledOption).toBeDisabled();
+
+    fireEvent.click(disabledOption);
+    expect(onChange).not.toHaveBeenCalled();
+  });
 });

@@ -30,11 +30,13 @@
 .input {
   min-height: 42px;
   padding: 0.5rem 0.625rem;
-  border: 1px solid var(--color-line);
+  border: 1px solid var(--glass-chip-border);
   border-radius: var(--radius-sm);
-  background: var(--color-surface);
+  background: var(--glass-chip-bg);
+  backdrop-filter: blur(var(--glass-chip-blur)) saturate(150%);
   color: var(--color-paper);
   font: inherit;
+  letter-spacing: 0.004em;
   text-overflow: ellipsis;
 }
 
@@ -64,9 +66,10 @@
   width: 100%;
   min-height: 38px;
   padding: 0.45rem 0.55rem;
-  border: 1px solid var(--color-line);
+  border: 1px solid var(--glass-chip-border);
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--color-panel) 94%, transparent);
+  background: var(--glass-chip-bg);
+  backdrop-filter: blur(var(--glass-chip-blur)) saturate(145%);
   color: var(--color-paper);
   font: inherit;
   text-align: left;
@@ -75,6 +78,10 @@
 
 .resultButton:hover {
   background: var(--color-surface-hover);
+}
+
+.resultButton:active {
+  transform: scale(0.99);
 }
 
 .resultButton[data-active="true"] {

@@ -76,16 +76,12 @@
   transform: translateY(0);
 }
 
-.ticked {
+.glassPanel {
   position: relative;
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--color-line) 52%, transparent);
-  background: linear-gradient(
-    170deg,
-    color-mix(in srgb, var(--color-panel) 96%, var(--color-paper) 4%) 0%,
-    color-mix(in srgb, var(--color-panel) 90%, var(--color-ink) 10%) 100%
-  );
-  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-panel-border);
+  background: var(--glass-panel-bg);
+  backdrop-filter: blur(var(--glass-panel-blur)) saturate(165%);
   box-shadow: var(--shadow-lg);
 }
 
@@ -108,6 +104,7 @@
   font-size: clamp(1.25rem, 4vw, 1.75rem);
   font-weight: 600;
   line-height: 1.1;
+  letter-spacing: -0.015em;
   margin: 0;
   color: var(--color-ochre);
 }
@@ -136,6 +133,7 @@
 .tagline {
   margin: 0.25rem 0 0;
   font-size: 0.8125rem;
+  letter-spacing: 0.006em;
   color: var(--color-paper);
 }
 
@@ -169,6 +167,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  transition: box-shadow 180ms ease;
 }
 
 .sheetHandleButton {
@@ -238,7 +237,7 @@
 
 .panelTab[aria-selected="true"] {
   border-bottom-color: var(--color-ochre);
-  background: color-mix(in srgb, var(--color-ochre) 10%, transparent);
+  background: color-mix(in srgb, var(--color-ochre) 14%, transparent);
   color: var(--color-paper);
 }
 
@@ -301,7 +300,7 @@
 
 .panelSources {
   padding-top: 0.75rem;
-  border-top: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
+  border-top: 1px solid var(--glass-chip-border);
   color: var(--color-muted);
   font-size: 0.6875rem;
 }
@@ -403,11 +402,13 @@
     border-bottom: 0;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     transform: translateY(calc(var(--panel-drag-offset, 0px) * 0.14));
-    transition: height 220ms ease, transform 130ms linear, box-shadow 130ms ease;
+    transition: height 320ms cubic-bezier(0.2, 0.9, 0.24, 1), transform 180ms
+      linear, box-shadow 180ms ease;
   }
 
   .panel[data-panel-dragging="true"] {
     box-shadow: var(--shadow-lg);
+    transition: none;
   }
 
   .panel[data-panel-size="full"] {
@@ -541,5 +542,17 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .panel[data-panel-dragging="true"],
+  .panelViewport[data-view="story"],
+  .panelViewport[data-view="places"],
+  .panelViewport[data-view="layers"] {
+    animation: none;
+    transition: opacity 180ms ease;
+    transform: none;
   }
 }

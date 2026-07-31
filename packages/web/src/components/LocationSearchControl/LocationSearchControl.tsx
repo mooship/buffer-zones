@@ -130,6 +130,12 @@ export function LocationSearchControl({
     setActiveResultIndex(-1);
   }
 
+  const activeResult =
+    activeResultIndex >= 0 && activeResultIndex < results.length
+      ? results[activeResultIndex]
+      : null;
+  const hasResults = results.length > 0;
+
   return (
     <section
       className={styles.root}
@@ -147,6 +153,13 @@ export function LocationSearchControl({
         data-e2e="location-search-input"
         className={styles.input}
         type="search"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded={hasResults}
+        aria-controls="location-search-results"
+        aria-activedescendant={
+          activeResult ? `location-search-option-${activeResult.id}` : undefined
+        }
         autoComplete="off"
         spellCheck={false}
         placeholder="Search town, suburb or station"
@@ -166,6 +179,7 @@ export function LocationSearchControl({
       ) : null}
       {results.length > 0 ? (
         <ul
+          id="location-search-results"
           className={styles.results}
           data-testid="location-search-results"
           data-e2e="location-search-results"
@@ -173,6 +187,7 @@ export function LocationSearchControl({
           {results.map((result, index) => (
             <li key={result.id}>
               <button
+                id={`location-search-option-${result.id}`}
                 type="button"
                 aria-selected={activeResultIndex === index}
                 className={styles.resultButton}

@@ -23,4 +23,17 @@ describe("ControlButton", () => {
       screen.getByRole("button", { name: "Open settings" }),
     ).toHaveAttribute("data-shape", "icon");
   });
+
+  it("supports embedded variant semantics", () => {
+    render(
+      <ControlButton variant="embedded" label="Close panel">
+        <span aria-hidden="true">X</span>
+      </ControlButton>,
+    );
+
+    expect(screen.getByRole("button", { name: "Close panel" })).toHaveAttribute(
+      "data-variant",
+      "embedded",
+    );
+  });
 });

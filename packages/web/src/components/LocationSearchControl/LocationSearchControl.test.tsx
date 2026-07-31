@@ -29,7 +29,11 @@ describe("LocationSearchControl", () => {
 
     render(<LocationSearchControl onLocationSelect={onLocationSelect} />);
 
-    fireEvent.change(screen.getByTestId("location-search-input"), {
+    const input = screen.getByTestId("location-search-input");
+    expect(input).toHaveAttribute("role", "combobox");
+    expect(input).toHaveAttribute("aria-controls", "location-search-results");
+
+    fireEvent.change(input, {
       target: { value: "Soweto" },
     });
     await waitFor(() => {

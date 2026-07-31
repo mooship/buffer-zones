@@ -1,23 +1,10 @@
 .group {
   display: flex;
   gap: var(--control-gap);
-  border: 1px solid var(--color-outline);
+  border: 1px solid var(--glass-nav-border);
   border-radius: var(--shape-medium);
-  background: linear-gradient(
-    180deg,
-    color-mix(
-        in srgb,
-        var(--color-surface-container-low) 86%,
-        var(--color-paper) 14%
-      )
-      0%,
-    color-mix(
-        in srgb,
-        var(--color-surface-container-low) 95%,
-        var(--color-line) 5%
-      )
-      100%
-  );
+  background: var(--glass-nav-bg);
+  backdrop-filter: blur(var(--glass-nav-blur)) saturate(150%);
   box-shadow: var(--elevation-raised);
   margin: 0;
   padding: var(--control-padding);
@@ -48,8 +35,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color var(--motion-duration-short) ease, color
-    var(--motion-duration-short) ease, transform var(--motion-duration-short)
-    ease;
+    var(--motion-duration-short) ease, transform 120ms ease;
 }
 
 .option:hover {
@@ -57,9 +43,13 @@
 }
 
 .option[aria-pressed="true"] {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: color-mix(in srgb, var(--color-primary) 84%, var(--color-panel));
+  color: var(--color-paper);
   font-weight: 700;
+}
+
+.option:active {
+  transform: scale(0.98);
 }
 
 .option:disabled {

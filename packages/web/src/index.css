@@ -29,6 +29,17 @@
   --elevation-raised: var(--shadow-md);
   --elevation-overlay: var(--shadow-lg);
 
+  --glass-nav-bg: color-mix(in srgb, var(--color-panel) 76%, transparent);
+  --glass-nav-border: color-mix(in srgb, var(--color-line) 58%, transparent);
+  --glass-nav-blur: 16px;
+  --glass-panel-bg: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  --glass-panel-border: color-mix(in srgb, var(--color-line) 72%, transparent);
+  --glass-panel-blur: 20px;
+  --glass-chip-bg: color-mix(in srgb, var(--color-panel) 64%, transparent);
+  --glass-chip-border: color-mix(in srgb, var(--color-line) 46%, transparent);
+  --glass-chip-blur: 12px;
+  --glass-overlay-scrim: rgb(19 24 33 / 18%);
+
   --color-primary: var(--color-ochre);
   --color-on-primary: var(--color-ink);
   --color-on-surface: var(--color-paper);
@@ -86,6 +97,17 @@
     --shadow-md: 0 3px 8px rgb(0 0 0 / 45%), 0 8px 20px rgb(0 0 0 / 34%);
     --shadow-lg: 0 7px 18px rgb(0 0 0 / 52%), 0 16px 36px rgb(0 0 0 / 40%);
 
+    --glass-nav-bg: color-mix(in srgb, var(--color-panel) 60%, transparent);
+    --glass-nav-border: color-mix(in srgb, var(--color-line) 42%, transparent);
+    --glass-nav-blur: 16px;
+    --glass-panel-bg: color-mix(in srgb, var(--color-panel) 74%, transparent);
+    --glass-panel-border: color-mix(in srgb, var(--color-line) 52%, transparent);
+    --glass-panel-blur: 22px;
+    --glass-chip-bg: color-mix(in srgb, var(--color-panel) 58%, transparent);
+    --glass-chip-border: color-mix(in srgb, var(--color-line) 40%, transparent);
+    --glass-chip-blur: 14px;
+    --glass-overlay-scrim: rgb(2 5 10 / 42%);
+
     color-scheme: dark;
   }
 }
@@ -105,6 +127,17 @@
   --shadow-sm: 0 2px 4px rgb(0 0 0 / 40%), 0 1px 2px rgb(0 0 0 / 28%);
   --shadow-md: 0 3px 8px rgb(0 0 0 / 45%), 0 8px 20px rgb(0 0 0 / 34%);
   --shadow-lg: 0 7px 18px rgb(0 0 0 / 52%), 0 16px 36px rgb(0 0 0 / 40%);
+
+  --glass-nav-bg: color-mix(in srgb, var(--color-panel) 60%, transparent);
+  --glass-nav-border: color-mix(in srgb, var(--color-line) 42%, transparent);
+  --glass-nav-blur: 16px;
+  --glass-panel-bg: color-mix(in srgb, var(--color-panel) 74%, transparent);
+  --glass-panel-border: color-mix(in srgb, var(--color-line) 52%, transparent);
+  --glass-panel-blur: 22px;
+  --glass-chip-bg: color-mix(in srgb, var(--color-panel) 58%, transparent);
+  --glass-chip-border: color-mix(in srgb, var(--color-line) 40%, transparent);
+  --glass-chip-blur: 14px;
+  --glass-overlay-scrim: rgb(2 5 10 / 42%);
 
   color-scheme: dark;
 }
@@ -227,5 +260,22 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+:root[data-reduced-transparency="true"] {
+  --glass-nav-bg: var(--color-panel);
+  --glass-panel-bg: var(--color-panel);
+  --glass-chip-bg: var(--color-surface);
+  --glass-nav-blur: 0px;
+  --glass-panel-blur: 0px;
+  --glass-chip-blur: 0px;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --glass-nav-border: var(--color-paper);
+    --glass-panel-border: var(--color-paper);
+    --glass-chip-border: var(--color-paper);
   }
 }

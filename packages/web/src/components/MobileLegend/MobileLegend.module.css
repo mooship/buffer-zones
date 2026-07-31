@@ -13,14 +13,20 @@
   width: min(21rem, calc(100vw - 1.5rem));
   max-height: min(46dvh, 24rem);
   padding: 0.875rem;
-  border: 1px solid color-mix(in srgb, var(--color-line) 40%, transparent);
+  border: 1px solid var(--glass-panel-border);
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--color-panel) 96%, transparent);
-  backdrop-filter: blur(8px);
+  background: var(--glass-panel-bg);
+  backdrop-filter: blur(var(--glass-panel-blur)) saturate(165%);
   box-shadow: var(--shadow-lg);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   animation: mobileLegendIn 170ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    animation: none;
+  }
 }
 
 .title {

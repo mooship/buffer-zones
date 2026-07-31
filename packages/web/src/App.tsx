@@ -43,6 +43,8 @@ const PANEL_VIEWS = ["story", "places", "layers"] as const;
 const MOBILE_BREAKPOINT_PX = 768;
 const SHEET_DRAG_THRESHOLD_PX = 36;
 const SHEET_DRAG_PREVIEW_LIMIT_PX = 96;
+const SHEET_PROJECTION_DECELERATION = 0.992;
+const SHEET_VELOCITY_SAMPLE_WINDOW_MS = 140;
 
 const PANEL_LABELS: Record<PanelView, string> = {
   story: "The pattern",
@@ -100,6 +102,26 @@ export function App() {
       setPanelOpen(true);
     }
   }, [setPanelOpen]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(prefers-reduced-transparency: reduce)",
+    );
+
+    function applyPreference() {
+      if (mediaQuery.matches) {
+        document.documentElement.dataset.reducedTransparency = "true";
+        return;
+      }
+      delete document.documentElement.dataset.reducedTransparency;
+    }
+
+    applyPreference();
+    mediaQuery.addEventListener("change", applyPreference);
+    return () => {
+      mediaQuery.removeEventListener("change", applyPreference);
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -209,6 +231,10 @@ export function App() {
 
     const handleElement = event.currentTarget;
     const startY = event.clientY;
+    let latestPointerY = startY;
+    const pointerSamples: Array<{ timestamp: number; y: number }> = [
+      { timestamp: performance.now(), y: startY },
+    ];
     activeSheetPointerIdRef.current = event.pointerId;
     setMobileSheetDragging(true);
     scheduleSheetDragOffset(0);
@@ -217,6 +243,15 @@ export function App() {
     function handlePointerMove(pointerEvent: globalThis.PointerEvent) {
       if (pointerEvent.pointerId !== activeSheetPointerIdRef.current) {
         return;
+      }
+      latestPointerY = pointerEvent.clientY;
+      const now = performance.now();
+      pointerSamples.push({ timestamp: now, y: pointerEvent.clientY });
+      while (
+        pointerSamples.length > 1 &&
+        now - pointerSamples[0].timestamp > SHEET_VELOCITY_SAMPLE_WINDOW_MS
+      ) {
+        pointerSamples.shift();
       }
       const delta = pointerEvent.clientY - startY;
       const clampedDelta = Math.max(
@@ -242,13 +277,38 @@ export function App() {
       if (pointerEvent.pointerId !== activeSheetPointerIdRef.current) {
         return;
       }
-      const delta = pointerEvent.clientY - startY;
-      if (Math.abs(delta) < SHEET_DRAG_THRESHOLD_PX) {
+      const now = performance.now();
+      pointerSamples.push({ timestamp: now, y: pointerEvent.clientY });
+      while (
+        pointerSamples.length > 1 &&
+        now - pointerSamples[0].timestamp > SHEET_VELOCITY_SAMPLE_WINDOW_MS
+      ) {
+        pointerSamples.shift();
+      }
+
+      const delta = latestPointerY - startY;
+      const firstSample = pointerSamples[0];
+      const lastSample = pointerSamples[pointerSamples.length - 1];
+      const elapsedMs = Math.max(
+        1,
+        lastSample.timestamp - firstSample.timestamp,
+      );
+      const velocityPxPerSecond =
+        ((lastSample.y - firstSample.y) / elapsedMs) * 1000;
+      const projectedDelta =
+        delta +
+        (velocityPxPerSecond / 1000) *
+          (SHEET_PROJECTION_DECELERATION / (1 - SHEET_PROJECTION_DECELERATION));
+
+      if (
+        Math.abs(delta) < SHEET_DRAG_THRESHOLD_PX &&
+        Math.abs(projectedDelta) < SHEET_DRAG_THRESHOLD_PX
+      ) {
         cleanup();
         return;
       }
       suppressNextHandleClickRef.current = true;
-      setMobilePanelExpanded(delta < 0);
+      setMobilePanelExpanded(projectedDelta < 0);
       cleanup();
     }
 
@@ -333,7 +393,7 @@ export function App() {
         ) : null}
       </main>
 
-      <div className={clsx(styles.locationSearchControl, styles.ticked)}>
+      <div className={clsx(styles.locationSearchControl, styles.glassPanel)}>
         <LocationSearchControl
           onLocationSelect={(location) => {
             setSelectedTownshipId(null);
@@ -371,7 +431,7 @@ export function App() {
 
       <aside
         id="map-controls"
-        className={clsx(styles.panel, styles.ticked)}
+        className={clsx(styles.panel, styles.glassPanel)}
         data-testid="panel-container"
         data-e2e="panel-container"
         data-panel-size={mobilePanelExpanded ? "full" : "medium"}
