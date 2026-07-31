@@ -12,6 +12,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useWindowSize } from "usehooks-ts";
 import styles from "./App.module.css";
 import { ControlButton } from "./components/ControlButton/ControlButton";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
@@ -79,6 +80,8 @@ export function App() {
     (state) => state.setSelectedTownshipId,
   );
   const themePreference = useThemePreference();
+  const { width } = useWindowSize();
+  const isDesktopViewport = (width ?? window.innerWidth) > MOBILE_BREAKPOINT_PX;
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const suppressNextHandleClickRef = useRef(false);
@@ -170,7 +173,7 @@ export function App() {
       suppressNextHandleClickRef.current = false;
       return;
     }
-    if (window.innerWidth > MOBILE_BREAKPOINT_PX) {
+    if (isDesktopViewport) {
       return;
     }
     setMobilePanelExpanded((value) => !value);
@@ -179,7 +182,7 @@ export function App() {
   function handleSheetHandlePointerDown(
     event: PointerEvent<HTMLButtonElement>,
   ) {
-    if (window.innerWidth > MOBILE_BREAKPOINT_PX) {
+    if (isDesktopViewport) {
       return;
     }
     if (event.pointerType === "mouse" && event.button !== 0) {
