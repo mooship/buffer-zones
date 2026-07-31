@@ -10,9 +10,15 @@ npm install
 npm run run
 ```
 
-Runs one national build. Internally, it loops over `@buffer-zones/shared`'s `METROS` (currently all Gauteng municipalities: Tshwane, Johannesburg, Ekurhuleni, Emfuleni, Midvaal, Lesedi, Mogale City, Rand West City, and Merafong City) to fetch and process each metro's boundaries and job-center routing, then writes a combined output to `packages/web/public/data/national/`.
+Runs a build for every `province`-kind region in `@buffer-zones/shared`'s `REGIONS` registry (currently just `gauteng`) via `runAllProvinceRegions()`. To build a single region instead, pass `--region <id>`:
 
-The national output currently includes display-optimized GeoJSON files only:
+```bash
+npm run run -- --region gauteng
+```
+
+Each region build (`runRegion(regionId)`) loops over the `METROS` tagged with that `regionId` (currently all Gauteng municipalities: Tshwane, Johannesburg, Ekurhuleni, Emfuleni, Midvaal, Lesedi, Mogale City, Rand West City, and Merafong City) to fetch and process each metro's boundaries and job-center routing, then writes a combined output to `packages/web/public/data/<regionId>/`.
+
+Each region's output currently includes display-optimized GeoJSON files only:
 `townships.display.v1.geojson`, `township-areas.display.v1.geojson`,
 `rapid-rail.display.v1.geojson`, `bus-rapid-transit.display.v1.geojson`,
 `commuter-rail.display.v1.geojson`, and `bus.display.v1.geojson`.
@@ -20,9 +26,9 @@ The national output currently includes display-optimized GeoJSON files only:
 Builds are fail-closed: the pipeline validates all required output files,
 required transit networks, and checksums before publishing. Artifacts are
 written to a staging directory first and only atomically promoted to
-`packages/web/public/data/national/` when validation passes.
+`packages/web/public/data/<regionId>/` when validation passes.
 
-Validate the currently published national dataset at any time:
+Validate every region directory that's currently published (`runAllRegionsOutputValidation()`, skipping any region in `REGIONS` that hasn't been built yet):
 
 ```bash
 npm run validate
@@ -49,8 +55,8 @@ map centre/zoom), add a bounding box to `METRO_BBOX` in
 `packages/shared/src/constants/townships.ts` (see
 `docs/data/tshwane-area-classification.md` and
 `docs/data/johannesburg-area-classification.md` for the selection
-methodology). `run.ts` loops over `METROS` automatically and merges them into
-the national output.
+methodology). `run.ts` loops over the region's `METROS` automatically and
+merges them into that region's output.
 
 ## Adding a new transit operator
 
@@ -58,13 +64,13 @@ Follow `src/adapters/gautrain.ts`, `src/adapters/aReYeng.ts`, or
 `src/adapters/reaVaya.ts` as a template: one adapter file with a
 `fetchX(bbox)` + `normalizeX()` pair, normalizing into the shared
 `TransitLayerFeatureCollection` shape. Wire the adapter into `run.ts` and map
-it to the appropriate national layer file(s), then re-run the pipeline.
+it to the appropriate layer file(s) for that region, then re-run the pipeline.
 
 Gautrain rail, Gautrain Bus, and PRASA/Metrorail are treated as shared
 networks. A Re Yeng (Tshwane) and Rea Vaya (Johannesburg) are city-specific
-sources that currently contribute to the national `bus-rapid-transit` layer.
-Tshwane Bus Services is a city-specific source that contributes to the
-national `bus` layer alongside Gautrain Bus.
+sources that currently contribute to the Gauteng region's `bus-rapid-transit`
+layer. Tshwane Bus Services is a city-specific source that contributes to the
+Gauteng region's `bus` layer alongside Gautrain Bus.
 
 Ekurhuleni, Emfuleni, Midvaal, Lesedi, Mogale City, Rand West City, and
 Merafong City currently contribute boundaries and job-centre routing only:

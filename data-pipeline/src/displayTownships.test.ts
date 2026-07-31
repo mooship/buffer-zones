@@ -48,7 +48,7 @@ const source: FeatureCollection<Polygon, { id: string; name: string }> = {
 describe("createDisplayPolygons", () => {
   const dataDirectory = resolve(
     import.meta.dirname,
-    "../../packages/web/public/data/national",
+    "../../packages/web/public/data/gauteng",
   );
   const readCollection = async (name: string) =>
     JSON.parse(
