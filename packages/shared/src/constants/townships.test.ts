@@ -25,7 +25,7 @@ describe("township groups", () => {
       "Olievenhoutbosch",
     );
     expect(getTownshipGroup("Plastic View", "799014063")).toBe("Plastic View");
-    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(119);
+    expect(TOWNSHIP_AREA_DEFINITIONS).toHaveLength(148);
   });
 
   it("tags each area with its metro and includes Johannesburg's townships", () => {
@@ -60,6 +60,29 @@ describe("township groups", () => {
     expect(getTownshipGroup("Vereeniging Central", "760006031")).toBe(
       "Vereeniging",
     );
+    expect(getTownshipGroup("Mamello", "761011001")).toBe("Mamello");
+    expect(getTownshipGroup("Ratanda Ext 4", "762015002")).toBe("Ratanda");
+    expect(getTownshipGroup("Kagiso Ext 12", "763011003")).toBe("Kagiso");
+    expect(getTownshipGroup("Mohlakeng Ext 2", "764004001")).toBe("Mohlakeng");
+    expect(getTownshipGroup("Bekkersdal Ext 6", "765002001")).toBe(
+      "Bekkersdal",
+    );
+    expect(getTownshipGroup("Khutsong South", "766003001")).toBe("Khutsong");
+    expect(getTownshipAreaDefinition("Mamello", "761011001")).toMatchObject({
+      metroId: "midvaal",
+    });
+    expect(
+      getTownshipAreaDefinition("Ratanda Ext 4", "762015002"),
+    ).toMatchObject({ metroId: "lesedi" });
+    expect(
+      getTownshipAreaDefinition("Kagiso Ext 12", "763011003"),
+    ).toMatchObject({ metroId: "mogale-city" });
+    expect(
+      getTownshipAreaDefinition("Mohlakeng Ext 2", "764004001"),
+    ).toMatchObject({ metroId: "rand-west-city" });
+    expect(
+      getTownshipAreaDefinition("Khutsong South", "766003001"),
+    ).toMatchObject({ metroId: "merafong-city" });
   });
 
   it("prefers a census-code match when two metros share the same area name", () => {

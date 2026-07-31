@@ -7,6 +7,11 @@ export const METRO_BBOX: Record<MetroId, string> = {
   johannesburg: "-26.55,27.65,-25.85,28.35",
   ekurhuleni: "-26.45,28.10,-25.95,28.65",
   emfuleni: "-26.79929,27.56909,-26.41898,28.02492",
+  midvaal: "-26.92383,27.86908,-26.33516,28.40685",
+  lesedi: "-26.67601,28.17947,-26.17224,28.86129",
+  "mogale-city": "-26.21321,27.42522,-25.79592,27.94085",
+  "rand-west-city": "-26.61774,27.46589,-26.05110,27.82447",
+  "merafong-city": "-26.64947,27.15634,-26.08917,27.62991",
 };
 
 export function getMetroBbox(metroId: MetroId): string {

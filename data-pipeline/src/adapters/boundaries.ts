@@ -74,13 +74,14 @@ export function normalizeBoundaries(
  */
 export function filterFeaturesByMunicipality(
   collection: FeatureCollection,
-  municipalityCode: number,
+  municipalityCodes: readonly number[],
 ): FeatureCollection {
+  const municipalityCodeSet = new Set(municipalityCodes);
   const features: Feature[] = collection.features
-    .filter(
-      (feature) =>
-        (feature.properties as Record<string, unknown> | null)?.MN_CODE ===
-        municipalityCode,
+    .filter((feature) =>
+      municipalityCodeSet.has(
+        Number((feature.properties as Record<string, unknown> | null)?.MN_CODE),
+      ),
     )
     .map((feature) => {
       const rawProps = feature.properties as Record<string, unknown> | null;
@@ -106,7 +107,7 @@ export function filterFeaturesByMunicipality(
  */
 export async function convertShapefileToGeoJSON(
   zipBuffer: Buffer,
-  municipalityCode: number,
+  municipalityCodes: readonly number[],
 ): Promise<FeatureCollection> {
   const zip = new AdmZip(zipBuffer);
   const shpEntry = zip.getEntry(SHP_ENTRY_NAME);
@@ -126,7 +127,7 @@ export async function convertShapefileToGeoJSON(
     dbfBuffer,
   );
 
-  return filterFeaturesByMunicipality(collection, municipalityCode);
+  return filterFeaturesByMunicipality(collection, municipalityCodes);
 }
 
 export async function fetchMetroBoundaries(
@@ -139,6 +140,6 @@ export async function fetchMetroBoundaries(
   const zipBuffer = Buffer.from(await response.arrayBuffer());
   return convertShapefileToGeoJSON(
     zipBuffer,
-    getMetroDefinition(metroId).municipalityCode,
+    getMetroDefinition(metroId).municipalityCodes,
   );
 }

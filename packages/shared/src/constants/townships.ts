@@ -879,6 +879,229 @@ const EMFULENI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[]
     },
   ];
 
+const MIDVAAL_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
+  [
+    {
+      id: "midvaal-mamello",
+      name: "Mamello",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["761011"],
+    },
+    {
+      id: "midvaal-evaton",
+      name: "Evaton",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["761009"],
+    },
+    {
+      id: "midvaal-meyerton",
+      name: "Meyerton",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["761006"],
+    },
+    {
+      id: "midvaal-walkerville",
+      name: "Walkerville",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["761004"],
+    },
+    {
+      id: "midvaal-vaal-marina",
+      name: "Vaal Marina",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["761012"],
+    },
+  ];
+
+const LESEDI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
+  [
+    {
+      id: "lesedi-ratanda",
+      name: "Ratanda",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["762015"],
+    },
+    {
+      id: "lesedi-impumelelo",
+      name: "Impumelelo",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["762005"],
+    },
+    {
+      id: "lesedi-heidelberg",
+      name: "Heidelberg",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["762014"],
+    },
+    {
+      id: "lesedi-devon",
+      name: "Devon",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["762006", "762007"],
+    },
+    {
+      id: "lesedi-endicott",
+      name: "Endicott",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["762003"],
+    },
+  ];
+
+const MOGALE_CITY_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
+  [
+    {
+      id: "mogale-kagiso",
+      name: "Kagiso",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["763011"],
+    },
+    {
+      id: "mogale-munsieville",
+      name: "Munsieville",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["763005"],
+    },
+    {
+      id: "mogale-rietvallei",
+      name: "Rietvallei",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["763012"],
+    },
+    {
+      id: "mogale-krugersdorp",
+      name: "Krugersdorp",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["763004"],
+    },
+    {
+      id: "mogale-magaliesburg",
+      name: "Magaliesburg",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["763006"],
+    },
+    {
+      id: "mogale-orient-hills",
+      name: "Orient Hills",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["763007"],
+    },
+  ];
+
+const RAND_WEST_CITY_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
+  [
+    {
+      id: "rand-west-mohlakeng",
+      name: "Mohlakeng",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["764004"],
+    },
+    {
+      id: "rand-west-bekkersdal",
+      name: "Bekkersdal",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["765002"],
+    },
+    {
+      id: "rand-west-simunye",
+      name: "Simunye",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["765007"],
+    },
+    {
+      id: "rand-west-glen-harvie",
+      name: "Glen Harvie",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["765014"],
+    },
+    {
+      id: "rand-west-randfontein",
+      name: "Randfontein",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["764002"],
+    },
+    {
+      id: "rand-west-westonaria",
+      name: "Westonaria",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["765008"],
+    },
+    {
+      id: "rand-west-zenzele",
+      name: "Zenzele",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["764005"],
+    },
+  ];
+
+const MERAFONG_CITY_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
+  [
+    {
+      id: "merafong-khutsong",
+      name: "Khutsong",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["766003"],
+    },
+    {
+      id: "merafong-kokosi",
+      name: "Kokosi",
+      selectionBasis: "census-main-place",
+      labelPriority: "primary",
+      censusMainPlaceCodes: ["766026"],
+    },
+    {
+      id: "merafong-wedela",
+      name: "Wedela",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["766023"],
+    },
+    {
+      id: "merafong-fochville",
+      name: "Fochville",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["766024"],
+    },
+    {
+      id: "merafong-carletonville",
+      name: "Carletonville",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["766004"],
+    },
+    {
+      id: "merafong-welverdiend",
+      name: "Welverdiend",
+      selectionBasis: "census-main-place",
+      labelPriority: "secondary",
+      censusMainPlaceCodes: ["766010"],
+    },
+  ];
+
 export const TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinition[] = [
   ...TSHWANE_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
     ...definition,
@@ -895,6 +1118,26 @@ export const TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinition[] = [
   ...EMFULENI_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
     ...definition,
     metroId: "emfuleni" as const,
+  })),
+  ...MIDVAAL_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
+    ...definition,
+    metroId: "midvaal" as const,
+  })),
+  ...LESEDI_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
+    ...definition,
+    metroId: "lesedi" as const,
+  })),
+  ...MOGALE_CITY_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
+    ...definition,
+    metroId: "mogale-city" as const,
+  })),
+  ...RAND_WEST_CITY_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
+    ...definition,
+    metroId: "rand-west-city" as const,
+  })),
+  ...MERAFONG_CITY_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
+    ...definition,
+    metroId: "merafong-city" as const,
   })),
 ];
 

@@ -125,7 +125,7 @@ describe("filterFeaturesByMunicipality", () => {
       ],
     };
 
-    const result = filterFeaturesByMunicipality(nationalCollection, 799);
+    const result = filterFeaturesByMunicipality(nationalCollection, [799]);
 
     expect(result.features).toHaveLength(1);
     const [feature] = result.features;
@@ -163,8 +163,70 @@ describe("filterFeaturesByMunicipality", () => {
       ],
     };
 
-    const result = filterFeaturesByMunicipality(nationalCollection, 799);
+    const result = filterFeaturesByMunicipality(nationalCollection, [799]);
 
     expect(result.features).toHaveLength(0);
+  });
+
+  it("supports merged municipalities by accepting multiple municipality codes", () => {
+    const nationalCollection = {
+      type: "FeatureCollection" as const,
+      features: [
+        {
+          type: "Feature" as const,
+          properties: {
+            SP_CODE: 764004001,
+            SP_NAME: "Mohlakeng",
+            MN_CODE: 764,
+          },
+          geometry: {
+            type: "Polygon" as const,
+            coordinates: [
+              [
+                [27.66, -26.18],
+                [27.67, -26.18],
+                [27.67, -26.17],
+                [27.66, -26.17],
+                [27.66, -26.18],
+              ],
+            ],
+          },
+        },
+        {
+          type: "Feature" as const,
+          properties: {
+            SP_CODE: 765002001,
+            SP_NAME: "Bekkersdal",
+            MN_CODE: 765,
+          },
+          geometry: {
+            type: "Polygon" as const,
+            coordinates: [
+              [
+                [27.62, -26.35],
+                [27.63, -26.35],
+                [27.63, -26.34],
+                [27.62, -26.34],
+                [27.62, -26.35],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = filterFeaturesByMunicipality(nationalCollection, [764, 765]);
+
+    expect(result.features).toHaveLength(2);
+    expect(result.features.map((feature) => feature.properties)).toEqual([
+      {
+        SP_CODE: "764004001",
+        SP_NAME: "Mohlakeng",
+      },
+      {
+        SP_CODE: "765002001",
+        SP_NAME: "Bekkersdal",
+      },
+    ]);
   });
 });
