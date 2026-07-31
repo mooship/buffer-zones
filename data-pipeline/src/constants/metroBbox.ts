@@ -18,13 +18,15 @@ export function getMetroBbox(metroId: MetroId): string {
   return METRO_BBOX[metroId];
 }
 
-// Gautrain, Gautrain Bus and PRASA are real Gauteng-wide networks that run
+// Gautrain, Gautrain Bus and PRASA are real region-wide networks that run
 // through more than one metro (e.g. Gautrain rail crosses Tshwane,
 // Ekurhuleni's OR Tambo, and Johannesburg). Fetching them per metro bbox
 // clips the line at that metro's boundary, so it looks severed when viewed
-// from the other metro even though the real network is continuous. This
-// union of every metro bbox is used to fetch those shared networks once,
-// whole, rather than as metro-clipped fragments.
+// from the other metro even though the real network is continuous. A union of
+// the bboxes of the metros in the region being built is used to fetch those
+// shared networks once, whole, rather than as metro-clipped fragments — and
+// scoped to that region so a build never pulls another region's network into
+// its own output.
 interface Bbox {
   south: number;
   west: number;
@@ -41,8 +43,11 @@ function parseBbox(box: string): Bbox {
   return { south, west, north, east };
 }
 
-export function getSharedTransitBbox(): string {
-  const boxes = Object.values(METRO_BBOX).map(parseBbox);
+export function getSharedTransitBbox(metroIds: readonly MetroId[]): string {
+  if (metroIds.length === 0) {
+    throw new Error("At least one metro is required to build a shared bbox");
+  }
+  const boxes = metroIds.map((metroId) => parseBbox(METRO_BBOX[metroId]));
   const south = Math.min(...boxes.map((box) => box.south));
   const west = Math.min(...boxes.map((box) => box.west));
   const north = Math.max(...boxes.map((box) => box.north));

@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   METROS,
+  type MetroId,
   REGIONS,
   type TransitLayerFeatureCollection,
 } from "@buffer-zones/shared";
@@ -207,14 +208,17 @@ async function cleanupStagingDirectories(
   );
 }
 
-async function fetchSharedTransit(regionId: string): Promise<SharedTransit> {
-  const bbox = getSharedTransitBbox();
+async function fetchSharedTransit(
+  regionId: string,
+  metroIds: readonly MetroId[],
+): Promise<SharedTransit> {
+  const bbox = getSharedTransitBbox(metroIds);
   const publishedOutputDir = resolve(OUTPUT_ROOT, regionId);
 
   let gautrain = emptyTransitCollection();
   try {
     const gautrainRaw = await timedStep(
-      "Fetching Gautrain rail via Overpass (Gauteng-wide)",
+      `Fetching Gautrain rail via Overpass (${regionId}-wide)`,
       () => fetchGautrainRail(bbox),
       (raw) => `(${raw.elements.length} elements)`,
     );
@@ -236,7 +240,7 @@ async function fetchSharedTransit(regionId: string): Promise<SharedTransit> {
   let prasa = emptyTransitCollection();
   try {
     const prasaRaw = await timedStep(
-      "Fetching PRASA rail via Overpass (Gauteng-wide)",
+      `Fetching PRASA rail via Overpass (${regionId}-wide)`,
       () => fetchPrasaRail(bbox),
       (raw) => `(${raw.elements.length} elements)`,
     );
@@ -258,7 +262,7 @@ async function fetchSharedTransit(regionId: string): Promise<SharedTransit> {
   let gautrainBus = emptyTransitCollection();
   try {
     const gautrainBusRaw = await timedStep(
-      "Fetching Gautrain bus routes via Overpass (Gauteng-wide)",
+      `Fetching Gautrain bus routes via Overpass (${regionId}-wide)`,
       () => fetchGautrainBusRoutes(bbox),
       (raw) => `(${raw.elements.length} elements)`,
     );
@@ -305,7 +309,10 @@ async function runRegion(regionId: string): Promise<void> {
 
   try {
     const outputDir = stagedDir;
-    const sharedTransit = await fetchSharedTransit(regionId);
+    const sharedTransit = await fetchSharedTransit(
+      regionId,
+      metros.map((metro) => metro.id),
+    );
 
     async function writeTransitLayer(
       name: string,
