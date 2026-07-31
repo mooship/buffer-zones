@@ -1,4 +1,8 @@
-import { METROS, type TownshipFeature } from "@buffer-zones/shared";
+import {
+  GAUTENG_SPATIAL_LEGACY_DOMAIN,
+  METROS,
+  type TownshipFeature,
+} from "@buffer-zones/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
@@ -77,13 +81,13 @@ export function App() {
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
   const panelView = useMapUiStore((state) => state.panelView);
-  const selectedTownshipId = useMapUiStore((state) => state.selectedTownshipId);
+  const selectedFeatureId = useMapUiStore((state) => state.selectedFeatureId);
   const toggleLayer = useMapUiStore((state) => state.toggleLayer);
   const setBasemap = useMapUiStore((state) => state.setBasemap);
   const setPanelOpen = useMapUiStore((state) => state.setPanelOpen);
   const setPanelView = useMapUiStore((state) => state.setPanelView);
-  const setSelectedTownshipId = useMapUiStore(
-    (state) => state.setSelectedTownshipId,
+  const setSelectedFeatureId = useMapUiStore(
+    (state) => state.setSelectedFeatureId,
   );
   const themePreference = useThemePreference();
   const { width } = useWindowSize({ initializeWithValue: false });
@@ -365,9 +369,9 @@ export function App() {
               townshipAreas={townshipAreas}
               visibleLayerIds={visibleLayerIds}
               basemap={basemap}
-              selectedTownshipId={selectedTownshipId}
+              selectedFeatureId={selectedFeatureId}
               focusLocationTarget={focusLocationTarget}
-              onTownshipSelect={setSelectedTownshipId}
+              onFeatureSelect={setSelectedFeatureId}
             />
           </Suspense>
         ) : (
@@ -396,7 +400,7 @@ export function App() {
       <div className={clsx(styles.locationSearchControl, styles.glassPanel)}>
         <LocationSearchControl
           onLocationSelect={(location) => {
-            setSelectedTownshipId(null);
+            setSelectedFeatureId(null);
             setFocusLocationTarget({ token: Date.now(), location });
           }}
         />
@@ -495,8 +499,13 @@ export function App() {
         >
           {panelView === "story" ? (
             <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Why this map exists</h2>
-              <EvidenceSummary jobCenterCount={NATIONAL_JOB_CENTER_COUNT} />
+              <h2 className={styles.sectionTitle}>
+                {GAUTENG_SPATIAL_LEGACY_DOMAIN.story.title}
+              </h2>
+              <EvidenceSummary
+                jobCenterCount={NATIONAL_JOB_CENTER_COUNT}
+                contextText={GAUTENG_SPATIAL_LEGACY_DOMAIN.story.body}
+              />
               <details className={styles.panelSources}>
                 <summary>Data sources and method</summary>
                 <div className={styles.panelSourceList}>
@@ -520,9 +529,9 @@ export function App() {
               <h2 className={styles.sectionTitle}>Included areas</h2>
               <TownshipBrowser
                 townships={townships}
-                selectedTownshipId={selectedTownshipId}
+                selectedTownshipId={selectedFeatureId}
                 onSelect={(township) =>
-                  setSelectedTownshipId(township.properties.id)
+                  setSelectedFeatureId(township.properties.id)
                 }
               />
             </section>

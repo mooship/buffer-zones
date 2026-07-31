@@ -1,22 +1,20 @@
-import type { LayerId } from "@buffer-zones/shared";
-import { getLayerDefinitions } from "../../layers/registry";
+import { Fragment } from "react";
+import { getLayer, getLayerGroups } from "../../layers/registry";
 import styles from "./LayerToggles.module.css";
 
 interface LayerTogglesProps {
-  visibleLayerIds: LayerId[];
-  onToggle: (id: LayerId) => void;
+  visibleLayerIds: string[];
+  onToggle: (id: string) => void;
 }
 
 export function LayerToggles({ visibleLayerIds, onToggle }: LayerTogglesProps) {
-  const layers = getLayerDefinitions();
-  const accessLayers = layers.filter(
-    (layer) => layer.layerType === "choropleth",
-  );
-  const transitLayers = layers.filter(
-    (layer) => layer.layerType !== "choropleth",
-  );
+  const groups = getLayerGroups();
 
-  function renderLayer(layer: (typeof layers)[number]) {
+  function renderLayer(layerId: string) {
+    const layer = getLayer(layerId);
+    if (!layer) {
+      return null;
+    }
     const layerTestId = `layer-toggle-${layer.id}`;
     return (
       <li key={layer.id}>
@@ -46,18 +44,20 @@ export function LayerToggles({ visibleLayerIds, onToggle }: LayerTogglesProps) {
 
   return (
     <div className={styles.groups}>
-      <section className={styles.group} aria-label="Accessibility overlays">
-        <h3 className={styles.groupTitle}>Accessibility overlays</h3>
-        <p className={styles.groupHint}>
-          Only one overlay can be active at a time.
-        </p>
-        <ul className={styles.list}>{accessLayers.map(renderLayer)}</ul>
-      </section>
-      <div className={styles.divider} aria-hidden="true" />
-      <section className={styles.group} aria-label="Transit networks">
-        <h3 className={styles.groupTitle}>Transit networks</h3>
-        <ul className={styles.list}>{transitLayers.map(renderLayer)}</ul>
-      </section>
+      {groups.map((group, index) => (
+        <Fragment key={group.id}>
+          {index > 0 ? (
+            <div className={styles.divider} aria-hidden="true" />
+          ) : null}
+          <section className={styles.group} aria-label={group.title}>
+            <h3 className={styles.groupTitle}>{group.title}</h3>
+            {group.description ? (
+              <p className={styles.groupHint}>{group.description}</p>
+            ) : null}
+            <ul className={styles.list}>{group.layerIds.map(renderLayer)}</ul>
+          </section>
+        </Fragment>
+      ))}
     </div>
   );
 }

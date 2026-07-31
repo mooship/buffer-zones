@@ -1,51 +1,49 @@
-import type { LayerDefinition } from "@buffer-zones/shared";
+import type { ColorBucket, Layer } from "@buffer-zones/shared";
 import type { Feature } from "geojson";
 import type { PathOptions } from "leaflet";
-import { CHOROPLETH_STROKE, TOWNSHIP_FILL } from "../constants/layerStyles";
-import { getTownshipGroup } from "../constants/townships";
-import {
-  commuteMinutesToColor,
-  transitDistanceToColor,
-} from "../utils/colorScale";
+import { CHOROPLETH_NO_DATA_COLOR } from "../constants/layerStyles";
 
 export interface LeafletLayerConfig {
   pathOptions?: PathOptions & { noClip?: boolean };
   styleFn?: (feature?: Feature) => PathOptions;
 }
 
-export function createLayerConfig(
-  definition: LayerDefinition,
-): LeafletLayerConfig {
-  const style = definition.style;
-  if (!style) {
-    return {};
+function colorForValue(
+  value: number | null,
+  buckets: ColorBucket[],
+  noDataColor: string,
+): string {
+  if (value === null) {
+    return noDataColor;
   }
+  const bucket = buckets.find((b) => value <= b.max);
+  return bucket?.color ?? buckets[buckets.length - 1]?.color ?? noDataColor;
+}
+
+export function createLayerConfig(layer: Layer): LeafletLayerConfig {
+  const style = layer.style;
 
   switch (style.kind) {
-    case "choropleth":
+    case "choropleth": {
       return {
         styleFn: (feature) => {
           const raw = feature?.properties?.[style.propertyKey];
           const value = typeof raw === "number" ? raw : null;
-          const name = feature?.properties?.name;
-          const id = feature?.properties?.id;
-          const isTownship =
-            typeof name === "string" &&
-            getTownshipGroup(name, typeof id === "string" ? id : undefined) !==
-              undefined;
-          const colorFn =
-            style.propertyKey === "nearestTransitKm"
-              ? transitDistanceToColor
-              : commuteMinutesToColor;
+          const emphasised = style.resolveEmphasis?.(feature?.properties);
           return {
-            fillColor: colorFn(value),
-            fillOpacity: isTownship
-              ? TOWNSHIP_FILL.fillOpacity
-              : CHOROPLETH_STROKE.fillOpacity,
-            weight: CHOROPLETH_STROKE.weight,
+            fillColor: colorForValue(
+              value,
+              style.buckets,
+              CHOROPLETH_NO_DATA_COLOR,
+            ),
+            fillOpacity: emphasised
+              ? (style.emphasisOpacity ?? style.baseOpacity)
+              : style.baseOpacity,
+            weight: 0,
           };
         },
       };
+    }
     case "line":
       return {
         pathOptions: {

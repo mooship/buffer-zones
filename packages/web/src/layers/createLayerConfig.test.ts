@@ -1,25 +1,40 @@
-import type { LayerDefinition } from "@buffer-zones/shared";
+import type { Layer } from "@buffer-zones/shared";
 import type { Feature } from "geojson";
 import { describe, expect, it } from "vitest";
-import {
-  COMMUTE_BUCKET_COLORS,
-  TRANSIT_DISTANCE_BUCKET_COLORS,
-} from "../constants/colorScale";
 import { createLayerConfig } from "./createLayerConfig";
+
+function choroplethLayer(overrides: Partial<Layer> = {}): Layer {
+  return {
+    id: "townships",
+    label: "Modeled car time",
+    dataSource: ["/data/gauteng/townships.v1.geojson"],
+    geometryKind: "choropleth",
+    defaultVisible: true,
+    available: true,
+    style: {
+      kind: "choropleth",
+      propertyKey: "commuteMinutes",
+      buckets: [
+        { max: 20, color: "#7A9B6E", label: "Short (≤ 20 min)" },
+        { max: 40, color: "#C9A227", label: "Moderate (21–40 min)" },
+        { max: 60, color: "#D6703F", label: "Long (41–60 min)" },
+        {
+          max: Number.POSITIVE_INFINITY,
+          color: "#C1502E",
+          label: "Very long (> 60 min)",
+        },
+      ],
+      baseOpacity: 0.18,
+      emphasisOpacity: 0.78,
+      resolveEmphasis: (properties) => properties?.name === "Mamelodi Ext 17",
+    },
+    ...overrides,
+  };
+}
 
 describe("createLayerConfig", () => {
   it("produces a styleFn for a choropleth layer that colors by commuteMinutes", () => {
-    const definition: LayerDefinition = {
-      id: "townships",
-      label: "Modeled car time",
-      dataSource: "/data/townships.v1.geojson",
-      layerType: "choropleth",
-      defaultVisible: true,
-      available: true,
-      style: { kind: "choropleth", propertyKey: "commuteMinutes" },
-    };
-
-    const config = createLayerConfig(definition);
+    const config = createLayerConfig(choroplethLayer());
     const feature = {
       type: "Feature",
       properties: { commuteMinutes: 15 },
@@ -28,22 +43,13 @@ describe("createLayerConfig", () => {
 
     expect(config.styleFn).toBeDefined();
     expect(config.styleFn?.(feature)).toMatchObject({
-      fillColor: COMMUTE_BUCKET_COLORS.short,
+      fillColor: "#7A9B6E",
+      fillOpacity: 0.18,
     });
   });
 
   it("styles a choropleth feature with a missing value as no-data", () => {
-    const definition: LayerDefinition = {
-      id: "townships",
-      label: "Modeled car time",
-      dataSource: "/data/townships.v1.geojson",
-      layerType: "choropleth",
-      defaultVisible: true,
-      available: true,
-      style: { kind: "choropleth", propertyKey: "commuteMinutes" },
-    };
-
-    const config = createLayerConfig(definition);
+    const config = createLayerConfig(choroplethLayer());
     const feature = {
       type: "Feature",
       properties: { commuteMinutes: null },
@@ -51,44 +57,48 @@ describe("createLayerConfig", () => {
     } as unknown as Feature;
 
     expect(config.styleFn?.(feature)).toMatchObject({
-      fillColor: COMMUTE_BUCKET_COLORS.noData,
+      fillColor: "#8A93A5",
     });
   });
 
-  it("gives recognized township sub-places a prominent boundary", () => {
-    const definition: LayerDefinition = {
-      id: "townships",
-      label: "Modeled car time",
-      dataSource: "/data/townships.v1.geojson",
-      layerType: "choropleth",
-      defaultVisible: true,
-      available: true,
-      style: { kind: "choropleth", propertyKey: "commuteMinutes" },
-    };
+  it("gives features the emphasis resolver selects a higher opacity", () => {
+    const config = createLayerConfig(choroplethLayer());
     const feature = {
       type: "Feature",
       properties: { name: "Mamelodi Ext 17", commuteMinutes: 35 },
       geometry: null,
     } as unknown as Feature;
 
-    expect(createLayerConfig(definition).styleFn?.(feature)).toMatchObject({
+    expect(config.styleFn?.(feature)).toMatchObject({
       weight: 0,
       fillOpacity: 0.78,
     });
   });
 
   it("produces a styleFn for a choropleth layer that colors by nearestTransitKm", () => {
-    const definition: LayerDefinition = {
-      id: "nearest-transit",
-      label: "Distance to Nearest Transit",
-      dataSource: "/data/townships.v1.geojson",
-      layerType: "choropleth",
-      defaultVisible: false,
-      available: true,
-      style: { kind: "choropleth", propertyKey: "nearestTransitKm" },
-    };
-
-    const config = createLayerConfig(definition);
+    const config = createLayerConfig(
+      choroplethLayer({
+        id: "nearest-transit",
+        label: "Distance to Nearest Transit",
+        defaultVisible: false,
+        style: {
+          kind: "choropleth",
+          propertyKey: "nearestTransitKm",
+          buckets: [
+            { max: 1, color: "#CFE3F5", label: "Near (≤ 1 km)" },
+            { max: 3, color: "#7FB2E5", label: "Moderate (1–3 km)" },
+            { max: 8, color: "#3673B8", label: "Far (3–8 km)" },
+            {
+              max: Number.POSITIVE_INFINITY,
+              color: "#123F6E",
+              label: "Very far (> 8 km)",
+            },
+          ],
+          baseOpacity: 0.18,
+          emphasisOpacity: 0.78,
+        },
+      }),
+    );
     const feature = {
       type: "Feature",
       properties: { nearestTransitKm: 30 },
@@ -96,22 +106,27 @@ describe("createLayerConfig", () => {
     } as unknown as Feature;
 
     expect(config.styleFn?.(feature)).toMatchObject({
-      fillColor: TRANSIT_DISTANCE_BUCKET_COLORS.veryFar,
+      fillColor: "#123F6E",
     });
   });
 
   it("produces static pathOptions for a line layer", () => {
-    const definition: LayerDefinition = {
+    const layer: Layer = {
       id: "gautrain",
       label: "Gautrain",
-      dataSource: "/data/gautrain.v1.geojson",
-      layerType: "line",
+      dataSource: ["/data/gauteng/gautrain.v1.geojson"],
+      geometryKind: "line",
       defaultVisible: false,
       available: true,
-      style: { kind: "line", color: "#A87FE0", weight: 3 },
+      style: {
+        kind: "line",
+        color: "#A87FE0",
+        weight: 3,
+        legendLabel: "Gautrain",
+      },
     };
 
-    const config = createLayerConfig(definition);
+    const config = createLayerConfig(layer);
 
     expect(config.pathOptions).toEqual({
       color: "#A87FE0",
@@ -125,33 +140,25 @@ describe("createLayerConfig", () => {
   });
 
   it("produces static pathOptions for a point layer", () => {
-    const definition: LayerDefinition = {
+    const layer: Layer = {
       id: "gautrain",
       label: "Gautrain",
-      dataSource: "/data/gautrain.v1.geojson",
-      layerType: "point",
+      dataSource: ["/data/gauteng/gautrain.v1.geojson"],
+      geometryKind: "point",
       defaultVisible: false,
       available: true,
-      style: { kind: "point", color: "#A87FE0", radius: 4 },
+      style: {
+        kind: "point",
+        color: "#A87FE0",
+        radius: 4,
+        legendLabel: "Gautrain",
+      },
     };
 
-    const config = createLayerConfig(definition);
+    const config = createLayerConfig(layer);
 
     expect(config).toEqual({
       pathOptions: { color: "#A87FE0", fillColor: "#A87FE0" },
     });
-  });
-
-  it("returns an empty config for a layer without a style", () => {
-    const definition: LayerDefinition = {
-      id: "myciti",
-      label: "MyCiTi",
-      dataSource: "/data/myciti.v1.geojson",
-      layerType: "line",
-      defaultVisible: false,
-      available: false,
-    };
-
-    expect(createLayerConfig(definition)).toEqual({});
   });
 });

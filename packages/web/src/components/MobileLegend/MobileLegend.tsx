@@ -1,4 +1,3 @@
-import type { LayerId } from "@buffer-zones/shared";
 import { BookOpen, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { IconButton } from "../IconButton/IconButton";
@@ -6,7 +5,7 @@ import { Legend } from "../Legend/Legend";
 import styles from "./MobileLegend.module.css";
 
 interface MobileLegendProps {
-  visibleLayerIds: LayerId[];
+  visibleLayerIds: string[];
   suppressed: boolean;
   panelOpen: boolean;
   panelExpanded: boolean;

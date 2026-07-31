@@ -1,9 +1,8 @@
-import type { LayerId } from "@buffer-zones/shared";
 import { Legend } from "../Legend/Legend";
 import styles from "./DesktopLegend.module.css";
 
 interface DesktopLegendProps {
-  visibleLayerIds: LayerId[];
+  visibleLayerIds: string[];
 }
 
 export function DesktopLegend({ visibleLayerIds }: DesktopLegendProps) {

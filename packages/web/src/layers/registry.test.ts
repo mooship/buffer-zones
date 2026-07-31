@@ -1,38 +1,39 @@
-import type { LayerId } from "@buffer-zones/shared";
-import { getLayerDefinition, getLayerDefinitions } from "./registry";
+import { describe, expect, it } from "vitest";
+import { getLayer, getLayerGroups, getLayers } from "./registry";
 
-describe("getLayerDefinitions", () => {
-  it("returns a stable shared definition list", () => {
-    const first = getLayerDefinitions();
-    const second = getLayerDefinitions();
-
-    expect(first).toBe(second);
-  });
-
-  it("includes an entry for every layer common", () => {
-    const ids = getLayerDefinitions().map((layer) => layer.id);
-    expect(ids).toEqual(
+describe("registry", () => {
+  it("returns the 6 gauteng-spatial-legacy layers", () => {
+    const layers = getLayers();
+    expect(layers.map((l) => l.id)).toEqual(
       expect.arrayContaining([
         "townships",
         "nearest-transit",
         "rapid-rail",
-        "bus",
+        "bus-rapid-transit",
         "commuter-rail",
+        "bus",
       ]),
     );
   });
 
-  it("points every layer's dataSource at .geojson files under /data/<region>/", () => {
-    for (const layer of getLayerDefinitions()) {
-      expect(layer.dataSource.length).toBeGreaterThan(0);
-      for (const source of layer.dataSource) {
-        expect(source).toMatch(/^\/data\/[\w-]+\/[\w.-]+\.geojson$/);
+  it("every layer dataSource points at a per-region geojson URL", () => {
+    for (const layer of getLayers()) {
+      for (const url of layer.dataSource) {
+        expect(url).toMatch(/^\/data\/[\w-]+\/[\w.-]+\.geojson$/);
       }
     }
   });
 
-  it("returns specific layer by id", () => {
-    expect(getLayerDefinition("rapid-rail")?.label).toBe("Rapid Rail");
-    expect(getLayerDefinition("not-a-real-layer" as LayerId)).toBeUndefined();
+  it("looks up a single layer by id", () => {
+    expect(getLayer("rapid-rail")?.label).toBe("Rapid Rail");
+    expect(getLayer("does-not-exist")).toBeUndefined();
+  });
+
+  it("returns the 2 layer groups", () => {
+    const groups = getLayerGroups();
+    expect(groups.map((g) => g.id)).toEqual([
+      "access-to-opportunity",
+      "transit-networks",
+    ]);
   });
 });

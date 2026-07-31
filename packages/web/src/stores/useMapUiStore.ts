@@ -1,42 +1,51 @@
-import type { LayerId } from "@buffer-zones/shared";
 import { create } from "zustand";
 import type { Basemap } from "../constants/basemaps";
-import { getLayerDefinitions } from "../layers/registry";
+import { getLayerGroups, getLayers } from "../layers/registry";
 
-const ACCESS_LAYER_IDS: readonly LayerId[] = ["townships", "nearest-transit"];
+function findGroupContaining(id: string) {
+  return getLayerGroups().find((group) => group.layerIds.includes(id));
+}
 
-function isAccessLayer(id: LayerId): boolean {
-  return ACCESS_LAYER_IDS.includes(id);
+function isExclusiveGroupMember(id: string): boolean {
+  return findGroupContaining(id)?.selectionMode === "exclusive";
+}
+
+function groupSiblings(id: string): string[] {
+  const group = findGroupContaining(id);
+  if (!group || group.selectionMode !== "exclusive") {
+    return [];
+  }
+  return group.layerIds.filter((sibling) => sibling !== id);
 }
 
 export type PanelView = "story" | "places" | "layers";
 
 interface MapUiState {
-  visibleLayerIds: LayerId[];
+  visibleLayerIds: string[];
   basemap: Basemap;
   panelOpen: boolean;
   panelView: PanelView;
   titleExpanded: boolean;
-  selectedTownshipId: string | null;
-  toggleLayer: (id: LayerId) => void;
+  selectedFeatureId: string | null;
+  toggleLayer: (id: string) => void;
   setBasemap: (basemap: Basemap) => void;
   setPanelOpen: (open: boolean) => void;
   setPanelView: (view: PanelView) => void;
   setTitleExpanded: (expanded: boolean) => void;
-  setSelectedTownshipId: (id: string | null) => void;
+  setSelectedFeatureId: (id: string | null) => void;
   reset: () => void;
 }
 
 function createInitialState() {
   return {
-    visibleLayerIds: getLayerDefinitions()
+    visibleLayerIds: getLayers()
       .filter((layer) => layer.defaultVisible)
       .map((layer) => layer.id),
     basemap: "street" as const,
     panelOpen: false,
     panelView: "story" as const,
     titleExpanded: false,
-    selectedTownshipId: null,
+    selectedFeatureId: null,
   };
 }
 
@@ -52,11 +61,12 @@ export const useMapUiStore = create<MapUiState>()((set) => ({
         };
       }
 
-      if (isAccessLayer(id)) {
+      if (isExclusiveGroupMember(id)) {
+        const siblings = groupSiblings(id);
         return {
           visibleLayerIds: [
             ...state.visibleLayerIds.filter(
-              (existing) => !isAccessLayer(existing),
+              (existing) => !siblings.includes(existing),
             ),
             id,
           ],
@@ -69,6 +79,6 @@ export const useMapUiStore = create<MapUiState>()((set) => ({
   setPanelOpen: (panelOpen) => set({ panelOpen }),
   setPanelView: (panelView) => set({ panelView }),
   setTitleExpanded: (titleExpanded) => set({ titleExpanded }),
-  setSelectedTownshipId: (selectedTownshipId) => set({ selectedTownshipId }),
+  setSelectedFeatureId: (selectedFeatureId) => set({ selectedFeatureId }),
   reset: () => set(createInitialState()),
 }));

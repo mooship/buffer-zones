@@ -1,5 +1,5 @@
 import type {
-  LayerId,
+  Layer as DomainLayer,
   TownshipFeature,
   TownshipProperties,
 } from "@buffer-zones/shared";
@@ -30,21 +30,21 @@ import { useLayerData } from "../../hooks/useLayerData";
 import { usePrefersDarkMode } from "../../hooks/usePrefersDarkMode";
 import { useThemePreference } from "../../hooks/useThemePreference";
 import { createLayerConfig } from "../../layers/createLayerConfig";
-import { getLayerDefinitions } from "../../layers/registry";
+import { getLayers } from "../../layers/registry";
 import { TownshipPopup } from "../TownshipPopup/TownshipPopup";
 import styles from "./MapView.module.css";
 
 interface MapViewProps {
   townships: TownshipFeature[];
   townshipAreas?: Feature[];
-  visibleLayerIds: LayerId[];
+  visibleLayerIds: string[];
   basemap?: Basemap;
-  selectedTownshipId?: string | null;
+  selectedFeatureId?: string | null;
   focusLocationTarget?: {
     token: number;
     location: LocationSearchResult;
   } | null;
-  onTownshipSelect?: (townshipId: string) => void;
+  onFeatureSelect?: (featureId: string) => void;
 }
 
 const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
@@ -63,9 +63,9 @@ const MAJOR_PRIMARY_LABEL_MIN_SUBPLACES = 12;
 const OVERVIEW_ZOOM_THRESHOLD = 9;
 const DETAIL_ZOOM_THRESHOLD = 11;
 
-type TownshipFeatureLayer = Layer & {
+type SelectableFeatureLayer = Layer & {
   feature?: Feature;
-  bindPopup?: (content: string) => TownshipFeatureLayer;
+  bindPopup?: (content: string) => SelectableFeatureLayer;
   getPopup?: () => unknown;
   openPopup?: () => void;
   getBounds?: () => LatLngBounds;
@@ -97,8 +97,8 @@ function getBoundsOptions(desktop: boolean) {
     : { padding: [24, 24] as [number, number] };
 }
 
-function bindTownshipPopup(
-  featureLayer: TownshipFeatureLayer,
+function bindSelectedFeaturePopup(
+  featureLayer: SelectableFeatureLayer,
   properties: TownshipProperties,
 ) {
   if (featureLayer.getPopup?.()) {
@@ -109,30 +109,40 @@ function bindTownshipPopup(
   );
 }
 
-function bindTownshipFeatureInteractions(
+function bindSelectableFeatureInteractions(
   feature: Feature,
-  layer: Layer,
-  townshipLayerById: Map<string, TownshipFeatureLayer>,
-  onTownshipSelect?: (townshipId: string) => void,
+  domainLayer: DomainLayer,
+  leafletLayer: Layer,
+  layerById: Map<string, SelectableFeatureLayer>,
+  onSelect?: (featureId: string) => void,
 ) {
+  if (!domainLayer.interaction?.selectable) {
+    return;
+  }
   const properties = feature.properties as TownshipProperties | null;
   if (!properties) {
     return;
   }
+  const labelField = domainLayer.interaction.labelField ?? "name";
+  const labelValue = (properties as unknown as Record<string, unknown>)[
+    labelField
+  ];
+  const label = typeof labelValue === "string" ? labelValue : properties.name;
+
   if (typeof properties.id === "string") {
-    townshipLayerById.set(properties.id, layer as TownshipFeatureLayer);
+    layerById.set(properties.id, leafletLayer as SelectableFeatureLayer);
   }
   let pendingClickTimeout: ReturnType<typeof setTimeout> | null = null;
   let removeKeyboardHandler: (() => void) | null = null;
 
-  layer.on("add", () => {
-    const element = (layer as Path).getElement?.();
+  leafletLayer.on("add", () => {
+    const element = (leafletLayer as Path).getElement?.();
     if (!element) {
       return;
     }
     element.setAttribute("tabindex", "0");
     element.setAttribute("role", "button");
-    element.setAttribute("aria-label", `View ${properties.name}`);
+    element.setAttribute("aria-label", `View ${label}`);
 
     const keydownHandler: EventListener = (event) => {
       const keyboardEvent = event as KeyboardEvent;
@@ -140,10 +150,10 @@ function bindTownshipFeatureInteractions(
         return;
       }
       keyboardEvent.preventDefault();
-      const featureLayer = layer as TownshipFeatureLayer;
-      bindTownshipPopup(featureLayer, properties);
+      const featureLayer = leafletLayer as SelectableFeatureLayer;
+      bindSelectedFeaturePopup(featureLayer, properties);
       featureLayer.openPopup?.();
-      onTownshipSelect?.(properties.id);
+      onSelect?.(properties.id);
     };
 
     element.addEventListener("keydown", keydownHandler);
@@ -153,7 +163,7 @@ function bindTownshipFeatureInteractions(
     };
   });
 
-  layer.on("click", (event: LeafletMouseEvent) => {
+  leafletLayer.on("click", (event: LeafletMouseEvent) => {
     if (pendingClickTimeout !== null) {
       clearTimeout(pendingClickTimeout);
       pendingClickTimeout = null;
@@ -166,21 +176,21 @@ function bindTownshipFeatureInteractions(
 
     pendingClickTimeout = setTimeout(() => {
       pendingClickTimeout = null;
-      const featureLayer = layer as TownshipFeatureLayer;
-      bindTownshipPopup(featureLayer, properties);
+      const featureLayer = leafletLayer as SelectableFeatureLayer;
+      bindSelectedFeaturePopup(featureLayer, properties);
       featureLayer.openPopup?.();
-      onTownshipSelect?.(properties.id);
+      onSelect?.(properties.id);
     }, TOWNSHIP_CLICK_DELAY_MS);
   });
 
-  layer.on("dblclick", () => {
+  leafletLayer.on("dblclick", () => {
     if (pendingClickTimeout !== null) {
       clearTimeout(pendingClickTimeout);
       pendingClickTimeout = null;
     }
   });
 
-  layer.on("remove", () => {
+  leafletLayer.on("remove", () => {
     if (pendingClickTimeout !== null) {
       clearTimeout(pendingClickTimeout);
       pendingClickTimeout = null;
@@ -189,27 +199,27 @@ function bindTownshipFeatureInteractions(
       removeKeyboardHandler();
     }
     if (typeof properties.id === "string") {
-      townshipLayerById.delete(properties.id);
+      layerById.delete(properties.id);
     }
   });
 }
 
-interface TownshipSelectionProps {
-  selectedTownshipId: string | null;
-  townshipLayerById: React.RefObject<Map<string, TownshipFeatureLayer>>;
+interface SelectedFeatureHighlightProps {
+  selectedFeatureId: string | null;
+  layerById: React.RefObject<Map<string, SelectableFeatureLayer>>;
 }
 
-function TownshipSelection({
-  selectedTownshipId,
-  townshipLayerById,
-}: TownshipSelectionProps) {
+function SelectedFeatureHighlight({
+  selectedFeatureId,
+  layerById,
+}: SelectedFeatureHighlightProps) {
   const map = useMap();
 
   useEffect(() => {
-    if (!selectedTownshipId) {
+    if (!selectedFeatureId) {
       return;
     }
-    const featureLayer = townshipLayerById.current.get(selectedTownshipId);
+    const featureLayer = layerById.current.get(selectedFeatureId);
     if (!featureLayer) {
       return;
     }
@@ -218,7 +228,7 @@ function TownshipSelection({
       | null
       | undefined;
     if (properties) {
-      bindTownshipPopup(featureLayer, properties);
+      bindSelectedFeaturePopup(featureLayer, properties);
     }
     const bounds = featureLayer.getBounds?.();
     if (bounds) {
@@ -229,7 +239,7 @@ function TownshipSelection({
       });
     }
     featureLayer.openPopup?.();
-  }, [map, selectedTownshipId, townshipLayerById]);
+  }, [map, selectedFeatureId, layerById]);
 
   return null;
 }
@@ -402,33 +412,21 @@ function MapViewComponent({
   townshipAreas = [],
   visibleLayerIds,
   basemap = "street",
-  selectedTownshipId = null,
+  selectedFeatureId = null,
   focusLocationTarget = null,
-  onTownshipSelect,
+  onFeatureSelect,
 }: MapViewProps) {
-  const townshipLayerById = useRef(new Map<string, TownshipFeatureLayer>());
-  const bindChoroplethFeature = useCallback(
-    (feature: Feature, featureLayer: Layer) => {
-      bindTownshipFeatureInteractions(
-        feature,
-        featureLayer,
-        townshipLayerById.current,
-        onTownshipSelect,
-      );
-    },
-    [onTownshipSelect],
-  );
-
+  const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
   const visibleLayers = useMemo(
     () =>
-      getLayerDefinitions().filter(
+      getLayers().filter(
         (layer) => layer.available && visibleLayerIds.includes(layer.id),
       ),
     [visibleLayerIds],
   );
   const overlayData = useLayerData(
     visibleLayers
-      .filter((layer) => layer.layerType !== "choropleth")
+      .filter((layer) => layer.geometryKind !== "choropleth")
       .map((layer) => layer.id),
   );
   const prefersDark = usePrefersDarkMode();
@@ -472,9 +470,11 @@ function MapViewComponent({
       };
     });
   }, [tileSourceMode, tileSources.length]);
-  const showAreaLabels =
-    visibleLayerIds.includes("townships") ||
-    visibleLayerIds.includes("nearest-transit");
+  const showAreaLabels = getLayers().some(
+    (layer) =>
+      visibleLayerIds.includes(layer.id) &&
+      layer.interaction?.labelField !== undefined,
+  );
   const isOverviewZoom = mapZoom < OVERVIEW_ZOOM_THRESHOLD;
   const isDetailZoom = mapZoom >= DETAIL_ZOOM_THRESHOLD;
   const transitStopRadius = isOverviewZoom ? 2 : isDetailZoom ? 4 : 3;
@@ -503,7 +503,7 @@ function MapViewComponent({
     () =>
       new Map(
         visibleLayers
-          .filter((layer) => layer.layerType !== "choropleth")
+          .filter((layer) => layer.geometryKind !== "choropleth")
           .map((layer) => {
             const config = layerConfigById.get(layer.id);
             return [
@@ -598,7 +598,7 @@ function MapViewComponent({
           if (!config) {
             return null;
           }
-          const isChoropleth = layer.layerType === "choropleth";
+          const isChoropleth = layer.geometryKind === "choropleth";
           const data = isChoropleth ? townshipData : overlayData[layer.id];
 
           if (!data || (isChoropleth && townships.length === 0)) {
@@ -615,16 +615,27 @@ function MapViewComponent({
                 ...config.pathOptions,
                 pane: isChoropleth ? TOWNSHIP_PANE : TRANSIT_PANE,
               }}
-              onEachFeature={isChoropleth ? bindChoroplethFeature : undefined}
+              onEachFeature={
+                isChoropleth
+                  ? (feature: Feature, featureLayer: Layer) =>
+                      bindSelectableFeatureInteractions(
+                        feature,
+                        layer,
+                        featureLayer,
+                        selectableLayerById.current,
+                        onFeatureSelect,
+                      )
+                  : undefined
+              }
               pointToLayer={
                 isChoropleth ? undefined : transitPointToLayerById.get(layer.id)
               }
             />
           );
         })}
-        <TownshipSelection
-          selectedTownshipId={selectedTownshipId}
-          townshipLayerById={townshipLayerById}
+        <SelectedFeatureHighlight
+          selectedFeatureId={selectedFeatureId}
+          layerById={selectableLayerById}
         />
         <FocusLocationTarget focusLocationTarget={focusLocationTarget} />
         <AreaLabelVisibility />

@@ -1,4 +1,3 @@
-import type { LayerId } from "@buffer-zones/shared";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -19,35 +18,11 @@ describe("useLayerData", () => {
   });
 
   it("fetches layers when mounted", async () => {
-    const { result } = renderHook(() => useLayerData(["townships" as LayerId]));
-
-    await waitFor(() => {
-      expect(result.current).toHaveProperty("townships");
-    });
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/data/gauteng/townships.display.v1.geojson"),
-      expect.objectContaining({ signal: expect.any(AbortSignal) }),
-    );
-  });
-
-  it("adds newly requested layers without refetching existing ones", async () => {
-    const { result, rerender } = renderHook(
-      ({ ids }: { ids: LayerId[] }) => useLayerData(ids),
-      { initialProps: { ids: ["townships" as LayerId] } },
-    );
-
-    await waitFor(() => {
-      expect(result.current).toHaveProperty("townships");
-    });
-    vi.clearAllMocks();
-
-    rerender({ ids: ["townships", "rapid-rail"] as LayerId[] });
+    const { result } = renderHook(() => useLayerData(["rapid-rail"]));
 
     await waitFor(() => {
       expect(result.current).toHaveProperty("rapid-rail");
     });
-
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining("/data/gauteng/rapid-rail.display.v1.geojson"),
@@ -55,8 +30,47 @@ describe("useLayerData", () => {
     );
   });
 
+  it("also fetches a layer's companionSource under an `:companion` key", async () => {
+    const { result } = renderHook(() => useLayerData(["townships"]));
+
+    await waitFor(() => {
+      expect(result.current).toHaveProperty("townships:companion");
+    });
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "/data/gauteng/township-areas.display.v1.geojson",
+      ),
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    );
+  });
+
+  it("adds newly requested layers without refetching existing ones", async () => {
+    const { result, rerender } = renderHook(
+      ({ ids }: { ids: string[] }) => useLayerData(ids),
+      { initialProps: { ids: ["rapid-rail"] } },
+    );
+
+    await waitFor(() => {
+      expect(result.current).toHaveProperty("rapid-rail");
+    });
+    vi.clearAllMocks();
+
+    rerender({ ids: ["rapid-rail", "bus"] });
+
+    await waitFor(() => {
+      expect(result.current).toHaveProperty("bus");
+    });
+
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/data/gauteng/bus.display.v1.geojson"),
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    );
+  });
+
   it("does not fetch layers that are unavailable", async () => {
-    const { result } = renderHook(() => useLayerData(["myciti" as LayerId]));
+    const { result } = renderHook(() => useLayerData(["myciti"]));
 
     await waitFor(() => {
       expect(result.current).toEqual({});
@@ -74,8 +88,8 @@ describe("useLayerData", () => {
       } as Response);
 
     const { result, rerender } = renderHook(
-      ({ ids }: { ids: LayerId[] }) => useLayerData(ids),
-      { initialProps: { ids: ["rapid-rail" as LayerId] } },
+      ({ ids }: { ids: string[] }) => useLayerData(ids),
+      { initialProps: { ids: ["rapid-rail"] } },
     );
 
     await waitFor(() => {
@@ -84,7 +98,7 @@ describe("useLayerData", () => {
     expect(result.current).toEqual({});
 
     rerender({ ids: [] });
-    rerender({ ids: ["rapid-rail" as LayerId] });
+    rerender({ ids: ["rapid-rail"] });
 
     await waitFor(() => {
       expect(result.current).toHaveProperty("rapid-rail");
@@ -101,9 +115,7 @@ describe("useLayerData", () => {
       return new Promise<Response>(() => {});
     });
 
-    const { unmount } = renderHook(() =>
-      useLayerData(["rapid-rail" as LayerId]),
-    );
+    const { unmount } = renderHook(() => useLayerData(["rapid-rail"]));
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -137,14 +149,14 @@ describe("useLayerData", () => {
       } as Response);
 
     vi.doMock("../layers/registry", () => ({
-      getLayerDefinition: () => ({
+      getLayer: () => ({
         id: "townships",
         label: "Modeled car time",
         dataSource: [
           "/data/gauteng/townships.display.v1.geojson",
           "/data/other/townships.display.v1.geojson",
         ],
-        layerType: "choropleth",
+        geometryKind: "choropleth",
         defaultVisible: true,
         available: true,
       }),
@@ -155,7 +167,7 @@ describe("useLayerData", () => {
     );
 
     const { result } = renderHook(() =>
-      useLayerDataWithTwoSources(["townships" as LayerId]),
+      useLayerDataWithTwoSources(["townships"]),
     );
 
     await waitFor(() => {

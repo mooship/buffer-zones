@@ -211,13 +211,13 @@ describe("MapView", () => {
 
   it("binds township popup markup lazily on first click", () => {
     vi.useFakeTimers();
-    const onTownshipSelect = vi.fn();
+    const onFeatureSelect = vi.fn();
 
     render(
       <MapView
         townships={townships}
         visibleLayerIds={["townships"]}
-        onTownshipSelect={onTownshipSelect}
+        onFeatureSelect={onFeatureSelect}
       />,
     );
 
@@ -229,22 +229,22 @@ describe("MapView", () => {
     vi.advanceTimersByTime(220);
 
     expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
-    expect(onTownshipSelect).toHaveBeenCalledWith("A");
+    expect(onFeatureSelect).toHaveBeenCalledWith("A");
 
     firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
     vi.advanceTimersByTime(220);
     expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
-    expect(onTownshipSelect).toHaveBeenCalledTimes(2);
+    expect(onFeatureSelect).toHaveBeenCalledTimes(2);
   });
 
   it("opens township popup via keyboard when the feature is focused", () => {
-    const onTownshipSelect = vi.fn();
+    const onFeatureSelect = vi.fn();
 
     render(
       <MapView
         townships={townships}
         visibleLayerIds={["townships"]}
-        onTownshipSelect={onTownshipSelect}
+        onFeatureSelect={onFeatureSelect}
       />,
     );
 
@@ -257,7 +257,7 @@ describe("MapView", () => {
 
     expect(firstLayer?.bindPopup).toHaveBeenCalledTimes(1);
     expect(firstLayer?.openPopup).toHaveBeenCalledTimes(1);
-    expect(onTownshipSelect).toHaveBeenCalledWith("A");
+    expect(onFeatureSelect).toHaveBeenCalledWith("A");
   });
 
   it("removes township-layer reference when a feature layer is removed", () => {
@@ -274,7 +274,7 @@ describe("MapView", () => {
       <MapView
         townships={townships}
         visibleLayerIds={["townships"]}
-        selectedTownshipId="A"
+        selectedFeatureId="A"
       />,
     );
 
@@ -283,13 +283,13 @@ describe("MapView", () => {
 
   it("does not open popup or select township on double-click", () => {
     vi.useFakeTimers();
-    const onTownshipSelect = vi.fn();
+    const onFeatureSelect = vi.fn();
 
     render(
       <MapView
         townships={townships}
         visibleLayerIds={["townships"]}
-        onTownshipSelect={onTownshipSelect}
+        onFeatureSelect={onFeatureSelect}
       />,
     );
 
@@ -301,7 +301,7 @@ describe("MapView", () => {
     vi.advanceTimersByTime(220);
 
     expect(popupMocks.renderToStaticMarkup).not.toHaveBeenCalled();
-    expect(onTownshipSelect).not.toHaveBeenCalled();
+    expect(onFeatureSelect).not.toHaveBeenCalled();
     expect(firstLayer?.openPopup).not.toHaveBeenCalled();
   });
 
@@ -310,7 +310,7 @@ describe("MapView", () => {
       <MapView
         townships={townships}
         visibleLayerIds={["townships"]}
-        selectedTownshipId="A"
+        selectedFeatureId="A"
       />,
     );
 

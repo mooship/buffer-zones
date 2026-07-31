@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { getLayerDefinitions } from "./layers/registry";
+import { getLayers } from "./layers/registry";
 import { links } from "./root";
 
 describe("root links", () => {
   it("includes exactly one preload link per unique dataSource URL", () => {
     const uniqueUrls = new Set(
-      getLayerDefinitions().flatMap((layer) => layer.dataSource),
+      getLayers().flatMap((layer) => layer.dataSource),
     );
 
     const preloadLinks = links().filter(
@@ -24,10 +24,9 @@ describe("root links", () => {
   });
 
   it("does not mark a defaultVisible layer's URL as low priority, but marks an invisible-only URL as low priority", () => {
-    const sharedUrl = getLayerDefinitions().find(
-      (layer) => layer.id === "townships",
-    )?.dataSource[0];
-    const invisibleOnlyUrl = getLayerDefinitions().find(
+    const sharedUrl = getLayers().find((layer) => layer.id === "townships")
+      ?.dataSource[0];
+    const invisibleOnlyUrl = getLayers().find(
       (layer) => layer.id === "rapid-rail",
     )?.dataSource[0];
 

@@ -11,11 +11,11 @@ import {
   ScrollRestoration,
 } from "react-router";
 import appStylesHref from "./index.css?url";
-import { getLayerDefinitions } from "./layers/registry";
+import { getLayers } from "./layers/registry";
 
 function getGeoJsonPreloadLinks() {
   const defaultVisibleByUrl = new Map<string, boolean>();
-  for (const layer of getLayerDefinitions()) {
+  for (const layer of getLayers()) {
     for (const source of layer.dataSource) {
       const isDefaultVisible = defaultVisibleByUrl.get(source) ?? false;
       defaultVisibleByUrl.set(source, isDefaultVisible || layer.defaultVisible);

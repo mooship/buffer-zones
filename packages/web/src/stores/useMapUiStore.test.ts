@@ -15,7 +15,7 @@ describe("useMapUiStore", () => {
       basemap: "street",
       panelOpen: false,
       titleExpanded: false,
-      selectedTownshipId: null,
+      selectedFeatureId: null,
     });
   });
 
