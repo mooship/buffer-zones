@@ -111,11 +111,12 @@ function bindTownshipFeatureInteractions(
     element.setAttribute("role", "button");
     element.setAttribute("aria-label", `View ${properties.name}`);
 
-    const keydownHandler = (event: KeyboardEvent) => {
-      if (event.key !== "Enter" && event.key !== " ") {
+    const keydownHandler: EventListener = (event) => {
+      const keyboardEvent = event as KeyboardEvent;
+      if (keyboardEvent.key !== "Enter" && keyboardEvent.key !== " ") {
         return;
       }
-      event.preventDefault();
+      keyboardEvent.preventDefault();
       const featureLayer = layer as TownshipFeatureLayer;
       bindTownshipPopup(featureLayer, properties);
       featureLayer.openPopup?.();
@@ -435,6 +436,9 @@ function MapViewComponent({
         ) : null}
         {visibleLayers.map((layer) => {
           const config = layerConfigById.get(layer.id);
+          if (!config) {
+            return null;
+          }
           const isChoropleth = layer.layerType === "choropleth";
           const data = isChoropleth ? townshipData : overlayData[layer.id];
 

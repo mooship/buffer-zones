@@ -12,6 +12,10 @@ const TILE_HOST_PATTERN =
   /tile\.openstreetmap\.org|basemaps\.cartocdn\.com|server\.arcgisonline\.com/;
 
 export const test = base.extend({
+  baseURL: [
+    process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:4173",
+    { option: true },
+  ],
   page: async ({ page }, use) => {
     await page.route(TILE_HOST_PATTERN, (route) =>
       route.fulfill({
