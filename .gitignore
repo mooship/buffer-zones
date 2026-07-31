@@ -1,4 +1,7 @@
-.claude/
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/apple-design.md
 node_modules
 dist
 packages/web/build/
