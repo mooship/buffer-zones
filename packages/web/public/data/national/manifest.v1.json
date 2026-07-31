@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-31T07:14:05.310Z",
+  "generatedAt": "2026-07-31T09:50:28.260Z",
   "metroIds": [
     "tshwane",
     "johannesburg",
@@ -21,9 +21,9 @@
     },
     {
       "fileName": "township-areas.display.v1.geojson",
-      "featureCount": 128,
-      "sha256": "3586087f59e622c65aeb0a8aa0e573bd9154942231f7c42532d2886da1d103fd",
-      "bytes": 277253
+      "featureCount": 123,
+      "sha256": "f4c7c2ec1344f89eb49aadaa91934a55cdaedf14a9fcf59bee567da1e584b252",
+      "bytes": 234544
     },
     {
       "fileName": "rapid-rail.display.v1.geojson",

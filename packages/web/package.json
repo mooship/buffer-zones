@@ -9,7 +9,7 @@
     "dev": "react-router dev",
     "build": "react-router build",
     "typecheck": "react-router typegen && tsc --noEmit",
-    "preview": "wrangler dev ../../wrangler.jsonc",
+    "preview": "wrangler dev --config ../../wrangler.jsonc",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:all": "playwright test",
