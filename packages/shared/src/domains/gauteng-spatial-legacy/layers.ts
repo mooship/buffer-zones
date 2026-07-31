@@ -1,7 +1,22 @@
+import { getTownshipGroup } from "../../constants/townships";
 import type { Layer } from "../../types/genericLayer";
 
 function dataUrl(fileName: string): string {
   return `/data/gauteng/${fileName}`;
+}
+
+function resolveTownshipEmphasis(
+  properties: Record<string, unknown> | null | undefined,
+): boolean {
+  const name = properties?.name;
+  const id = properties?.id;
+  if (typeof name !== "string") {
+    return false;
+  }
+  return (
+    getTownshipGroup(name, typeof id === "string" ? id : undefined) !==
+    undefined
+  );
 }
 
 export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
@@ -29,6 +44,9 @@ export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
           label: "Very long (> 60 min)",
         },
       ],
+      baseOpacity: 0.18,
+      emphasisOpacity: 0.78,
+      resolveEmphasis: resolveTownshipEmphasis,
     },
   },
   {
@@ -55,6 +73,9 @@ export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
           label: "Very far (> 8 km)",
         },
       ],
+      baseOpacity: 0.18,
+      emphasisOpacity: 0.78,
+      resolveEmphasis: resolveTownshipEmphasis,
     },
   },
   {

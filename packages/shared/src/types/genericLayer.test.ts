@@ -13,6 +13,7 @@ describe("generic Layer/LayerGroup types", () => {
       kind: "choropleth",
       propertyKey: "commuteMinutes",
       buckets: [{ max: 20, color: "#7A9B6E", label: "Short (≤ 20 min)" }],
+      baseOpacity: 0.18,
     };
     const layer: Layer = {
       id: "example-choropleth",
@@ -56,10 +57,27 @@ describe("generic Layer/LayerGroup types", () => {
       geometryKind: "choropleth",
       defaultVisible: false,
       available: true,
-      style: { kind: "choropleth", propertyKey: "value", buckets: [] },
+      style: {
+        kind: "choropleth",
+        propertyKey: "value",
+        buckets: [],
+        baseOpacity: 0.18,
+      },
       interaction: { selectable: true, labelField: "name" },
     };
     expect(layer.interaction?.selectable).toBe(true);
+  });
+
+  it("accepts a choropleth style with an emphasis resolver", () => {
+    const style: ChoroplethLayerStyle = {
+      kind: "choropleth",
+      propertyKey: "commuteMinutes",
+      buckets: [],
+      baseOpacity: 0.18,
+      emphasisOpacity: 0.78,
+      resolveEmphasis: (properties) => properties?.name === "example",
+    };
+    expect(style.resolveEmphasis?.({ name: "example" })).toBe(true);
   });
 
   it("accepts an exclusive and an independent layer group", () => {

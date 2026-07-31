@@ -10,6 +10,11 @@ export interface ChoroplethLayerStyle {
   kind: "choropleth";
   propertyKey: string;
   buckets: ColorBucket[];
+  baseOpacity: number;
+  emphasisOpacity?: number;
+  resolveEmphasis?: (
+    properties: Record<string, unknown> | null | undefined,
+  ) => boolean;
 }
 
 export interface LineLayerStyle {
