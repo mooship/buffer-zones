@@ -26,6 +26,8 @@ import { DATA_SOURCES, REPOSITORY_URL } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
 import type { LocationSearchResult } from "./data/locationSearch";
+import { mergeFeatureCollections } from "./data/mergeFeatureCollections";
+import { buildRegionDataUrls } from "./data/regionDataUrls";
 import {
   setThemePreference,
   useThemePreference,
@@ -105,19 +107,25 @@ export function App() {
     setTownships([]);
     setTownshipAreas([]);
     const cacheBust = loadAttempt > 0 ? `?retry=${loadAttempt}` : "";
-    const repository = createTownshipDataRepository(
-      `/data/national/townships.display.v1.geojson${cacheBust}`,
+    const townshipUrls = buildRegionDataUrls(
+      `townships.display.v1.geojson${cacheBust}`,
     );
+    const areaUrls = buildRegionDataUrls(
+      `township-areas.display.v1.geojson${cacheBust}`,
+    );
+
     Promise.all([
-      repository.getTownships(),
-      fetchFeatureCollection(
-        `/data/national/township-areas.display.v1.geojson${cacheBust}`,
+      Promise.all(
+        townshipUrls.map((url) =>
+          createTownshipDataRepository(url).getTownships(),
+        ),
       ),
+      Promise.all(areaUrls.map((url) => fetchFeatureCollection(url))),
     ])
-      .then(([features, areas]) => {
+      .then(([townshipsByRegion, areasByRegion]) => {
         if (!cancelled) {
-          setTownships(features);
-          setTownshipAreas(areas.features);
+          setTownships(townshipsByRegion.flat());
+          setTownshipAreas(mergeFeatureCollections(areasByRegion).features);
         }
       })
       .catch(() => {
