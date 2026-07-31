@@ -19,6 +19,12 @@ describe("metros", () => {
     ]);
   });
 
+  it("assigns every metro to the gauteng region", () => {
+    for (const metro of METROS) {
+      expect(metro.regionId).toBe("gauteng");
+    }
+  });
+
   it("throws for an unknown metro id", () => {
     // @ts-expect-error deliberately invalid id for the runtime guard
     expect(() => getMetroDefinition("durban")).toThrow(/Unknown metro id/);

@@ -13,6 +13,7 @@ export interface MetroDefinition {
   id: MetroId;
   name: string;
   shortName: string;
+  regionId: string;
   municipalityCodes: readonly number[];
   center: { lat: number; lon: number };
   zoom: number;
@@ -28,6 +29,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "tshwane",
     name: "City of Tshwane",
     shortName: "Tshwane",
+    regionId: "gauteng",
     municipalityCodes: [799],
     center: { lat: -25.7449, lon: 28.1878 },
     zoom: 10,
@@ -37,6 +39,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "johannesburg",
     name: "City of Johannesburg",
     shortName: "Johannesburg",
+    regionId: "gauteng",
     municipalityCodes: [798],
     center: { lat: -26.2041, lon: 28.0473 },
     zoom: 10,
@@ -46,6 +49,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "ekurhuleni",
     name: "City of Ekurhuleni",
     shortName: "Ekurhuleni",
+    regionId: "gauteng",
     municipalityCodes: [797],
     center: { lat: -26.175, lon: 28.29 },
     zoom: 10,
@@ -55,6 +59,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "emfuleni",
     name: "Emfuleni Local Municipality",
     shortName: "Emfuleni",
+    regionId: "gauteng",
     municipalityCodes: [760],
     center: { lat: -26.67, lon: 27.86 },
     zoom: 10,
@@ -64,6 +69,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "midvaal",
     name: "Midvaal Local Municipality",
     shortName: "Midvaal",
+    regionId: "gauteng",
     municipalityCodes: [761],
     center: { lat: -26.585, lon: 28.0785 },
     zoom: 10,
@@ -73,6 +79,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "lesedi",
     name: "Lesedi Local Municipality",
     shortName: "Lesedi",
+    regionId: "gauteng",
     municipalityCodes: [762],
     center: { lat: -26.4823, lon: 28.4146 },
     zoom: 10,
@@ -82,6 +89,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "mogale-city",
     name: "Mogale City Local Municipality",
     shortName: "Mogale City",
+    regionId: "gauteng",
     municipalityCodes: [763],
     center: { lat: -26.063, lon: 27.7376 },
     zoom: 10,
@@ -91,6 +99,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "rand-west-city",
     name: "Rand West City Local Municipality",
     shortName: "Rand West City",
+    regionId: "gauteng",
     municipalityCodes: [764, 765],
     center: { lat: -26.26, lon: 27.6648 },
     zoom: 10,
@@ -100,6 +109,7 @@ export const METROS: readonly MetroDefinition[] = [
     id: "merafong-city",
     name: "Merafong City Local Municipality",
     shortName: "Merafong City",
+    regionId: "gauteng",
     municipalityCodes: [766],
     center: { lat: -26.4095, lon: 27.4034 },
     zoom: 10,
