@@ -79,6 +79,10 @@ function getSnapshot() {
   return currentPreference;
 }
 
+function getServerSnapshot(): ThemePreference {
+  return "system";
+}
+
 export function setThemePreference(preference: ThemePreference) {
   currentPreference = preference;
   if (typeof window !== "undefined") {
@@ -95,5 +99,5 @@ export function setThemePreference(preference: ThemePreference) {
 }
 
 export function useThemePreference() {
-  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

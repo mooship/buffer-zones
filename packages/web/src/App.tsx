@@ -17,6 +17,7 @@ import styles from "./App.module.css";
 import { ControlButton } from "./components/ControlButton/ControlButton";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
+import { LocationSearchControl } from "./components/LocationSearchControl/LocationSearchControl";
 import { MobileLegend } from "./components/MobileLegend/MobileLegend";
 import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
@@ -92,7 +93,10 @@ export function App() {
 
   useEffect(() => {
     setHydrated(true);
-  }, []);
+    if (window.innerWidth > MOBILE_BREAKPOINT_PX) {
+      setPanelOpen(true);
+    }
+  }, [setPanelOpen]);
 
   useEffect(() => {
     let cancelled = false;
@@ -320,6 +324,15 @@ export function App() {
         ) : null}
       </main>
 
+      <div className={clsx(styles.locationSearchControl, styles.ticked)}>
+        <LocationSearchControl
+          onLocationSelect={(location) => {
+            setSelectedTownshipId(null);
+            setFocusLocationTarget({ token: Date.now(), location });
+          }}
+        />
+      </div>
+
       <ControlButton
         ref={panelTriggerRef}
         className={styles.panelTrigger}
@@ -461,10 +474,6 @@ export function App() {
           onBasemapChange={setBasemap}
           themePreference={themePreference}
           onThemePreferenceChange={setThemePreference}
-          onLocationSelect={(location) => {
-            setSelectedTownshipId(null);
-            setFocusLocationTarget({ token: Date.now(), location });
-          }}
         />
       </div>
     </div>

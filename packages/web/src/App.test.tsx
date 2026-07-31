@@ -109,6 +109,20 @@ describe("App", () => {
     );
   });
 
+  it("shows map-chrome location search outside settings", async () => {
+    render(<App />);
+
+    expect(screen.getByTestId("location-search-input")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+    expect(
+      screen.queryByTestId("settings-location-search-input"),
+    ).not.toBeInTheDocument();
+
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+  });
+
   it("shows layer controls immediately in the layers tab", async () => {
     render(<App />);
 

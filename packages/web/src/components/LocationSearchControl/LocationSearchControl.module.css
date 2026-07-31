@@ -1,0 +1,76 @@
+.root {
+  display: grid;
+  gap: 0.375rem;
+  width: min(28rem, calc(100vw - 7rem));
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.label svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.input {
+  min-height: 42px;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-paper);
+  font: inherit;
+}
+
+.input:focus-visible,
+.resultButton:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
+.status {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.results {
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  max-height: min(40dvh, 15rem);
+  overflow-y: auto;
+}
+
+.resultButton {
+  width: 100%;
+  min-height: 38px;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-panel) 94%, transparent);
+  color: var(--color-paper);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.resultButton:hover {
+  background: var(--color-surface-hover);
+}
+
+.resultButton[data-active="true"] {
+  background: var(--color-surface-hover);
+  border-color: color-mix(in srgb, var(--color-paper) 45%, var(--color-line));
+}

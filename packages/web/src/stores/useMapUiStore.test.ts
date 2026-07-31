@@ -13,7 +13,8 @@ describe("useMapUiStore", () => {
     expect(state).toMatchObject({
       visibleLayerIds: ["townships"],
       basemap: "street",
-      titleExpanded: true,
+      panelOpen: false,
+      titleExpanded: false,
       selectedTownshipId: null,
     });
   });

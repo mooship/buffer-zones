@@ -291,6 +291,14 @@
   z-index: 1240;
 }
 
+.locationSearchControl {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 1240;
+  padding: 0.75rem 0.875rem;
+}
+
 .panelSources {
   padding-top: 0.75rem;
   border-top: 1px solid color-mix(in srgb, var(--color-line) 45%, transparent);
@@ -492,6 +500,19 @@
       var(--mobile-control-size) +
       3rem
     );
+  }
+
+  .locationSearchControl {
+    top: calc(0.75rem + var(--mobile-safe-top));
+    left: 0.75rem;
+    right: calc(
+      var(--mobile-control-edge) +
+      var(--mobile-control-size) +
+      0.625rem
+    );
+    width: auto;
+    max-width: none;
+    padding: 0.625rem 0.75rem;
   }
 
   .panelTab {

@@ -1,0 +1,190 @@
+import { Search } from "lucide-react";
+import {
+  type KeyboardEvent as ReactKeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  type LocationSearchResult,
+  fetchLocationSearchResults,
+} from "../../data/locationSearch";
+import styles from "./LocationSearchControl.module.css";
+
+interface LocationSearchControlProps {
+  onLocationSelect: (location: LocationSearchResult) => void;
+}
+
+const MIN_SEARCH_QUERY_LENGTH = 2;
+const SEARCH_DEBOUNCE_MS = 260;
+
+export function LocationSearchControl({
+  onLocationSelect,
+}: LocationSearchControlProps) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<LocationSearchResult[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [activeResultIndex, setActiveResultIndex] = useState(-1);
+  const searchControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      searchControllerRef.current?.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    const trimmedQuery = query.trim();
+    if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
+      setResults([]);
+      setSearchError(null);
+      setSearching(false);
+      setActiveResultIndex(-1);
+      searchControllerRef.current?.abort();
+      return;
+    }
+
+    searchControllerRef.current?.abort();
+    const controller = new AbortController();
+    searchControllerRef.current = controller;
+
+    const debounceTimer = setTimeout(async () => {
+      setSearching(true);
+      setSearchError(null);
+      setActiveResultIndex(-1);
+
+      try {
+        const nextResults = await fetchLocationSearchResults(
+          trimmedQuery,
+          controller.signal,
+        );
+        setResults(nextResults);
+
+        if (nextResults.length === 0) {
+          setSearchError("No places matched that search.");
+        }
+      } catch {
+        if (controller.signal.aborted) {
+          return;
+        }
+        setResults([]);
+        setSearchError("Search is unavailable right now. Please try again.");
+      } finally {
+        if (searchControllerRef.current === controller) {
+          setSearching(false);
+        }
+      }
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => {
+      clearTimeout(debounceTimer);
+      controller.abort();
+    };
+  }, [query]);
+
+  function handleInputKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (results.length === 0) {
+        return;
+      }
+      setActiveResultIndex((index) => Math.min(index + 1, results.length - 1));
+      return;
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (results.length === 0) {
+        return;
+      }
+      setActiveResultIndex((index) => Math.max(index - 1, 0));
+      return;
+    }
+
+    if (event.key === "Enter") {
+      if (activeResultIndex < 0 || activeResultIndex >= results.length) {
+        return;
+      }
+
+      event.preventDefault();
+      const selected = results[activeResultIndex];
+      if (selected) {
+        handleResultSelect(selected);
+      }
+      return;
+    }
+
+    if (event.key === "Escape") {
+      setResults([]);
+      setSearchError(null);
+      setActiveResultIndex(-1);
+    }
+  }
+
+  function handleResultSelect(result: LocationSearchResult) {
+    onLocationSelect(result);
+    setQuery(result.label);
+    setResults([]);
+    setSearchError(null);
+    setActiveResultIndex(-1);
+  }
+
+  return (
+    <section
+      className={styles.root}
+      aria-label="Location search"
+      data-testid="location-search"
+      data-e2e="location-search"
+    >
+      <label className={styles.label} htmlFor="map-location-search">
+        <Search aria-hidden="true" />
+        Search place
+      </label>
+      <input
+        id="map-location-search"
+        data-testid="location-search-input"
+        data-e2e="location-search-input"
+        className={styles.input}
+        type="search"
+        autoComplete="off"
+        spellCheck={false}
+        placeholder="Search town, suburb, station or landmark"
+        value={query}
+        onChange={(event) => {
+          setQuery(event.target.value);
+          setSearchError(null);
+          setActiveResultIndex(-1);
+        }}
+        onKeyDown={handleInputKeyDown}
+      />
+      {query.trim().length >= MIN_SEARCH_QUERY_LENGTH && searching ? (
+        <output className={styles.status}>Searching places...</output>
+      ) : null}
+      {searchError ? (
+        <output className={styles.status}>{searchError}</output>
+      ) : null}
+      {results.length > 0 ? (
+        <ul
+          className={styles.results}
+          data-testid="location-search-results"
+          data-e2e="location-search-results"
+        >
+          {results.map((result, index) => (
+            <li key={result.id}>
+              <button
+                type="button"
+                aria-selected={activeResultIndex === index}
+                className={styles.resultButton}
+                data-active={activeResultIndex === index ? "true" : "false"}
+                onClick={() => handleResultSelect(result)}
+              >
+                {result.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </section>
+  );
+}

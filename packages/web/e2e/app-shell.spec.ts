@@ -9,6 +9,14 @@ test.describe("app shell", () => {
   test("loads with the expected landmarks and a rendered map", async ({
     page,
   }) => {
+    const consoleErrors: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() !== "error") {
+        return;
+      }
+      consoleErrors.push(message.text());
+    });
+
     await page.goto("/");
 
     await expect(page).toHaveTitle(/buffer zones/i);
@@ -25,6 +33,11 @@ test.describe("app shell", () => {
 
     await expect(page.locator(".leaflet-container")).toBeVisible();
     await expect(page.locator(MAP_GEOMETRY_SELECTOR).first()).toBeVisible();
+    expect(
+      consoleErrors.filter((message) =>
+        /react error #418|hydration|did not match/i.test(message),
+      ),
+    ).toEqual([]);
   });
 
   test("shows layer controls in the layers tab and keeps legend toggle available", async ({
