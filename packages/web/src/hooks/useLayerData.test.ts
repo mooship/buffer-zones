@@ -30,21 +30,6 @@ describe("useLayerData", () => {
     );
   });
 
-  it("also fetches a layer's companionSource under an `:companion` key", async () => {
-    const { result } = renderHook(() => useLayerData(["townships"]));
-
-    await waitFor(() => {
-      expect(result.current).toHaveProperty("townships:companion");
-    });
-    expect(global.fetch).toHaveBeenCalledTimes(2);
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/data/gauteng/township-areas.display.v1.geojson",
-      ),
-      expect.objectContaining({ signal: expect.any(AbortSignal) }),
-    );
-  });
-
   it("adds newly requested layers without refetching existing ones", async () => {
     const { result, rerender } = renderHook(
       ({ ids }: { ids: string[] }) => useLayerData(ids),

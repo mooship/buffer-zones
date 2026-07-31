@@ -17,15 +17,6 @@ export const STATION_LAYER_IDS: readonly string[] = [
   "commuter-rail",
 ];
 
-export const CHOROPLETH_STROKE = {
-  weight: 0,
-  fillOpacity: 0.18,
-} as const;
-
-export const TOWNSHIP_FILL = {
-  fillOpacity: 0.78,
-} as const;
-
 export const TOWNSHIP_OUTLINE = {
   color: "#F2EDE6",
   weight: 4,

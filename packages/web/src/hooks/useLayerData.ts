@@ -23,7 +23,7 @@ export function useLayerData(layerIds: string[]): LayerDataMap {
         continue;
       }
 
-      const requestKey = `${id}:${definition.dataSource.join(",")}:${definition.companionSource ?? ""}`;
+      const requestKey = `${id}:${definition.dataSource.join(",")}`;
       if (requested.current.has(requestKey)) {
         continue;
       }
@@ -32,28 +32,16 @@ export function useLayerData(layerIds: string[]): LayerDataMap {
       const controller = new AbortController();
       controllers.set(requestKey, controller);
 
-      Promise.all([
-        Promise.all(
-          definition.dataSource.map((source) =>
-            fetchFeatureCollection(source, undefined, controller.signal),
-          ),
+      Promise.all(
+        definition.dataSource.map((source) =>
+          fetchFeatureCollection(source, undefined, controller.signal),
         ),
-        definition.companionSource
-          ? fetchFeatureCollection(
-              definition.companionSource,
-              undefined,
-              controller.signal,
-            )
-          : Promise.resolve(undefined),
-      ])
-        .then(([collections, companionCollection]) => {
+      )
+        .then((collections) => {
           if (!cancelled) {
             setData((current) => ({
               ...current,
               [id]: mergeFeatureCollections(collections),
-              ...(companionCollection
-                ? { [`${id}:companion`]: companionCollection }
-                : {}),
             }));
           }
           controllers.delete(requestKey);
