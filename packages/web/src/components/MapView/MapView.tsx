@@ -11,9 +11,10 @@ import {
   type LatLngBounds,
   type Layer,
   type LeafletMouseEvent,
+  type Path,
   circleMarker,
 } from "leaflet";
-import { useEffect, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   GeoJSON,
@@ -61,6 +62,7 @@ type TownshipFeatureLayer = Layer & {
   getPopup?: () => unknown;
   openPopup?: () => void;
   getBounds?: () => LatLngBounds;
+  getElement?: () => HTMLElement | null;
 };
 
 function getBoundsOptions(desktop: boolean) {
@@ -98,6 +100,34 @@ function bindTownshipFeatureInteractions(
     townshipLayerById.set(properties.id, layer as TownshipFeatureLayer);
   }
   let pendingClickTimeout: ReturnType<typeof setTimeout> | null = null;
+  let removeKeyboardHandler: (() => void) | null = null;
+
+  layer.on("add", () => {
+    const element = (layer as Path).getElement?.();
+    if (!element) {
+      return;
+    }
+    element.setAttribute("tabindex", "0");
+    element.setAttribute("role", "button");
+    element.setAttribute("aria-label", `View ${properties.name}`);
+
+    const keydownHandler = (event: KeyboardEvent) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+      event.preventDefault();
+      const featureLayer = layer as TownshipFeatureLayer;
+      bindTownshipPopup(featureLayer, properties);
+      featureLayer.openPopup?.();
+      onTownshipSelect?.(properties.id);
+    };
+
+    element.addEventListener("keydown", keydownHandler);
+    removeKeyboardHandler = () => {
+      element.removeEventListener("keydown", keydownHandler);
+      removeKeyboardHandler = null;
+    };
+  });
 
   layer.on("click", (event: LeafletMouseEvent) => {
     if (pendingClickTimeout !== null) {
@@ -130,6 +160,12 @@ function bindTownshipFeatureInteractions(
     if (pendingClickTimeout !== null) {
       clearTimeout(pendingClickTimeout);
       pendingClickTimeout = null;
+    }
+    if (removeKeyboardHandler) {
+      removeKeyboardHandler();
+    }
+    if (typeof properties.id === "string") {
+      townshipLayerById.delete(properties.id);
     }
   });
 }
@@ -200,19 +236,32 @@ function AreaLabelVisibility() {
 function ResponsiveMapBounds() {
   const map = useMap();
   const desktopRef = useRef(window.innerWidth > MOBILE_BREAKPOINT_PX);
+  const resizeFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
-      map.invalidateSize({ animate: false });
-      const desktop = window.innerWidth > MOBILE_BREAKPOINT_PX;
-      if (desktop === desktopRef.current) {
+      if (resizeFrameRef.current !== null) {
         return;
       }
-      desktopRef.current = desktop;
-      map.fitBounds(NATIONAL_BOUNDS, getBoundsOptions(desktop));
+      resizeFrameRef.current = requestAnimationFrame(() => {
+        resizeFrameRef.current = null;
+        map.invalidateSize({ animate: false });
+        const desktop = window.innerWidth > MOBILE_BREAKPOINT_PX;
+        if (desktop === desktopRef.current) {
+          return;
+        }
+        desktopRef.current = desktop;
+        map.fitBounds(NATIONAL_BOUNDS, getBoundsOptions(desktop));
+      });
     };
+
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeFrameRef.current !== null) {
+        cancelAnimationFrame(resizeFrameRef.current);
+      }
+    };
   }, [map]);
 
   return null;
@@ -243,7 +292,7 @@ function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
   });
 }
 
-export function MapView({
+function MapViewComponent({
   townships,
   townshipAreas = [],
   visibleLayerIds,
@@ -252,6 +301,17 @@ export function MapView({
   onTownshipSelect,
 }: MapViewProps) {
   const townshipLayerById = useRef(new Map<string, TownshipFeatureLayer>());
+  const bindChoroplethFeature = useCallback(
+    (feature: Feature, featureLayer: Layer) => {
+      bindTownshipFeatureInteractions(
+        feature,
+        featureLayer,
+        townshipLayerById.current,
+        onTownshipSelect,
+      );
+    },
+    [onTownshipSelect],
+  );
 
   const visibleLayers = useMemo(
     () =>
@@ -286,6 +346,43 @@ export function MapView({
       features: townshipAreas,
     }),
     [townshipAreas],
+  );
+  const townshipData = useMemo<FeatureCollection>(
+    () => ({
+      type: "FeatureCollection",
+      features: townships,
+    }),
+    [townships],
+  );
+  const layerConfigById = useMemo(
+    () =>
+      new Map(
+        visibleLayers.map((layer) => [layer.id, createLayerConfig(layer)]),
+      ),
+    [visibleLayers],
+  );
+  const transitPointToLayerById = useMemo(
+    () =>
+      new Map(
+        visibleLayers
+          .filter((layer) => layer.layerType !== "choropleth")
+          .map((layer) => {
+            const config = layerConfigById.get(layer.id);
+            return [
+              layer.id,
+              (_feature: Feature, latlng: LatLng) =>
+                circleMarker(latlng, {
+                  ...config?.pathOptions,
+                  pane: TRANSIT_PANE,
+                  radius: STOP_RADIUS,
+                  fillColor: config?.pathOptions?.color,
+                  fillOpacity: 1,
+                  weight: 1,
+                }),
+            ] as const;
+          }),
+      ),
+    [layerConfigById, visibleLayers],
   );
   const boundsOptions = getBoundsOptions(
     window.innerWidth > MOBILE_BREAKPOINT_PX,
@@ -337,11 +434,9 @@ export function MapView({
           />
         ) : null}
         {visibleLayers.map((layer) => {
-          const config = createLayerConfig(layer);
+          const config = layerConfigById.get(layer.id);
           const isChoropleth = layer.layerType === "choropleth";
-          const data = isChoropleth
-            ? { type: "FeatureCollection" as const, features: townships }
-            : overlayData[layer.id];
+          const data = isChoropleth ? townshipData : overlayData[layer.id];
 
           if (!data || (isChoropleth && townships.length === 0)) {
             return null;
@@ -356,26 +451,9 @@ export function MapView({
                 ...config.pathOptions,
                 pane: isChoropleth ? TOWNSHIP_PANE : TRANSIT_PANE,
               }}
-              onEachFeature={
-                isChoropleth
-                  ? (feature: Feature, featureLayer: Layer) =>
-                      bindTownshipFeatureInteractions(
-                        feature,
-                        featureLayer,
-                        townshipLayerById.current,
-                        onTownshipSelect,
-                      )
-                  : undefined
-              }
-              pointToLayer={(_feature: Feature, latlng: LatLng) =>
-                circleMarker(latlng, {
-                  ...config.pathOptions,
-                  pane: TRANSIT_PANE,
-                  radius: STOP_RADIUS,
-                  fillColor: config.pathOptions?.color,
-                  fillOpacity: 1,
-                  weight: 1,
-                })
+              onEachFeature={isChoropleth ? bindChoroplethFeature : undefined}
+              pointToLayer={
+                isChoropleth ? undefined : transitPointToLayerById.get(layer.id)
               }
             />
           );
@@ -390,3 +468,5 @@ export function MapView({
     </section>
   );
 }
+
+export const MapView = memo(MapViewComponent);

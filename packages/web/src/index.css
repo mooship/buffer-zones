@@ -200,6 +200,11 @@ body {
   outline-offset: -3px;
 }
 
+.leaflet-container:focus-visible {
+  outline: 3px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
 @media (max-width: 768px) {
   .leaflet-control-zoom {
     margin-right: 0.75rem !important;

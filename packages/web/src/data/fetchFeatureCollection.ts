@@ -8,8 +8,9 @@ import {
 export async function fetchFeatureCollection(
   url: string,
   schema: FeatureCollectionSchema = featureCollectionSchema,
+  signal?: AbortSignal,
 ): Promise<FeatureCollection> {
-  const response = await fetch(url);
+  const response = await fetch(url, { signal });
   if (!response.ok) {
     throw new Error(`Failed to load ${url}: ${response.status}`);
   }

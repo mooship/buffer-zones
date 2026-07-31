@@ -26,6 +26,7 @@ vi.mock("react-dom/server", () => ({
 
 function createMockLayer(feature: { properties?: { id?: string } | null }) {
   const handlers: Record<string, (...args: unknown[]) => void> = {};
+  const element = document.createElement("path");
   let popupContent: string | null = null;
   const layer = {
     feature,
@@ -36,11 +37,13 @@ function createMockLayer(feature: { properties?: { id?: string } | null }) {
     getPopup: vi.fn(() => popupContent),
     openPopup: vi.fn(),
     bindTooltip: vi.fn(),
+    getElement: vi.fn(() => element),
     getBounds: vi.fn(() => ({ north: -25, south: -26, east: 28, west: 27 })),
     on: (eventName: string, handler: (...args: unknown[]) => void) => {
       handlers[eventName] = handler;
     },
     __handlers: handlers,
+    __element: element,
   };
   return layer;
 }
@@ -83,6 +86,7 @@ vi.mock("react-leaflet", () => ({
         const layer = layers[index];
         if (layer) {
           onEachFeature?.(feature, layer);
+          layer.__handlers.add?.();
         }
       }
       if (ref && typeof ref === "object") {
@@ -213,6 +217,50 @@ describe("MapView", () => {
     expect(onTownshipSelect).toHaveBeenCalledTimes(2);
   });
 
+  it("opens township popup via keyboard when the feature is focused", () => {
+    const onTownshipSelect = vi.fn();
+
+    render(
+      <MapView
+        townships={townships}
+        visibleLayerIds={["townships"]}
+        onTownshipSelect={onTownshipSelect}
+      />,
+    );
+
+    const firstLayer = mapMocks.featureLayers[0];
+    expect(firstLayer).toBeDefined();
+
+    firstLayer?.__element.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+    );
+
+    expect(firstLayer?.bindPopup).toHaveBeenCalledTimes(1);
+    expect(firstLayer?.openPopup).toHaveBeenCalledTimes(1);
+    expect(onTownshipSelect).toHaveBeenCalledWith("A");
+  });
+
+  it("removes township-layer reference when a feature layer is removed", () => {
+    const { rerender } = render(
+      <MapView townships={townships} visibleLayerIds={["townships"]} />,
+    );
+
+    const firstLayer = mapMocks.featureLayers[0];
+    expect(firstLayer).toBeDefined();
+
+    firstLayer?.__handlers.remove?.();
+
+    rerender(
+      <MapView
+        townships={townships}
+        visibleLayerIds={["townships"]}
+        selectedTownshipId="A"
+      />,
+    );
+
+    expect(firstLayer?.openPopup).not.toHaveBeenCalled();
+  });
+
   it("does not open popup or select township on double-click", () => {
     vi.useFakeTimers();
     const onTownshipSelect = vi.fn();
@@ -295,6 +343,7 @@ describe("MapView", () => {
     );
     expect(fetch).toHaveBeenCalledWith(
       "/data/national/rapid-rail.display.v1.geojson",
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
 
@@ -386,6 +435,12 @@ describe("MapView", () => {
   });
 
   it("refits the full area bounds when crossing the mobile breakpoint", () => {
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+      callback(0);
+      return 1;
+    });
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
+
     vi.stubGlobal("innerWidth", 1024);
     render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
 

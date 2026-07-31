@@ -13,6 +13,7 @@ export function useLayerData(layerIds: LayerId[]): LayerDataMap {
 
   useEffect(() => {
     let cancelled = false;
+    const controllers = new Map<string, AbortController>();
 
     const ids = key.length > 0 ? (key.split(",") as LayerId[]) : [];
 
@@ -27,19 +28,31 @@ export function useLayerData(layerIds: LayerId[]): LayerDataMap {
       }
 
       requested.current.add(requestKey);
-      fetchFeatureCollection(definition.dataSource)
+      const controller = new AbortController();
+      controllers.set(requestKey, controller);
+
+      fetchFeatureCollection(
+        definition.dataSource,
+        undefined,
+        controller.signal,
+      )
         .then((collection) => {
           if (!cancelled) {
             setData((current) => ({ ...current, [id]: collection }));
           }
+          controllers.delete(requestKey);
         })
         .catch(() => {
           requested.current.delete(requestKey);
+          controllers.delete(requestKey);
         });
     }
 
     return () => {
       cancelled = true;
+      for (const controller of controllers.values()) {
+        controller.abort();
+      }
     };
   }, [key]);
 

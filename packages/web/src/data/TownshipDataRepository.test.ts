@@ -42,7 +42,10 @@ describe("createTownshipDataRepository", () => {
     const repo = createTownshipDataRepository("/data/townships.v1.geojson");
     const result = await repo.getTownships();
 
-    expect(fetch).toHaveBeenCalledWith("/data/townships.v1.geojson");
+    expect(fetch).toHaveBeenCalledWith(
+      "/data/townships.v1.geojson",
+      expect.objectContaining({ signal: undefined }),
+    );
     expect(result).toEqual(geojson.features);
   });
 

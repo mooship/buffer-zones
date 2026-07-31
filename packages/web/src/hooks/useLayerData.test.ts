@@ -27,6 +27,7 @@ describe("useLayerData", () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining("/data/national/townships.display.v1.geojson"),
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
 
@@ -50,6 +51,7 @@ describe("useLayerData", () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining("/data/national/rapid-rail.display.v1.geojson"),
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
 
@@ -88,5 +90,28 @@ describe("useLayerData", () => {
       expect(result.current).toHaveProperty("rapid-rail");
     });
     expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("aborts in-flight fetches on unmount", async () => {
+    let capturedSignal: AbortSignal | undefined;
+    vi.mocked(global.fetch).mockImplementation((_, init) => {
+      capturedSignal = (init as RequestInit | undefined)?.signal as
+        | AbortSignal
+        | undefined;
+      return new Promise<Response>(() => {});
+    });
+
+    const { unmount } = renderHook(() =>
+      useLayerData(["rapid-rail" as LayerId]),
+    );
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+    expect(capturedSignal?.aborted).toBe(false);
+
+    unmount();
+
+    expect(capturedSignal?.aborted).toBe(true);
   });
 });
