@@ -23,14 +23,12 @@ Rand West City was formed after Census 2011 by merging Randfontein and Westonari
 
 ## Current inclusion set
 
-The current version includes 7 areas:
+The current version includes 5 areas:
 
 - Mohlakeng
 - Bekkersdal
 - Simunye
 - Glen Harvie
-- Randfontein
-- Westonaria
 - Zenzele
 
 ## Limitations

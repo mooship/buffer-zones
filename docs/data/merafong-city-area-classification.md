@@ -23,13 +23,11 @@ Merafong City's municipality code (`MN_CODE`) in the Stats SA Census 2011 sub-pl
 
 ## Current inclusion set
 
-The current version includes 6 areas:
+The current version includes 4 areas:
 
 - Khutsong
 - Kokosi
 - Wedela
-- Fochville
-- Carletonville
 - Welverdiend
 
 ## Limitations

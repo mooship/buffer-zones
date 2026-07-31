@@ -895,27 +895,6 @@ const MIDVAAL_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] 
       labelPriority: "secondary",
       censusMainPlaceCodes: ["761009"],
     },
-    {
-      id: "midvaal-meyerton",
-      name: "Meyerton",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["761006"],
-    },
-    {
-      id: "midvaal-walkerville",
-      name: "Walkerville",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["761004"],
-    },
-    {
-      id: "midvaal-vaal-marina",
-      name: "Vaal Marina",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["761012"],
-    },
   ];
 
 const LESEDI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
@@ -933,13 +912,6 @@ const LESEDI_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInput[] =
       selectionBasis: "census-main-place",
       labelPriority: "primary",
       censusMainPlaceCodes: ["762005"],
-    },
-    {
-      id: "lesedi-heidelberg",
-      name: "Heidelberg",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["762014"],
     },
     {
       id: "lesedi-devon",
@@ -981,20 +953,6 @@ const MOGALE_CITY_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionInpu
       censusMainPlaceCodes: ["763012"],
     },
     {
-      id: "mogale-krugersdorp",
-      name: "Krugersdorp",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["763004"],
-    },
-    {
-      id: "mogale-magaliesburg",
-      name: "Magaliesburg",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["763006"],
-    },
-    {
       id: "mogale-orient-hills",
       name: "Orient Hills",
       selectionBasis: "census-main-place",
@@ -1034,20 +992,6 @@ const RAND_WEST_CITY_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionI
       censusMainPlaceCodes: ["765014"],
     },
     {
-      id: "rand-west-randfontein",
-      name: "Randfontein",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["764002"],
-    },
-    {
-      id: "rand-west-westonaria",
-      name: "Westonaria",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["765008"],
-    },
-    {
       id: "rand-west-zenzele",
       name: "Zenzele",
       selectionBasis: "census-main-place",
@@ -1078,20 +1022,6 @@ const MERAFONG_CITY_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionIn
       selectionBasis: "census-main-place",
       labelPriority: "secondary",
       censusMainPlaceCodes: ["766023"],
-    },
-    {
-      id: "merafong-fochville",
-      name: "Fochville",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["766024"],
-    },
-    {
-      id: "merafong-carletonville",
-      name: "Carletonville",
-      selectionBasis: "census-main-place",
-      labelPriority: "secondary",
-      censusMainPlaceCodes: ["766004"],
     },
     {
       id: "merafong-welverdiend",

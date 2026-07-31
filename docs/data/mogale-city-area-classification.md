@@ -23,13 +23,11 @@ Mogale City's municipality code (`MN_CODE`) in the Stats SA Census 2011 sub-plac
 
 ## Current inclusion set
 
-The current version includes 6 areas:
+The current version includes 4 areas:
 
 - Kagiso
 - Munsieville
 - Rietvallei
-- Krugersdorp
-- Magaliesburg
 - Orient Hills
 
 ## Limitations

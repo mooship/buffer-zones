@@ -23,11 +23,10 @@ Lesedi's municipality code (`MN_CODE`) in the Stats SA Census 2011 sub-place sha
 
 ## Current inclusion set
 
-The current version includes 5 areas:
+The current version includes 4 areas:
 
 - Ratanda
 - Impumelelo
-- Heidelberg
 - Devon
 - Endicott
 
