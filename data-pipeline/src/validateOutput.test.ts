@@ -76,4 +76,14 @@ describe("validateOutput", () => {
       resolve(root, "gauteng"),
     );
   });
+
+  it("throws when no region directory exists at all", async () => {
+    const root = await mkdtemp(resolve(tmpdir(), "buffer-zones-validate-"));
+    outputManifestMocks.validateOutputDirectory.mockResolvedValue([]);
+
+    await expect(runAllRegionsOutputValidation(root)).rejects.toThrow(
+      /No region output directories found/,
+    );
+    expect(outputManifestMocks.validateOutputDirectory).not.toHaveBeenCalled();
+  });
 });

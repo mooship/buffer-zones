@@ -4,6 +4,10 @@
       "command": "npx",
       "args": ["chrome-devtools-mcp@latest", "--headless", "--isolated"]
     },
+    "cloudflare-api": {
+      "type": "http",
+      "url": "https://mcp.cloudflare.com/mcp"
+    },
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/"

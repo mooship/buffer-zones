@@ -4,7 +4,7 @@ This file provides guidance to GitHub Copilot when working with code in this rep
 
 ## What this is
 
-Buffer Zones maps apartheid-era spatial planning legacy across South African metros using one combined national map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. The published national layer currently combines Tshwane/Pretoria and Johannesburg. It is a public-interest SSR web app on Cloudflare Workers — no accounts and no tracking beyond cookieless page views.
+Buffer Zones maps apartheid-era spatial planning legacy across South African metros using one combined regional map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. The published layer currently covers the `gauteng` region: all nine Gauteng municipalities, including Tshwane/Pretoria and Johannesburg. It is a public-interest SSR web app on Cloudflare Workers — no accounts and no tracking beyond cookieless page views.
 
 ## Commands
 
@@ -44,7 +44,7 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 
 **Three parts, one direction of data flow:** `data-pipeline` (offline, run manually) → static GeoJSON committed per-region under `packages/web/public/data/<regionId>/` → `packages/web` (client-side fetch only, no runtime API). `packages/shared` is the contract both ends agree on.
 
-- **packages/shared** — `constants/regions.ts` defines `REGIONS` (currently one entry, `gauteng`, kind `province`), the registry driving per-region output directories and data-fetch URLs. `constants/metros.ts` still defines `METROS` (currently Tshwane and Johannesburg), each tagged with a `regionId`, used by the pipeline while building a region's dataset. `constants/townships.ts` defines included township-area groupings per metro. `types/` holds shared GeoJSON/layer contracts.
+- **packages/shared** — `constants/regions.ts` defines `REGIONS` (currently one entry, `gauteng`, kind `province`), the registry driving per-region output directories and data-fetch URLs. `constants/metros.ts` still defines `METROS` (currently the nine Gauteng municipalities), each tagged with a `regionId`, used by the pipeline while building a region's dataset. `constants/townships.ts` defines included township-area groupings per metro. `types/` holds shared GeoJSON/layer contracts.
 
 - **data-pipeline** — `src/run.ts` runs `runRegion(regionId)` (looped across every `province`-kind entry in `REGIONS` by `runAllProvinceRegions()`, or invoked for a single region via `npm run run -- --region gauteng`): loops through the `METROS` belonging to that region to fetch boundaries and per-metro OSRM job-center routing, merges transit sources, computes nearest-transit distance, then writes that region's combined dataset under `packages/web/public/data/<regionId>/` (including `townships`, `township-areas`, `rapid-rail`, `bus-rapid-transit`, `commuter-rail`, and `bus` plus `.display.v1.geojson` variants). Only the `gauteng` region exists today.
 

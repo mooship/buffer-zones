@@ -4,6 +4,7 @@ import { ensurePanelOpen } from "./ui";
 
 const MAP_GEOMETRY_SELECTOR =
   ".leaflet-overlay-pane canvas, .leaflet-container path.leaflet-interactive";
+const MOBILE_BREAKPOINT_PX = 768;
 
 test.describe("app shell", () => {
   test("loads with the expected landmarks and a rendered map", async ({
@@ -48,6 +49,12 @@ test.describe("app shell", () => {
     await page.getByTestId(E2E.panelTab.layers).click();
 
     await expect(page.getByTestId(E2E.layerToggle.townships)).toBeChecked();
+
+    const width = page.viewportSize()?.width ?? 0;
+    if (width > MOBILE_BREAKPOINT_PX) {
+      await expect(page.getByTestId(E2E.desktopLegend)).toBeVisible();
+      return;
+    }
 
     const legendTrigger = page.getByTestId(E2E.mobileLegendTrigger);
     await expect(legendTrigger).toBeVisible();
