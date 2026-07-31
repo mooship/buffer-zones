@@ -30,6 +30,7 @@ import {
 } from "./constants/metadata";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
+import type { LocationSearchResult } from "./data/locationSearch";
 import {
   setThemePreference,
   useThemePreference,
@@ -57,6 +58,11 @@ const NATIONAL_JOB_CENTER_COUNT = METROS.reduce(
   0,
 );
 
+interface FocusLocationTarget {
+  token: number;
+  location: LocationSearchResult;
+}
+
 export function App() {
   const [hydrated, setHydrated] = useState(false);
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
@@ -66,6 +72,8 @@ export function App() {
   const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
   const [mobileSheetDragOffset, setMobileSheetDragOffset] = useState(0);
   const [mobileSheetDragging, setMobileSheetDragging] = useState(false);
+  const [focusLocationTarget, setFocusLocationTarget] =
+    useState<FocusLocationTarget | null>(null);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
@@ -294,6 +302,7 @@ export function App() {
               visibleLayerIds={visibleLayerIds}
               basemap={basemap}
               selectedTownshipId={selectedTownshipId}
+              focusLocationTarget={focusLocationTarget}
               onTownshipSelect={setSelectedTownshipId}
             />
           </Suspense>
@@ -496,6 +505,10 @@ export function App() {
           onBasemapChange={setBasemap}
           themePreference={themePreference}
           onThemePreferenceChange={setThemePreference}
+          onLocationSelect={(location) => {
+            setSelectedTownshipId(null);
+            setFocusLocationTarget({ token: Date.now(), location });
+          }}
         />
       </div>
     </div>

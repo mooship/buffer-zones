@@ -52,6 +52,7 @@ export function createLayerConfig(
           color: style.color,
           weight: style.weight,
           opacity: 0.95,
+          noClip: true,
           lineCap: "round",
           lineJoin: "round",
         },

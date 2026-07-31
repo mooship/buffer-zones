@@ -424,6 +424,26 @@ describe("MapView", () => {
     ).toBe(true);
   });
 
+  it("fits to searched locations passed from the settings search", () => {
+    render(
+      <MapView
+        townships={[]}
+        visibleLayerIds={[]}
+        focusLocationTarget={{
+          token: 1,
+          location: {
+            id: "loc-1",
+            label: "Soweto",
+            latitude: -26.267,
+            longitude: 27.854,
+          },
+        }}
+      />,
+    );
+
+    expect(mapMocks.fitBounds).toHaveBeenCalled();
+  });
+
   it("switches tile source when the satellite basemap is selected", () => {
     render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
 

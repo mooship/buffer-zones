@@ -1,8 +1,21 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const searchMocks = vi.hoisted(() => ({
+  fetchLocationSearchResults: vi.fn(),
+}));
+
+vi.mock("../../data/locationSearch", () => ({
+  fetchLocationSearchResults: searchMocks.fetchLocationSearchResults,
+}));
+
 import { SettingsMenu } from "./SettingsMenu";
 
 describe("SettingsMenu", () => {
+  beforeEach(() => {
+    searchMocks.fetchLocationSearchResults.mockReset();
+  });
+
   it("is closed by default and toggles open state from the trigger", () => {
     render(
       <SettingsMenu
@@ -10,6 +23,7 @@ describe("SettingsMenu", () => {
         onBasemapChange={vi.fn()}
         themePreference="system"
         onThemePreferenceChange={vi.fn()}
+        onLocationSelect={vi.fn()}
       />,
     );
 
@@ -32,6 +46,7 @@ describe("SettingsMenu", () => {
         onBasemapChange={vi.fn()}
         themePreference="system"
         onThemePreferenceChange={vi.fn()}
+        onLocationSelect={vi.fn()}
       />,
     );
 
@@ -54,6 +69,7 @@ describe("SettingsMenu", () => {
         onBasemapChange={vi.fn()}
         themePreference="system"
         onThemePreferenceChange={vi.fn()}
+        onLocationSelect={vi.fn()}
       />,
     );
 
@@ -80,6 +96,7 @@ describe("SettingsMenu", () => {
         onBasemapChange={onBasemapChange}
         themePreference="system"
         onThemePreferenceChange={onThemePreferenceChange}
+        onLocationSelect={vi.fn()}
       />,
     );
 
@@ -98,6 +115,7 @@ describe("SettingsMenu", () => {
         onBasemapChange={vi.fn()}
         themePreference="system"
         onThemePreferenceChange={vi.fn()}
+        onLocationSelect={vi.fn()}
       />,
     );
 
@@ -112,11 +130,53 @@ describe("SettingsMenu", () => {
         onBasemapChange={vi.fn()}
         themePreference="system"
         onThemePreferenceChange={vi.fn()}
+        onLocationSelect={vi.fn()}
       />,
     );
 
     expect(screen.getByTestId("settings-basemap-hint")).toHaveTextContent(
       "Imagery context for land use and built form checks.",
+    );
+  });
+
+  it("searches and applies a location result", async () => {
+    const onLocationSelect = vi.fn();
+    searchMocks.fetchLocationSearchResults.mockResolvedValue([
+      {
+        id: "123",
+        label: "Soweto, Johannesburg, Gauteng, South Africa",
+        latitude: -26.267,
+        longitude: 27.854,
+      },
+    ]);
+
+    render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+        onLocationSelect={onLocationSelect}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+    fireEvent.change(screen.getByTestId("settings-location-search-input"), {
+      target: { value: "Soweto" },
+    });
+    fireEvent.click(screen.getByTestId("settings-location-search-submit"));
+
+    const resultButton = await screen.findByRole("button", {
+      name: /soweto, johannesburg/i,
+    });
+    fireEvent.click(resultButton);
+
+    expect(onLocationSelect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: "123",
+        latitude: -26.267,
+        longitude: 27.854,
+      }),
     );
   });
 });

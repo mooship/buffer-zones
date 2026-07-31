@@ -205,6 +205,10 @@ body {
   outline-offset: 2px;
 }
 
+.leaflet-overlay-pane path {
+  shape-rendering: geometricPrecision;
+}
+
 @media (max-width: 768px) {
   .leaflet-control-zoom {
     margin-right: 0.75rem !important;

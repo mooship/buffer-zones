@@ -22,6 +22,14 @@ describe("useThemePreference theme-color meta sync", () => {
     expect(document.documentElement.dataset.theme).toBeUndefined();
   });
 
+  it("does not mutate document head on module import", async () => {
+    await importFreshModule();
+
+    expect(
+      document.querySelector('meta[name="theme-color"][data-theme-override]'),
+    ).not.toBeInTheDocument();
+  });
+
   it("sets an override meta tag and data-theme attribute for dark", async () => {
     const { setThemePreference, THEME_COLOR } = await importFreshModule();
     setThemePreference("dark");

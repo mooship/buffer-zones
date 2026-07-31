@@ -67,7 +67,6 @@ function applyThemeAttribute(preference: ThemePreference) {
 let currentPreference: ThemePreference = "system";
 if (typeof window !== "undefined") {
   currentPreference = readStoredPreference();
-  applyThemeAttribute(currentPreference);
 }
 const listeners = new Set<() => void>();
 

@@ -1,10 +1,8 @@
 import type {
   LayerId,
-  MetroId,
   TownshipFeature,
   TownshipProperties,
 } from "@buffer-zones/shared";
-import { getMetroDefinition } from "@buffer-zones/shared";
 import type { Feature, FeatureCollection } from "geojson";
 import {
   type LatLng,
@@ -27,6 +25,7 @@ import {
 } from "react-leaflet";
 import { type Basemap, getBasemapTileSources } from "../../constants/basemaps";
 import { TOWNSHIP_OUTLINE } from "../../constants/layerStyles";
+import type { LocationSearchResult } from "../../data/locationSearch";
 import { useLayerData } from "../../hooks/useLayerData";
 import { usePrefersDarkMode } from "../../hooks/usePrefersDarkMode";
 import { useThemePreference } from "../../hooks/useThemePreference";
@@ -41,20 +40,18 @@ interface MapViewProps {
   visibleLayerIds: LayerId[];
   basemap?: Basemap;
   selectedTownshipId?: string | null;
+  focusLocationTarget?: {
+    token: number;
+    location: LocationSearchResult;
+  } | null;
   onTownshipSelect?: (townshipId: string) => void;
 }
-
-const NATIONAL_BOUNDS: [[number, number], [number, number]] = [
-  [-35.0, 16.0],
-  [-22.0, 33.0],
-];
 
 const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
   [-27.15, 27.1],
   [-25.3, 28.75],
 ];
 
-const STOP_RADIUS = 4;
 const TOWNSHIP_PANE = "townships";
 const TOWNSHIP_OUTLINE_PANE = "township-outlines";
 const TRANSIT_PANE = "transit";
@@ -63,6 +60,8 @@ const TOWNSHIP_CLICK_DELAY_MS = 220;
 const PRIMARY_LABEL_REVEAL_ZOOM = 10;
 const SECONDARY_LABEL_REVEAL_ZOOM = 12;
 const MAJOR_PRIMARY_LABEL_MIN_SUBPLACES = 12;
+const OVERVIEW_ZOOM_THRESHOLD = 9;
+const DETAIL_ZOOM_THRESHOLD = 11;
 
 type TownshipFeatureLayer = Layer & {
   feature?: Feature;
@@ -303,6 +302,68 @@ function ResponsiveMapBounds() {
   return null;
 }
 
+function ZoomStateWatcher({
+  onZoomChange,
+}: { onZoomChange: (zoom: number) => void }) {
+  const map = useMap();
+
+  useEffect(() => {
+    const updateZoom = () => {
+      onZoomChange(map.getZoom());
+    };
+
+    map.on("zoomend", updateZoom);
+    updateZoom();
+
+    return () => {
+      map.off("zoomend", updateZoom);
+    };
+  }, [map, onZoomChange]);
+
+  return null;
+}
+
+function FocusLocationTarget({
+  focusLocationTarget,
+}: {
+  focusLocationTarget: { token: number; location: LocationSearchResult } | null;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!focusLocationTarget) {
+      return;
+    }
+
+    const bounds = focusLocationTarget.location.bounds;
+    if (bounds) {
+      map.fitBounds(bounds, {
+        animate: false,
+        maxZoom: 14,
+        padding: [44, 44],
+      });
+      return;
+    }
+
+    const lat = focusLocationTarget.location.latitude;
+    const lon = focusLocationTarget.location.longitude;
+
+    map.fitBounds(
+      [
+        [lat - 0.025, lon - 0.025],
+        [lat + 0.025, lon + 0.025],
+      ],
+      {
+        animate: false,
+        maxZoom: 13,
+        padding: [44, 44],
+      },
+    );
+  }, [focusLocationTarget, map]);
+
+  return null;
+}
+
 function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
   const name = feature.properties?.name;
   const labelPriority = feature.properties?.labelPriority;
@@ -342,6 +403,7 @@ function MapViewComponent({
   visibleLayerIds,
   basemap = "street",
   selectedTownshipId = null,
+  focusLocationTarget = null,
   onTownshipSelect,
 }: MapViewProps) {
   const townshipLayerById = useRef(new Map<string, TownshipFeatureLayer>());
@@ -383,6 +445,7 @@ function MapViewComponent({
     mode: tileSourceMode,
     index: 0,
   }));
+  const [mapZoom, setMapZoom] = useState(9);
   const currentTileSourceIndex =
     tileSourceState.mode === tileSourceMode ? tileSourceState.index : 0;
   const safeTileSourceIndex = Math.min(
@@ -412,6 +475,9 @@ function MapViewComponent({
   const showAreaLabels =
     visibleLayerIds.includes("townships") ||
     visibleLayerIds.includes("nearest-transit");
+  const isOverviewZoom = mapZoom < OVERVIEW_ZOOM_THRESHOLD;
+  const isDetailZoom = mapZoom >= DETAIL_ZOOM_THRESHOLD;
+  const transitStopRadius = isOverviewZoom ? 2 : isDetailZoom ? 4 : 3;
   const townshipAreaData = useMemo<FeatureCollection>(
     () => ({
       type: "FeatureCollection",
@@ -446,7 +512,7 @@ function MapViewComponent({
                 circleMarker(latlng, {
                   ...config?.pathOptions,
                   pane: TRANSIT_PANE,
-                  radius: STOP_RADIUS,
+                  radius: transitStopRadius,
                   fillColor: config?.pathOptions?.color,
                   fillOpacity: 1,
                   weight: 1,
@@ -454,7 +520,7 @@ function MapViewComponent({
             ] as const;
           }),
       ),
-    [layerConfigById, visibleLayers],
+    [layerConfigById, transitStopRadius, visibleLayers],
   );
   const boundsOptions = getBoundsOptions(
     getViewportWidth() > MOBILE_BREAKPOINT_PX,
@@ -483,8 +549,9 @@ function MapViewComponent({
           key={`${tileSourceMode}-${tileSource.url}`}
           url={tileSource.url}
           attribution={tileSource.attribution}
+          className={useDarkTiles ? styles.darkTile : undefined}
           detectRetina={useRetinaTiles}
-          updateWhenZooming={false}
+          updateWhenZooming
           eventHandlers={{ tileerror: handleTileError }}
         />
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
@@ -493,6 +560,7 @@ function MapViewComponent({
         {showAreaLabels && townshipAreas.length > 0 ? (
           <GeoJSON
             data={townshipAreaData}
+            smoothFactor={0}
             pathOptions={{
               pane: TOWNSHIP_OUTLINE_PANE,
               fillOpacity: 0,
@@ -500,10 +568,17 @@ function MapViewComponent({
             }}
             style={(feature: Feature | undefined) => ({
               ...TOWNSHIP_OUTLINE,
+              color: resolvedDark ? "#7f8794" : TOWNSHIP_OUTLINE.color,
               opacity:
                 feature?.properties?.labelPriority === "secondary" ? 0.72 : 1,
               weight:
-                feature?.properties?.labelPriority === "secondary" ? 2 : 4,
+                feature?.properties?.labelPriority === "secondary"
+                  ? isOverviewZoom
+                    ? 1
+                    : 2
+                  : isOverviewZoom
+                    ? 2
+                    : 4,
             })}
             onEachFeature={bindTownshipAreaLabel}
           />
@@ -524,7 +599,31 @@ function MapViewComponent({
             <GeoJSON
               key={layer.id}
               data={data}
-              style={config.styleFn}
+              smoothFactor={0}
+              style={
+                isChoropleth
+                  ? (feature) => {
+                      const base = config.styleFn?.(feature);
+                      if (!base) {
+                        return {};
+                      }
+
+                      const fillColor =
+                        typeof base.fillColor === "string"
+                          ? base.fillColor
+                          : "#8a93a5";
+                      return {
+                        ...base,
+                        color: fillColor,
+                        fillColor,
+                        opacity: resolvedDark ? 0.9 : 0.85,
+                        weight: isOverviewZoom ? 0.7 : isDetailZoom ? 1 : 0.85,
+                        lineCap: "round",
+                        lineJoin: "round",
+                      };
+                    }
+                  : config.styleFn
+              }
               pathOptions={{
                 ...config.pathOptions,
                 pane: isChoropleth ? TOWNSHIP_PANE : TRANSIT_PANE,
@@ -540,8 +639,10 @@ function MapViewComponent({
           selectedTownshipId={selectedTownshipId}
           townshipLayerById={townshipLayerById}
         />
+        <FocusLocationTarget focusLocationTarget={focusLocationTarget} />
         <AreaLabelVisibility />
         <ResponsiveMapBounds />
+        <ZoomStateWatcher onZoomChange={setMapZoom} />
       </MapContainer>
     </section>
   );

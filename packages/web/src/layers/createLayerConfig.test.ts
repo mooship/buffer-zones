@@ -117,6 +117,7 @@ describe("createLayerConfig", () => {
       color: "#A87FE0",
       weight: 3,
       opacity: 0.95,
+      noClip: true,
       lineCap: "round",
       lineJoin: "round",
     });
