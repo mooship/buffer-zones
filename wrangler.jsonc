@@ -8,7 +8,13 @@
     "directory": "./packages/web/build/client"
   },
   "observability": {
-    "enabled": true
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true
+    }
   },
   "routes": [
     { "pattern": "buffer-zones.timothybrits.co.za", "custom_domain": true }

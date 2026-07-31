@@ -1,3 +1,4 @@
+import type { MetroId } from "@buffer-zones/shared";
 import { describe, expect, it } from "vitest";
 import { METRO_BBOX, getMetroBbox, getSharedTransitBbox } from "./metroBbox";
 
@@ -15,6 +16,20 @@ describe("metroBbox", () => {
   });
 
   it("builds one shared bbox that fully contains every metro bbox", () => {
-    expect(getSharedTransitBbox()).toBe("-26.92383,27.15634,-25.55,28.86129");
+    expect(getSharedTransitBbox(Object.keys(METRO_BBOX) as MetroId[])).toBe(
+      "-26.92383,27.15634,-25.55,28.86129",
+    );
+  });
+
+  it("unions only the metros it is given, not every configured metro", () => {
+    expect(getSharedTransitBbox(["tshwane", "johannesburg"])).toBe(
+      "-26.55,27.65,-25.55,28.4",
+    );
+  });
+
+  it("throws when given no metros", () => {
+    expect(() => getSharedTransitBbox([])).toThrow(
+      /at least one metro is required/i,
+    );
   });
 });

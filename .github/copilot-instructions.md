@@ -4,7 +4,7 @@ This file provides guidance to GitHub Copilot when working with code in this rep
 
 ## What this is
 
-Buffer Zones maps apartheid-era spatial planning legacy across South African metros using one combined national map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. The published national layer currently combines Tshwane/Pretoria and Johannesburg. It is a public-interest SSR web app on Cloudflare Workers — no accounts and no tracking beyond cookieless page views.
+Buffer Zones maps apartheid-era spatial planning legacy across South African metros using one combined regional map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. The published layer currently covers the `gauteng` region: all nine Gauteng municipalities, including Tshwane/Pretoria and Johannesburg. It is a public-interest SSR web app on Cloudflare Workers — no accounts and no tracking beyond cookieless page views.
 
 ## Commands
 
@@ -42,13 +42,13 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 
 ## Architecture
 
-**Three parts, one direction of data flow:** `data-pipeline` (offline, run manually) → static GeoJSON committed to `packages/web/public/data/national/` → `packages/web` (client-side fetch only, no runtime API). `packages/shared` is the contract both ends agree on.
+**Three parts, one direction of data flow:** `data-pipeline` (offline, run manually) → static GeoJSON committed per-region under `packages/web/public/data/<regionId>/` → `packages/web` (client-side fetch only, no runtime API). `packages/shared` is the contract both ends agree on.
 
-- **packages/shared** — `constants/metros.ts` still defines `METROS` (currently Tshwane and Johannesburg), used by the pipeline while building the national dataset. `constants/townships.ts` defines included township-area groupings per metro. `types/` holds shared GeoJSON/layer contracts.
+- **packages/shared** — `constants/regions.ts` defines `REGIONS` (currently one entry, `gauteng`, kind `province`), the registry driving per-region output directories and data-fetch URLs. `constants/metros.ts` still defines `METROS` (currently the nine Gauteng municipalities), each tagged with a `regionId`, used by the pipeline while building a region's dataset. `constants/townships.ts` defines included township-area groupings per metro. `types/` holds shared GeoJSON/layer contracts.
 
-- **data-pipeline** — `src/run.ts` runs `runNational()`: loops through `METROS` to fetch boundaries and per-metro OSRM job-center routing, merges transit sources, computes nearest-transit distance, then writes one combined national dataset under `packages/web/public/data/national/` (including `townships`, `township-areas`, `rapid-rail`, `bus-rapid-transit`, `commuter-rail`, and `bus` plus `.display.v1.geojson` variants). There is no metro-switch output directory per city in the current pipeline output.
+- **data-pipeline** — `src/run.ts` runs `runRegion(regionId)` (looped across every `province`-kind entry in `REGIONS` by `runAllProvinceRegions()`, or invoked for a single region via `npm run run -- --region gauteng`): loops through the `METROS` belonging to that region to fetch boundaries and per-metro OSRM job-center routing, merges transit sources, computes nearest-transit distance, then writes that region's combined dataset under `packages/web/public/data/<regionId>/` (including `townships`, `township-areas`, `rapid-rail`, `bus-rapid-transit`, `commuter-rail`, and `bus` plus `.display.v1.geojson` variants). Only the `gauteng` region exists today.
 
-- **packages/web** — `layers/registry.ts` uses `getLayerDefinitions()` with no metro argument and points every layer to `/data/national/*.geojson`. UI state in `stores/useMapUiStore.ts` contains layer visibility, basemap, panel state, and selection only; there is no metro selector state. `App.tsx` and `hooks/useLayerData.ts` fetch national data paths.
+- **packages/web** — `layers/registry.ts` uses `getLayerDefinitions()` with no metro argument; each layer's `dataSource` is a list of URLs, one per region in `REGIONS`, built via `buildRegionDataUrls()` and pointing at `/data/<regionId>/*.geojson`. UI state in `stores/useMapUiStore.ts` contains layer visibility, basemap, panel state, and selection only; there is no metro or region selector state. `App.tsx` and `hooks/useLayerData.ts` fetch every region's data and merge the resulting `FeatureCollection`s client-side into one combined map view.
 
 - **Deploy** — Cloudflare Workers runs the wrapper entry (`packages/web/workers/app.ts`) which imports the built React Router server bundle (`packages/web/build/server/index.js`), and serves built client assets from `packages/web/build/client` (`wrangler.jsonc`). Full/100 Lighthouse scores and mobile-friendliness are a hard requirement, not aspirational — this drives decisions like the `.display.v1.geojson` simplification step and self-hosted variable fonts.
 

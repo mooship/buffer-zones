@@ -14,17 +14,15 @@ import appStylesHref from "./index.css?url";
 import { getLayerDefinitions } from "./layers/registry";
 
 function getGeoJsonPreloadLinks() {
-  const defaultVisibleByDataSource = new Map<string, boolean>();
+  const defaultVisibleByUrl = new Map<string, boolean>();
   for (const layer of getLayerDefinitions()) {
-    const isDefaultVisible =
-      defaultVisibleByDataSource.get(layer.dataSource) ?? false;
-    defaultVisibleByDataSource.set(
-      layer.dataSource,
-      isDefaultVisible || layer.defaultVisible,
-    );
+    for (const source of layer.dataSource) {
+      const isDefaultVisible = defaultVisibleByUrl.get(source) ?? false;
+      defaultVisibleByUrl.set(source, isDefaultVisible || layer.defaultVisible);
+    }
   }
 
-  return Array.from(defaultVisibleByDataSource, ([href, defaultVisible]) => ({
+  return Array.from(defaultVisibleByUrl, ([href, defaultVisible]) => ({
     rel: "preload" as const,
     href,
     as: "fetch" as const,

@@ -2,6 +2,7 @@ import type { LayerId } from "@buffer-zones/shared";
 import type { FeatureCollection } from "geojson";
 import { useEffect, useRef, useState } from "react";
 import { fetchFeatureCollection } from "../data/fetchFeatureCollection";
+import { mergeFeatureCollections } from "../data/mergeFeatureCollections";
 import { getLayerDefinition } from "../layers/registry";
 
 export type LayerDataMap = Partial<Record<LayerId, FeatureCollection>>;
@@ -18,12 +19,13 @@ export function useLayerData(layerIds: LayerId[]): LayerDataMap {
     const ids = key.length > 0 ? (key.split(",") as LayerId[]) : [];
 
     for (const id of ids) {
-      const requestKey = `national:${id}`;
-      if (requested.current.has(requestKey)) {
-        continue;
-      }
       const definition = getLayerDefinition(id);
       if (!definition?.available) {
+        continue;
+      }
+
+      const requestKey = `${id}:${definition.dataSource.join(",")}`;
+      if (requested.current.has(requestKey)) {
         continue;
       }
 
@@ -31,14 +33,17 @@ export function useLayerData(layerIds: LayerId[]): LayerDataMap {
       const controller = new AbortController();
       controllers.set(requestKey, controller);
 
-      fetchFeatureCollection(
-        definition.dataSource,
-        undefined,
-        controller.signal,
+      Promise.all(
+        definition.dataSource.map((source) =>
+          fetchFeatureCollection(source, undefined, controller.signal),
+        ),
       )
-        .then((collection) => {
+        .then((collections) => {
           if (!cancelled) {
-            setData((current) => ({ ...current, [id]: collection }));
+            setData((current) => ({
+              ...current,
+              [id]: mergeFeatureCollections(collections),
+            }));
           }
           controllers.delete(requestKey);
         })

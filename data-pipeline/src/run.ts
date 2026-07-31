@@ -3,6 +3,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   METROS,
+  type MetroId,
+  REGIONS,
   type TransitLayerFeatureCollection,
 } from "@buffer-zones/shared";
 import {
@@ -182,7 +184,10 @@ async function promoteStagedOutput(
   await rm(backupDir, { recursive: true, force: true });
 }
 
-async function cleanupStagingDirectories(rootDir: string): Promise<void> {
+async function cleanupStagingDirectories(
+  rootDir: string,
+  regionId: string,
+): Promise<void> {
   const entries = await readdir(rootDir, {
     withFileTypes: true,
     encoding: "utf8",
@@ -194,7 +199,8 @@ async function cleanupStagingDirectories(rootDir: string): Promise<void> {
     entries
       .filter(
         (entry) =>
-          entry.isDirectory() && entry.name.startsWith("national.__staging__"),
+          entry.isDirectory() &&
+          entry.name.startsWith(`${regionId}.__staging__`),
       )
       .map((entry) =>
         rm(resolve(rootDir, entry.name), { recursive: true, force: true }),
@@ -202,14 +208,17 @@ async function cleanupStagingDirectories(rootDir: string): Promise<void> {
   );
 }
 
-async function fetchSharedTransit(): Promise<SharedTransit> {
-  const bbox = getSharedTransitBbox();
-  const publishedOutputDir = resolve(OUTPUT_ROOT, "national");
+async function fetchSharedTransit(
+  regionId: string,
+  metroIds: readonly MetroId[],
+): Promise<SharedTransit> {
+  const bbox = getSharedTransitBbox(metroIds);
+  const publishedOutputDir = resolve(OUTPUT_ROOT, regionId);
 
   let gautrain = emptyTransitCollection();
   try {
     const gautrainRaw = await timedStep(
-      "Fetching Gautrain rail via Overpass (Gauteng-wide)",
+      `Fetching Gautrain rail via Overpass (${regionId}-wide)`,
       () => fetchGautrainRail(bbox),
       (raw) => `(${raw.elements.length} elements)`,
     );
@@ -231,7 +240,7 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
   let prasa = emptyTransitCollection();
   try {
     const prasaRaw = await timedStep(
-      "Fetching PRASA rail via Overpass (Gauteng-wide)",
+      `Fetching PRASA rail via Overpass (${regionId}-wide)`,
       () => fetchPrasaRail(bbox),
       (raw) => `(${raw.elements.length} elements)`,
     );
@@ -253,7 +262,7 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
   let gautrainBus = emptyTransitCollection();
   try {
     const gautrainBusRaw = await timedStep(
-      "Fetching Gautrain bus routes via Overpass (Gauteng-wide)",
+      `Fetching Gautrain bus routes via Overpass (${regionId}-wide)`,
       () => fetchGautrainBusRoutes(bbox),
       (raw) => `(${raw.elements.length} elements)`,
     );
@@ -282,17 +291,28 @@ async function fetchSharedTransit(): Promise<SharedTransit> {
   return { gautrain, gautrainBus, prasa };
 }
 
-async function runNational(): Promise<void> {
+async function runRegion(regionId: string): Promise<void> {
   await pruneCache(7 * 24 * 60 * 60 * 1000);
   assertMetroSetup();
-  await cleanupStagingDirectories(OUTPUT_ROOT);
+  await cleanupStagingDirectories(OUTPUT_ROOT, regionId);
 
-  const publishDir = resolve(OUTPUT_ROOT, "national");
-  const stagedDir = resolve(OUTPUT_ROOT, `national.__staging__${Date.now()}`);
+  const metros = METROS.filter((metro) => metro.regionId === regionId);
+  if (metros.length === 0) {
+    throw new Error(`No metros configured for region: ${regionId}`);
+  }
+
+  const publishDir = resolve(OUTPUT_ROOT, regionId);
+  const stagedDir = resolve(
+    OUTPUT_ROOT,
+    `${regionId}.__staging__${Date.now()}`,
+  );
 
   try {
     const outputDir = stagedDir;
-    const sharedTransit = await fetchSharedTransit();
+    const sharedTransit = await fetchSharedTransit(
+      regionId,
+      metros.map((metro) => metro.id),
+    );
 
     async function writeTransitLayer(
       name: string,
@@ -311,7 +331,7 @@ async function runNational(): Promise<void> {
     const busCollections = [...sharedTransit.gautrainBus.features];
     const metroTownshipCounts: Record<string, number> = {};
 
-    for (const metro of METROS) {
+    for (const metro of metros) {
       console.log(`\n=== ${metro.id} ===`);
       const rawBoundaries = await timedStep(
         `Fetching ${metro.id} sub-place boundaries`,
@@ -404,7 +424,7 @@ async function runNational(): Promise<void> {
       metroTownshipCounts[metro.id] = townshipFeatures.length;
     }
 
-    console.log("Writing national files...");
+    console.log(`Writing ${regionId} files...`);
 
     const townshipCollection = {
       type: "FeatureCollection" as const,
@@ -447,7 +467,7 @@ async function runNational(): Promise<void> {
 
     const manifest = await buildOutputManifest(
       outputDir,
-      METROS.map((metro) => metro.id),
+      metros.map((metro) => metro.id),
       networkCoverage,
     );
     await writeGeoJsonFile(resolve(outputDir, "manifest.v1.json"), manifest);
@@ -459,8 +479,8 @@ async function runNational(): Promise<void> {
 
     await promoteStagedOutput(stagedDir, publishDir);
 
-    console.log("\nPublished national dataset:");
-    for (const metro of METROS) {
+    console.log(`\nPublished ${regionId} dataset:`);
+    for (const metro of metros) {
       console.log(
         `  ${metro.id}: ${metroTownshipCounts[metro.id] ?? 0} sub-places`,
       );
@@ -474,7 +494,25 @@ async function runNational(): Promise<void> {
   }
 }
 
-runNational().catch((err) => {
+async function runAllProvinceRegions(): Promise<void> {
+  const provinceRegions = REGIONS.filter(
+    (region) => region.kind === "province",
+  );
+  for (const region of provinceRegions) {
+    console.log(`\n### Region: ${region.id} ###`);
+    await runRegion(region.id);
+  }
+}
+
+const regionArgIndex = process.argv.indexOf("--region");
+const requestedRegionId =
+  regionArgIndex >= 0 ? process.argv[regionArgIndex + 1] : undefined;
+
+const work = requestedRegionId
+  ? runRegion(requestedRegionId)
+  : runAllProvinceRegions();
+
+work.catch((err) => {
   console.error(err);
   process.exit(1);
 });

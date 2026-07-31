@@ -1,13 +1,12 @@
 import type { LayerDefinition, LayerId } from "@buffer-zones/shared";
 import { TRANSIT_LINE_COLORS } from "../constants/layerStyles";
-
-const base = "/data/national";
+import { buildRegionDataUrls } from "../data/regionDataUrls";
 
 const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
   {
     id: "townships",
     label: "Modeled car time",
-    dataSource: `${base}/townships.display.v1.geojson`,
+    dataSource: buildRegionDataUrls("townships.display.v1.geojson"),
     layerType: "choropleth",
     defaultVisible: true,
     available: true,
@@ -16,7 +15,7 @@ const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
   {
     id: "nearest-transit",
     label: "Distance to Nearest Transit",
-    dataSource: `${base}/townships.display.v1.geojson`,
+    dataSource: buildRegionDataUrls("townships.display.v1.geojson"),
     layerType: "choropleth",
     defaultVisible: false,
     available: true,
@@ -25,7 +24,7 @@ const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
   {
     id: "rapid-rail",
     label: "Rapid Rail",
-    dataSource: `${base}/rapid-rail.display.v1.geojson`,
+    dataSource: buildRegionDataUrls("rapid-rail.display.v1.geojson"),
     layerType: "line",
     defaultVisible: false,
     available: true,
@@ -34,7 +33,7 @@ const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
   {
     id: "bus-rapid-transit",
     label: "Bus Rapid Transit",
-    dataSource: `${base}/bus-rapid-transit.display.v1.geojson`,
+    dataSource: buildRegionDataUrls("bus-rapid-transit.display.v1.geojson"),
     layerType: "line",
     defaultVisible: false,
     available: true,
@@ -47,7 +46,7 @@ const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
   {
     id: "commuter-rail",
     label: "Commuter Rail",
-    dataSource: `${base}/commuter-rail.display.v1.geojson`,
+    dataSource: buildRegionDataUrls("commuter-rail.display.v1.geojson"),
     layerType: "line",
     defaultVisible: false,
     available: true,
@@ -60,7 +59,7 @@ const LAYER_DEFINITIONS: readonly LayerDefinition[] = [
   {
     id: "bus",
     label: "Bus",
-    dataSource: `${base}/bus.display.v1.geojson`,
+    dataSource: buildRegionDataUrls("bus.display.v1.geojson"),
     layerType: "line",
     defaultVisible: false,
     available: true,

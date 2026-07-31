@@ -362,7 +362,7 @@ describe("MapView", () => {
       "transit",
     );
     expect(fetch).toHaveBeenCalledWith(
-      "/data/national/rapid-rail.display.v1.geojson",
+      "/data/gauteng/rapid-rail.display.v1.geojson",
       expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });

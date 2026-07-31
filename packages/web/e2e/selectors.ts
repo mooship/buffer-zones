@@ -4,6 +4,7 @@ export const E2E = {
   panelSheetHandle: "panel-sheet-handle",
   panelTablist: "panel-tablist",
   panelLegend: "panel-legend",
+  desktopLegend: "desktop-legend",
   mobileLegendTrigger: "mobile-legend-trigger",
   mobileLegendContent: "mobile-legend-content",
   panelTab: {
