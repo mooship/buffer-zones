@@ -39,10 +39,10 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Chromium
-        run: npm run playwright:install --workspace @buffer-zones/web
+        run: npm run playwright:install --workspace @stratum/web
 
       - name: Run Playwright tests
-        run: npm run test:e2e:all --workspace @buffer-zones/web
+        run: npm run test:e2e:all --workspace @stratum/web
 
       - name: Upload Playwright report
         if: always()

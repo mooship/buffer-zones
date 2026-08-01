@@ -518,7 +518,7 @@ export function App() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Source code: mooship/buffer-zones
+                    Source code: mooship/stratum
                   </a>
                 </div>
               </details>

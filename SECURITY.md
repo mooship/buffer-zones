@@ -31,7 +31,7 @@ there.
 Please **do not** open a public issue for a suspected vulnerability.
 
 Report it privately through GitHub's private vulnerability reporting:
-[github.com/mooship/buffer-zones/security/advisories/new](https://github.com/mooship/buffer-zones/security/advisories/new).
+[github.com/mooship/stratum/security/advisories/new](https://github.com/mooship/stratum/security/advisories/new).
 
 Helpful reports include:
 
