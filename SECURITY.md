@@ -4,7 +4,7 @@ _Last updated: 2026-07-29_
 
 ## Scope
 
-Buffer Zones is a static, client-side single-page application. There is no
+Stratum is a static, client-side single-page application. There is no
 backend, no database, no accounts, no authentication, and no user-submitted
 data. The deployed surface is Cloudflare Workers serving pre-built static assets
 (HTML, JS, CSS, fonts, and GeoJSON files).

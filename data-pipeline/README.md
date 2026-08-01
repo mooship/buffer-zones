@@ -10,7 +10,7 @@ npm install
 npm run run
 ```
 
-Runs a build for every `province`-kind region in `@buffer-zones/shared`'s `REGIONS` registry (currently just `gauteng`) via `runAllProvinceRegions()`. To build a single region instead, pass `--region <id>`:
+Runs a build for every `province`-kind region in `@stratum/shared`'s `REGIONS` registry (currently just `gauteng`) via `runAllProvinceRegions()`. To build a single region instead, pass `--region <id>`:
 
 ```bash
 npm run run -- --region gauteng

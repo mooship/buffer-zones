@@ -1,6 +1,6 @@
-# Contributing to Buffer Zones
+# Contributing to Stratum
 
-Thanks for your interest. Buffer Zones is a public-interest mapping project
+Thanks for your interest. Stratum is a public-interest mapping project
 about the spatial legacy of apartheid-era planning across South African cities.
 Contributions are welcome — especially better data sources, accessibility
 improvements, and corrections to how areas are classified or described.
@@ -20,7 +20,7 @@ npm run test:coverage # same scope, with a coverage report
 npm run typecheck   # shared typecheck + web build + data-pipeline typecheck
 npm run lint        # biome check .
 npm run format      # biome format --write .
-npm run dev --workspace @buffer-zones/web
+npm run dev --workspace @stratum/web
 ```
 
 Run a single test file with `npx vitest run path/to/file.test.ts`.

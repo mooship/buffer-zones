@@ -1,6 +1,6 @@
-# Buffer Zones Design System
+# Stratum Design System
 
-Buffer Zones uses an app-owned design system aligned to Apple Human Interface
+Stratum uses an app-owned design system aligned to Apple Human Interface
 Guidelines and a restrained glass visual language. The app remains plain React,
 CSS Modules, and CSS custom properties; no framework design library is introduced.
 
