@@ -96,4 +96,26 @@ describe("validateOutput", () => {
     );
     expect(outputManifestMocks.validateOutputDirectory).not.toHaveBeenCalled();
   });
+
+  it("fails closed only for a region with an on-disk directory but no matching pipeline config, without aborting the other regions", async () => {
+    const root = await mkdtemp(resolve(tmpdir(), "buffer-zones-validate-"));
+    await mkdir(resolve(root, "gauteng"), { recursive: true });
+    await mkdir(resolve(root, "not-yet-built"), { recursive: true });
+    outputManifestMocks.validateOutputDirectory.mockResolvedValue([]);
+
+    await expect(runAllRegionsOutputValidation(root)).rejects.toThrow(
+      /not-yet-built/,
+    );
+
+    expect(outputManifestMocks.validateOutputDirectory).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(outputManifestMocks.validateOutputDirectory).toHaveBeenCalledWith(
+      resolve(root, "gauteng"),
+      GAUTENG_PIPELINE_CONFIG,
+    );
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining("not-yet-built"),
+    );
+  });
 });

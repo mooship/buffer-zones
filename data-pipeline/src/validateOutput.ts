@@ -37,18 +37,37 @@ export async function runAllRegionsOutputValidation(
   outputRoot = OUTPUT_ROOT,
 ): Promise<void> {
   let validatedCount = 0;
+  const misconfiguredRegionIds: string[] = [];
+
   for (const region of REGIONS) {
     const outputDir = resolve(outputRoot, region.id);
     if (!(await pathExists(outputDir))) {
       continue;
     }
-    await runOutputValidation(outputDir, getRegionPipelineConfig(region.id));
+
+    let config: RegionPipelineConfig;
+    try {
+      config = getRegionPipelineConfig(region.id);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`Output validation failed for ${outputDir}: ${message}`);
+      misconfiguredRegionIds.push(region.id);
+      continue;
+    }
+
+    await runOutputValidation(outputDir, config);
     validatedCount += 1;
   }
 
   // Validating nothing means the published data is missing or misnamed: fail closed.
-  if (validatedCount === 0) {
+  if (validatedCount === 0 && misconfiguredRegionIds.length === 0) {
     throw new Error(`No region output directories found under ${outputRoot}.`);
+  }
+
+  if (misconfiguredRegionIds.length > 0) {
+    throw new Error(
+      `No pipeline config registered for region(s): ${misconfiguredRegionIds.join(", ")}.`,
+    );
   }
 }
 
