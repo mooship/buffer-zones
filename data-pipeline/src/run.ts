@@ -24,16 +24,15 @@ import {
   validateOutputDirectory,
 } from "./outputManifest";
 import type { RegionPipelineConfig } from "./pipelineSource";
-import { GAUTENG_PIPELINE_CONFIG } from "./regions/gautengPipelineConfig";
+import {
+  REGION_PIPELINE_CONFIGS,
+  getRegionPipelineConfig,
+} from "./regionPipelineConfigs";
 import { createTownshipAreas } from "./townshipAreas";
 import { computeNearestTransitKm } from "./transitDistance";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_ROOT = resolve(__dirname, "../../packages/web/public/data");
-
-const REGION_PIPELINE_CONFIGS: RegionPipelineConfig[] = [
-  GAUTENG_PIPELINE_CONFIG,
-];
 
 function formatDuration(ms: number): string {
   if (ms < 1000) {
@@ -270,10 +269,11 @@ async function runRegion(config: RegionPipelineConfig): Promise<void> {
       outputDir,
       metros.map((metro) => metro.id),
       networkCoverage,
+      config,
     );
     await writeGeoJsonFile(resolve(outputDir, "manifest.v1.json"), manifest);
 
-    const issues = await validateOutputDirectory(outputDir);
+    const issues = await validateOutputDirectory(outputDir, config);
     if (issues.length > 0) {
       throw new Error(`Output validation failed: ${issues.join("; ")}`);
     }
@@ -313,16 +313,6 @@ async function runAllProvinceRegions(): Promise<void> {
 const regionArgIndex = process.argv.indexOf("--region");
 const requestedRegionId =
   regionArgIndex >= 0 ? process.argv[regionArgIndex + 1] : undefined;
-
-function getRegionPipelineConfig(regionId: string): RegionPipelineConfig {
-  const config = REGION_PIPELINE_CONFIGS.find(
-    (candidate) => candidate.regionId === regionId,
-  );
-  if (!config) {
-    throw new Error(`No pipeline config registered for region: ${regionId}`);
-  }
-  return config;
-}
 
 const work = requestedRegionId
   ? runRegion(getRegionPipelineConfig(requestedRegionId))

@@ -3,6 +3,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { REGIONS } from "@buffer-zones/shared";
 import { validateOutputDirectory } from "./outputManifest";
+import type { RegionPipelineConfig } from "./pipelineSource";
+import { getRegionPipelineConfig } from "./regionPipelineConfigs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const OUTPUT_ROOT = resolve(__dirname, "../../packages/web/public/data");
@@ -16,8 +18,11 @@ async function pathExists(path: string): Promise<boolean> {
   }
 }
 
-export async function runOutputValidation(outputDir: string): Promise<void> {
-  const issues = await validateOutputDirectory(outputDir);
+export async function runOutputValidation(
+  outputDir: string,
+  config: RegionPipelineConfig,
+): Promise<void> {
+  const issues = await validateOutputDirectory(outputDir, config);
   if (issues.length > 0) {
     for (const issue of issues) {
       console.error(issue);
@@ -37,7 +42,7 @@ export async function runAllRegionsOutputValidation(
     if (!(await pathExists(outputDir))) {
       continue;
     }
-    await runOutputValidation(outputDir);
+    await runOutputValidation(outputDir, getRegionPipelineConfig(region.id));
     validatedCount += 1;
   }
 

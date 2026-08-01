@@ -3,11 +3,14 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
-  OUTPUT_LAYER_RULES,
   REQUIRED_TRANSIT_NETWORKS,
+  buildOutputLayerRules,
   buildOutputManifest,
   validateOutputDirectory,
 } from "./outputManifest";
+import { GAUTENG_PIPELINE_CONFIG } from "./regions/gautengPipelineConfig";
+
+const OUTPUT_LAYER_RULES = buildOutputLayerRules(GAUTENG_PIPELINE_CONFIG);
 
 function collection(featureCount: number): string {
   return JSON.stringify({
@@ -25,7 +28,7 @@ describe("output manifest", () => {
     const dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-manifest-"));
     await mkdir(dir, { recursive: true });
 
-    const issues = await validateOutputDirectory(dir);
+    const issues = await validateOutputDirectory(dir, GAUTENG_PIPELINE_CONFIG);
 
     expect(issues).toHaveLength(1);
     expect(issues[0]).toContain("Missing or unreadable manifest");
@@ -49,13 +52,14 @@ describe("output manifest", () => {
       dir,
       ["tshwane", "johannesburg"],
       networkCoverage,
+      GAUTENG_PIPELINE_CONFIG,
     );
     await writeFile(
       resolve(dir, "manifest.v1.json"),
       JSON.stringify(manifest, null, 2),
     );
 
-    const issues = await validateOutputDirectory(dir);
+    const issues = await validateOutputDirectory(dir, GAUTENG_PIPELINE_CONFIG);
 
     expect(issues).toEqual([]);
   });
@@ -80,13 +84,14 @@ describe("output manifest", () => {
       dir,
       ["tshwane", "johannesburg"],
       networkCoverage,
+      GAUTENG_PIPELINE_CONFIG,
     );
     await writeFile(
       resolve(dir, "manifest.v1.json"),
       JSON.stringify(manifest, null, 2),
     );
 
-    const issues = await validateOutputDirectory(dir);
+    const issues = await validateOutputDirectory(dir, GAUTENG_PIPELINE_CONFIG);
 
     expect(issues).toContain(
       "Missing required transit network coverage: Gautrain",
@@ -111,6 +116,7 @@ describe("output manifest", () => {
       dir,
       ["tshwane", "johannesburg"],
       networkCoverage,
+      GAUTENG_PIPELINE_CONFIG,
     );
     await writeFile(
       resolve(dir, "manifest.v1.json"),
@@ -124,7 +130,7 @@ describe("output manifest", () => {
 
     await writeFile(resolve(dir, firstFile), collection(5));
 
-    const issues = await validateOutputDirectory(dir);
+    const issues = await validateOutputDirectory(dir, GAUTENG_PIPELINE_CONFIG);
 
     expect(
       issues.some((issue) =>
@@ -157,6 +163,7 @@ describe("output manifest", () => {
       dir,
       ["tshwane", "johannesburg"],
       networkCoverage,
+      GAUTENG_PIPELINE_CONFIG,
     );
     await writeFile(
       resolve(dir, "manifest.v1.json"),
@@ -169,7 +176,7 @@ describe("output manifest", () => {
     }
     await writeFile(resolve(dir, firstFile), "not-json");
 
-    const issues = await validateOutputDirectory(dir);
+    const issues = await validateOutputDirectory(dir, GAUTENG_PIPELINE_CONFIG);
 
     expect(issues).toContain(`Invalid GeoJSON JSON content: ${firstFile}`);
   });
@@ -192,6 +199,7 @@ describe("output manifest", () => {
       dir,
       ["tshwane", "johannesburg"],
       networkCoverage,
+      GAUTENG_PIPELINE_CONFIG,
     );
 
     const firstFile = OUTPUT_LAYER_RULES[0]?.fileName;
@@ -211,7 +219,7 @@ describe("output manifest", () => {
       ),
     );
 
-    const issues = await validateOutputDirectory(dir);
+    const issues = await validateOutputDirectory(dir, GAUTENG_PIPELINE_CONFIG);
 
     expect(issues).toContain(`Manifest missing file entry for ${firstFile}`);
   });
@@ -234,14 +242,29 @@ describe("output manifest", () => {
       dir,
       ["tshwane", "johannesburg"],
       networkCoverage,
+      GAUTENG_PIPELINE_CONFIG,
     );
     await writeFile(
       resolve(dir, "manifest.v1.json"),
       JSON.stringify({ ...manifest, version: 2 }, null, 2),
     );
 
-    const issues = await validateOutputDirectory(dir);
+    const issues = await validateOutputDirectory(dir, GAUTENG_PIPELINE_CONFIG);
 
     expect(issues).toContain("Unsupported manifest version: 2");
+  });
+
+  it("derives one output rule per configured source, plus the fixed township rules", () => {
+    const rules = buildOutputLayerRules(GAUTENG_PIPELINE_CONFIG);
+    expect(rules.map((r) => r.fileName).sort()).toEqual(
+      [
+        "townships.display.v1.geojson",
+        "township-areas.display.v1.geojson",
+        "rapid-rail.display.v1.geojson",
+        "commuter-rail.display.v1.geojson",
+        "bus-rapid-transit.display.v1.geojson",
+        "bus.display.v1.geojson",
+      ].sort(),
+    );
   });
 });

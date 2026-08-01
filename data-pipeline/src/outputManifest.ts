@@ -2,20 +2,29 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import type { FeatureCollection } from "geojson";
+import type { RegionPipelineConfig } from "./pipelineSource";
 
 export interface OutputLayerRule {
   fileName: string;
   minFeatures: number;
 }
 
-export const OUTPUT_LAYER_RULES: readonly OutputLayerRule[] = [
+const TOWNSHIP_OUTPUT_RULES: readonly OutputLayerRule[] = [
   { fileName: "townships.display.v1.geojson", minFeatures: 1 },
   { fileName: "township-areas.display.v1.geojson", minFeatures: 1 },
-  { fileName: "rapid-rail.display.v1.geojson", minFeatures: 1 },
-  { fileName: "commuter-rail.display.v1.geojson", minFeatures: 1 },
-  { fileName: "bus-rapid-transit.display.v1.geojson", minFeatures: 1 },
-  { fileName: "bus.display.v1.geojson", minFeatures: 1 },
 ];
+
+export function buildOutputLayerRules(
+  config: RegionPipelineConfig,
+): OutputLayerRule[] {
+  return [
+    ...TOWNSHIP_OUTPUT_RULES,
+    ...config.sources.map((source) => ({
+      fileName: source.outputFileName,
+      minFeatures: 1,
+    })),
+  ];
+}
 
 export const REQUIRED_TRANSIT_NETWORKS = [
   "Gautrain",
@@ -64,10 +73,11 @@ export async function buildOutputManifest(
   outputDir: string,
   metroIds: string[],
   networkCoverage: Record<string, number>,
+  config: RegionPipelineConfig,
 ): Promise<OutputManifest> {
   const files: OutputFileManifestEntry[] = [];
 
-  for (const rule of OUTPUT_LAYER_RULES) {
+  for (const rule of buildOutputLayerRules(config)) {
     const fullPath = resolve(outputDir, rule.fileName);
     const raw = await readFile(fullPath);
     const parsed = JSON.parse(raw.toString("utf8")) as FeatureCollection;
@@ -93,6 +103,7 @@ export async function buildOutputManifest(
 
 export async function validateOutputDirectory(
   outputDir: string,
+  config: RegionPipelineConfig,
 ): Promise<string[]> {
   const issues: string[] = [];
   const manifestPath = resolve(outputDir, "manifest.v1.json");
@@ -110,7 +121,7 @@ export async function validateOutputDirectory(
     issues.push(`Unsupported manifest version: ${manifest.version}`);
   }
 
-  for (const rule of OUTPUT_LAYER_RULES) {
+  for (const rule of buildOutputLayerRules(config)) {
     const fullPath = resolve(outputDir, rule.fileName);
     let raw: Buffer;
     try {
