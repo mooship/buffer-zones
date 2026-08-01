@@ -10,7 +10,9 @@
   border-radius: var(--shape-medium);
   background: var(--glass-chip-bg);
   backdrop-filter: blur(var(--glass-chip-blur)) saturate(180%);
-  box-shadow: var(--elevation-raised), inset 0 1px 0 var(--glass-specular-top),
+  box-shadow:
+    var(--elevation-raised),
+    inset 0 1px 0 var(--glass-specular-top),
     inset 0 -1px 0 var(--glass-specular-bottom);
   color: var(--color-on-surface);
   font-family: var(--font-body);
@@ -18,9 +20,11 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   cursor: pointer;
-  transition: background-color var(--motion-duration-short) ease, border-color
-    var(--motion-duration-short) ease, box-shadow var(--motion-duration-short)
-    ease, transform 120ms ease;
+  transition:
+    background-color var(--motion-duration-short) ease,
+    border-color var(--motion-duration-short) ease,
+    box-shadow var(--motion-duration-short) ease,
+    transform 120ms ease;
 }
 
 .button[data-shape="icon"] {

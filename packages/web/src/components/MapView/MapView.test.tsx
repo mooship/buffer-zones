@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { type ReactNode, forwardRef, useEffect } from "react";
+import { forwardRef, type ReactNode, useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mapMocks = vi.hoisted(() => ({

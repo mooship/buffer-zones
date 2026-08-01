@@ -1,8 +1,8 @@
 import {
+  getTownshipAreaDefinition,
   TOWNSHIP_AREA_DEFINITIONS,
   type TownshipAreaLabelPriority,
   type TownshipAreaSelectionBasis,
-  getTownshipAreaDefinition,
 } from "@stratum/shared";
 import * as turf from "@turf/turf";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";

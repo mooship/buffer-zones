@@ -33,8 +33,10 @@
   font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color var(--motion-duration-short) ease, color
-    var(--motion-duration-short) ease, transform 120ms ease;
+  transition:
+    background-color var(--motion-duration-short) ease,
+    color var(--motion-duration-short) ease,
+    transform 120ms ease;
 }
 
 .option:hover {
@@ -42,7 +44,11 @@
 }
 
 .option[aria-pressed="true"] {
-  border-color: color-mix(in srgb, var(--color-primary) 30%, var(--color-paper));
+  border-color: color-mix(
+    in srgb,
+    var(--color-primary) 30%,
+    var(--color-paper)
+  );
   background: linear-gradient(
     170deg,
     color-mix(in srgb, var(--color-primary) 54%, transparent) 0%,

@@ -18,15 +18,15 @@ import { writeGeoJsonFile } from "./export";
 import { joinTownshipData } from "./join";
 import { getNearestJobCenter } from "./osrmClient";
 import {
-  REQUIRED_TRANSIT_NETWORKS,
   buildOutputManifest,
   countTransitNetworks,
+  REQUIRED_TRANSIT_NETWORKS,
   validateOutputDirectory,
 } from "./outputManifest";
 import type { RegionPipelineConfig } from "./pipelineSource";
 import {
-  REGION_PIPELINE_CONFIGS,
   getRegionPipelineConfig,
+  REGION_PIPELINE_CONFIGS,
 } from "./regionPipelineConfigs";
 import { createTownshipAreas } from "./townshipAreas";
 import { computeNearestTransitKm } from "./transitDistance";

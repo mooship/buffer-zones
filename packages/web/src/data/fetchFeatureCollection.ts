@@ -1,7 +1,7 @@
 import type { FeatureCollection } from "geojson";
 import {
-  type FeatureCollectionSchema,
   createFeatureCollectionParser,
+  type FeatureCollectionSchema,
   featureCollectionSchema,
 } from "./geoJsonSchemas";
 

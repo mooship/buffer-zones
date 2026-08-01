@@ -9,7 +9,7 @@ import type {
   LineString,
   MultiLineString,
 } from "geojson";
-import { type OverpassResponse, fetchOverpass } from "./gautrain";
+import { fetchOverpass, type OverpassResponse } from "./gautrain";
 
 // Source: City of Tshwane Open Data / e-GIS ArcGIS Server, "Other_WS/BRT_A_Re_Yeng"
 // MapServer. Verified reachable and returning real route geometry via GeoJSON export

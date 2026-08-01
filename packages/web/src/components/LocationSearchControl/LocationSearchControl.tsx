@@ -6,8 +6,8 @@ import {
   useState,
 } from "react";
 import {
-  type LocationSearchResult,
   fetchLocationSearchResults,
+  type LocationSearchResult,
 } from "../../data/locationSearch";
 import styles from "./LocationSearchControl.module.css";
 
@@ -180,15 +180,18 @@ export function LocationSearchControl({
       {results.length > 0 ? (
         <ul
           id="location-search-results"
+          // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: role="listbox" on <ul> is the standard WAI-ARIA combobox pattern
+          role="listbox"
           className={styles.results}
           data-testid="location-search-results"
           data-e2e="location-search-results"
         >
           {results.map((result, index) => (
-            <li key={result.id}>
+            <li key={result.id} role="presentation">
               <button
                 id={`location-search-option-${result.id}`}
                 type="button"
+                role="option"
                 aria-selected={activeResultIndex === index}
                 className={styles.resultButton}
                 data-active={activeResultIndex === index ? "true" : "false"}

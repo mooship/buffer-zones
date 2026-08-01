@@ -34,8 +34,9 @@
   border-radius: var(--radius-sm);
   background: var(--glass-chip-bg);
   backdrop-filter: blur(var(--glass-chip-blur)) saturate(182%);
-  box-shadow: inset 0 1px 0 var(--glass-specular-top), inset 0 -1px 0
-    var(--glass-specular-bottom);
+  box-shadow:
+    inset 0 1px 0 var(--glass-specular-top),
+    inset 0 -1px 0 var(--glass-specular-bottom);
   color: var(--color-paper);
   font: inherit;
   letter-spacing: 0.004em;
@@ -72,8 +73,9 @@
   border-radius: var(--radius-sm);
   background: var(--glass-chip-bg);
   backdrop-filter: blur(var(--glass-chip-blur)) saturate(175%);
-  box-shadow: inset 0 1px 0 var(--glass-specular-top), inset 0 -1px 0
-    var(--glass-specular-bottom);
+  box-shadow:
+    inset 0 1px 0 var(--glass-specular-top),
+    inset 0 -1px 0 var(--glass-specular-bottom);
   color: var(--color-paper);
   font: inherit;
   text-align: left;

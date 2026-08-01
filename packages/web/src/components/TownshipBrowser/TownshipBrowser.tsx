@@ -1,7 +1,7 @@
 import {
+  getTownshipGroup,
   TOWNSHIP_GROUPS,
   type TownshipFeature,
-  getTownshipGroup,
 } from "@stratum/shared";
 import { Search } from "lucide-react";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";

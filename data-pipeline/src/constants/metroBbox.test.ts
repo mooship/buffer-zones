@@ -1,6 +1,6 @@
 import type { MetroId } from "@stratum/shared";
 import { describe, expect, it } from "vitest";
-import { METRO_BBOX, getMetroBbox, getSharedTransitBbox } from "./metroBbox";
+import { getMetroBbox, getSharedTransitBbox, METRO_BBOX } from "./metroBbox";
 
 describe("metroBbox", () => {
   it("returns the configured bbox for each metro", () => {

@@ -43,7 +43,7 @@ describe("LocationSearchControl", () => {
       );
     });
 
-    const resultButton = await screen.findByRole("button", {
+    const resultButton = await screen.findByRole("option", {
       name: /soweto, johannesburg/i,
     });
     fireEvent.click(resultButton);
@@ -87,7 +87,7 @@ describe("LocationSearchControl", () => {
         expect.any(AbortSignal),
       );
     });
-    await screen.findByRole("button", { name: /pretoria, city of tshwane/i });
+    await screen.findByRole("option", { name: /pretoria, city of tshwane/i });
 
     fireEvent.keyDown(input, { key: "ArrowDown" });
     fireEvent.keyDown(input, { key: "Enter" });

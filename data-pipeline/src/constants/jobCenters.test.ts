@@ -1,6 +1,6 @@
 import { METROS } from "@stratum/shared";
 import { describe, expect, it } from "vitest";
-import { JOB_CENTERS, getJobCentersForMetro } from "./jobCenters";
+import { getJobCentersForMetro, JOB_CENTERS } from "./jobCenters";
 
 describe("getJobCentersForMetro", () => {
   it("splits the shared job centre list by metro", () => {

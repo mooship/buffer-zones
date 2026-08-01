@@ -11,5 +11,5 @@ export const GAUTENG_SPATIAL_LEGACY_DOMAIN = {
   },
 };
 
-export { GAUTENG_SPATIAL_LEGACY_LAYERS } from "./layers";
 export { GAUTENG_SPATIAL_LEGACY_LAYER_GROUPS } from "./layerGroups";
+export { GAUTENG_SPATIAL_LEGACY_LAYERS } from "./layers";

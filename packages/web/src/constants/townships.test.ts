@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  TOWNSHIP_AREA_DEFINITIONS,
   getTownshipAreaDefinition,
   getTownshipGroup,
+  TOWNSHIP_AREA_DEFINITIONS,
 } from "./townships";
 
 describe("township groups", () => {

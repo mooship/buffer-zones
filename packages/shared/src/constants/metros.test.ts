@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { METROS, getMetroDefinition } from "./metros";
+import { getMetroDefinition, METROS } from "./metros";
 
 describe("metros", () => {
   it("defines all Gauteng municipalities with stable Census 2011 municipality codes", () => {

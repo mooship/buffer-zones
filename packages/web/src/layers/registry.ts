@@ -1,5 +1,5 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
 import type { Layer, LayerGroup } from "@stratum/shared";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
 
 export function getLayers(): readonly Layer[] {
   return GAUTENG_SPATIAL_LEGACY_DOMAIN.layers;

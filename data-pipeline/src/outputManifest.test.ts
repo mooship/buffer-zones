@@ -3,9 +3,9 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
-  REQUIRED_TRANSIT_NETWORKS,
   buildOutputLayerRules,
   buildOutputManifest,
+  REQUIRED_TRANSIT_NETWORKS,
   validateOutputDirectory,
 } from "./outputManifest";
 import { GAUTENG_PIPELINE_CONFIG } from "./regions/gautengPipelineConfig";

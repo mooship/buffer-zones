@@ -3,8 +3,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   METROS,
-  TRANSIT_OPERATOR_LAYER_NAMES,
   type TownshipFeature,
+  TRANSIT_OPERATOR_LAYER_NAMES,
   type TransitLayerFeatureCollection,
 } from "@stratum/shared";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";

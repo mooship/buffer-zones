@@ -9,9 +9,9 @@ import { Layers, X } from "lucide-react";
 import {
   type CSSProperties,
   type KeyboardEvent,
+  lazy,
   type PointerEvent,
   Suspense,
-  lazy,
   useEffect,
   useRef,
   useState,
@@ -27,11 +27,11 @@ import { MobileLegend } from "./components/MobileLegend/MobileLegend";
 import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import { DATA_SOURCES, REPOSITORY_URL } from "./constants/metadata";
-import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
 import type { LocationSearchResult } from "./data/locationSearch";
 import { mergeFeatureCollections } from "./data/mergeFeatureCollections";
 import { buildRegionDataUrls } from "./data/regionDataUrls";
+import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import {
   setThemePreference,
   useThemePreference,

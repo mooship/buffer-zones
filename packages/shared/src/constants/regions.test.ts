@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { REGIONS, getRegionDefinition } from "./regions";
+import { getRegionDefinition, REGIONS } from "./regions";
 
 describe("regions", () => {
   it("defines the gauteng province region", () => {

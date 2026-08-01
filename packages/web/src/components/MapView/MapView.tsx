@@ -5,12 +5,12 @@ import type {
 } from "@stratum/shared";
 import type { Feature, FeatureCollection } from "geojson";
 import {
+  circleMarker,
   type LatLng,
   type LatLngBounds,
   type Layer,
   type LeafletMouseEvent,
   type Path,
-  circleMarker,
 } from "leaflet";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -20,8 +20,8 @@ import {
   Pane,
   ScaleControl,
   TileLayer,
-  ZoomControl,
   useMap,
+  ZoomControl,
 } from "react-leaflet";
 import { type Basemap, getBasemapTileSources } from "../../constants/basemaps";
 import { TOWNSHIP_OUTLINE } from "../../constants/layerStyles";
@@ -314,7 +314,9 @@ function ResponsiveMapBounds() {
 
 function ZoomStateWatcher({
   onZoomChange,
-}: { onZoomChange: (zoom: number) => void }) {
+}: {
+  onZoomChange: (zoom: number) => void;
+}) {
   const map = useMap();
 
   useEffect(() => {
@@ -451,9 +453,6 @@ function MapViewComponent({
     tileSources.length - 1,
   );
   const tileSource = tileSources[safeTileSourceIndex] ?? tileSources[0];
-  if (!tileSource) {
-    return null;
-  }
   const handleTileError = useCallback(() => {
     setTileSourceState((currentState) => {
       const currentIndex =
@@ -527,6 +526,10 @@ function MapViewComponent({
   );
   const useRetinaTiles =
     getDevicePixelRatio() > 1.25 && getViewportWidth() > MOBILE_BREAKPOINT_PX;
+
+  if (!tileSource) {
+    return null;
+  }
 
   return (
     <section

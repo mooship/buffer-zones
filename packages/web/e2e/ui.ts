@@ -1,4 +1,4 @@
-import { type Page, expect } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { E2E } from "./selectors";
 
 export async function ensurePanelOpen(page: Page) {

@@ -1,5 +1,5 @@
 import type { TransitLayerFeatureCollection } from "@stratum/shared";
-import { type OverpassResponse, fetchOverpass } from "./gautrain";
+import { fetchOverpass, type OverpassResponse } from "./gautrain";
 import { normalizeRelationTransitOverpass } from "./relationTransit";
 
 function tshwaneBusQuery(bbox: string): string {
