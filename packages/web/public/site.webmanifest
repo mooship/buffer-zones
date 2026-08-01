@@ -1,6 +1,6 @@
 {
-  "name": "Buffer Zones",
-  "short_name": "Buffer Zones",
+  "name": "Stratum",
+  "short_name": "Stratum",
   "description": "Visualising how apartheid-era spatial planning still shapes commute times and access to jobs in Tshwane and Johannesburg.",
   "start_url": "/",
   "scope": "/",

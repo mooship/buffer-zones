@@ -33,7 +33,7 @@ function getGeoJsonPreloadLinks() {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Buffer Zones" },
+    { title: "Stratum" },
     {
       name: "description",
       content:

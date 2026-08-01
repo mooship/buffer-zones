@@ -1,4 +1,4 @@
-export const APP_NAME = "Buffer Zones";
+export const APP_NAME = "Stratum";
 export const DATA_AS_OF = "2026-07-28";
 export const REPOSITORY_URL = "https://github.com/mooship/buffer-zones";
 
