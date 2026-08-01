@@ -1,43 +1,17 @@
-import { readFile, readdir, rename, rm, stat } from "node:fs/promises";
+import { readdir, rename, rm, stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   METROS,
-  type MetroId,
   REGIONS,
   type TransitLayerFeatureCollection,
 } from "@buffer-zones/shared";
 import {
-  fetchAReYengRoutes,
-  normalizeAReYeng,
-  normalizeAReYengOverpass,
-} from "./adapters/aReYeng";
-import {
   fetchMetroBoundaries,
   normalizeBoundaries,
 } from "./adapters/boundaries";
-import {
-  fetchEkurhuleniIrptnRoutes,
-  normalizeEkurhuleniIrptn,
-} from "./adapters/ekurhuleniIrptn";
-import {
-  fetchGautrainBusRoutes,
-  fetchGautrainRail,
-  normalizeGautrainBusOverpass,
-  normalizeGautrainOverpass,
-} from "./adapters/gautrain";
-import { fetchPrasaRail, normalizePrasaOverpass } from "./adapters/prasa";
-import {
-  fetchReaVayaRoutes,
-  normalizeReaVayaOverpass,
-} from "./adapters/reaVaya";
-import {
-  fetchTshwaneBusRoutes,
-  normalizeTshwaneBusOverpass,
-} from "./adapters/tshwaneBus";
 import { pruneCache } from "./cache";
 import { getJobCentersForMetro } from "./constants/jobCenters";
-import { getMetroBbox, getSharedTransitBbox } from "./constants/metroBbox";
 import { createDisplayPolygons } from "./displayTownships";
 import { createDisplayTransit } from "./displayTransit";
 import { writeGeoJsonFile } from "./export";
@@ -49,17 +23,17 @@ import {
   countTransitNetworks,
   validateOutputDirectory,
 } from "./outputManifest";
+import type { RegionPipelineConfig } from "./pipelineSource";
+import { GAUTENG_PIPELINE_CONFIG } from "./regions/gautengPipelineConfig";
 import { createTownshipAreas } from "./townshipAreas";
 import { computeNearestTransitKm } from "./transitDistance";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_ROOT = resolve(__dirname, "../../packages/web/public/data");
 
-interface SharedTransit {
-  gautrain: TransitLayerFeatureCollection;
-  gautrainBus: TransitLayerFeatureCollection;
-  prasa: TransitLayerFeatureCollection;
-}
+const REGION_PIPELINE_CONFIGS: RegionPipelineConfig[] = [
+  GAUTENG_PIPELINE_CONFIG,
+];
 
 function formatDuration(ms: number): string {
   if (ms < 1000) {
@@ -88,10 +62,6 @@ async function timedStep<T>(
   }
 }
 
-function emptyTransitCollection(): TransitLayerFeatureCollection {
-  return { type: "FeatureCollection", features: [] };
-}
-
 async function pathExists(path: string): Promise<boolean> {
   try {
     await stat(path);
@@ -99,28 +69,6 @@ async function pathExists(path: string): Promise<boolean> {
   } catch {
     return false;
   }
-}
-
-async function readExistingTransitLayer(
-  outputDir: string,
-  layerName: string,
-): Promise<TransitLayerFeatureCollection | null> {
-  const candidates = [
-    resolve(outputDir, `${layerName}.display.v1.geojson`),
-    resolve(outputDir, `${layerName}.v1.geojson`),
-  ];
-
-  for (const filePath of candidates) {
-    try {
-      const raw = await readFile(filePath, "utf8");
-      const parsed = JSON.parse(raw) as TransitLayerFeatureCollection;
-      if (Array.isArray(parsed.features) && parsed.features.length > 0) {
-        return parsed;
-      }
-    } catch {}
-  }
-
-  return null;
 }
 
 function assertCompleteNetworkCoverage(
@@ -208,95 +156,13 @@ async function cleanupStagingDirectories(
   );
 }
 
-async function fetchSharedTransit(
-  regionId: string,
-  metroIds: readonly MetroId[],
-): Promise<SharedTransit> {
-  const bbox = getSharedTransitBbox(metroIds);
-  const publishedOutputDir = resolve(OUTPUT_ROOT, regionId);
+async function runRegion(config: RegionPipelineConfig): Promise<void> {
+  const { regionId, metros } = config;
 
-  let gautrain = emptyTransitCollection();
-  try {
-    const gautrainRaw = await timedStep(
-      `Fetching Gautrain rail via Overpass (${regionId}-wide)`,
-      () => fetchGautrainRail(bbox),
-      (raw) => `(${raw.elements.length} elements)`,
-    );
-    gautrain = normalizeGautrainOverpass(gautrainRaw);
-  } catch (error) {
-    console.warn("Skipping Gautrain rail due to fetch failure", error);
-    const fallback = await readExistingTransitLayer(
-      publishedOutputDir,
-      "rapid-rail",
-    );
-    if (!fallback) {
-      throw new Error(
-        "Failed to fetch Gautrain rail and no fallback output exists",
-      );
-    }
-    gautrain = fallback;
-  }
-
-  let prasa = emptyTransitCollection();
-  try {
-    const prasaRaw = await timedStep(
-      `Fetching PRASA rail via Overpass (${regionId}-wide)`,
-      () => fetchPrasaRail(bbox),
-      (raw) => `(${raw.elements.length} elements)`,
-    );
-    prasa = normalizePrasaOverpass(prasaRaw);
-  } catch (error) {
-    console.warn("Skipping PRASA rail due to fetch failure", error);
-    const fallback = await readExistingTransitLayer(
-      publishedOutputDir,
-      "commuter-rail",
-    );
-    if (!fallback) {
-      throw new Error(
-        "Failed to fetch PRASA rail and no fallback output exists",
-      );
-    }
-    prasa = fallback;
-  }
-
-  let gautrainBus = emptyTransitCollection();
-  try {
-    const gautrainBusRaw = await timedStep(
-      `Fetching Gautrain bus routes via Overpass (${regionId}-wide)`,
-      () => fetchGautrainBusRoutes(bbox),
-      (raw) => `(${raw.elements.length} elements)`,
-    );
-    gautrainBus = normalizeGautrainBusOverpass(gautrainBusRaw);
-  } catch (error) {
-    console.warn("Skipping Gautrain Bus due to fetch failure", error);
-    const fallback = await readExistingTransitLayer(publishedOutputDir, "bus");
-    if (!fallback) {
-      throw new Error(
-        "Failed to fetch Gautrain Bus and no fallback output exists",
-      );
-    }
-    gautrainBus = {
-      type: "FeatureCollection",
-      features: fallback.features.filter(
-        (feature) =>
-          (feature.properties as { network?: unknown } | null)?.network ===
-          "Gautrain Bus",
-      ),
-    };
-    if (gautrainBus.features.length === 0) {
-      throw new Error("Failed to recover Gautrain Bus from fallback output");
-    }
-  }
-
-  return { gautrain, gautrainBus, prasa };
-}
-
-async function runRegion(regionId: string): Promise<void> {
   await pruneCache(7 * 24 * 60 * 60 * 1000);
   assertMetroSetup();
   await cleanupStagingDirectories(OUTPUT_ROOT, regionId);
 
-  const metros = METROS.filter((metro) => metro.regionId === regionId);
   if (metros.length === 0) {
     throw new Error(`No metros configured for region: ${regionId}`);
   }
@@ -309,26 +175,23 @@ async function runRegion(regionId: string): Promise<void> {
 
   try {
     const outputDir = stagedDir;
-    const sharedTransit = await fetchSharedTransit(
-      regionId,
-      metros.map((metro) => metro.id),
-    );
 
-    async function writeTransitLayer(
-      name: string,
-      collection: TransitLayerFeatureCollection,
-    ): Promise<void> {
-      await writeGeoJsonFile(
-        resolve(outputDir, `${name}.display.v1.geojson`),
-        createDisplayTransit(collection),
-        { compact: true },
-      );
-    }
+    const fetchedSources = await Promise.all(
+      config.sources.map(async (source) => ({
+        source,
+        collection: await timedStep(
+          `Fetching ${source.layerId} for ${regionId}`,
+          source.fetch,
+          (raw) => `(${raw.features.length} features)`,
+        ),
+      })),
+    );
+    const transitCollections = fetchedSources.map(
+      (entry) => entry.collection as TransitLayerFeatureCollection,
+    );
 
     const allTownships = [];
     const allNormalizedTownships = [];
-    const brtCollections = [];
-    const busCollections = [...sharedTransit.gautrainBus.features];
     const metroTownshipCounts: Record<string, number> = {};
 
     for (const metro of metros) {
@@ -351,59 +214,6 @@ async function runRegion(regionId: string): Promise<void> {
           jobCenters,
         ),
       );
-
-      const transitCollections = [
-        sharedTransit.gautrain,
-        sharedTransit.prasa,
-        sharedTransit.gautrainBus,
-      ];
-
-      if (metro.id === "tshwane") {
-        const bbox = getMetroBbox(metro.id);
-        const rawAReYeng = await timedStep("Fetching A Re Yeng routes", () =>
-          fetchAReYengRoutes(),
-        );
-
-        const tshwaneBusRaw = await timedStep(
-          "Fetching Tshwane Bus Services routes via Overpass",
-          () => fetchTshwaneBusRoutes(bbox),
-          (raw) => `(${raw.elements.length} elements)`,
-        );
-
-        const aReYeng =
-          "elements" in rawAReYeng
-            ? normalizeAReYengOverpass(rawAReYeng)
-            : normalizeAReYeng(rawAReYeng);
-        brtCollections.push(...aReYeng.features);
-        transitCollections.push(aReYeng);
-
-        const tshwaneBus = normalizeTshwaneBusOverpass(tshwaneBusRaw);
-        busCollections.push(...tshwaneBus.features);
-        transitCollections.push(tshwaneBus);
-      }
-
-      if (metro.id === "johannesburg") {
-        const bbox = getMetroBbox(metro.id);
-        const reaVayaRaw = await timedStep(
-          "Fetching Rea Vaya routes via Overpass",
-          () => fetchReaVayaRoutes(bbox),
-          (raw) => `(${raw.elements.length} elements)`,
-        );
-        const reaVaya = normalizeReaVayaOverpass(reaVayaRaw);
-        brtCollections.push(...reaVaya.features);
-        transitCollections.push(reaVaya);
-      }
-
-      if (metro.id === "ekurhuleni") {
-        const ekurhuleniIrptnRaw = await timedStep(
-          "Fetching Ekurhuleni IRPTN routes",
-          () => fetchEkurhuleniIrptnRoutes(),
-          (raw) => `(${raw.features.length} features)`,
-        );
-        const ekurhuleniIrptn = normalizeEkurhuleniIrptn(ekurhuleniIrptnRaw);
-        brtCollections.push(...ekurhuleniIrptn.features);
-        transitCollections.push(ekurhuleniIrptn);
-      }
 
       const nearestTransitKm = await timedStep(
         "Computing nearest-transit distances",
@@ -443,27 +253,18 @@ async function runRegion(regionId: string): Promise<void> {
       { compact: true },
     );
 
-    const brt: TransitLayerFeatureCollection = {
-      type: "FeatureCollection",
-      features: brtCollections,
-    };
-    const bus: TransitLayerFeatureCollection = {
-      type: "FeatureCollection",
-      features: busCollections,
-    };
-
     const networkCoverage = mergeNetworkCoverage(
-      countTransitNetworks(sharedTransit.gautrain),
-      countTransitNetworks(sharedTransit.prasa),
-      countTransitNetworks(brt),
-      countTransitNetworks(bus),
+      ...fetchedSources.map((entry) => countTransitNetworks(entry.collection)),
     );
     assertCompleteNetworkCoverage(networkCoverage);
 
-    await writeTransitLayer("rapid-rail", sharedTransit.gautrain);
-    await writeTransitLayer("commuter-rail", sharedTransit.prasa);
-    await writeTransitLayer("bus-rapid-transit", brt);
-    await writeTransitLayer("bus", bus);
+    for (const { source, collection } of fetchedSources) {
+      await writeGeoJsonFile(
+        resolve(outputDir, source.outputFileName),
+        createDisplayTransit(collection as TransitLayerFeatureCollection),
+        { compact: true },
+      );
+    }
 
     const manifest = await buildOutputManifest(
       outputDir,
@@ -495,12 +296,17 @@ async function runRegion(regionId: string): Promise<void> {
 }
 
 async function runAllProvinceRegions(): Promise<void> {
-  const provinceRegions = REGIONS.filter(
-    (region) => region.kind === "province",
+  const provinceRegionIds = new Set(
+    REGIONS.filter((region) => region.kind === "province").map(
+      (region) => region.id,
+    ),
   );
-  for (const region of provinceRegions) {
-    console.log(`\n### Region: ${region.id} ###`);
-    await runRegion(region.id);
+  for (const config of REGION_PIPELINE_CONFIGS) {
+    if (!provinceRegionIds.has(config.regionId)) {
+      continue;
+    }
+    console.log(`\n### Region: ${config.regionId} ###`);
+    await runRegion(config);
   }
 }
 
@@ -508,8 +314,18 @@ const regionArgIndex = process.argv.indexOf("--region");
 const requestedRegionId =
   regionArgIndex >= 0 ? process.argv[regionArgIndex + 1] : undefined;
 
+function getRegionPipelineConfig(regionId: string): RegionPipelineConfig {
+  const config = REGION_PIPELINE_CONFIGS.find(
+    (candidate) => candidate.regionId === regionId,
+  );
+  if (!config) {
+    throw new Error(`No pipeline config registered for region: ${regionId}`);
+  }
+  return config;
+}
+
 const work = requestedRegionId
-  ? runRegion(requestedRegionId)
+  ? runRegion(getRegionPipelineConfig(requestedRegionId))
   : runAllProvinceRegions();
 
 work.catch((err) => {
