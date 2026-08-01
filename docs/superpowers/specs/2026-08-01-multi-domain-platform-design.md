@@ -40,7 +40,7 @@ Confirmed by direct file audit:
 
 Layers: income-band choropleth, unemployment-rate choropleth, service-access choropleth (reusing the existing OSRM drive-time machinery against a different destination set — clinics/schools instead of job centers). Story copy frames this as the present-day counterpart to the historical spatial-legacy domain: same region, paired lens — the concrete "this is a platform" signal for a buyer.
 
-This fits `PipelineSource`'s existing contract (`layerId`, `fetch()`, `outputFileName`) with zero changes to pipeline orchestration; it's a new `RegionPipelineConfig` entry’s `sources` list, same as any other domain would register.
+This fits `PipelineSource`'s existing contract (`layerId`, `fetch()`, `outputFileName`) — but **`run.ts`'s `runRegion` currently performs the township/drive-time/transit join inline and ungated for every region** (not behind a domain hook). A socioeconomic `RegionPipelineConfig` reusing the same municipal boundaries would otherwise be forced through that Gauteng-township-shaped join. `runRegion` needs a `join?: (ctx) => Promise<void>` hook on `RegionPipelineConfig` (as the prior generic-layer-platform design's §5 already proposed but never wired in) so the Gauteng township join becomes that domain's own `join`, and a region without one skips it. This is a real, if small, change to pipeline orchestration, not a zero-change reuse.
 
 **Rejected alternative:** ward-level geometry for richer granularity — deferred; requires sourcing/licensing new boundary data disproportionate to a first proof-of-concept domain. Candidate fast-follow once the architecture is proven.
 
