@@ -29,14 +29,6 @@
   --elevation-raised: var(--shadow-md);
   --elevation-overlay: var(--shadow-lg);
 
-  --glass-nav-bg: linear-gradient(
-    165deg,
-    color-mix(in srgb, var(--color-panel) 74%, #ffffff) 0%,
-    color-mix(in srgb, var(--color-panel) 54%, transparent) 56%,
-    color-mix(in srgb, var(--color-panel) 40%, transparent) 100%
-  );
-  --glass-nav-border: color-mix(in srgb, #f2f7ff 56%, var(--color-line));
-  --glass-nav-blur: 22px;
   --glass-panel-bg: linear-gradient(
     158deg,
     color-mix(in srgb, var(--color-panel) 82%, #ffffff) 0%,
@@ -119,14 +111,6 @@
     --shadow-md: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
     --shadow-lg: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
-    --glass-nav-bg: linear-gradient(
-      165deg,
-      color-mix(in srgb, #2f3f59 52%, transparent) 0%,
-      color-mix(in srgb, #2b3a54 36%, transparent) 60%,
-      color-mix(in srgb, #24324a 28%, transparent) 100%
-    );
-    --glass-nav-border: color-mix(in srgb, #d0defd 24%, #4d5d7a);
-    --glass-nav-blur: 22px;
     --glass-panel-bg: linear-gradient(
       160deg,
       color-mix(in srgb, #32415e 58%, transparent) 0%,
@@ -172,14 +156,6 @@
   --shadow-md: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
   --shadow-lg: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
-  --glass-nav-bg: linear-gradient(
-    165deg,
-    color-mix(in srgb, #2f3f59 52%, transparent) 0%,
-    color-mix(in srgb, #2b3a54 36%, transparent) 60%,
-    color-mix(in srgb, #24324a 28%, transparent) 100%
-  );
-  --glass-nav-border: color-mix(in srgb, #d0defd 24%, #4d5d7a);
-  --glass-nav-blur: 22px;
   --glass-panel-bg: linear-gradient(
     160deg,
     color-mix(in srgb, #32415e 58%, transparent) 0%,
@@ -330,10 +306,8 @@ body {
 }
 
 :root[data-reduced-transparency="true"] {
-  --glass-nav-bg: var(--color-panel);
   --glass-panel-bg: var(--color-panel);
   --glass-chip-bg: var(--color-surface);
-  --glass-nav-blur: 0px;
   --glass-panel-blur: 0px;
   --glass-chip-blur: 0px;
   --glass-sheen: none;
@@ -341,7 +315,6 @@ body {
 
 @media (prefers-contrast: more) {
   :root {
-    --glass-nav-border: var(--color-paper);
     --glass-panel-border: var(--color-paper);
     --glass-chip-border: var(--color-paper);
   }
