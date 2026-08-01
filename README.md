@@ -1,6 +1,6 @@
-# Buffer Zones
+# Stratum
 
-Apartheid-era spatial planning still shapes access to economic opportunity in South African cities today. **Buffer Zones** maps recognized township areas, formal transit routes, and modeled car time to selected job centers in a single national view. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
+**Stratum** is a public-interest geospatial layer platform. Its first published domain, **Gauteng spatial legacy**, maps apartheid-era spatial planning legacy across South African cities: recognized township areas, formal transit routes, and modeled car time to selected job centers in a single combined view. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
 
 **Current scope: full Gauteng municipality coverage in one combined national layer.** The app currently includes City of Tshwane, City of Johannesburg, City of Ekurhuleni, Emfuleni, Midvaal, Lesedi, Mogale City, Rand West City, and Merafong City. It uses Stats SA Census 2011 boundaries, modeled OSRM car routing to each municipality's selected job centers, and transit overlays sourced from Gautrain rail, Gautrain Bus, PRASA rail, A Re Yeng, and Rea Vaya. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros (Cape Town, Durban) are not yet included in the published national layer.
 
@@ -30,7 +30,7 @@ React + TypeScript SSR app (React Router framework mode on Vite, `react-leaflet`
 
 ```bash
 npm install
-npm run dev --workspace @buffer-zones/web
+npm run dev --workspace @stratum/web
 ```
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) covers the full setup, the project conventions, and how to propose data changes. [`SECURITY.md`](SECURITY.md) covers reporting a suspected vulnerability privately.
