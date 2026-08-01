@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@buffer-zones/shared";
+import type { TownshipFeature } from "@stratum/shared";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { TownshipBrowser } from "./TownshipBrowser";

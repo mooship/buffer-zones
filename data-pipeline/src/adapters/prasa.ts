@@ -1,7 +1,7 @@
 import type {
   TransitLayerFeatureCollection,
   TransitStop,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";
 import { type OverpassResponse, fetchOverpass } from "./gautrain";
 
 // Rail ways carry operator=PRASA; stations are tagged network=Metrorail Gauteng (verified 2026-07-28).

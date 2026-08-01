@@ -1,4 +1,4 @@
-import { METROS } from "@buffer-zones/shared";
+import { METROS } from "@stratum/shared";
 import { describe, expect, it } from "vitest";
 import { JOB_CENTERS, getJobCentersForMetro } from "./jobCenters";
 

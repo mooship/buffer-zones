@@ -2,7 +2,7 @@ import type {
   Layer as DomainLayer,
   TownshipFeature,
   TownshipProperties,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";
 import type { Feature, FeatureCollection } from "geojson";
 import {
   type LatLng,

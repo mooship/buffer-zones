@@ -2,7 +2,7 @@ import { defineProject } from "vitest/config";
 
 export default defineProject({
   test: {
-    name: "@buffer-zones/shared",
+    name: "@stratum/shared",
     environment: "node",
   },
 });

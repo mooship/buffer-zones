@@ -1,5 +1,5 @@
 {
-  "name": "buffer-zones-data-pipeline",
+  "name": "stratum-data-pipeline",
   "version": "1.0.0",
   "description": "Offline GIS data pipeline for spatial boundaries, OSRM routing, and transit normalization",
   "license": "AGPL-3.0-only",
@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@buffer-zones/shared": "file:../packages/shared",
+    "@stratum/shared": "file:../packages/shared",
     "@turf/turf": "^7.1.0",
     "adm-zip": "^0.6.0",
     "shapefile": "^0.6.6",

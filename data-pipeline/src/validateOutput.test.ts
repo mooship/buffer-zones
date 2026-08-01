@@ -12,8 +12,8 @@ vi.mock("./outputManifest", () => ({
   validateOutputDirectory: outputManifestMocks.validateOutputDirectory,
 }));
 
-vi.mock("@buffer-zones/shared", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@buffer-zones/shared")>();
+vi.mock("@stratum/shared", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@stratum/shared")>();
   return {
     ...actual,
     REGIONS: [

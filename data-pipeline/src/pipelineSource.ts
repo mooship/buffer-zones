@@ -1,4 +1,4 @@
-import type { MetroDefinition } from "@buffer-zones/shared";
+import type { MetroDefinition } from "@stratum/shared";
 import type { FeatureCollection } from "geojson";
 
 export interface PipelineSource {

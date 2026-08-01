@@ -3,7 +3,7 @@ import {
   type TownshipAreaLabelPriority,
   type TownshipAreaSelectionBasis,
   getTownshipAreaDefinition,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";
 import * as turf from "@turf/turf";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import type { NormalizedTownship } from "./adapters/boundaries";

@@ -2,7 +2,7 @@ import {
   TOWNSHIP_GROUPS,
   type TownshipFeature,
   getTownshipGroup,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";
 import { Search } from "lucide-react";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { formatCommuteTime } from "../../utils/formatCommuteTime";

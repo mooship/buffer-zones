@@ -1,4 +1,4 @@
-import type { MetroId } from "@buffer-zones/shared";
+import type { MetroId } from "@stratum/shared";
 
 export interface JobCenter {
   id: string;

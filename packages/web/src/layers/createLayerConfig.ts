@@ -1,4 +1,4 @@
-import type { ColorBucket, Layer } from "@buffer-zones/shared";
+import type { ColorBucket, Layer } from "@stratum/shared";
 import type { Feature } from "geojson";
 import type { PathOptions } from "leaflet";
 import { CHOROPLETH_NO_DATA_COLOR } from "../constants/layerStyles";

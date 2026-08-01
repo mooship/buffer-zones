@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@buffer-zones/shared";
+import type { TownshipFeature } from "@stratum/shared";
 import { fetchFeatureCollection } from "./fetchFeatureCollection";
 import { townshipFeatureCollectionSchema } from "./geoJsonSchemas";
 

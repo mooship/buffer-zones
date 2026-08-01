@@ -1,5 +1,5 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@buffer-zones/shared";
-import type { Layer, LayerGroup } from "@buffer-zones/shared";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
+import type { Layer, LayerGroup } from "@stratum/shared";
 
 export function getLayers(): readonly Layer[] {
   return GAUTENG_SPATIAL_LEGACY_DOMAIN.layers;

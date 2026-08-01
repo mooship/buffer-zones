@@ -1,5 +1,5 @@
 {
-  "name": "@buffer-zones/shared",
+  "name": "@stratum/shared",
   "version": "1.0.0",
   "description": "Shared GeoJSON layer types and township definitions",
   "license": "AGPL-3.0-only",

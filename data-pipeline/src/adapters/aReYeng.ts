@@ -1,7 +1,7 @@
 import type {
   TransitLayerFeatureCollection,
   TransitStop,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";
 import type {
   Feature,
   FeatureCollection,

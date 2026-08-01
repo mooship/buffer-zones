@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@buffer-zones/shared";
+import type { TownshipFeature } from "@stratum/shared";
 import type { NormalizedTownship } from "./adapters/boundaries";
 import type { NearestJobCenterResult } from "./osrmClient";
 

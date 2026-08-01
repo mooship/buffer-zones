@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@buffer-zones/shared";
+import type { TownshipFeature } from "@stratum/shared";
 import { describe, expect, it } from "vitest";
 import type { NormalizedTownship } from "./adapters/boundaries";
 import { joinTownshipData } from "./join";

@@ -1,7 +1,7 @@
 {
-  "name": "@buffer-zones/web",
+  "name": "@stratum/web",
   "version": "1.0.0",
-  "description": "Buffer Zones web SPA map viewer",
+  "description": "Stratum web SPA map viewer",
   "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
@@ -42,7 +42,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@buffer-zones/shared": "file:../shared",
+    "@stratum/shared": "file:../shared",
     "clsx": "^2.1.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.27.0",

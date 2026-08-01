@@ -2,7 +2,7 @@ import {
   GAUTENG_SPATIAL_LEGACY_DOMAIN,
   METROS,
   type TownshipFeature,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";

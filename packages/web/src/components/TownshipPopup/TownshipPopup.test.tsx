@@ -1,4 +1,4 @@
-import type { TownshipProperties } from "@buffer-zones/shared";
+import type { TownshipProperties } from "@stratum/shared";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { TownshipPopup } from "./TownshipPopup";

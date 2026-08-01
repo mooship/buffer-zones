@@ -1,4 +1,4 @@
-import type { MetroId } from "@buffer-zones/shared";
+import type { MetroId } from "@stratum/shared";
 import { describe, expect, it } from "vitest";
 import { METRO_BBOX, getMetroBbox, getSharedTransitBbox } from "./metroBbox";
 

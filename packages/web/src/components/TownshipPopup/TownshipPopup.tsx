@@ -1,4 +1,4 @@
-import type { TownshipProperties } from "@buffer-zones/shared";
+import type { TownshipProperties } from "@stratum/shared";
 import { formatCommuteTime } from "../../utils/formatCommuteTime";
 import styles from "./TownshipPopup.module.css";
 

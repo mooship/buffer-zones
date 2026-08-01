@@ -5,7 +5,7 @@ import {
   METROS,
   REGIONS,
   type TransitLayerFeatureCollection,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";
 import {
   fetchMetroBoundaries,
   normalizeBoundaries,

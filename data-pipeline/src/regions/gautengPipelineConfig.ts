@@ -1,10 +1,7 @@
 import { readFile, stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  METROS,
-  type TransitLayerFeatureCollection,
-} from "@buffer-zones/shared";
+import { METROS, type TransitLayerFeatureCollection } from "@stratum/shared";
 import {
   fetchAReYengRoutes,
   normalizeAReYeng,

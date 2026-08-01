@@ -1,4 +1,4 @@
-import type { MetroId } from "@buffer-zones/shared";
+import type { MetroId } from "@stratum/shared";
 
 // (south, west, north, east). Generous enough to include Midrand/Ivory
 // Park's Gautrain/PRASA infrastructure just outside the Johannesburg boundary.

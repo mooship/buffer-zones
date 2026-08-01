@@ -3,4 +3,4 @@ export {
   getTownshipGroup,
   TOWNSHIP_AREA_DEFINITIONS,
   TOWNSHIP_GROUPS,
-} from "@buffer-zones/shared";
+} from "@stratum/shared";

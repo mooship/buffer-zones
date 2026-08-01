@@ -1,5 +1,5 @@
 {
-  "name": "buffer-zones",
+  "name": "stratum",
   "version": "1.0.0",
   "description": "Spatial planning legacy & transit accessibility mapping in Tshwane",
   "license": "AGPL-3.0-only",
@@ -11,8 +11,8 @@
     "format": "biome format --write .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "npm run test:e2e --workspace @buffer-zones/web",
-    "typecheck": "npm run typecheck --workspace @buffer-zones/shared && npm run build --workspace @buffer-zones/web && npm run typecheck --prefix data-pipeline",
+    "test:e2e": "npm run test:e2e --workspace @stratum/web",
+    "typecheck": "npm run typecheck --workspace @stratum/shared && npm run build --workspace @stratum/web && npm run typecheck --prefix data-pipeline",
     "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { type MetroId, getMetroDefinition } from "@buffer-zones/shared";
+import { type MetroId, getMetroDefinition } from "@stratum/shared";
 import * as turf from "@turf/turf";
 import AdmZip from "adm-zip";
 import type {
