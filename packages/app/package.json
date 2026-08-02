@@ -1,5 +1,5 @@
 {
-  "name": "@stratum/shared",
+  "name": "@stratum/app",
   "version": "1.0.0",
   "description": "Shared GeoJSON layer types and township definitions",
   "license": "AGPL-3.0-only",
@@ -10,6 +10,9 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stratum/core": "file:../core"
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.14"

@@ -1,4 +1,4 @@
-import type { MetroId } from "@stratum/shared";
+import type { MetroId } from "@stratum/app";
 import { describe, expect, it } from "vitest";
 import { getMetroBbox, getSharedTransitBbox, METRO_BBOX } from "./metroBbox";
 

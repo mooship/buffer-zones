@@ -6,7 +6,7 @@ import {
   type TownshipFeature,
   TRANSIT_OPERATOR_LAYER_NAMES,
   type TransitLayerFeatureCollection,
-} from "@stratum/shared";
+} from "@stratum/app";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import { createDisplayPolygons } from "./displayTownships";
 import { createDisplayTransit } from "./displayTransit";

@@ -1,10 +1,10 @@
-import { DomainProvider } from "@stratum/map";
 import {
   GAUTENG_SPATIAL_LEGACY_DOMAIN,
   METROS,
   type TownshipFeature,
   type TownshipProperties,
-} from "@stratum/shared";
+} from "@stratum/app";
+import { DomainProvider } from "@stratum/map";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";

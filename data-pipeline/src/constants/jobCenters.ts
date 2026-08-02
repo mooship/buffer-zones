@@ -1,4 +1,4 @@
-import type { MetroId } from "@stratum/shared";
+import type { MetroId } from "@stratum/app";
 
 export interface JobCenter {
   id: string;

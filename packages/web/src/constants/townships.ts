@@ -3,4 +3,4 @@ export {
   getTownshipGroup,
   TOWNSHIP_AREA_DEFINITIONS,
   TOWNSHIP_GROUPS,
-} from "@stratum/shared";
+} from "@stratum/app";

@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stratum/shared": "file:../packages/shared",
+    "@stratum/app": "file:../packages/app",
     "@turf/turf": "^7.1.0",
     "adm-zip": "^0.6.0",
     "shapefile": "^0.6.6",

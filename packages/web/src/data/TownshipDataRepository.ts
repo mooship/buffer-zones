@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@stratum/shared";
+import type { TownshipFeature } from "@stratum/app";
 import { fetchFeatureCollection } from "./fetchFeatureCollection";
 import { townshipFeatureCollectionSchema } from "./geoJsonSchemas";
 

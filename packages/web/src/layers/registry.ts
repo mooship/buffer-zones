@@ -1,6 +1,6 @@
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import type { Layer, LayerGroup } from "@stratum/core";
 import { createRegistry } from "@stratum/core";
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
 
 const registry = createRegistry(GAUTENG_SPATIAL_LEGACY_DOMAIN);
 

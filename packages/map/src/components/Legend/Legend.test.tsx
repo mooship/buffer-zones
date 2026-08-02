@@ -1,4 +1,4 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DomainProvider } from "../../context/DomainContext";

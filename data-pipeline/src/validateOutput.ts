@@ -1,7 +1,7 @@
 import { stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { REGIONS } from "@stratum/shared";
+import { REGIONS } from "@stratum/app";
 import { validateOutputDirectory } from "./outputManifest";
 import type { RegionPipelineConfig } from "./pipelineSource";
 import { getRegionPipelineConfig } from "./regionPipelineConfigs";

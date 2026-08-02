@@ -1,7 +1,4 @@
-import type {
-  TransitLayerFeatureCollection,
-  TransitStop,
-} from "@stratum/shared";
+import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
 import { hashKey, readJsonCache, writeJsonCache } from "../cache";
 import { getOverpassUrls } from "../constants/serviceUrls";
 import { normalizeRelationTransitOverpass } from "./relationTransit";

@@ -1,4 +1,4 @@
-import type { TransitLayerFeatureCollection } from "@stratum/shared";
+import type { TransitLayerFeatureCollection } from "@stratum/app";
 import * as turf from "@turf/turf";
 import type { LineString, Point } from "geojson";
 import type { LatLon } from "./adapters/boundaries";

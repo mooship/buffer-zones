@@ -1,4 +1,4 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { forwardRef, type ReactNode, useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";

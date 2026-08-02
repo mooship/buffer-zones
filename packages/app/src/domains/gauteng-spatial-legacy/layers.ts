@@ -1,5 +1,5 @@
+import type { Layer } from "@stratum/core";
 import { getTownshipGroup } from "../../constants/townships";
-import type { Layer } from "../../types/genericLayer";
 
 function dataUrl(fileName: string): string {
   return `/data/gauteng/${fileName}`;

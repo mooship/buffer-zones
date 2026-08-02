@@ -1,7 +1,4 @@
-import type {
-  TransitLayerFeatureCollection,
-  TransitStop,
-} from "@stratum/shared";
+import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
 import type { OverpassResponse } from "./gautrain";
 
 export function normalizeRelationTransitOverpass(

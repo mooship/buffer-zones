@@ -17,7 +17,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "npm run test:e2e --workspace @stratum/web",
-    "typecheck": "npm run typecheck --workspace @stratum/shared && npm run build --workspace @stratum/web && npm run typecheck --prefix data-pipeline",
+    "typecheck": "npm run typecheck --workspace @stratum/core && npm run typecheck --workspace @stratum/app && npm run typecheck --workspace @stratum/map && npm run typecheck --workspace @stratum/react && npm run build --workspace @stratum/web && npm run typecheck --prefix data-pipeline",
     "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {
