@@ -1,9 +1,11 @@
+import { clearFeatureCollectionCache } from "@stratum/core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createTownshipDataRepository } from "./TownshipDataRepository";
 
 describe("createTownshipDataRepository", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
+    clearFeatureCollectionCache();
   });
 
   it("fetches the given URL and returns the parsed features array", async () => {

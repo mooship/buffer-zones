@@ -8,7 +8,7 @@ Domain-agnostic layer model and geodata utilities for Stratum. Has no dependency
 - **`resolveClassification(classification, properties)`** (`layers/classification.ts`) — resolves a feature's properties through a `Classification<T>` to its style output value; used internally by `createLayerConfig` and exported for direct use (e.g. custom legend rendering).
 - **`createLayerConfig(layer, noDataColor?)`** (`layers/createLayerConfig.ts`) — converts a `Layer` descriptor into a Leaflet `pathOptions`/`styleFn` configuration. Returns a `styleFn` (instead of static `pathOptions`) for `line`/`point` layers that declare a classification.
 - **`createRegistry(domain)`** (`layers/createRegistry.ts`) — a read-only `getLayers`/`getLayer`/`getLayerGroups` accessor over a `DomainConfig`.
-- **Geodata utils** (`data/`) — `fetchFeatureCollection`, `mergeFeatureCollections`, and the Zod schemas in `geoJsonSchemas.ts` (`featureCollectionSchema`, `polygonGeometrySchema`, `multiPolygonGeometrySchema`, `createFeatureCollectionParser`).
+- **Geodata utils** (`data/`) — `fetchFeatureCollection` (caches successful results in-memory by URL for the page's lifetime; `clearFeatureCollectionCache()` resets it, mainly for tests), `mergeFeatureCollections`, and the Zod schemas in `geoJsonSchemas.ts` (`featureCollectionSchema` — including `GeometryCollection` — `polygonGeometrySchema`, `multiPolygonGeometrySchema`, `createFeatureCollectionParser`).
 
 Every export is JSDoc-documented (TSDoc-compatible).
 

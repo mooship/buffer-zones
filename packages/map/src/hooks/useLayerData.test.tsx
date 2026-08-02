@@ -1,5 +1,5 @@
 import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
-import type { DomainConfig } from "@stratum/core";
+import { clearFeatureCollectionCache, type DomainConfig } from "@stratum/core";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DomainProvider } from "../context/DomainContext";
@@ -25,6 +25,7 @@ describe("useLayerData", () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    clearFeatureCollectionCache();
   });
 
   it("fetches layers when mounted", async () => {
