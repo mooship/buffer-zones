@@ -28,6 +28,8 @@ vi.mock("react-leaflet", () => ({
     on: vi.fn(),
     off: vi.fn(),
   }),
+  useMapEvents: () => ({}),
+  Popup: () => null,
 }));
 
 vi.mock("@stratum/core", async (importOriginal) => {

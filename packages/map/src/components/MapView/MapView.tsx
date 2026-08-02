@@ -39,6 +39,7 @@ import { TOWNSHIP_OUTLINE } from "../../constants/mapStyles";
 import { useDomain } from "../../context/DomainContext";
 import type { LocationSearchResult } from "../../data/locationSearch";
 import { useLayerData } from "../../hooks/useLayerData";
+import { ClickToLocatePopup } from "./ClickToLocatePopup";
 import styles from "./MapView.module.css";
 import { VectorBasemapLayer } from "./VectorBasemapLayer";
 
@@ -69,6 +70,11 @@ interface MapViewProps<
   renderFeaturePopup?: (properties: TProperties) => ReactNode;
   /** Called with the ids of overlay layers whose data failed to load, whenever that set changes. */
   onLayerDataError?: (failedLayerIds: string[]) => void;
+  /**
+   * When `true`, clicking the map background reverse-geocodes that point and
+   * shows the result in a popup. Defaults to `false`.
+   */
+  locateOnClick?: boolean;
 }
 
 const TOWNSHIP_PANE = "townships";
@@ -461,6 +467,7 @@ function MapViewComponent<
   onFeatureSelect,
   renderFeaturePopup,
   onLayerDataError,
+  locateOnClick = false,
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
   const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
@@ -713,6 +720,7 @@ function MapViewComponent<
         <AreaLabelVisibility />
         <ResponsiveMapBounds bounds={bounds} />
         <ZoomStateWatcher onZoomChange={setMapZoom} />
+        {locateOnClick ? <ClickToLocatePopup /> : null}
       </MapContainer>
     </section>
   );

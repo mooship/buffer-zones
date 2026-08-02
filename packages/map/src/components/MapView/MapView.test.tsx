@@ -1,5 +1,11 @@
 import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { forwardRef, type ReactNode, useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -7,6 +13,7 @@ const mapMocks = vi.hoisted(() => ({
   fitBounds: vi.fn(),
   invalidateSize: vi.fn(),
   tileErrorHandler: null as null | (() => void),
+  mapClickHandler: null as null | ((event: unknown) => void),
   featureLayers: [] as Array<{
     feature: { properties?: { id?: string } | null };
     bindPopup: ReturnType<typeof vi.fn>;
@@ -16,6 +23,10 @@ const mapMocks = vi.hoisted(() => ({
     on: (eventName: string, handler: (...args: unknown[]) => void) => void;
     __handlers: Record<string, (...args: unknown[]) => void>;
   }>,
+}));
+
+const geocodeMocks = vi.hoisted(() => ({
+  fetchReverseGeocodeResult: vi.fn(),
 }));
 
 const popupMocks = vi.hoisted(() => ({
@@ -135,9 +146,20 @@ vi.mock("react-leaflet", () => ({
     on: vi.fn(),
     off: vi.fn(),
   }),
+  useMapEvents: (handlers: { click?: (event: unknown) => void }) => {
+    mapMocks.mapClickHandler = handlers.click ?? null;
+    return {};
+  },
+  Popup: ({ children }: { children: ReactNode }) => (
+    <div data-testid="click-locate-popup">{children}</div>
+  ),
   Pane: () => null,
   ZoomControl: () => <div data-testid="zoom-control" />,
   ScaleControl: () => <div data-testid="scale-control" />,
+}));
+
+vi.mock("../../data/locationSearch", () => ({
+  fetchReverseGeocodeResult: geocodeMocks.fetchReverseGeocodeResult,
 }));
 
 import { setThemePreference } from "@stratum/react";
@@ -184,8 +206,10 @@ describe("MapView", () => {
     mapMocks.fitBounds.mockReset();
     mapMocks.invalidateSize.mockReset();
     mapMocks.tileErrorHandler = null;
+    mapMocks.mapClickHandler = null;
     mapMocks.featureLayers = [];
     popupMocks.renderToStaticMarkup.mockClear();
+    geocodeMocks.fetchReverseGeocodeResult.mockReset();
     vi.unstubAllGlobals();
     vi.useRealTimers();
     setThemePreference("system");
@@ -715,6 +739,52 @@ describe("MapView", () => {
         [-25.3, 28.75],
       ],
       { padding: [24, 24] },
+    );
+  });
+
+  it("does not reverse-geocode background clicks when locateOnClick is not set", () => {
+    render(
+      withDomain(
+        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+      ),
+    );
+
+    expect(screen.queryByTestId("click-locate-popup")).not.toBeInTheDocument();
+    expect(mapMocks.mapClickHandler).toBeNull();
+  });
+
+  it("reverse-geocodes a background click and shows the result when locateOnClick is set", async () => {
+    geocodeMocks.fetchReverseGeocodeResult.mockResolvedValue({
+      id: "1",
+      label: "Braamfontein, Johannesburg",
+      latitude: -26.19,
+      longitude: 28.03,
+    });
+
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={[]}
+          locateOnClick
+        />,
+      ),
+    );
+
+    act(() => {
+      mapMocks.mapClickHandler?.({ latlng: { lat: -26.19, lng: 28.03 } });
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("click-locate-popup")).toHaveTextContent(
+        "Braamfontein, Johannesburg",
+      );
+    });
+    expect(geocodeMocks.fetchReverseGeocodeResult).toHaveBeenCalledWith(
+      -26.19,
+      28.03,
+      expect.any(AbortSignal),
     );
   });
 });
