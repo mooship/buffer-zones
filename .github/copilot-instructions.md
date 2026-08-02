@@ -12,7 +12,7 @@ Stratum is a public-interest geospatial layer platform, built as an SSR web app 
 npm install
 npm run test        # vitest across the npm workspaces under packages/*
 npm run test:coverage # vitest run --coverage, same scope
-npm run typecheck   # shared package typecheck + web build (which also typechecks @stratum/core, imported as TS source) + data-pipeline typecheck
+npm run typecheck   # shared package typecheck (which transitively typechecks @stratum/core via genericLayer.ts's re-export) + web build + data-pipeline typecheck
 npm run build       # build all workspaces
 npm run lint        # biome check .
 npm run format      # biome format --write .
