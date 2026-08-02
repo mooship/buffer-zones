@@ -7,6 +7,10 @@ const searchMocks = vi.hoisted(() => ({
 
 vi.mock("../../data/locationSearch", () => ({
   fetchLocationSearchResults: searchMocks.fetchLocationSearchResults,
+  nominatimGeocoderProvider: {
+    search: searchMocks.fetchLocationSearchResults,
+    reverse: vi.fn(),
+  },
 }));
 
 import { LocationSearchControl } from "./LocationSearchControl";
@@ -97,5 +101,35 @@ describe("LocationSearchControl", () => {
         id: "1",
       }),
     );
+  });
+
+  it("uses a custom provider instead of the default Nominatim one when given", async () => {
+    const customSearch = vi.fn().mockResolvedValue([
+      {
+        id: "custom-1",
+        label: "Custom result",
+        latitude: -26.2,
+        longitude: 28.0,
+      },
+    ]);
+
+    render(
+      <LocationSearchControl
+        onLocationSelect={vi.fn()}
+        provider={{ search: customSearch, reverse: vi.fn() }}
+      />,
+    );
+
+    fireEvent.change(screen.getByTestId("location-search-input"), {
+      target: { value: "Somewhere" },
+    });
+
+    await waitFor(() => {
+      expect(customSearch).toHaveBeenCalledWith(
+        "Somewhere",
+        expect.any(AbortSignal),
+      );
+    });
+    expect(searchMocks.fetchLocationSearchResults).not.toHaveBeenCalled();
   });
 });

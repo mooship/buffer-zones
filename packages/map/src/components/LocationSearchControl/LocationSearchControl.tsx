@@ -6,8 +6,9 @@ import {
   useState,
 } from "react";
 import {
-  fetchLocationSearchResults,
+  type GeocoderProvider,
   type LocationSearchResult,
+  nominatimGeocoderProvider,
 } from "../../data/locationSearch";
 import styles from "./LocationSearchControl.module.css";
 
@@ -15,6 +16,8 @@ interface LocationSearchControlProps {
   onLocationSelect: (location: LocationSearchResult) => void;
   /** Input placeholder text. Defaults to `"Search town, suburb or station"`. */
   placeholder?: string;
+  /** Geocoder backend used for search. Defaults to OpenStreetMap Nominatim. */
+  provider?: GeocoderProvider;
 }
 
 const MIN_SEARCH_QUERY_LENGTH = 2;
@@ -29,6 +32,7 @@ const DEFAULT_PLACEHOLDER = "Search town, suburb or station";
 export function LocationSearchControl({
   onLocationSelect,
   placeholder = DEFAULT_PLACEHOLDER,
+  provider = nominatimGeocoderProvider,
 }: LocationSearchControlProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<LocationSearchResult[]>([]);
@@ -43,6 +47,7 @@ export function LocationSearchControl({
     };
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: provider intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
   useEffect(() => {
     const trimmedQuery = query.trim();
     if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
@@ -64,7 +69,7 @@ export function LocationSearchControl({
       setActiveResultIndex(-1);
 
       try {
-        const nextResults = await fetchLocationSearchResults(
+        const nextResults = await provider.search(
           trimmedQuery,
           controller.signal,
         );

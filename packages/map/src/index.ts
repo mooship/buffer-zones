@@ -36,6 +36,14 @@ export {
 export { TOWNSHIP_OUTLINE } from "./constants/mapStyles";
 export type { DomainRegistry } from "./context/DomainContext";
 export { DomainProvider, useDomain } from "./context/DomainContext";
-export type { LocationSearchResult } from "./data/locationSearch";
+export type {
+  GeocoderProvider,
+  LocationSearchResult,
+} from "./data/locationSearch";
+export {
+  fetchLocationSearchResults,
+  fetchReverseGeocodeResult,
+  nominatimGeocoderProvider,
+} from "./data/locationSearch";
 export type { LayerDataMap, LayerDataResult } from "./hooks/useLayerData";
 export { useLayerData } from "./hooks/useLayerData";
