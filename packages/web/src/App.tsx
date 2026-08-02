@@ -1,7 +1,9 @@
+import { DomainProvider } from "@stratum/map";
 import {
   GAUTENG_SPATIAL_LEGACY_DOMAIN,
   METROS,
   type TownshipFeature,
+  type TownshipProperties,
 } from "@stratum/shared";
 import clsx from "clsx";
 import type { Feature } from "geojson";
@@ -26,6 +28,7 @@ import { LocationSearchControl } from "./components/LocationSearchControl/Locati
 import { MobileLegend } from "./components/MobileLegend/MobileLegend";
 import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
+import { TownshipPopup } from "./components/TownshipPopup/TownshipPopup";
 import { DATA_SOURCES, REPOSITORY_URL } from "./constants/metadata";
 import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
 import type { LocationSearchResult } from "./data/locationSearch";
@@ -42,6 +45,11 @@ const MapView = lazy(async () => {
   const module = await import("./components/MapView/MapView");
   return { default: module.MapView };
 });
+
+const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
+  [-27.15, 27.1],
+  [-25.3, 28.75],
+];
 
 const PANEL_VIEWS = ["story", "places", "layers"] as const;
 const MOBILE_BREAKPOINT_PX = 768;
@@ -346,218 +354,227 @@ export function App() {
   }
 
   return (
-    <div
-      className={styles.app}
-      data-panel-open={panelOpen ? "true" : "false"}
-      data-panel-size={mobilePanelExpanded ? "full" : "medium"}
-      data-panel-dragging={mobileSheetDragging ? "true" : "false"}
-      data-panel-drag-direction={mobileSheetDragDirection}
-    >
-      <a className={styles.skipLink} href="#map-information">
-        Skip to map information
-      </a>
-
-      <main id="map-information" tabIndex={-1}>
-        {hydrated ? (
-          <Suspense
-            fallback={
-              <output className={styles.mapLoading}>Loading map</output>
-            }
-          >
-            <MapView
-              townships={townships}
-              townshipAreas={townshipAreas}
-              visibleLayerIds={visibleLayerIds}
-              basemap={basemap}
-              selectedFeatureId={selectedFeatureId}
-              focusLocationTarget={focusLocationTarget}
-              onFeatureSelect={setSelectedFeatureId}
-            />
-          </Suspense>
-        ) : (
-          <output className={styles.mapLoading}>Loading map</output>
-        )}
-        {dataError ? (
-          <div
-            className={styles.dataError}
-            role="alert"
-            data-testid="data-load-error"
-            data-e2e="data-load-error"
-          >
-            <p>Map data could not be loaded.</p>
-            <button
-              type="button"
-              data-testid="retry-data-load"
-              data-e2e="retry-data-load"
-              onClick={() => setLoadAttempt((value) => value + 1)}
-            >
-              Retry
-            </button>
-          </div>
-        ) : null}
-      </main>
-
-      <div className={clsx(styles.locationSearchControl, styles.glassPanel)}>
-        <LocationSearchControl
-          onLocationSelect={(location) => {
-            setSelectedFeatureId(null);
-            setFocusLocationTarget({ token: Date.now(), location });
-          }}
-        />
-      </div>
-
-      <ControlButton
-        ref={panelTriggerRef}
-        className={styles.panelTrigger}
-        shape="pill"
-        data-testid="panel-toggle"
-        data-e2e="panel-toggle"
-        aria-expanded={panelOpen}
-        aria-controls="map-controls"
-        onClick={handlePanelToggle}
-      >
-        {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
-        <span className={styles.panelTriggerLabel}>
-          {panelOpen ? "Close" : "Explore"}
-        </span>
-      </ControlButton>
-
-      {isDesktopViewport ? (
-        <DesktopLegend visibleLayerIds={visibleLayerIds} />
-      ) : (
-        <MobileLegend
-          visibleLayerIds={visibleLayerIds}
-          suppressed={false}
-          panelOpen={panelOpen}
-          panelExpanded={mobilePanelExpanded}
-        />
-      )}
-
-      <aside
-        id="map-controls"
-        className={clsx(styles.panel, styles.glassPanel)}
-        data-testid="panel-container"
-        data-e2e="panel-container"
+    <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
+      <div
+        className={styles.app}
+        data-panel-open={panelOpen ? "true" : "false"}
         data-panel-size={mobilePanelExpanded ? "full" : "medium"}
         data-panel-dragging={mobileSheetDragging ? "true" : "false"}
         data-panel-drag-direction={mobileSheetDragDirection}
-        style={mobilePanelDragStyle}
-        hidden={!panelOpen}
       >
-        <button
-          type="button"
-          className={styles.sheetHandleButton}
-          data-testid="panel-sheet-handle"
-          data-e2e="panel-sheet-handle"
-          data-dragging={mobileSheetDragging ? "true" : "false"}
-          data-drag-direction={mobileSheetDragDirection}
-          aria-pressed={mobilePanelExpanded}
-          aria-label={
-            mobilePanelExpanded ? "Reduce panel height" : "Expand panel height"
-          }
-          onPointerDown={handleSheetHandlePointerDown}
-          onClick={handleSheetHeightToggle}
-        >
-          <span className={styles.sheetHandle} aria-hidden="true" />
-        </button>
-        <div
-          className={styles.panelTabs}
-          role="tablist"
-          aria-label="Map panel"
-          data-testid="panel-tablist"
-          data-e2e="panel-tablist"
-        >
-          {PANEL_VIEWS.map((view, index) => (
-            <button
-              key={view}
-              type="button"
-              data-testid={`panel-tab-${view}`}
-              data-e2e={`panel-tab-${view}`}
-              ref={(element) => {
-                tabRefs.current[index] = element;
-              }}
-              id={`panel-tab-${view}`}
-              role="tab"
-              tabIndex={panelView === view ? 0 : -1}
-              aria-selected={panelView === view}
-              aria-controls={`panel-view-${view}`}
-              className={styles.panelTab}
-              onClick={() => setPanelView(view)}
-              onKeyDown={handleTabKeyDown}
-            >
-              {PANEL_LABELS[view]}
-            </button>
-          ))}
-        </div>
+        <a className={styles.skipLink} href="#map-information">
+          Skip to map information
+        </a>
 
-        <div
-          id={`panel-view-${panelView}`}
-          role="tabpanel"
-          aria-labelledby={`panel-tab-${panelView}`}
-          className={styles.panelViewport}
-          data-view={panelView}
-        >
-          {panelView === "story" ? (
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>
-                {GAUTENG_SPATIAL_LEGACY_DOMAIN.story.title}
-              </h2>
-              <EvidenceSummary
-                jobCenterCount={NATIONAL_JOB_CENTER_COUNT}
-                contextText={GAUTENG_SPATIAL_LEGACY_DOMAIN.story.body}
-              />
-              <details className={styles.panelSources}>
-                <summary>Data sources and method</summary>
-                <div className={styles.panelSourceList}>
-                  {DATA_SOURCES.map((source) => (
-                    <span key={source}>{source}</span>
-                  ))}
-                  <a
-                    className={styles.panelSourceLink}
-                    href={REPOSITORY_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Source code: mooship/stratum
-                  </a>
-                </div>
-              </details>
-            </section>
-          ) : null}
-          {panelView === "places" ? (
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Included areas</h2>
-              <TownshipBrowser
+        <main id="map-information" tabIndex={-1}>
+          {hydrated ? (
+            <Suspense
+              fallback={
+                <output className={styles.mapLoading}>Loading map</output>
+              }
+            >
+              <MapView
+                bounds={GAUTENG_BOUNDS}
                 townships={townships}
-                selectedTownshipId={selectedFeatureId}
-                onSelect={(township) =>
-                  setSelectedFeatureId(township.properties.id)
-                }
+                townshipAreas={townshipAreas}
+                visibleLayerIds={visibleLayerIds}
+                basemap={basemap}
+                selectedFeatureId={selectedFeatureId}
+                focusLocationTarget={focusLocationTarget}
+                onFeatureSelect={setSelectedFeatureId}
+                renderFeaturePopup={(props) => (
+                  <TownshipPopup properties={props as TownshipProperties} />
+                )}
               />
-            </section>
-          ) : null}
-          {panelView === "layers" ? (
-            <div className={styles.panelContent}>
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Layers</h2>
-                <LayerToggles
-                  visibleLayerIds={visibleLayerIds}
-                  onToggle={toggleLayer}
-                />
-              </section>
+            </Suspense>
+          ) : (
+            <output className={styles.mapLoading}>Loading map</output>
+          )}
+          {dataError ? (
+            <div
+              className={styles.dataError}
+              role="alert"
+              data-testid="data-load-error"
+              data-e2e="data-load-error"
+            >
+              <p>Map data could not be loaded.</p>
+              <button
+                type="button"
+                data-testid="retry-data-load"
+                data-e2e="retry-data-load"
+                onClick={() => setLoadAttempt((value) => value + 1)}
+              >
+                Retry
+              </button>
             </div>
           ) : null}
-        </div>
-      </aside>
+        </main>
 
-      <div className={styles.settingsControl}>
-        <SettingsMenu
-          basemap={basemap}
-          onBasemapChange={setBasemap}
-          themePreference={themePreference}
-          onThemePreferenceChange={setThemePreference}
-        />
+        <div className={clsx(styles.locationSearchControl, styles.glassPanel)}>
+          <LocationSearchControl
+            placeholder="Search town, suburb or station"
+            onLocationSelect={(location) => {
+              setSelectedFeatureId(null);
+              setFocusLocationTarget({ token: Date.now(), location });
+            }}
+          />
+        </div>
+
+        <ControlButton
+          ref={panelTriggerRef}
+          className={styles.panelTrigger}
+          shape="pill"
+          data-testid="panel-toggle"
+          data-e2e="panel-toggle"
+          aria-expanded={panelOpen}
+          aria-controls="map-controls"
+          onClick={handlePanelToggle}
+        >
+          {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
+          <span className={styles.panelTriggerLabel}>
+            {panelOpen ? "Close" : "Explore"}
+          </span>
+        </ControlButton>
+
+        {isDesktopViewport ? (
+          <DesktopLegend visibleLayerIds={visibleLayerIds} />
+        ) : (
+          <MobileLegend
+            visibleLayerIds={visibleLayerIds}
+            suppressed={false}
+            panelOpen={panelOpen}
+            panelExpanded={mobilePanelExpanded}
+          />
+        )}
+
+        <aside
+          id="map-controls"
+          className={clsx(styles.panel, styles.glassPanel)}
+          data-testid="panel-container"
+          data-e2e="panel-container"
+          data-panel-size={mobilePanelExpanded ? "full" : "medium"}
+          data-panel-dragging={mobileSheetDragging ? "true" : "false"}
+          data-panel-drag-direction={mobileSheetDragDirection}
+          style={mobilePanelDragStyle}
+          hidden={!panelOpen}
+        >
+          <button
+            type="button"
+            className={styles.sheetHandleButton}
+            data-testid="panel-sheet-handle"
+            data-e2e="panel-sheet-handle"
+            data-dragging={mobileSheetDragging ? "true" : "false"}
+            data-drag-direction={mobileSheetDragDirection}
+            aria-pressed={mobilePanelExpanded}
+            aria-label={
+              mobilePanelExpanded
+                ? "Reduce panel height"
+                : "Expand panel height"
+            }
+            onPointerDown={handleSheetHandlePointerDown}
+            onClick={handleSheetHeightToggle}
+          >
+            <span className={styles.sheetHandle} aria-hidden="true" />
+          </button>
+          <div
+            className={styles.panelTabs}
+            role="tablist"
+            aria-label="Map panel"
+            data-testid="panel-tablist"
+            data-e2e="panel-tablist"
+          >
+            {PANEL_VIEWS.map((view, index) => (
+              <button
+                key={view}
+                type="button"
+                data-testid={`panel-tab-${view}`}
+                data-e2e={`panel-tab-${view}`}
+                ref={(element) => {
+                  tabRefs.current[index] = element;
+                }}
+                id={`panel-tab-${view}`}
+                role="tab"
+                tabIndex={panelView === view ? 0 : -1}
+                aria-selected={panelView === view}
+                aria-controls={`panel-view-${view}`}
+                className={styles.panelTab}
+                onClick={() => setPanelView(view)}
+                onKeyDown={handleTabKeyDown}
+              >
+                {PANEL_LABELS[view]}
+              </button>
+            ))}
+          </div>
+
+          <div
+            id={`panel-view-${panelView}`}
+            role="tabpanel"
+            aria-labelledby={`panel-tab-${panelView}`}
+            className={styles.panelViewport}
+            data-view={panelView}
+          >
+            {panelView === "story" ? (
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>
+                  {GAUTENG_SPATIAL_LEGACY_DOMAIN.story.title}
+                </h2>
+                <EvidenceSummary
+                  jobCenterCount={NATIONAL_JOB_CENTER_COUNT}
+                  contextText={GAUTENG_SPATIAL_LEGACY_DOMAIN.story.body}
+                />
+                <details className={styles.panelSources}>
+                  <summary>Data sources and method</summary>
+                  <div className={styles.panelSourceList}>
+                    {DATA_SOURCES.map((source) => (
+                      <span key={source}>{source}</span>
+                    ))}
+                    <a
+                      className={styles.panelSourceLink}
+                      href={REPOSITORY_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Source code: mooship/stratum
+                    </a>
+                  </div>
+                </details>
+              </section>
+            ) : null}
+            {panelView === "places" ? (
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>Included areas</h2>
+                <TownshipBrowser
+                  townships={townships}
+                  selectedTownshipId={selectedFeatureId}
+                  onSelect={(township) =>
+                    setSelectedFeatureId(township.properties.id)
+                  }
+                />
+              </section>
+            ) : null}
+            {panelView === "layers" ? (
+              <div className={styles.panelContent}>
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Layers</h2>
+                  <LayerToggles
+                    visibleLayerIds={visibleLayerIds}
+                    onToggle={toggleLayer}
+                  />
+                </section>
+              </div>
+            ) : null}
+          </div>
+        </aside>
+
+        <div className={styles.settingsControl}>
+          <SettingsMenu
+            basemap={basemap}
+            onBasemapChange={setBasemap}
+            themePreference={themePreference}
+            onThemePreferenceChange={setThemePreference}
+          />
+        </div>
       </div>
-    </div>
+    </DomainProvider>
   );
 }

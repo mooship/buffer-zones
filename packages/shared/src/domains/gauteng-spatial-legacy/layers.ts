@@ -85,6 +85,7 @@ export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
     geometryKind: "line",
     defaultVisible: false,
     available: true,
+    hasPointGeometry: true,
     style: {
       kind: "line",
       color: "#E69F00",
@@ -113,6 +114,7 @@ export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
     geometryKind: "line",
     defaultVisible: false,
     available: true,
+    hasPointGeometry: true,
     style: {
       kind: "line",
       color: "#D55E00",

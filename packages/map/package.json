@@ -1,0 +1,36 @@
+{
+  "name": "@stratum/map",
+  "version": "1.0.0",
+  "description": "Generic map rendering and UI components for Stratum",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stratum/core": "file:../core",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.27.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-leaflet": "^5.0.0",
+    "usehooks-ts": "^3.1.1"
+  },
+  "devDependencies": {
+    "@stratum/shared": "file:../shared",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/leaflet": "^1.9.14",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "happy-dom": "^20.11.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
+  }
+}

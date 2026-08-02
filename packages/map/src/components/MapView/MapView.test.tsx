@@ -1,3 +1,4 @@
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { forwardRef, type ReactNode, useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -139,8 +140,24 @@ vi.mock("react-leaflet", () => ({
   ScaleControl: () => <div data-testid="scale-control" />,
 }));
 
+import { DomainProvider } from "../../context/DomainContext";
 import { setThemePreference } from "../../hooks/useThemePreference";
 import { MapView } from "./MapView";
+
+const bounds: [[number, number], [number, number]] = [
+  [-27.15, 27.1],
+  [-25.3, 28.75],
+];
+
+function withDomain(ui: ReactNode) {
+  return (
+    <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>{ui}</DomainProvider>
+  );
+}
+
+function testRenderFeaturePopup(properties: Record<string, unknown>) {
+  return <div>{String(properties.name)}</div>;
+}
 
 const townships = [
   {
@@ -174,8 +191,55 @@ describe("MapView", () => {
     setThemePreference("system");
   });
 
+  it("passes bounds to MapContainer", () => {
+    render(
+      withDomain(
+        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+      ),
+    );
+    expect(screen.getByTestId("map-container")).toHaveAttribute(
+      "data-has-bounds",
+      "true",
+    );
+  });
+
+  it("calls renderFeaturePopup with feature properties when a feature is clicked", () => {
+    vi.useFakeTimers();
+    const renderFeaturePopup = vi.fn().mockReturnValue(<div>Custom popup</div>);
+    const onFeatureSelect = vi.fn();
+
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+          onFeatureSelect={onFeatureSelect}
+          renderFeaturePopup={renderFeaturePopup}
+        />,
+      ),
+    );
+
+    const firstLayer = mapMocks.featureLayers[0];
+    expect(firstLayer).toBeDefined();
+    firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
+    vi.advanceTimersByTime(220);
+
+    expect(renderFeaturePopup).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "A", name: "Mamelodi" }),
+    );
+  });
+
   it("renders a tile layer and one GeoJSON layer per visible registry entry", () => {
-    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
+    );
 
     expect(screen.getByTestId("map-container")).toBeInTheDocument();
     expect(screen.getByTestId("map-container")).toHaveAttribute(
@@ -201,7 +265,15 @@ describe("MapView", () => {
       value: 2,
     });
 
-    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
+    );
 
     expect(screen.getByTestId("tile-layer")).toHaveAttribute(
       "data-retina",
@@ -214,11 +286,15 @@ describe("MapView", () => {
     const onFeatureSelect = vi.fn();
 
     render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        onFeatureSelect={onFeatureSelect}
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+          onFeatureSelect={onFeatureSelect}
+          renderFeaturePopup={testRenderFeaturePopup}
+        />,
+      ),
     );
 
     expect(popupMocks.renderToStaticMarkup).not.toHaveBeenCalled();
@@ -241,11 +317,15 @@ describe("MapView", () => {
     const onFeatureSelect = vi.fn();
 
     render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        onFeatureSelect={onFeatureSelect}
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+          onFeatureSelect={onFeatureSelect}
+          renderFeaturePopup={testRenderFeaturePopup}
+        />,
+      ),
     );
 
     const firstLayer = mapMocks.featureLayers[0];
@@ -262,7 +342,13 @@ describe("MapView", () => {
 
   it("removes township-layer reference when a feature layer is removed", () => {
     const { rerender } = render(
-      <MapView townships={townships} visibleLayerIds={["townships"]} />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
     );
 
     const firstLayer = mapMocks.featureLayers[0];
@@ -271,11 +357,14 @@ describe("MapView", () => {
     firstLayer?.__handlers.remove?.();
 
     rerender(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        selectedFeatureId="A"
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+          selectedFeatureId="A"
+        />,
+      ),
     );
 
     expect(firstLayer?.openPopup).not.toHaveBeenCalled();
@@ -286,11 +375,14 @@ describe("MapView", () => {
     const onFeatureSelect = vi.fn();
 
     render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        onFeatureSelect={onFeatureSelect}
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+          onFeatureSelect={onFeatureSelect}
+        />,
+      ),
     );
 
     const firstLayer = mapMocks.featureLayers[0];
@@ -307,11 +399,15 @@ describe("MapView", () => {
 
   it("opens the selected township popup without scanning every layer", () => {
     render(
-      <MapView
-        townships={townships}
-        visibleLayerIds={["townships"]}
-        selectedFeatureId="A"
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+          selectedFeatureId="A"
+          renderFeaturePopup={testRenderFeaturePopup}
+        />,
+      ),
     );
 
     expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
@@ -320,25 +416,51 @@ describe("MapView", () => {
   });
 
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
-    render(<MapView townships={[]} visibleLayerIds={[]} />);
+    render(
+      withDomain(
+        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+      ),
+    );
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
   });
 
   it("waits for township data before mounting the choropleth", () => {
     const { rerender } = render(
-      <MapView townships={[]} visibleLayerIds={["townships"]} />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
     );
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
 
-    rerender(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+    rerender(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
+    );
 
     expect(screen.getByTestId("geojson-layer")).toHaveTextContent("1 features");
   });
 
   it("does not render a layer that has no data available yet", () => {
-    render(<MapView townships={townships} visibleLayerIds={["myciti"]} />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["myciti"]}
+        />,
+      ),
+    );
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
   });
@@ -355,7 +477,15 @@ describe("MapView", () => {
       }),
     );
 
-    render(<MapView townships={[]} visibleLayerIds={["rapid-rail"]} />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={["rapid-rail"]}
+        />,
+      ),
+    );
 
     expect(await screen.findByText("1 features")).toHaveAttribute(
       "data-pane",
@@ -368,7 +498,15 @@ describe("MapView", () => {
   });
 
   it("keeps township polygons in the pane below transit overlays", () => {
-    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
+    );
 
     expect(screen.getByTestId("geojson-layer")).toHaveAttribute(
       "data-pane",
@@ -386,11 +524,14 @@ describe("MapView", () => {
     ] as never;
 
     render(
-      <MapView
-        townships={townships}
-        townshipAreas={townshipAreas}
-        visibleLayerIds={["townships"]}
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          townshipAreas={townshipAreas}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
     );
 
     expect(
@@ -410,11 +551,14 @@ describe("MapView", () => {
     ] as never;
 
     render(
-      <MapView
-        townships={townships}
-        townshipAreas={townshipAreas}
-        visibleLayerIds={["nearest-transit"]}
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          townshipAreas={townshipAreas}
+          visibleLayerIds={["nearest-transit"]}
+        />,
+      ),
     );
 
     expect(
@@ -426,26 +570,38 @@ describe("MapView", () => {
 
   it("fits to searched locations passed from the settings search", () => {
     render(
-      <MapView
-        townships={[]}
-        visibleLayerIds={[]}
-        focusLocationTarget={{
-          token: 1,
-          location: {
-            id: "loc-1",
-            label: "Soweto",
-            latitude: -26.267,
-            longitude: 27.854,
-          },
-        }}
-      />,
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={[]}
+          focusLocationTarget={{
+            token: 1,
+            location: {
+              id: "loc-1",
+              label: "Soweto",
+              latitude: -26.267,
+              longitude: 27.854,
+            },
+          }}
+        />,
+      ),
     );
 
     expect(mapMocks.fitBounds).toHaveBeenCalled();
   });
 
   it("switches tile source when the satellite basemap is selected", () => {
-    render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={[]}
+          basemap="satellite"
+        />,
+      ),
+    );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
   });
@@ -453,7 +609,11 @@ describe("MapView", () => {
   it("uses the dark street tile source when the OS prefers dark mode", () => {
     stubMatchMedia(true);
 
-    render(<MapView townships={[]} visibleLayerIds={[]} />);
+    render(
+      withDomain(
+        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+      ),
+    );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/dark_all/i);
   });
@@ -461,7 +621,11 @@ describe("MapView", () => {
   it("uses the light street tile source when the OS prefers light mode", () => {
     stubMatchMedia(false);
 
-    render(<MapView townships={[]} visibleLayerIds={[]} />);
+    render(
+      withDomain(
+        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+      ),
+    );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
   });
@@ -469,7 +633,11 @@ describe("MapView", () => {
   it("falls back to OpenStreetMap when the light street tiles error", () => {
     stubMatchMedia(false);
 
-    render(<MapView townships={[]} visibleLayerIds={[]} />);
+    render(
+      withDomain(
+        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+      ),
+    );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
     act(() => {
@@ -483,7 +651,11 @@ describe("MapView", () => {
   it("falls back from dark street tiles before using OpenStreetMap", () => {
     stubMatchMedia(true);
 
-    render(<MapView townships={[]} visibleLayerIds={[]} />);
+    render(
+      withDomain(
+        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+      ),
+    );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/dark_all/i);
     act(() => {
@@ -501,7 +673,16 @@ describe("MapView", () => {
   it("does not swap to a dark variant for satellite in dark mode", () => {
     stubMatchMedia(true);
 
-    render(<MapView townships={[]} visibleLayerIds={[]} basemap="satellite" />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={[]}
+          basemap="satellite"
+        />,
+      ),
+    );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
   });
@@ -514,7 +695,15 @@ describe("MapView", () => {
     vi.stubGlobal("cancelAnimationFrame", vi.fn());
 
     vi.stubGlobal("innerWidth", 1024);
-    render(<MapView townships={townships} visibleLayerIds={["townships"]} />);
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={townships}
+          visibleLayerIds={["townships"]}
+        />,
+      ),
+    );
 
     vi.stubGlobal("innerWidth", 390);
     fireEvent(window, new Event("resize"));
