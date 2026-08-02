@@ -47,9 +47,17 @@ describe("Legend", () => {
     expect(screen.getByText("Commuter Rail").closest("li")).toHaveTextContent(
       "line + stations",
     );
-    expect(
-      screen.getByText("Bus Rapid Transit").closest("li"),
-    ).toHaveTextContent("route only");
+    expect(screen.getByText("A Re Yeng").closest("li")).toHaveTextContent(
+      "route only",
+    );
+  });
+
+  it("renders one entry per operator for a line layer with a categorized color classification", () => {
+    render(withDomain(<Legend />));
+    expect(screen.getByText("A Re Yeng")).toBeInTheDocument();
+    expect(screen.getByText("Rea Vaya")).toBeInTheDocument();
+    expect(screen.getByText("Ekurhuleni IRPTN")).toBeInTheDocument();
+    expect(screen.queryByText("Bus Rapid Transit")).not.toBeInTheDocument();
   });
 
   it("in active mode, shows only visible layer sections", () => {
