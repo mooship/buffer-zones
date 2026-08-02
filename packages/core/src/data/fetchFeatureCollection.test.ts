@@ -114,6 +114,51 @@ describe("fetchFeatureCollection", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
+  it("evicts the least-recently-used entry once the cache exceeds its max size", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ type: "FeatureCollection", features: [] }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const urls = Array.from({ length: 51 }, (_, i) => `/data/lru-${i}.geojson`);
+    for (const url of urls) {
+      await fetchFeatureCollection(url);
+    }
+
+    fetchMock.mockClear();
+    await fetchFeatureCollection(urls[0] as string);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    fetchMock.mockClear();
+    await fetchFeatureCollection(urls[urls.length - 1] as string);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("protects a recently-read entry from eviction by marking it most-recently-used", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ type: "FeatureCollection", features: [] }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await fetchFeatureCollection("/data/protected.geojson");
+    for (let i = 0; i < 48; i++) {
+      await fetchFeatureCollection(`/data/fill-${i}.geojson`);
+    }
+    // Cache now holds 49 entries; "protected" is the least recently used.
+    await fetchFeatureCollection("/data/protected.geojson"); // cache hit, touches it
+    await fetchFeatureCollection("/data/fill-48.geojson"); // 50th entry, cache at max
+    await fetchFeatureCollection("/data/fill-49.geojson"); // 51st entry, evicts the LRU one
+
+    fetchMock.mockClear();
+    await fetchFeatureCollection("/data/protected.geojson");
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    await fetchFeatureCollection("/data/fill-0.geojson");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it("clearFeatureCollectionCache forces the next call to re-fetch", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,

@@ -2,7 +2,6 @@ import { Search } from "lucide-react";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import {
@@ -10,6 +9,7 @@ import {
   type LocationSearchResult,
   nominatimGeocoderProvider,
 } from "../../data/locationSearch";
+import { useAbortController } from "../../hooks/useAbortController";
 import styles from "./LocationSearchControl.module.css";
 
 interface LocationSearchControlProps {
@@ -39,13 +39,7 @@ export function LocationSearchControl({
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
-  const searchControllerRef = useRef<AbortController | null>(null);
-
-  useEffect(() => {
-    return () => {
-      searchControllerRef.current?.abort();
-    };
-  }, []);
+  const { next, abort } = useAbortController();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: provider intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
   useEffect(() => {
@@ -55,13 +49,11 @@ export function LocationSearchControl({
       setSearchError(null);
       setSearching(false);
       setActiveResultIndex(-1);
-      searchControllerRef.current?.abort();
+      abort();
       return;
     }
 
-    searchControllerRef.current?.abort();
-    const controller = new AbortController();
-    searchControllerRef.current = controller;
+    const signal = next();
 
     const debounceTimer = setTimeout(async () => {
       setSearching(true);
@@ -69,23 +61,20 @@ export function LocationSearchControl({
       setActiveResultIndex(-1);
 
       try {
-        const nextResults = await provider.search(
-          trimmedQuery,
-          controller.signal,
-        );
+        const nextResults = await provider.search(trimmedQuery, signal);
         setResults(nextResults);
 
         if (nextResults.length === 0) {
           setSearchError("No places matched that search.");
         }
       } catch {
-        if (controller.signal.aborted) {
+        if (signal.aborted) {
           return;
         }
         setResults([]);
         setSearchError("Search is unavailable right now. Please try again.");
       } finally {
-        if (searchControllerRef.current === controller) {
+        if (!signal.aborted) {
           setSearching(false);
         }
       }
@@ -93,9 +82,9 @@ export function LocationSearchControl({
 
     return () => {
       clearTimeout(debounceTimer);
-      controller.abort();
+      abort();
     };
-  }, [query]);
+  }, [query, next, abort]);
 
   function handleInputKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
     if (event.key === "ArrowDown") {

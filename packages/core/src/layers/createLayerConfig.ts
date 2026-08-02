@@ -1,6 +1,11 @@
 import type { Feature } from "geojson";
 import type { PathOptions } from "leaflet";
-import type { Classification, ColorBucket, Layer } from "../types/layer";
+import type {
+  ChoroplethLayerStyle,
+  Classification,
+  GraduatedClassification,
+  Layer,
+} from "../types/layer";
 import { resolveClassification } from "./classification";
 
 /** Leaflet path configuration for a single layer. */
@@ -11,16 +16,26 @@ export interface LeafletLayerConfig {
   ) => PathOptions & { noClip?: boolean; radius?: number };
 }
 
-function colorForValue(
-  value: number | null,
-  sortedBuckets: ColorBucket[],
+/**
+ * Adapts a choropleth style's `buckets` into a `GraduatedClassification`, so
+ * choropleth fill color resolves through the same `resolveClassification`
+ * machinery as line/point classifications, instead of a separate
+ * implementation of the same sort-by-max/find/fallback lookup.
+ */
+function bucketsToClassification(
+  style: ChoroplethLayerStyle,
   noDataColor: string,
-): string {
-  if (value === null) {
-    return noDataColor;
-  }
-  const bucket = sortedBuckets.find((b) => value <= b.max);
-  return bucket?.color ?? sortedBuckets.at(-1)?.color ?? noDataColor;
+): GraduatedClassification<string> {
+  return {
+    kind: "graduated",
+    propertyKey: style.propertyKey,
+    stops: style.buckets.map((bucket) => ({
+      max: bucket.max,
+      value: bucket.color,
+      label: bucket.label,
+    })),
+    fallback: noDataColor,
+  };
 }
 
 function resolveStyleValue<T>(
@@ -51,14 +66,15 @@ export function createLayerConfig(
 
   switch (style.kind) {
     case "choropleth": {
-      const sortedBuckets = [...style.buckets].sort((a, b) => a.max - b.max);
+      const classification = bucketsToClassification(style, noDataColor);
       return {
         styleFn: (feature) => {
-          const raw = feature?.properties?.[style.propertyKey];
-          const value = typeof raw === "number" ? raw : null;
           const emphasised = style.resolveEmphasis?.(feature?.properties);
           return {
-            fillColor: colorForValue(value, sortedBuckets, noDataColor),
+            fillColor: resolveClassification(
+              classification,
+              feature?.properties,
+            ),
             fillOpacity: emphasised
               ? (style.emphasisOpacity ?? style.baseOpacity)
               : style.baseOpacity,

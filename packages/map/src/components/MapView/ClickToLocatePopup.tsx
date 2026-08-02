@@ -1,7 +1,8 @@
 import type { LatLng } from "leaflet";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Popup, useMapEvents } from "react-leaflet";
 import { fetchReverseGeocodeResult } from "../../data/locationSearch";
+import { useAbortController } from "../../hooks/useAbortController";
 
 interface ClickState {
   latlng: LatLng;
@@ -18,35 +19,27 @@ interface ClickState {
  */
 export function ClickToLocatePopup() {
   const [state, setState] = useState<ClickState | null>(null);
-  const controllerRef = useRef<AbortController | null>(null);
+  const { next } = useAbortController();
 
   useMapEvents({
     click(event) {
-      controllerRef.current?.abort();
-      const controller = new AbortController();
-      controllerRef.current = controller;
       const { latlng } = event;
+      const signal = next();
 
       setState({ latlng, loading: true, label: null });
 
-      fetchReverseGeocodeResult(latlng.lat, latlng.lng, controller.signal)
+      fetchReverseGeocodeResult(latlng.lat, latlng.lng, signal)
         .then(
           (result) => result?.label ?? null,
           () => null,
         )
         .then((label) => {
-          if (!controller.signal.aborted) {
+          if (!signal.aborted) {
             setState({ latlng, loading: false, label });
           }
         });
     },
   });
-
-  useEffect(() => {
-    return () => {
-      controllerRef.current?.abort();
-    };
-  }, []);
 
   if (!state) {
     return null;
