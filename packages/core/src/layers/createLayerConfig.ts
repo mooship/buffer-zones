@@ -1,11 +1,14 @@
 import type { Feature } from "geojson";
 import type { PathOptions } from "leaflet";
 import type { ColorBucket, Layer } from "../types/layer";
+import { resolveClassification } from "./classification";
 
 /** Leaflet path configuration for a single layer. */
 export interface LeafletLayerConfig {
-  pathOptions?: PathOptions & { noClip?: boolean };
-  styleFn?: (feature?: Feature) => PathOptions;
+  pathOptions?: PathOptions & { noClip?: boolean; radius?: number };
+  styleFn?: (
+    feature?: Feature,
+  ) => PathOptions & { noClip?: boolean; radius?: number };
 }
 
 function colorForValue(
@@ -54,7 +57,29 @@ export function createLayerConfig(
         },
       };
     }
-    case "line":
+    case "line": {
+      if (style.colorClassification || style.weightClassification) {
+        return {
+          styleFn: (feature) => ({
+            color: style.colorClassification
+              ? resolveClassification(
+                  style.colorClassification,
+                  feature?.properties,
+                )
+              : style.color,
+            weight: style.weightClassification
+              ? resolveClassification(
+                  style.weightClassification,
+                  feature?.properties,
+                )
+              : style.weight,
+            opacity: 0.95,
+            noClip: true,
+            lineCap: "round",
+            lineJoin: "round",
+          }),
+        };
+      }
       return {
         pathOptions: {
           color: style.color,
@@ -65,7 +90,31 @@ export function createLayerConfig(
           lineJoin: "round",
         },
       };
-    case "point":
+    }
+    case "point": {
+      if (style.colorClassification || style.radiusClassification) {
+        return {
+          styleFn: (feature) => {
+            const color = style.colorClassification
+              ? resolveClassification(
+                  style.colorClassification,
+                  feature?.properties,
+                )
+              : style.color;
+            return {
+              color,
+              fillColor: color,
+              radius: style.radiusClassification
+                ? resolveClassification(
+                    style.radiusClassification,
+                    feature?.properties,
+                  )
+                : style.radius,
+            };
+          },
+        };
+      }
       return { pathOptions: { color: style.color, fillColor: style.color } };
+    }
   }
 }
