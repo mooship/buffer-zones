@@ -302,7 +302,7 @@ function AreaLabelVisibility() {
     return () => {
       map.off("zoomend", updateVisibility);
     };
-  }, [map, primaryLabelsClass, secondaryLabelsClass]);
+  }, [map]);
 
   return null;
 }

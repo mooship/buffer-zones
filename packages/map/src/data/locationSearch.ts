@@ -18,7 +18,7 @@ interface NominatimLocationResult {
 function parseBounds(
   boundingbox: NominatimLocationResult["boundingbox"],
 ): LocationSearchResult["bounds"] {
-  if (!boundingbox || boundingbox.length !== 4) {
+  if (boundingbox?.length !== 4) {
     return undefined;
   }
 

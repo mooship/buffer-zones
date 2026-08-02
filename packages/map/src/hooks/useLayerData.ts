@@ -19,6 +19,7 @@ export function useLayerData(layerIds: string[]): LayerDataMap {
   const requested = useRef(new Set<string>());
   const key = layerIds.join(",");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: getLayer is stable per DomainProvider instance
   useEffect(() => {
     let cancelled = false;
     const controllers = new Map<string, AbortController>();
@@ -66,7 +67,6 @@ export function useLayerData(layerIds: string[]): LayerDataMap {
         controller.abort();
       }
     };
-    // biome-ignore lint/correctness/useExhaustiveDependencies: getLayer is stable per DomainProvider instance
   }, [key]);
 
   return data;
