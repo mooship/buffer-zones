@@ -471,7 +471,7 @@ function MapViewComponent<
       .filter((layer) => layer.geometryKind !== "choropleth")
       .map((layer) => layer.id),
   );
-  // biome-ignore lint/correctness/useExhaustiveDependencies: onLayerDataError intentionally omitted -- callers pass an inline function each render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: onLayerDataError intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
   useEffect(() => {
     onLayerDataError?.(failedLayerIds);
   }, [failedLayerIds]);

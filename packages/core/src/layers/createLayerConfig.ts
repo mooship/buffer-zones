@@ -10,13 +10,12 @@ export interface LeafletLayerConfig {
 
 function colorForValue(
   value: number | null,
-  buckets: ColorBucket[],
+  sortedBuckets: ColorBucket[],
   noDataColor: string,
 ): string {
   if (value === null) {
     return noDataColor;
   }
-  const sortedBuckets = [...buckets].sort((a, b) => a.max - b.max);
   const bucket = sortedBuckets.find((b) => value <= b.max);
   return bucket?.color ?? sortedBuckets.at(-1)?.color ?? noDataColor;
 }
@@ -39,13 +38,14 @@ export function createLayerConfig(
 
   switch (style.kind) {
     case "choropleth": {
+      const sortedBuckets = [...style.buckets].sort((a, b) => a.max - b.max);
       return {
         styleFn: (feature) => {
           const raw = feature?.properties?.[style.propertyKey];
           const value = typeof raw === "number" ? raw : null;
           const emphasised = style.resolveEmphasis?.(feature?.properties);
           return {
-            fillColor: colorForValue(value, style.buckets, noDataColor),
+            fillColor: colorForValue(value, sortedBuckets, noDataColor),
             fillOpacity: emphasised
               ? (style.emphasisOpacity ?? style.baseOpacity)
               : style.baseOpacity,

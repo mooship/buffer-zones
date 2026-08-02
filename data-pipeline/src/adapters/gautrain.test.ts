@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   normalizeGautrainBusOverpass,
   normalizeGautrainOverpass,
@@ -93,10 +93,20 @@ describe("normalizeGautrainBusOverpass", () => {
 });
 
 describe("fetchOverpass", () => {
-  it("retries once on HTTP 504 then succeeds", async () => {
+  let freshFetchOverpass: typeof import("./gautrain").fetchOverpass;
+
+  beforeEach(async () => {
     vi.resetModules();
-    const { fetchOverpass: freshFetchOverpass } = await import("./gautrain");
+    ({ fetchOverpass: freshFetchOverpass } = await import("./gautrain"));
     vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it("retries once on HTTP 504 then succeeds", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({ ok: false, status: 504 })
@@ -112,15 +122,9 @@ describe("fetchOverpass", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(result).toEqual({ elements: [] });
-
-    vi.unstubAllGlobals();
-    vi.useRealTimers();
   });
 
   it("rotates to a different public Overpass mirror on repeated failures", async () => {
-    vi.resetModules();
-    const { fetchOverpass: freshFetchOverpass } = await import("./gautrain");
-    vi.useFakeTimers();
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({ ok: false, status: 429 })
@@ -136,8 +140,5 @@ describe("fetchOverpass", () => {
 
     const urlsCalled = fetchMock.mock.calls.map((call) => call[0] as string);
     expect(new Set(urlsCalled).size).toBe(2);
-
-    vi.unstubAllGlobals();
-    vi.useRealTimers();
   });
 });
