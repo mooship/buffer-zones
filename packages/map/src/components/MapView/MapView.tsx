@@ -98,17 +98,21 @@ type SelectableFeatureLayer = Layer & {
 };
 
 function getViewportWidth(): number {
+  /* v8 ignore start -- SSR guard: packages/web never renders MapView server-side (gated behind a client-only hydrated flag), but this is a reusable SDK component with no visibility into other consumers */
   if (typeof window === "undefined") {
     return MOBILE_BREAKPOINT_PX;
   }
+  /* v8 ignore stop */
 
   return window.innerWidth;
 }
 
 function getDevicePixelRatio(): number {
+  /* v8 ignore start -- SSR guard, see getViewportWidth above */
   if (typeof window === "undefined") {
     return 1;
   }
+  /* v8 ignore stop */
 
   return window.devicePixelRatio;
 }
@@ -291,6 +295,7 @@ function AreaLabelVisibility() {
   const secondaryLabelsClass = styles.showSecondaryLabels;
 
   useEffect(() => {
+    /* v8 ignore next 3 -- unreachable: CSS Modules always resolve these class names to real hashed strings in a real build */
     if (!primaryLabelsClass || !secondaryLabelsClass) {
       return;
     }
@@ -591,6 +596,7 @@ function MapViewComponent<
   const useRetinaTiles =
     getDevicePixelRatio() > 1.25 && getViewportWidth() > MOBILE_BREAKPOINT_PX;
 
+  /* v8 ignore next 3 -- unreachable: every registered raster basemap always yields at least one tile source */
   if (!isVectorBasemap && !tileSource) {
     return null;
   }
@@ -667,6 +673,7 @@ function MapViewComponent<
         ) : null}
         {visibleLayers.map((layer) => {
           const config = layerConfigById.get(layer.id);
+          /* v8 ignore next 3 -- unreachable: layerConfigById is built from this same visibleLayers list, so every layer.id here always has an entry */
           if (!config) {
             return null;
           }
