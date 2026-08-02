@@ -1,4 +1,5 @@
 import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
+import type { DomainConfig } from "@stratum/core";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DomainProvider } from "../../context/DomainContext";
@@ -58,6 +59,47 @@ describe("Legend", () => {
     expect(screen.getByText("Rea Vaya")).toBeInTheDocument();
     expect(screen.getByText("Ekurhuleni IRPTN")).toBeInTheDocument();
     expect(screen.queryByText("Bus Rapid Transit")).not.toBeInTheDocument();
+  });
+
+  it("renders one entry per stop for a line layer with a graduated color classification", () => {
+    const graduatedDomain: DomainConfig = {
+      layers: [
+        {
+          id: "traffic",
+          label: "Traffic",
+          dataSource: ["/data/example/traffic.geojson"],
+          geometryKind: "line",
+          defaultVisible: true,
+          available: true,
+          style: {
+            kind: "line",
+            color: "#8A93A5",
+            weight: 2,
+            legendLabel: "Traffic",
+            colorClassification: {
+              kind: "graduated",
+              propertyKey: "volume",
+              stops: [
+                { max: 100, value: "#7A9B6E", label: "Light" },
+                { max: 500, value: "#D6703F", label: "Heavy" },
+              ],
+              fallback: "#8A93A5",
+            },
+          },
+        },
+      ],
+      layerGroups: [],
+    };
+
+    render(
+      <DomainProvider domain={graduatedDomain}>
+        <Legend />
+      </DomainProvider>,
+    );
+
+    expect(screen.getByText("Light")).toBeInTheDocument();
+    expect(screen.getByText("Heavy")).toBeInTheDocument();
+    expect(screen.queryByText("Traffic")).not.toBeInTheDocument();
   });
 
   it("in active mode, shows only visible layer sections", () => {

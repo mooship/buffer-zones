@@ -492,24 +492,19 @@ function MapViewComponent<
   const resolvedDark =
     themePreference === "dark" || (themePreference === "system" && prefersDark);
   const basemapDefinition = getBasemapDefinition(basemap);
+  const isRasterBasemap = basemapDefinition.kind === "raster";
   const isVectorBasemap = basemapDefinition.kind === "vector";
   const useDarkTiles =
-    basemapDefinition.kind === "raster" &&
-    basemapDefinition.darkUrl !== undefined &&
-    resolvedDark;
+    isRasterBasemap && basemapDefinition.darkUrl !== undefined && resolvedDark;
   const tileSourceMode = `${basemap}-${useDarkTiles ? "dark" : "light"}`;
   const tileSources = useMemo(
-    () =>
-      basemapDefinition.kind === "raster"
-        ? getBasemapTileSources(basemap, useDarkTiles)
-        : [],
-    [basemapDefinition, basemap, useDarkTiles],
+    () => (isRasterBasemap ? getBasemapTileSources(basemap, useDarkTiles) : []),
+    [isRasterBasemap, basemap, useDarkTiles],
   );
-  const vectorStyleUrl =
-    basemapDefinition.kind === "vector"
-      ? (resolvedDark && basemapDefinition.darkStyleUrl) ||
-        basemapDefinition.styleUrl
-      : null;
+  const vectorStyleUrl = isVectorBasemap
+    ? (resolvedDark && basemapDefinition.darkStyleUrl) ||
+      basemapDefinition.styleUrl
+    : null;
   const [tileSourceState, setTileSourceState] = useState(() => ({
     mode: tileSourceMode,
     index: 0,
@@ -617,7 +612,7 @@ function MapViewComponent<
       >
         <ZoomControl position="bottomright" />
         <ScaleControl position="bottomleft" imperial={false} />
-        {basemapDefinition.kind === "raster" && tileSource ? (
+        {isRasterBasemap && tileSource ? (
           <TileLayer
             key={`${tileSourceMode}-${tileSource.url}`}
             url={tileSource.url}

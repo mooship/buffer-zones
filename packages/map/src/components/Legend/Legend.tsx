@@ -49,7 +49,7 @@ function getTransitEntries(
     const { style } = layer;
     const hasStations = layer.hasPointGeometry === true;
 
-    if (style.colorClassification?.kind === "categorized") {
+    if (style.colorClassification) {
       return style.colorClassification.stops.map((stop) => ({
         label: stop.label,
         color: stop.value,

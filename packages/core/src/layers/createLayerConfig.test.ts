@@ -1,7 +1,31 @@
-import type { Layer } from "@stratum/core";
+import type { Layer, LineLayerStyle, PointLayerStyle } from "@stratum/core";
 import type { Feature } from "geojson";
 import { describe, expect, it } from "vitest";
 import { createLayerConfig } from "./createLayerConfig";
+
+function lineLayer(style: LineLayerStyle): Layer {
+  return {
+    id: "corridors",
+    label: "Corridors",
+    dataSource: ["/data/gauteng/corridors.v1.geojson"],
+    geometryKind: "line",
+    defaultVisible: false,
+    available: true,
+    style,
+  };
+}
+
+function pointLayer(style: PointLayerStyle): Layer {
+  return {
+    id: "stations",
+    label: "Stations",
+    dataSource: ["/data/gauteng/stations.v1.geojson"],
+    geometryKind: "point",
+    defaultVisible: false,
+    available: true,
+    style,
+  };
+}
 
 function choroplethLayer(overrides: Partial<Layer> = {}): Layer {
   return {
@@ -194,34 +218,26 @@ describe("createLayerConfig", () => {
   });
 
   it("produces a styleFn for a line layer with a color classification", () => {
-    const layer: Layer = {
-      id: "corridors",
-      label: "Corridors",
-      dataSource: ["/data/gauteng/corridors.v1.geojson"],
-      geometryKind: "line",
-      defaultVisible: false,
-      available: true,
-      style: {
-        kind: "line",
-        color: "#8A93A5",
-        weight: 3,
-        legendLabel: "Corridors",
-        colorClassification: {
-          kind: "graduated",
-          propertyKey: "frequencyPerHour",
-          stops: [
-            { max: 2, value: "#D6703F", label: "Low frequency" },
-            { max: 6, value: "#C9A227", label: "Medium frequency" },
-            {
-              max: Number.POSITIVE_INFINITY,
-              value: "#7A9B6E",
-              label: "High frequency",
-            },
-          ],
-          fallback: "#8A93A5",
-        },
+    const layer = lineLayer({
+      kind: "line",
+      color: "#8A93A5",
+      weight: 3,
+      legendLabel: "Corridors",
+      colorClassification: {
+        kind: "graduated",
+        propertyKey: "frequencyPerHour",
+        stops: [
+          { max: 2, value: "#D6703F", label: "Low frequency" },
+          { max: 6, value: "#C9A227", label: "Medium frequency" },
+          {
+            max: Number.POSITIVE_INFINITY,
+            value: "#7A9B6E",
+            label: "High frequency",
+          },
+        ],
+        fallback: "#8A93A5",
       },
-    };
+    });
 
     const config = createLayerConfig(layer);
     const highFrequency = {
@@ -244,26 +260,18 @@ describe("createLayerConfig", () => {
   });
 
   it("produces a styleFn for a line layer with a weight classification", () => {
-    const layer: Layer = {
-      id: "corridors",
-      label: "Corridors",
-      dataSource: ["/data/gauteng/corridors.v1.geojson"],
-      geometryKind: "line",
-      defaultVisible: false,
-      available: true,
-      style: {
-        kind: "line",
-        color: "#8A93A5",
-        weight: 1,
-        legendLabel: "Corridors",
-        weightClassification: {
-          kind: "categorized",
-          propertyKey: "operator",
-          stops: [{ match: "gautrain", value: 5, label: "Gautrain" }],
-          fallback: 1,
-        },
+    const layer = lineLayer({
+      kind: "line",
+      color: "#8A93A5",
+      weight: 1,
+      legendLabel: "Corridors",
+      weightClassification: {
+        kind: "categorized",
+        propertyKey: "operator",
+        stops: [{ match: "gautrain", value: 5, label: "Gautrain" }],
+        fallback: 1,
       },
-    };
+    });
 
     const config = createLayerConfig(layer);
     const feature = {
@@ -279,32 +287,24 @@ describe("createLayerConfig", () => {
   });
 
   it("produces a styleFn for a point layer with color and radius classifications", () => {
-    const layer: Layer = {
-      id: "stations",
-      label: "Stations",
-      dataSource: ["/data/gauteng/stations.v1.geojson"],
-      geometryKind: "point",
-      defaultVisible: false,
-      available: true,
-      style: {
-        kind: "point",
-        color: "#A87FE0",
-        radius: 3,
-        legendLabel: "Stations",
-        colorClassification: {
-          kind: "categorized",
-          propertyKey: "operator",
-          stops: [{ match: "gautrain", value: "#E69F00", label: "Gautrain" }],
-          fallback: "#A87FE0",
-        },
-        radiusClassification: {
-          kind: "categorized",
-          propertyKey: "isInterchange",
-          stops: [{ match: "true", value: 6, label: "Interchange" }],
-          fallback: 3,
-        },
+    const layer = pointLayer({
+      kind: "point",
+      color: "#A87FE0",
+      radius: 3,
+      legendLabel: "Stations",
+      colorClassification: {
+        kind: "categorized",
+        propertyKey: "operator",
+        stops: [{ match: "gautrain", value: "#E69F00", label: "Gautrain" }],
+        fallback: "#A87FE0",
       },
-    };
+      radiusClassification: {
+        kind: "categorized",
+        propertyKey: "isInterchange",
+        stops: [{ match: "true", value: 6, label: "Interchange" }],
+        fallback: 3,
+      },
+    });
 
     const config = createLayerConfig(layer);
     const feature = {

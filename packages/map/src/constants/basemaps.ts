@@ -71,9 +71,15 @@ function defaultBasemaps(): Record<string, BasemapDefinition> {
   };
 }
 
-const registry = new Map<Basemap, BasemapDefinition>(
-  Object.entries(defaultBasemaps()),
-);
+function loadDefaultsInto(target: Map<Basemap, BasemapDefinition>): void {
+  target.clear();
+  for (const [id, definition] of Object.entries(defaultBasemaps())) {
+    target.set(id, definition);
+  }
+}
+
+const registry = new Map<Basemap, BasemapDefinition>();
+loadDefaultsInto(registry);
 
 /**
  * Registers (or overwrites) a basemap definition under `id`, making it
@@ -108,10 +114,7 @@ export function getBasemapDefinition(id: Basemap): BasemapDefinition {
  * @remarks For test isolation — the registry is a module-level singleton.
  */
 export function resetBasemapRegistry(): void {
-  registry.clear();
-  for (const [id, definition] of Object.entries(defaultBasemaps())) {
-    registry.set(id, definition);
-  }
+  loadDefaultsInto(registry);
 }
 
 /** A resolved raster tile source: URL template plus its attribution. */

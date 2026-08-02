@@ -30,17 +30,14 @@ export function ClickToLocatePopup() {
       setState({ latlng, loading: true, label: null });
 
       fetchReverseGeocodeResult(latlng.lat, latlng.lng, controller.signal)
-        .then((result) => {
-          if (controller.signal.aborted) {
-            return;
+        .then(
+          (result) => result?.label ?? null,
+          () => null,
+        )
+        .then((label) => {
+          if (!controller.signal.aborted) {
+            setState({ latlng, loading: false, label });
           }
-          setState({ latlng, loading: false, label: result?.label ?? null });
-        })
-        .catch(() => {
-          if (controller.signal.aborted) {
-            return;
-          }
-          setState({ latlng, loading: false, label: null });
         });
     },
   });

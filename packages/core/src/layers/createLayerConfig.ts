@@ -1,6 +1,6 @@
 import type { Feature } from "geojson";
 import type { PathOptions } from "leaflet";
-import type { ColorBucket, Layer } from "../types/layer";
+import type { Classification, ColorBucket, Layer } from "../types/layer";
 import { resolveClassification } from "./classification";
 
 /** Leaflet path configuration for a single layer. */
@@ -21,6 +21,16 @@ function colorForValue(
   }
   const bucket = sortedBuckets.find((b) => value <= b.max);
   return bucket?.color ?? sortedBuckets.at(-1)?.color ?? noDataColor;
+}
+
+function resolveStyleValue<T>(
+  classification: Classification<T> | undefined,
+  properties: Record<string, unknown> | null | undefined,
+  fallback: T,
+): T {
+  return classification
+    ? resolveClassification(classification, properties)
+    : fallback;
 }
 
 /**
@@ -61,18 +71,16 @@ export function createLayerConfig(
       if (style.colorClassification || style.weightClassification) {
         return {
           styleFn: (feature) => ({
-            color: style.colorClassification
-              ? resolveClassification(
-                  style.colorClassification,
-                  feature?.properties,
-                )
-              : style.color,
-            weight: style.weightClassification
-              ? resolveClassification(
-                  style.weightClassification,
-                  feature?.properties,
-                )
-              : style.weight,
+            color: resolveStyleValue(
+              style.colorClassification,
+              feature?.properties,
+              style.color,
+            ),
+            weight: resolveStyleValue(
+              style.weightClassification,
+              feature?.properties,
+              style.weight,
+            ),
             opacity: 0.95,
             noClip: true,
             lineCap: "round",
@@ -95,21 +103,19 @@ export function createLayerConfig(
       if (style.colorClassification || style.radiusClassification) {
         return {
           styleFn: (feature) => {
-            const color = style.colorClassification
-              ? resolveClassification(
-                  style.colorClassification,
-                  feature?.properties,
-                )
-              : style.color;
+            const color = resolveStyleValue(
+              style.colorClassification,
+              feature?.properties,
+              style.color,
+            );
             return {
               color,
               fillColor: color,
-              radius: style.radiusClassification
-                ? resolveClassification(
-                    style.radiusClassification,
-                    feature?.properties,
-                  )
-                : style.radius,
+              radius: resolveStyleValue(
+                style.radiusClassification,
+                feature?.properties,
+                style.radius,
+              ),
             };
           },
         };

@@ -15,11 +15,10 @@ export function BasemapToggle({ basemap, onChange }: BasemapToggleProps) {
   return (
     <SegmentedControl
       label="Basemap"
-      options={getRegisteredBasemapIds().map((id) => ({
-        id,
-        label: getBasemapDefinition(id).label,
-        ariaLabel: `${getBasemapDefinition(id).label} basemap`,
-      }))}
+      options={getRegisteredBasemapIds().map((id) => {
+        const { label } = getBasemapDefinition(id);
+        return { id, label, ariaLabel: `${label} basemap` };
+      })}
       value={basemap}
       onChange={onChange}
       testId="basemap"

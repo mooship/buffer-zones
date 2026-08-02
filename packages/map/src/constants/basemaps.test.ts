@@ -3,9 +3,18 @@ import {
   getBasemapDefinition,
   getBasemapTileSources,
   getRegisteredBasemapIds,
+  type RasterBasemapDefinition,
   registerBasemap,
   resetBasemapRegistry,
 } from "./basemaps";
+
+const CUSTOM_RASTER_BASEMAP: RasterBasemapDefinition = {
+  kind: "raster",
+  label: "Custom",
+  description: "A custom basemap.",
+  url: "https://example.com/{z}/{x}/{y}.png",
+  attribution: "Example",
+};
 
 describe("basemap registry", () => {
   afterEach(() => {
@@ -25,13 +34,7 @@ describe("basemap registry", () => {
   });
 
   it("registers a new basemap that becomes retrievable and listed", () => {
-    registerBasemap("custom", {
-      kind: "raster",
-      label: "Custom",
-      description: "A custom basemap.",
-      url: "https://example.com/{z}/{x}/{y}.png",
-      attribution: "Example",
-    });
+    registerBasemap("custom", CUSTOM_RASTER_BASEMAP);
 
     expect(getRegisteredBasemapIds()).toContain("custom");
     expect(getBasemapDefinition("custom")).toMatchObject({ label: "Custom" });
@@ -50,13 +53,7 @@ describe("basemap registry", () => {
   });
 
   it("resetBasemapRegistry restores the built-in defaults", () => {
-    registerBasemap("custom", {
-      kind: "raster",
-      label: "Custom",
-      description: "A custom basemap.",
-      url: "https://example.com/{z}/{x}/{y}.png",
-      attribution: "Example",
-    });
+    registerBasemap("custom", CUSTOM_RASTER_BASEMAP);
 
     resetBasemapRegistry();
 
@@ -97,13 +94,7 @@ describe("getBasemapTileSources", () => {
   });
 
   it("returns a single source for a raster basemap with no dark or fallback URLs", () => {
-    registerBasemap("custom", {
-      kind: "raster",
-      label: "Custom",
-      description: "A custom basemap.",
-      url: "https://example.com/{z}/{x}/{y}.png",
-      attribution: "Example",
-    });
+    registerBasemap("custom", CUSTOM_RASTER_BASEMAP);
 
     expect(getBasemapTileSources("custom", false)).toEqual([
       { url: "https://example.com/{z}/{x}/{y}.png", attribution: "Example" },
