@@ -43,4 +43,13 @@ describe("serviceUrls", () => {
       "https://b.example/api/interpreter",
     ]);
   });
+
+  it("falls back to the public mirrors when OVERPASS_URLS is empty/whitespace-only", () => {
+    process.env.OVERPASS_URLS = " , ,";
+    expect(getOverpassUrls()).toEqual([
+      "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+      "https://overpass.private.coffee/api/interpreter",
+      "https://overpass-api.de/api/interpreter",
+    ]);
+  });
 });

@@ -107,6 +107,66 @@ describe("featureCollectionSchema", () => {
 
     expect(result.success).toBe(true);
   });
+
+  it("accepts a GeometryCollection containing multiple geometry types", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "GeometryCollection",
+            geometries: [
+              { type: "Point", coordinates: [28, -25] },
+              {
+                type: "LineString",
+                coordinates: [
+                  [28, -25],
+                  [28.1, -25.1],
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a GeometryCollection with no geometries", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: { type: "GeometryCollection", geometries: [] },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a GeometryCollection containing an invalid geometry", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "GeometryCollection",
+            geometries: [{ type: "Point", coordinates: [28] }],
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("createFeatureCollectionParser", () => {
@@ -133,5 +193,22 @@ describe("createFeatureCollectionParser", () => {
     const message = (thrown as Error).message;
     expect(message.split("; ")).toHaveLength(3);
     expect(message).not.toMatch(/features\.3\./);
+  });
+
+  it("labels a root-level issue as 'root' instead of an empty path", () => {
+    const parse = createFeatureCollectionParser(
+      featureCollectionSchema,
+      "/data/broken.geojson",
+    );
+
+    let thrown: unknown;
+    try {
+      parse(null);
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(Error);
+    expect((thrown as Error).message).toMatch(/root:/);
   });
 });

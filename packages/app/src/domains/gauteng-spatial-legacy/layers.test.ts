@@ -50,6 +50,7 @@ describe("GAUTENG_SPATIAL_LEGACY_LAYERS", () => {
     expect(style.emphasisOpacity).toBe(0.78);
     expect(style.resolveEmphasis?.({ name: "Mamelodi", id: "1" })).toBe(true);
     expect(style.resolveEmphasis?.({ name: "Not A Real Place" })).toBe(false);
+    expect(style.resolveEmphasis?.({ id: "1" })).toBe(false);
   });
 
   it("matches today's nearest-transit choropleth exactly", () => {
@@ -80,6 +81,7 @@ describe("GAUTENG_SPATIAL_LEGACY_LAYERS", () => {
     expect(style.emphasisOpacity).toBe(0.78);
     expect(style.resolveEmphasis?.({ name: "Mamelodi", id: "1" })).toBe(true);
     expect(style.resolveEmphasis?.({ name: "Not A Real Place" })).toBe(false);
+    expect(style.resolveEmphasis?.({ id: "1" })).toBe(false);
   });
 
   it("matches today's 4 transit line layers exactly", () => {
@@ -105,6 +107,20 @@ describe("GAUTENG_SPATIAL_LEGACY_LAYERS", () => {
       color: "#009E73",
       weight: 3,
       legendLabel: "Bus Rapid Transit",
+      colorClassification: {
+        kind: "categorized",
+        propertyKey: "network",
+        stops: [
+          { match: "A Re Yeng", value: "#56B4E9", label: "A Re Yeng" },
+          { match: "Rea Vaya", value: "#009E73", label: "Rea Vaya" },
+          {
+            match: "Ekurhuleni IRPTN",
+            value: "#0072B2",
+            label: "Ekurhuleni IRPTN",
+          },
+        ],
+        fallback: "#009E73",
+      },
     });
     expect(findLayer("commuter-rail").style).toEqual({
       kind: "line",

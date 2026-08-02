@@ -17,6 +17,7 @@ export function LayerToggles({
 
   function renderLayer(layerId: string) {
     const layer = getLayer(layerId);
+    /* v8 ignore next 3 -- unreachable: every layer group's layerIds is drawn from the same registry, so getLayer always finds a match */
     if (!layer) {
       return null;
     }

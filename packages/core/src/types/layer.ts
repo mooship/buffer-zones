@@ -35,18 +35,30 @@ export interface ChoroplethLayerStyle {
 /** Style configuration for a line layer. */
 export interface LineLayerStyle {
   kind: "line";
+  /** Fallback color, used when `colorClassification` is absent or unmatched. */
   color: string;
+  /** Fallback weight, used when `weightClassification` is absent or unmatched. */
   weight: number;
   /** Label shown in the transit legend. */
   legendLabel: string;
+  /** Optional per-feature color classification, overriding `color`. */
+  colorClassification?: Classification<string>;
+  /** Optional per-feature weight classification, overriding `weight`. */
+  weightClassification?: Classification<number>;
 }
 
 /** Style configuration for a point/circle-marker layer. */
 export interface PointLayerStyle {
   kind: "point";
+  /** Fallback color, used when `colorClassification` is absent or unmatched. */
   color: string;
+  /** Fallback radius, used when `radiusClassification` is absent or unmatched. */
   radius: number;
   legendLabel: string;
+  /** Optional per-feature color classification, overriding `color`. */
+  colorClassification?: Classification<string>;
+  /** Optional per-feature radius classification, overriding `radius`. */
+  radiusClassification?: Classification<number>;
 }
 
 /** Union of all layer style configurations. */
@@ -54,6 +66,55 @@ export type LayerStyleConfig =
   | ChoroplethLayerStyle
   | LineLayerStyle
   | PointLayerStyle;
+
+/** A single stop in a graduated (numeric range) classification. */
+export interface GraduatedStop<T> {
+  /** Upper bound (inclusive) of this stop's numeric range. */
+  max: number;
+  value: T;
+  /** Human-readable label shown in the legend. */
+  label: string;
+}
+
+/** A single stop in a categorized (exact string match) classification. */
+export interface CategorizedStop<T> {
+  /** Exact feature-property string value this stop matches. */
+  match: string;
+  value: T;
+  /** Human-readable label shown in the legend. */
+  label: string;
+}
+
+/** Classifies a numeric feature property into ranges, each mapped to a style value. */
+export interface GraduatedClassification<T> {
+  kind: "graduated";
+  /** GeoJSON feature property whose numeric value drives classification. */
+  propertyKey: string;
+  stops: GraduatedStop<T>[];
+  /** Value used when the property is missing, non-numeric, or below every stop's max. */
+  fallback: T;
+}
+
+/** Classifies a string feature property by exact match, each mapped to a style value. */
+export interface CategorizedClassification<T> {
+  kind: "categorized";
+  /** GeoJSON feature property whose string value drives classification. */
+  propertyKey: string;
+  stops: CategorizedStop<T>[];
+  /** Value used when the property is missing, non-string, or matches no stop. */
+  fallback: T;
+}
+
+/**
+ * Data-driven style value: classifies a feature property into a style output
+ * of type `T`, either by numeric range (`"graduated"`) or exact string match
+ * (`"categorized"`).
+ * @remarks Usable for any geometry kind's style fields (e.g. line color/weight,
+ * point color/radius) — not limited to choropleth fill color.
+ */
+export type Classification<T> =
+  | GraduatedClassification<T>
+  | CategorizedClassification<T>;
 
 /** Interaction configuration for selectable features. */
 export interface LayerInteraction {

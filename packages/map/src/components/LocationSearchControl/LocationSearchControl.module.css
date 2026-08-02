@@ -27,9 +27,14 @@
   height: 0.9rem;
 }
 
+.inputRow {
+  position: relative;
+}
+
 .input {
+  width: 100%;
   min-height: 42px;
-  padding: 0.5rem 0.625rem;
+  padding: 0.5rem 2.25rem 0.5rem 0.625rem;
   border: 1px solid var(--glass-chip-border);
   border-radius: var(--radius-sm);
   background: var(--glass-chip-bg);
@@ -41,6 +46,25 @@
   font: inherit;
   letter-spacing: 0.004em;
   text-overflow: ellipsis;
+}
+
+.input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clearButton {
+  position: absolute;
+  top: 50%;
+  right: 0.3rem;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  min-height: 0;
+}
+
+.clearButton svg {
+  width: 0.9rem;
+  height: 0.9rem;
 }
 
 .input:focus-visible,

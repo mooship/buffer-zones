@@ -2,6 +2,7 @@ import { stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { REGIONS } from "@stratum/app";
+import { isDirectExecution } from "./cliEntry";
 import { validateOutputDirectory } from "./outputManifest";
 import type { RegionPipelineConfig } from "./pipelineSource";
 import { getRegionPipelineConfig } from "./regionPipelineConfigs";
@@ -49,6 +50,7 @@ export async function runAllRegionsOutputValidation(
     try {
       config = getRegionPipelineConfig(region.id);
     } catch (error) {
+      /* v8 ignore next -- unreachable: getRegionPipelineConfig only ever throws a real Error */
       const message = error instanceof Error ? error.message : String(error);
       console.error(`Output validation failed for ${outputDir}: ${message}`);
       misconfiguredRegionIds.push(region.id);
@@ -71,18 +73,11 @@ export async function runAllRegionsOutputValidation(
   }
 }
 
-function isDirectExecution(argv: readonly string[]): boolean {
-  const commandPath = argv[1];
-  if (!commandPath) {
-    return false;
-  }
-
-  return resolve(commandPath) === fileURLToPath(import.meta.url);
-}
-
-if (isDirectExecution(process.argv)) {
+/* v8 ignore start -- exercised via `npm run validate`, not unit tests */
+if (isDirectExecution(process.argv, import.meta.url)) {
   runAllRegionsOutputValidation().catch((error) => {
     console.error(error);
     process.exit(1);
   });
 }
+/* v8 ignore stop */

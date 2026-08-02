@@ -118,9 +118,11 @@ async function pruneDirectory(path: string, cutoffMs: number): Promise<number> {
         await unlink(entryPath);
         removed += 1;
       }
+      /* v8 ignore start -- race condition (concurrent prune/manual delete), not deterministically testable */
     } catch {
       // Skip files that disappear while pruning.
     }
+    /* v8 ignore stop */
   }
 
   return removed;

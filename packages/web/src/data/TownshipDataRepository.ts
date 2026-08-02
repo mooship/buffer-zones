@@ -14,6 +14,7 @@ class FetchTownshipDataRepository implements TownshipDataRepository {
       this.dataUrl,
       townshipFeatureCollectionSchema,
     );
+    /* v8 ignore next -- unreachable: townshipFeatureCollectionSchema requires a features array, so a validated collection always has one */
     const features = (collection.features ?? []) as TownshipFeature[];
     return features.map((feature) => ({
       ...feature,

@@ -118,4 +118,16 @@ describe("validateOutput", () => {
       expect.stringContaining("not-yet-built"),
     );
   });
+
+  it("fails closed with the misconfigured-region error, not the no-output error, when nothing validates but a config is missing", async () => {
+    const root = await mkdtemp(resolve(tmpdir(), "buffer-zones-validate-"));
+    await mkdir(resolve(root, "not-yet-built"), { recursive: true });
+    outputManifestMocks.validateOutputDirectory.mockResolvedValue([]);
+
+    await expect(runAllRegionsOutputValidation(root)).rejects.toThrow(
+      /No pipeline config registered for region\(s\): not-yet-built/,
+    );
+
+    expect(outputManifestMocks.validateOutputDirectory).not.toHaveBeenCalled();
+  });
 });

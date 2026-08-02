@@ -4,10 +4,11 @@ Domain-agnostic layer model and geodata utilities for Stratum. Has no dependency
 
 ## What belongs here
 
-- **Layer/domain types** (`types/layer.ts`) — `Layer`, `LayerGroup`, `DomainConfig`, and every style config type (`ChoroplethLayerStyle`, `LineLayerStyle`, `PointLayerStyle`, `ColorBucket`, `LayerInteraction`, `LayerGroupSelectionMode`).
-- **`createLayerConfig(layer, noDataColor?)`** (`layers/createLayerConfig.ts`) — converts a `Layer` descriptor into a Leaflet `pathOptions`/`styleFn` configuration.
+- **Layer/domain types** (`types/layer.ts`) — `Layer`, `LayerGroup`, `DomainConfig`, and every style config type (`ChoroplethLayerStyle`, `LineLayerStyle`, `PointLayerStyle`, `ColorBucket`, `LayerInteraction`, `LayerGroupSelectionMode`). `LineLayerStyle`/`PointLayerStyle` also accept an optional `Classification<T>` (`GraduatedClassification` for numeric ranges, `CategorizedClassification` for exact string match) on `colorClassification`/`weightClassification`/`radiusClassification`, for data-driven styling of any geometry kind — not just choropleth fill color. The flat `color`/`weight`/`radius` fields remain required as the fallback/no-classification value.
+- **`resolveClassification(classification, properties)`** (`layers/classification.ts`) — resolves a feature's properties through a `Classification<T>` to its style output value; used internally by `createLayerConfig` and exported for direct use (e.g. custom legend rendering).
+- **`createLayerConfig(layer, noDataColor?)`** (`layers/createLayerConfig.ts`) — converts a `Layer` descriptor into a Leaflet `pathOptions`/`styleFn` configuration. Returns a `styleFn` for choropleth layers (resolving fill color through the same `resolveClassification` machinery, via an internal `buckets`-to-`GraduatedClassification` adapter) and for `line`/`point` layers that declare a classification; otherwise static `pathOptions`.
 - **`createRegistry(domain)`** (`layers/createRegistry.ts`) — a read-only `getLayers`/`getLayer`/`getLayerGroups` accessor over a `DomainConfig`.
-- **Geodata utils** (`data/`) — `fetchFeatureCollection`, `mergeFeatureCollections`, and the Zod schemas in `geoJsonSchemas.ts` (`featureCollectionSchema`, `polygonGeometrySchema`, `multiPolygonGeometrySchema`, `createFeatureCollectionParser`).
+- **Geodata utils** (`data/`) — `fetchFeatureCollection` (caches successful results in-memory by URL, evicting the least-recently-used entry once the cache exceeds 50 entries; `clearFeatureCollectionCache()` resets it, mainly for tests), `mergeFeatureCollections`, and the Zod schemas in `geoJsonSchemas.ts` (`featureCollectionSchema` — including `GeometryCollection` — `polygonGeometrySchema`, `multiPolygonGeometrySchema`, `createFeatureCollectionParser`).
 
 Every export is JSDoc-documented (TSDoc-compatible).
 

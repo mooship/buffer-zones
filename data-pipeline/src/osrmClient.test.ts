@@ -47,6 +47,43 @@ describe("getNearestJobCenter", () => {
     ]);
   });
 
+  it("aborts the in-flight request once the per-attempt timeout elapses", async () => {
+    vi.useFakeTimers();
+    let capturedSignal: AbortSignal | undefined;
+    let resolveFetch: (value: unknown) => void = () => {};
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    fetchMock.mockImplementation(
+      (_url: string, init: { signal: AbortSignal }) => {
+        capturedSignal = init.signal;
+        return new Promise((resolve) => {
+          resolveFetch = resolve;
+        });
+      },
+    );
+
+    const resultPromise = getNearestJobCenter(
+      [{ lat: -25.75, lon: 28.19 }],
+      destinations,
+    );
+    await vi.advanceTimersByTimeAsync(30_000);
+
+    expect(capturedSignal?.aborted).toBe(true);
+
+    resolveFetch({
+      ok: true,
+      json: async () => ({ code: "Ok", durations: [[120, 800]] }),
+    });
+    const result = await resultPromise;
+
+    expect(result).toEqual([
+      {
+        minutes: 2,
+        jobCenterId: "pretoria-cbd",
+        jobCenterName: "Pretoria CBD",
+      },
+    ]);
+  });
+
   it("returns a null result for an origin with no reachable destination", async () => {
     (fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: true,
@@ -67,6 +104,30 @@ describe("getNearestJobCenter", () => {
     const fetchMock = fetch as ReturnType<typeof vi.fn>;
     fetchMock
       .mockResolvedValueOnce({ ok: false, status: 429 })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ code: "Ok", durations: [[600, 1200]] }),
+      });
+
+    const result = await getNearestJobCenter(
+      [{ lat: -25.75, lon: 28.19 }],
+      destinations,
+    );
+
+    expect(result).toEqual([
+      {
+        minutes: 10,
+        jobCenterId: "pretoria-cbd",
+        jobCenterName: "Pretoria CBD",
+      },
+    ]);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("retries once on HTTP 504 then succeeds", async () => {
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    fetchMock
+      .mockResolvedValueOnce({ ok: false, status: 504 })
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ code: "Ok", durations: [[600, 1200]] }),
@@ -190,5 +251,23 @@ describe("getNearestJobCenter", () => {
     ]);
     expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(writeJsonCacheSpy).not.toHaveBeenCalled();
+  });
+
+  it("throws a timeout error when every retry attempt aborts", async () => {
+    vi.useFakeTimers();
+    const abortError = new Error("aborted");
+    abortError.name = "AbortError";
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    fetchMock.mockRejectedValue(abortError);
+
+    const resultPromise = getNearestJobCenter(
+      [{ lat: -25.75, lon: 28.19 }],
+      destinations,
+    );
+    const assertion = expect(resultPromise).rejects.toThrow(/timed out after/);
+    await vi.advanceTimersByTimeAsync(10_000);
+    await assertion;
+
+    expect(fetchMock).toHaveBeenCalledTimes(3);
   });
 });

@@ -1,5 +1,5 @@
 import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
-import type { DomainConfig } from "@stratum/core";
+import { clearFeatureCollectionCache, type DomainConfig } from "@stratum/core";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DomainProvider } from "../context/DomainContext";
@@ -25,6 +25,7 @@ describe("useLayerData", () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    clearFeatureCollectionCache();
   });
 
   it("fetches layers when mounted", async () => {
@@ -152,6 +153,91 @@ describe("useLayerData", () => {
     unmount();
 
     expect(capturedSignal?.aborted).toBe(true);
+  });
+
+  it("does not update state when a fetch resolves after unmount", async () => {
+    let resolveFetch: (value: Response) => void = () => {};
+    vi.mocked(global.fetch).mockImplementation(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveFetch = resolve;
+        }),
+    );
+
+    const { result, unmount } = renderHook(() => useLayerData(["rapid-rail"]), {
+      wrapper: withGautengDomain,
+    });
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    unmount();
+    resolveFetch({
+      ok: true,
+      json: async () => ({ type: "FeatureCollection", features: [] }),
+    } as Response);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(result.current.data).toEqual({});
+  });
+
+  it("does not update failedLayerIds when a fetch rejects after unmount", async () => {
+    let rejectFetch: (reason: unknown) => void = () => {};
+    vi.mocked(global.fetch).mockImplementation(
+      () =>
+        new Promise<Response>((_resolve, reject) => {
+          rejectFetch = reject;
+        }),
+    );
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { result, unmount } = renderHook(() => useLayerData(["rapid-rail"]), {
+      wrapper: withGautengDomain,
+    });
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    unmount();
+    rejectFetch(new Error("network"));
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(result.current.failedLayerIds).toEqual([]);
+    expect(consoleError).not.toHaveBeenCalled();
+
+    consoleError.mockRestore();
+  });
+
+  it("does not duplicate a layer id in failedLayerIds when its retry also fails", async () => {
+    vi.mocked(global.fetch).mockRejectedValue(new Error("network"));
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { result, rerender } = renderHook(
+      ({ ids }: { ids: string[] }) => useLayerData(ids),
+      { initialProps: { ids: ["rapid-rail"] }, wrapper: withGautengDomain },
+    );
+
+    await waitFor(() => {
+      expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+    });
+
+    rerender({ ids: [] });
+    rerender({ ids: ["rapid-rail"] });
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+    expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+
+    consoleError.mockRestore();
   });
 
   it("merges features from every region source configured for a layer", async () => {

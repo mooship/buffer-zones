@@ -45,7 +45,11 @@ export const multiPolygonGeometrySchema = z.looseObject({
   coordinates: z.array(polygonCoordinatesSchema).check(z.minLength(1)),
 });
 
-const geometrySchema = z.union([
+/**
+ * Zod schema for a GeoJSON geometry, including `null` and (recursively)
+ * `GeometryCollection`.
+ */
+const geometrySchema: z.ZodMiniType<unknown> = z.union([
   z.null(),
   z.looseObject({ type: z.literal("Point"), coordinates: positionSchema }),
   z.looseObject({
@@ -62,6 +66,10 @@ const geometrySchema = z.union([
   }),
   polygonGeometrySchema,
   multiPolygonGeometrySchema,
+  z.looseObject({
+    type: z.literal("GeometryCollection"),
+    geometries: z.array(z.lazy(() => geometrySchema)),
+  }),
 ]);
 
 const propertiesSchema = z.union([z.null(), z.record(z.string(), z.unknown())]);

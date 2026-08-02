@@ -30,12 +30,18 @@ import {
   useMap,
   ZoomControl,
 } from "react-leaflet";
-import { type Basemap, getBasemapTileSources } from "../../constants/basemaps";
+import {
+  type Basemap,
+  getBasemapDefinition,
+  getBasemapTileSources,
+} from "../../constants/basemaps";
 import { TOWNSHIP_OUTLINE } from "../../constants/mapStyles";
 import { useDomain } from "../../context/DomainContext";
 import type { LocationSearchResult } from "../../data/locationSearch";
 import { useLayerData } from "../../hooks/useLayerData";
+import { ClickToLocatePopup } from "./ClickToLocatePopup";
 import styles from "./MapView.module.css";
+import { VectorBasemapLayer } from "./VectorBasemapLayer";
 
 /**
  * `@types/leaflet`'s `GeoJSONOptions` omits `smoothFactor`, even though
@@ -64,6 +70,16 @@ interface MapViewProps<
   renderFeaturePopup?: (properties: TProperties) => ReactNode;
   /** Called with the ids of overlay layers whose data failed to load, whenever that set changes. */
   onLayerDataError?: (failedLayerIds: string[]) => void;
+  /**
+   * Called if the current vector basemap's style fails to load, so a caller
+   * can fall back to another basemap instead of leaving the map blank.
+   */
+  onBasemapError?: (basemap: Basemap, error: unknown) => void;
+  /**
+   * When `true`, clicking the map background reverse-geocodes that point and
+   * shows the result in a popup. Defaults to `false`.
+   */
+  locateOnClick?: boolean;
 }
 
 const TOWNSHIP_PANE = "townships";
@@ -87,17 +103,21 @@ type SelectableFeatureLayer = Layer & {
 };
 
 function getViewportWidth(): number {
+  /* v8 ignore start -- SSR guard: packages/web never renders MapView server-side (gated behind a client-only hydrated flag), but this is a reusable SDK component with no visibility into other consumers */
   if (typeof window === "undefined") {
     return MOBILE_BREAKPOINT_PX;
   }
+  /* v8 ignore stop */
 
   return window.innerWidth;
 }
 
 function getDevicePixelRatio(): number {
+  /* v8 ignore start -- SSR guard, see getViewportWidth above */
   if (typeof window === "undefined") {
     return 1;
   }
+  /* v8 ignore stop */
 
   return window.devicePixelRatio;
 }
@@ -280,6 +300,7 @@ function AreaLabelVisibility() {
   const secondaryLabelsClass = styles.showSecondaryLabels;
 
   useEffect(() => {
+    /* v8 ignore next 3 -- unreachable: CSS Modules always resolve these class names to real hashed strings in a real build */
     if (!primaryLabelsClass || !secondaryLabelsClass) {
       return;
     }
@@ -456,6 +477,8 @@ function MapViewComponent<
   onFeatureSelect,
   renderFeaturePopup,
   onLayerDataError,
+  onBasemapError,
+  locateOnClick = false,
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
   const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
@@ -479,12 +502,20 @@ function MapViewComponent<
   const themePreference = useThemePreference();
   const resolvedDark =
     themePreference === "dark" || (themePreference === "system" && prefersDark);
-  const useDarkTiles = basemap === "street" && resolvedDark;
+  const basemapDefinition = getBasemapDefinition(basemap);
+  const isRasterBasemap = basemapDefinition.kind === "raster";
+  const isVectorBasemap = basemapDefinition.kind === "vector";
+  const useDarkTiles =
+    isRasterBasemap && basemapDefinition.darkUrl !== undefined && resolvedDark;
   const tileSourceMode = `${basemap}-${useDarkTiles ? "dark" : "light"}`;
   const tileSources = useMemo(
-    () => getBasemapTileSources(basemap, useDarkTiles),
-    [basemap, useDarkTiles],
+    () => (isRasterBasemap ? getBasemapTileSources(basemap, useDarkTiles) : []),
+    [isRasterBasemap, basemap, useDarkTiles],
   );
+  const vectorStyleUrl = isVectorBasemap
+    ? (resolvedDark && basemapDefinition.darkStyleUrl) ||
+      basemapDefinition.styleUrl
+    : null;
   const [tileSourceState, setTileSourceState] = useState(() => ({
     mode: tileSourceMode,
     index: 0,
@@ -571,7 +602,8 @@ function MapViewComponent<
   const useRetinaTiles =
     getDevicePixelRatio() > 1.25 && getViewportWidth() > MOBILE_BREAKPOINT_PX;
 
-  if (!tileSource) {
+  /* v8 ignore next 3 -- unreachable: every registered raster basemap always yields at least one tile source */
+  if (!isVectorBasemap && !tileSource) {
     return null;
   }
 
@@ -592,15 +624,24 @@ function MapViewComponent<
       >
         <ZoomControl position="bottomright" />
         <ScaleControl position="bottomleft" imperial={false} />
-        <TileLayer
-          key={`${tileSourceMode}-${tileSource.url}`}
-          url={tileSource.url}
-          attribution={tileSource.attribution}
-          className={useDarkTiles ? styles.darkTile : undefined}
-          detectRetina={useRetinaTiles}
-          updateWhenZooming
-          eventHandlers={{ tileerror: handleTileError }}
-        />
+        {isRasterBasemap && tileSource ? (
+          <TileLayer
+            key={`${tileSourceMode}-${tileSource.url}`}
+            url={tileSource.url}
+            attribution={tileSource.attribution}
+            className={useDarkTiles ? styles.darkTile : undefined}
+            detectRetina={useRetinaTiles}
+            updateWhenZooming
+            eventHandlers={{ tileerror: handleTileError }}
+          />
+        ) : null}
+        {vectorStyleUrl ? (
+          <VectorBasemapLayer
+            key={vectorStyleUrl}
+            styleUrl={vectorStyleUrl}
+            onError={(error) => onBasemapError?.(basemap, error)}
+          />
+        ) : null}
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />
         <Pane name={TRANSIT_PANE} style={{ zIndex: 450 }} />
@@ -642,6 +683,7 @@ function MapViewComponent<
         ) : null}
         {visibleLayers.map((layer) => {
           const config = layerConfigById.get(layer.id);
+          /* v8 ignore next 3 -- unreachable: layerConfigById is built from this same visibleLayers list, so every layer.id here always has an entry */
           if (!config) {
             return null;
           }
@@ -656,7 +698,11 @@ function MapViewComponent<
             <GeoJSON
               key={layer.id}
               data={data}
-              smoothFactor={0}
+              // Leaflet's default smoothFactor (1) simplifies just enough to
+              // round off the jagged real-world turns in OSM-derived transit
+              // route geometry; unlike the township outline below, there's
+              // no boundary-fidelity reason to disable it here.
+              smoothFactor={1}
               style={config.styleFn}
               pathOptions={{
                 ...config.pathOptions,
@@ -690,6 +736,7 @@ function MapViewComponent<
         <AreaLabelVisibility />
         <ResponsiveMapBounds bounds={bounds} />
         <ZoomStateWatcher onZoomChange={setMapZoom} />
+        {locateOnClick ? <ClickToLocatePopup /> : null}
       </MapContainer>
     </section>
   );

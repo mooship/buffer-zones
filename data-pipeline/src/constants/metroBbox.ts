@@ -36,6 +36,7 @@ interface Bbox {
 
 function parseBbox(box: string): Bbox {
   const parts = box.split(",").map(Number);
+  /* v8 ignore next 3 -- unreachable: only ever called with hardcoded, valid METRO_BBOX entries */
   if (parts.length !== 4 || parts.some((value) => Number.isNaN(value))) {
     throw new Error(`Invalid bbox string: ${box}`);
   }

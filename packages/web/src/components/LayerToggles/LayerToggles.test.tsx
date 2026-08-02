@@ -1,8 +1,42 @@
+import type { Layer, LayerGroup } from "@stratum/core";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import * as registry from "../../layers/registry";
 import { LayerToggles } from "./LayerToggles";
 
 describe("LayerToggles", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("marks an unavailable layer as unavailable and disabled, with a badge", () => {
+    const unavailableLayer: Layer = {
+      id: "myciti",
+      label: "MyCiTi",
+      dataSource: ["/data/myciti.geojson"],
+      geometryKind: "line",
+      defaultVisible: false,
+      available: false,
+      style: { kind: "line", color: "#000", weight: 2 },
+    };
+    const group: LayerGroup = {
+      id: "transit",
+      title: "Transit",
+      layerIds: ["myciti"],
+    };
+    vi.spyOn(registry, "getLayer").mockReturnValue(unavailableLayer);
+    vi.spyOn(registry, "getLayerGroups").mockReturnValue([group]);
+
+    render(<LayerToggles visibleLayerIds={[]} onToggle={vi.fn()} />);
+
+    expect(screen.getByTestId("layer-toggle-myciti-row")).toHaveAttribute(
+      "data-unavailable",
+      "true",
+    );
+    expect(screen.getByTestId("layer-toggle-myciti")).toBeDisabled();
+    expect(screen.getByText("Not yet available")).toBeInTheDocument();
+  });
+
   it("reflects visibility state on each layer's checkbox", () => {
     render(<LayerToggles visibleLayerIds={["townships"]} onToggle={vi.fn()} />);
 

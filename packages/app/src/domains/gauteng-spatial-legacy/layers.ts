@@ -105,6 +105,20 @@ export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
       color: "#009E73",
       weight: 3,
       legendLabel: "Bus Rapid Transit",
+      colorClassification: {
+        kind: "categorized",
+        propertyKey: "network",
+        stops: [
+          { match: "A Re Yeng", value: "#56B4E9", label: "A Re Yeng" },
+          { match: "Rea Vaya", value: "#009E73", label: "Rea Vaya" },
+          {
+            match: "Ekurhuleni IRPTN",
+            value: "#0072B2",
+            label: "Ekurhuleni IRPTN",
+          },
+        ],
+        fallback: "#009E73",
+      },
     },
   },
   {

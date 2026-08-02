@@ -5,11 +5,11 @@ Generic map rendering and UI components (React + Leaflet) for Stratum, built on 
 ## What belongs here
 
 - **`DomainProvider({ domain, children })` / `useDomain(): DomainRegistry`** (`context/DomainContext.tsx`) — a React context wrapping `createRegistry` from `@stratum/core`. Any component that calls `useDomain()`, directly or transitively, must be rendered inside a `DomainProvider`; `useDomain()` throws otherwise.
-- **`MapView`** — the Leaflet map itself: tile basemap, choropleth and transit overlays resolved from the active `DomainProvider`, township-area-style outline labels, feature selection/keyboard interaction, and location-search fly-to behaviour. Takes a `bounds` prop (no baked-in region bounds) and a `renderFeaturePopup` callback (no hardcoded popup component), so it stays domain-agnostic. Exported from a dedicated `@stratum/map/MapView` subpath — see below.
+- **`MapView`** — the Leaflet map itself: tile basemap, choropleth and transit overlays resolved from the active `DomainProvider`, township-area-style outline labels, feature selection/keyboard interaction, and location-search fly-to behaviour. Takes a `bounds` prop (no baked-in region bounds) and a `renderFeaturePopup` callback (no hardcoded popup component), so it stays domain-agnostic. An optional `locateOnClick` prop (default `false`) reverse-geocodes a background map click and shows the result in a popup, via the new `ClickToLocatePopup` sub-component. Exported from a dedicated `@stratum/map/MapView` subpath — see below.
 - **`Legend`, `DesktopLegend`, `MobileLegend`** — choropleth and transit layer legend entries, resolved from `useDomain()`.
-- **`LocationSearchControl`** — a debounced, keyboard-navigable place search box backed by Nominatim, with a configurable `placeholder`.
+- **`LocationSearchControl`** — a debounced, keyboard-navigable place search box, with a configurable `placeholder` and an optional `provider` (a `GeocoderProvider`), defaulting to `nominatimGeocoderProvider` (OpenStreetMap Nominatim).
 - **UI primitives** — `IconButton`, `SegmentedControl`, `ControlButton`, `ThemeToggle`, `BasemapToggle`, `SettingsMenu`.
-- **Leaflet-specific utilities** — `constants/basemaps.ts` (`getBasemapTileSources`, `Basemap`), `constants/mapStyles.ts` (`TOWNSHIP_OUTLINE`), `data/locationSearch.ts` (`fetchLocationSearchResults`, `LocationSearchResult`).
+- **Leaflet-specific utilities** — `constants/basemaps.ts` (an extensible basemap registry: `registerBasemap`, `getBasemapDefinition`, `getRegisteredBasemapIds`, `getBasemapTileSources`, `Basemap`, `BasemapDefinition`; ships `street`/`satellite` raster basemaps and a `voyager` vector basemap rendered via MapLibre GL, lazy-loaded on selection), `constants/mapStyles.ts` (`TOWNSHIP_OUTLINE`), `data/locationSearch.ts` (`fetchLocationSearchResults`, `fetchReverseGeocodeResult`, `nominatimGeocoderProvider`, `GeocoderProvider`, `LocationSearchResult`).
 
 ## What doesn't belong here
 

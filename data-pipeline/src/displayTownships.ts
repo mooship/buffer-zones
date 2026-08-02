@@ -24,6 +24,7 @@ export function createDisplayPolygons<
     MINIMUM_TRIANGLE_WEIGHT,
   );
   const townships = simplified.objects.townships;
+  /* v8 ignore next 3 -- unreachable with well-formed input; topology() always produces a "townships" object for the source we pass it */
   if (!townships) {
     throw new Error("Display topology did not contain township geometry");
   }

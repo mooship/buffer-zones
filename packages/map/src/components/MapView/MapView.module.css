@@ -13,6 +13,25 @@
   filter: brightness(1.22) contrast(0.94) saturate(0.92);
 }
 
+/*
+ * Combined OSM + basemap-provider attribution text can run long enough to
+ * span most of the viewport width and collide with the bottom-left scale
+ * control on narrow screens. Cap its width and let it wrap onto a second
+ * line instead.
+ */
+:global(.leaflet-control-attribution) {
+  max-width: min(60vw, 22rem);
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+@media (max-width: 768px) {
+  :global(.leaflet-control-attribution) {
+    max-width: 52vw;
+    font-size: 10px;
+  }
+}
+
 .townshipLabel {
   padding: 3px 6px;
   border: 1px solid var(--color-map-label-outline);

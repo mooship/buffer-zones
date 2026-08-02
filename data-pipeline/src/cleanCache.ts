@@ -1,6 +1,5 @@
-import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import { clearCache, getCacheDir, pruneCache } from "./cache";
+import { isDirectExecution } from "./cliEntry";
 
 const DEFAULT_MAX_AGE_DAYS = 7;
 
@@ -41,18 +40,11 @@ export async function runCleanCache(argv: readonly string[]): Promise<void> {
   );
 }
 
-function isDirectExecution(argv: readonly string[]): boolean {
-  const commandPath = argv[1];
-  if (!commandPath) {
-    return false;
-  }
-
-  return resolve(commandPath) === fileURLToPath(import.meta.url);
-}
-
-if (isDirectExecution(process.argv)) {
+/* v8 ignore start -- exercised via `npm run cache:*`, not unit tests */
+if (isDirectExecution(process.argv, import.meta.url)) {
   runCleanCache(process.argv).catch((error) => {
     console.error(error);
     process.exit(1);
   });
 }
+/* v8 ignore stop */

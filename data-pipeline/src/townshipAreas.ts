@@ -35,6 +35,7 @@ export function createTownshipAreas(
       polygons.length === 1
         ? polygons[0]
         : turf.union(turf.featureCollection(polygons));
+    /* v8 ignore next 3 -- unreachable with well-formed input; turf.union only returns null for a degenerate (self-cancelling) collection, which valid township polygons never produce */
     if (!dissolved) {
       return [];
     }

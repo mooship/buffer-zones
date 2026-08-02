@@ -13,7 +13,16 @@ export default defineConfig({
         "**/vite-env.d.ts",
         "data-pipeline/src/run.ts",
         "data-pipeline/src/buildDisplayData.ts",
+        "packages/web/src/entry.client.tsx",
+        "packages/web/src/entry.server.tsx",
+        "packages/web/src/routes/**",
       ],
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
     },
   },
 });

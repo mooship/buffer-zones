@@ -50,4 +50,23 @@ describe("useMapUiStore", () => {
       "nearest-transit",
     );
   });
+
+  it("sets the basemap", () => {
+    act(() => {
+      useMapUiStore.getState().setBasemap("satellite");
+    });
+    expect(useMapUiStore.getState().basemap).toBe("satellite");
+  });
+
+  it("sets whether the title is expanded", () => {
+    act(() => {
+      useMapUiStore.getState().setTitleExpanded(true);
+    });
+    expect(useMapUiStore.getState().titleExpanded).toBe(true);
+
+    act(() => {
+      useMapUiStore.getState().setTitleExpanded(false);
+    });
+    expect(useMapUiStore.getState().titleExpanded).toBe(false);
+  });
 });

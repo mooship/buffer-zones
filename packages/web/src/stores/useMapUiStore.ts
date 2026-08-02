@@ -12,6 +12,7 @@ function isExclusiveGroupMember(id: string): boolean {
 
 function groupSiblings(id: string): string[] {
   const group = findGroupContaining(id);
+  /* v8 ignore next 3 -- unreachable: groupSiblings is only called after isExclusiveGroupMember(id) already confirmed selectionMode === "exclusive" */
   if (group?.selectionMode !== "exclusive") {
     return [];
   }

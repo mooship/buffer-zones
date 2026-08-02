@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   useEffect,
@@ -6,15 +6,20 @@ import {
   useState,
 } from "react";
 import {
-  fetchLocationSearchResults,
+  type GeocoderProvider,
   type LocationSearchResult,
+  nominatimGeocoderProvider,
 } from "../../data/locationSearch";
+import { useAbortController } from "../../hooks/useAbortController";
+import { IconButton } from "../IconButton/IconButton";
 import styles from "./LocationSearchControl.module.css";
 
 interface LocationSearchControlProps {
   onLocationSelect: (location: LocationSearchResult) => void;
   /** Input placeholder text. Defaults to `"Search town, suburb or station"`. */
   placeholder?: string;
+  /** Geocoder backend used for search. Defaults to OpenStreetMap Nominatim. */
+  provider?: GeocoderProvider;
 }
 
 const MIN_SEARCH_QUERY_LENGTH = 2;
@@ -29,20 +34,17 @@ const DEFAULT_PLACEHOLDER = "Search town, suburb or station";
 export function LocationSearchControl({
   onLocationSelect,
   placeholder = DEFAULT_PLACEHOLDER,
+  provider = nominatimGeocoderProvider,
 }: LocationSearchControlProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<LocationSearchResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
-  const searchControllerRef = useRef<AbortController | null>(null);
+  const { next, abort } = useAbortController();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    return () => {
-      searchControllerRef.current?.abort();
-    };
-  }, []);
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: provider intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
   useEffect(() => {
     const trimmedQuery = query.trim();
     if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
@@ -50,13 +52,11 @@ export function LocationSearchControl({
       setSearchError(null);
       setSearching(false);
       setActiveResultIndex(-1);
-      searchControllerRef.current?.abort();
+      abort();
       return;
     }
 
-    searchControllerRef.current?.abort();
-    const controller = new AbortController();
-    searchControllerRef.current = controller;
+    const signal = next();
 
     const debounceTimer = setTimeout(async () => {
       setSearching(true);
@@ -64,23 +64,20 @@ export function LocationSearchControl({
       setActiveResultIndex(-1);
 
       try {
-        const nextResults = await fetchLocationSearchResults(
-          trimmedQuery,
-          controller.signal,
-        );
+        const nextResults = await provider.search(trimmedQuery, signal);
         setResults(nextResults);
 
         if (nextResults.length === 0) {
           setSearchError("No places matched that search.");
         }
       } catch {
-        if (controller.signal.aborted) {
+        if (signal.aborted) {
           return;
         }
         setResults([]);
         setSearchError("Search is unavailable right now. Please try again.");
       } finally {
-        if (searchControllerRef.current === controller) {
+        if (!signal.aborted) {
           setSearching(false);
         }
       }
@@ -88,9 +85,9 @@ export function LocationSearchControl({
 
     return () => {
       clearTimeout(debounceTimer);
-      controller.abort();
+      abort();
     };
-  }, [query]);
+  }, [query, next, abort]);
 
   function handleInputKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
     if (event.key === "ArrowDown") {
@@ -118,6 +115,7 @@ export function LocationSearchControl({
 
       event.preventDefault();
       const selected = results[activeResultIndex];
+      /* v8 ignore next 3 -- unreachable: activeResultIndex is already bounds-checked above */
       if (selected) {
         handleResultSelect(selected);
       }
@@ -125,9 +123,7 @@ export function LocationSearchControl({
     }
 
     if (event.key === "Escape") {
-      setResults([]);
-      setSearchError(null);
-      setActiveResultIndex(-1);
+      handleClear();
     }
   }
 
@@ -137,6 +133,14 @@ export function LocationSearchControl({
     setResults([]);
     setSearchError(null);
     setActiveResultIndex(-1);
+  }
+
+  function handleClear() {
+    setQuery("");
+    setResults([]);
+    setSearchError(null);
+    setActiveResultIndex(-1);
+    inputRef.current?.focus();
   }
 
   const activeResult =
@@ -156,30 +160,46 @@ export function LocationSearchControl({
         <Search aria-hidden="true" />
         Search place
       </label>
-      <input
-        id="map-location-search"
-        data-testid="location-search-input"
-        data-e2e="location-search-input"
-        className={styles.input}
-        type="search"
-        role="combobox"
-        aria-autocomplete="list"
-        aria-expanded={hasResults}
-        aria-controls="location-search-results"
-        aria-activedescendant={
-          activeResult ? `location-search-option-${activeResult.id}` : undefined
-        }
-        autoComplete="off"
-        spellCheck={false}
-        placeholder={placeholder}
-        value={query}
-        onChange={(event) => {
-          setQuery(event.target.value);
-          setSearchError(null);
-          setActiveResultIndex(-1);
-        }}
-        onKeyDown={handleInputKeyDown}
-      />
+      <div className={styles.inputRow}>
+        <input
+          ref={inputRef}
+          id="map-location-search"
+          data-testid="location-search-input"
+          data-e2e="location-search-input"
+          className={styles.input}
+          type="search"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={hasResults}
+          aria-controls="location-search-results"
+          aria-activedescendant={
+            activeResult
+              ? `location-search-option-${activeResult.id}`
+              : undefined
+          }
+          autoComplete="off"
+          spellCheck={false}
+          placeholder={placeholder}
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setSearchError(null);
+            setActiveResultIndex(-1);
+          }}
+          onKeyDown={handleInputKeyDown}
+        />
+        {query.length > 0 ? (
+          <IconButton
+            className={styles.clearButton}
+            label="Clear search"
+            data-testid="location-search-clear"
+            data-e2e="location-search-clear"
+            onClick={handleClear}
+          >
+            <X aria-hidden="true" />
+          </IconButton>
+        ) : null}
+      </div>
       {query.trim().length >= MIN_SEARCH_QUERY_LENGTH && searching ? (
         <output className={styles.status}>Searching places...</output>
       ) : null}

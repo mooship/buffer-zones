@@ -83,6 +83,56 @@ describe("normalizeEkurhuleniIrptn", () => {
     });
   });
 
+  it("falls back to default id and name when properties is null", () => {
+    const raw = {
+      type: "FeatureCollection" as const,
+      features: [
+        {
+          type: "Feature" as const,
+          properties: null,
+          geometry: {
+            type: "LineString" as const,
+            coordinates: [
+              [28.2, -26.0],
+              [28.21, -26.01],
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = normalizeEkurhuleniIrptn(raw);
+
+    expect(result.features[0]?.properties).toEqual({
+      id: "unknown",
+      name: "Unnamed",
+      network: "Ekurhuleni IRPTN",
+    });
+  });
+
+  it("falls back to the Id property when OBJECTID is absent", () => {
+    const raw = {
+      type: "FeatureCollection" as const,
+      features: [
+        {
+          type: "Feature" as const,
+          properties: { Id: 7, Name: "Route 2A" },
+          geometry: {
+            type: "LineString" as const,
+            coordinates: [
+              [28.2, -26.0],
+              [28.21, -26.01],
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = normalizeEkurhuleniIrptn(raw);
+
+    expect(result.features[0]?.properties.id).toBe("7");
+  });
+
   it("skips features that are not line geometries", () => {
     const raw = {
       type: "FeatureCollection" as const,
@@ -158,6 +208,60 @@ describe("fetchEkurhuleniIrptnRoutes", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(result.features).toHaveLength(2);
+
+    vi.useRealTimers();
+  });
+
+  it("throws when the request fails with a non-OK status", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: false, status: 503 });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchEkurhuleniIrptnRoutes()).rejects.toThrow(
+      "Ekurhuleni IRPTN request failed with status 503",
+    );
+  });
+
+  it("throws when the response body is not a FeatureCollection", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => "not an object" });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchEkurhuleniIrptnRoutes()).rejects.toThrow(
+      "Ekurhuleni IRPTN returned an unexpected shape",
+    );
+  });
+
+  it("aborts the in-flight request once the request timeout elapses", async () => {
+    vi.useFakeTimers();
+    let capturedSignal: AbortSignal | undefined;
+    let resolveFetch: (value: unknown) => void = () => {};
+    const fetchMock = vi
+      .fn()
+      .mockImplementation((_url: string, init: { signal: AbortSignal }) => {
+        capturedSignal = init.signal;
+        return new Promise((resolve) => {
+          resolveFetch = resolve;
+        });
+      });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const resultPromise = fetchEkurhuleniIrptnRoutes();
+    await vi.advanceTimersByTimeAsync(90_000);
+
+    expect(capturedSignal?.aborted).toBe(true);
+
+    resolveFetch({
+      ok: true,
+      json: async () => ({
+        type: "FeatureCollection",
+        features: [],
+        exceededTransferLimit: false,
+      }),
+    });
+    const result = await resultPromise;
+
+    expect(result.features).toHaveLength(0);
 
     vi.useRealTimers();
   });

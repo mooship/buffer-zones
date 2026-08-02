@@ -1,8 +1,13 @@
 export type {
+  CategorizedClassification,
+  CategorizedStop,
   ChoroplethLayerStyle,
+  Classification,
   ColorBucket,
   DomainConfig,
   FeatureGeometryKind,
+  GraduatedClassification,
+  GraduatedStop,
   Layer,
   LayerGroup,
   LayerGroupSelectionMode,

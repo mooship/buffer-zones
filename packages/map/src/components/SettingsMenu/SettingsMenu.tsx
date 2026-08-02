@@ -1,7 +1,7 @@
 import type { ThemePreference } from "@stratum/react";
 import { Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { BASEMAPS, type Basemap } from "../../constants/basemaps";
+import { type Basemap, getBasemapDefinition } from "../../constants/basemaps";
 import { BasemapToggle } from "../BasemapToggle/BasemapToggle";
 import { IconButton } from "../IconButton/IconButton";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
@@ -88,7 +88,7 @@ export function SettingsMenu({
             data-testid="settings-basemap-hint"
             aria-live="polite"
           >
-            {BASEMAPS[basemap].description}
+            {getBasemapDefinition(basemap).description}
           </p>
           <ThemeToggle
             preference={themePreference}

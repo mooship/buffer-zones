@@ -37,19 +37,28 @@ function getTransitEntries(
   layers: readonly Layer[],
   visibleLayerIds?: string[],
 ) {
-  return layers.flatMap((layer) =>
-    layer.available &&
-    layer.style.kind === "line" &&
-    (!visibleLayerIds || visibleLayerIds.includes(layer.id))
-      ? [
-          {
-            label: layer.style.legendLabel,
-            color: layer.style.color,
-            hasStations: layer.hasPointGeometry === true,
-          },
-        ]
-      : [],
-  );
+  return layers.flatMap((layer) => {
+    if (
+      !layer.available ||
+      layer.style.kind !== "line" ||
+      (visibleLayerIds && !visibleLayerIds.includes(layer.id))
+    ) {
+      return [];
+    }
+
+    const { style } = layer;
+    const hasStations = layer.hasPointGeometry === true;
+
+    if (style.colorClassification) {
+      return style.colorClassification.stops.map((stop) => ({
+        label: stop.label,
+        color: stop.value,
+        hasStations,
+      }));
+    }
+
+    return [{ label: style.legendLabel, color: style.color, hasStations }];
+  });
 }
 
 function getLegendAriaLabel(mode: "all" | "active", label: string) {
