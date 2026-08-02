@@ -384,4 +384,49 @@ describe("LocationSearchControl", () => {
       screen.queryByRole("option", { name: "First" }),
     ).not.toBeInTheDocument();
   });
+
+  it("does not show a clear button when the query is empty", () => {
+    render(<LocationSearchControl onLocationSelect={vi.fn()} />);
+
+    expect(
+      screen.queryByRole("button", { name: /clear search/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("clears the query, results, and error via the clear button", async () => {
+    searchMocks.fetchLocationSearchResults.mockResolvedValue([
+      { id: "1", label: "First", latitude: 0, longitude: 0 },
+    ]);
+
+    render(<LocationSearchControl onLocationSelect={vi.fn()} />);
+    const input = screen.getByTestId("location-search-input");
+    fireEvent.change(input, { target: { value: "Query" } });
+    await screen.findByRole("option", { name: "First" });
+
+    fireEvent.click(screen.getByRole("button", { name: /clear search/i }));
+
+    expect(input).toHaveValue("");
+    expect(
+      screen.queryByRole("option", { name: "First" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /clear search/i }),
+    ).not.toBeInTheDocument();
+    expect(input).toHaveFocus();
+  });
+
+  it("clears the query and dismisses results on Escape", async () => {
+    searchMocks.fetchLocationSearchResults.mockResolvedValue([
+      { id: "1", label: "First", latitude: 0, longitude: 0 },
+    ]);
+
+    render(<LocationSearchControl onLocationSelect={vi.fn()} />);
+    const input = screen.getByTestId("location-search-input");
+    fireEvent.change(input, { target: { value: "Query" } });
+    await screen.findByRole("option", { name: "First" });
+
+    fireEvent.keyDown(input, { key: "Escape" });
+
+    expect(input).toHaveValue("");
+  });
 });

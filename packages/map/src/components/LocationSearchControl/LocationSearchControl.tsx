@@ -1,7 +1,8 @@
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import {
@@ -10,6 +11,7 @@ import {
   nominatimGeocoderProvider,
 } from "../../data/locationSearch";
 import { useAbortController } from "../../hooks/useAbortController";
+import { IconButton } from "../IconButton/IconButton";
 import styles from "./LocationSearchControl.module.css";
 
 interface LocationSearchControlProps {
@@ -40,6 +42,7 @@ export function LocationSearchControl({
   const [searchError, setSearchError] = useState<string | null>(null);
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const { next, abort } = useAbortController();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: provider intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
   useEffect(() => {
@@ -120,9 +123,7 @@ export function LocationSearchControl({
     }
 
     if (event.key === "Escape") {
-      setResults([]);
-      setSearchError(null);
-      setActiveResultIndex(-1);
+      handleClear();
     }
   }
 
@@ -132,6 +133,14 @@ export function LocationSearchControl({
     setResults([]);
     setSearchError(null);
     setActiveResultIndex(-1);
+  }
+
+  function handleClear() {
+    setQuery("");
+    setResults([]);
+    setSearchError(null);
+    setActiveResultIndex(-1);
+    inputRef.current?.focus();
   }
 
   const activeResult =
@@ -151,30 +160,46 @@ export function LocationSearchControl({
         <Search aria-hidden="true" />
         Search place
       </label>
-      <input
-        id="map-location-search"
-        data-testid="location-search-input"
-        data-e2e="location-search-input"
-        className={styles.input}
-        type="search"
-        role="combobox"
-        aria-autocomplete="list"
-        aria-expanded={hasResults}
-        aria-controls="location-search-results"
-        aria-activedescendant={
-          activeResult ? `location-search-option-${activeResult.id}` : undefined
-        }
-        autoComplete="off"
-        spellCheck={false}
-        placeholder={placeholder}
-        value={query}
-        onChange={(event) => {
-          setQuery(event.target.value);
-          setSearchError(null);
-          setActiveResultIndex(-1);
-        }}
-        onKeyDown={handleInputKeyDown}
-      />
+      <div className={styles.inputRow}>
+        <input
+          ref={inputRef}
+          id="map-location-search"
+          data-testid="location-search-input"
+          data-e2e="location-search-input"
+          className={styles.input}
+          type="search"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={hasResults}
+          aria-controls="location-search-results"
+          aria-activedescendant={
+            activeResult
+              ? `location-search-option-${activeResult.id}`
+              : undefined
+          }
+          autoComplete="off"
+          spellCheck={false}
+          placeholder={placeholder}
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setSearchError(null);
+            setActiveResultIndex(-1);
+          }}
+          onKeyDown={handleInputKeyDown}
+        />
+        {query.length > 0 ? (
+          <IconButton
+            className={styles.clearButton}
+            label="Clear search"
+            data-testid="location-search-clear"
+            data-e2e="location-search-clear"
+            onClick={handleClear}
+          >
+            <X aria-hidden="true" />
+          </IconButton>
+        ) : null}
+      </div>
       {query.trim().length >= MIN_SEARCH_QUERY_LENGTH && searching ? (
         <output className={styles.status}>Searching places...</output>
       ) : null}

@@ -85,4 +85,51 @@ describe("VectorBasemapLayer", () => {
     expect(layerMocks.maplibreGL).not.toHaveBeenCalled();
     expect(layer.addTo).not.toHaveBeenCalled();
   });
+
+  it("calls onError instead of leaving the map blank when the style fails to load", async () => {
+    const loadError = new Error("network down");
+    layerMocks.maplibreGL.mockImplementation(() => {
+      throw loadError;
+    });
+    const onError = vi.fn();
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    render(
+      <VectorBasemapLayer
+        styleUrl="https://example.com/style.json"
+        onError={onError}
+      />,
+    );
+
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(loadError));
+
+    consoleError.mockRestore();
+  });
+
+  it("does not call onError if unmounted before the failure resolves", async () => {
+    const loadError = new Error("network down");
+    layerMocks.maplibreGL.mockImplementation(() => {
+      throw loadError;
+    });
+    const onError = vi.fn();
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { unmount } = render(
+      <VectorBasemapLayer
+        styleUrl="https://example.com/style.json"
+        onError={onError}
+      />,
+    );
+    unmount();
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(onError).not.toHaveBeenCalled();
+
+    consoleError.mockRestore();
+  });
 });

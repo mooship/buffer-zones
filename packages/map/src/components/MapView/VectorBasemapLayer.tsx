@@ -4,6 +4,12 @@ import { useMap } from "react-leaflet";
 interface VectorBasemapLayerProps {
   /** URL of a MapLibre GL style JSON document to render as the basemap. */
   styleUrl: string;
+  /**
+   * Called if the style/plugin fails to load or the MapLibre layer fails to
+   * initialize, so a caller can fall back to another basemap instead of
+   * leaving the map blank. Always logged to `console.error` regardless.
+   */
+  onError?: (error: unknown) => void;
 }
 
 /**
@@ -14,23 +20,31 @@ interface VectorBasemapLayerProps {
  *   basemap) never need it. Recreates the MapLibre GL layer whenever
  *   `styleUrl` changes (e.g. switching a light/dark style).
  */
-export function VectorBasemapLayer({ styleUrl }: VectorBasemapLayerProps) {
+export function VectorBasemapLayer({
+  styleUrl,
+  onError,
+}: VectorBasemapLayerProps) {
   const map = useMap();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: onError intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect (tearing down and recreating the MapLibre layer) on every render for callers that don't memoize it
   useEffect(() => {
     let cancelled = false;
     let layer: import("leaflet").MaplibreGL | undefined;
 
-    Promise.all([
-      import("@maplibre/maplibre-gl-leaflet"),
-      import("leaflet"),
-    ]).then(([, L]) => {
-      if (cancelled) {
-        return;
-      }
-      layer = L.maplibreGL({ style: styleUrl });
-      layer.addTo(map);
-    });
+    Promise.all([import("@maplibre/maplibre-gl-leaflet"), import("leaflet")])
+      .then(([, L]) => {
+        if (cancelled) {
+          return;
+        }
+        layer = L.maplibreGL({ style: styleUrl });
+        layer.addTo(map);
+      })
+      .catch((error) => {
+        console.error(`Failed to load vector basemap style ${styleUrl}`, error);
+        if (!cancelled) {
+          onError?.(error);
+        }
+      });
 
     return () => {
       cancelled = true;

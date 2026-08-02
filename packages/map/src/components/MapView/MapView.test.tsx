@@ -36,6 +36,7 @@ const mapMocks = vi.hoisted(() => ({
   >,
   nextFeatureLayerElement: undefined as HTMLElement | null | undefined,
   zoom: 9,
+  vectorBasemapOnError: null as ((error: unknown) => void) | null,
 }));
 
 const geocodeMocks = vi.hoisted(() => ({
@@ -196,9 +197,16 @@ vi.mock("../../data/locationSearch", () => ({
 }));
 
 vi.mock("./VectorBasemapLayer", () => ({
-  VectorBasemapLayer: ({ styleUrl }: { styleUrl: string }) => (
-    <div data-testid="vector-basemap-layer">{styleUrl}</div>
-  ),
+  VectorBasemapLayer: ({
+    styleUrl,
+    onError,
+  }: {
+    styleUrl: string;
+    onError?: (error: unknown) => void;
+  }) => {
+    mapMocks.vectorBasemapOnError = onError ?? null;
+    return <div data-testid="vector-basemap-layer">{styleUrl}</div>;
+  },
 }));
 
 import { setThemePreference } from "@stratum/react";
@@ -278,6 +286,7 @@ describe("MapView", () => {
     mapMocks.geoJsonProps = {};
     mapMocks.nextFeatureLayerElement = undefined;
     mapMocks.zoom = 9;
+    mapMocks.vectorBasemapOnError = null;
     popupMocks.renderToStaticMarkup.mockClear();
     geocodeMocks.fetchReverseGeocodeResult.mockReset();
     vi.unstubAllGlobals();
@@ -1598,5 +1607,27 @@ describe("MapView", () => {
     expect(screen.getByTestId("vector-basemap-layer")).toHaveTextContent(
       "https://example.com/dark.json",
     );
+  });
+
+  it("calls onBasemapError when the vector basemap layer fails to load", () => {
+    const onBasemapError = vi.fn();
+    stubMatchMedia(false);
+
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={[]}
+          basemap="voyager"
+          onBasemapError={onBasemapError}
+        />,
+      ),
+    );
+
+    const loadError = new Error("network down");
+    mapMocks.vectorBasemapOnError?.(loadError);
+
+    expect(onBasemapError).toHaveBeenCalledWith("voyager", loadError);
   });
 });

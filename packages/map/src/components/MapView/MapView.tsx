@@ -71,6 +71,11 @@ interface MapViewProps<
   /** Called with the ids of overlay layers whose data failed to load, whenever that set changes. */
   onLayerDataError?: (failedLayerIds: string[]) => void;
   /**
+   * Called if the current vector basemap's style fails to load, so a caller
+   * can fall back to another basemap instead of leaving the map blank.
+   */
+  onBasemapError?: (basemap: Basemap, error: unknown) => void;
+  /**
    * When `true`, clicking the map background reverse-geocodes that point and
    * shows the result in a popup. Defaults to `false`.
    */
@@ -472,6 +477,7 @@ function MapViewComponent<
   onFeatureSelect,
   renderFeaturePopup,
   onLayerDataError,
+  onBasemapError,
   locateOnClick = false,
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
@@ -630,7 +636,11 @@ function MapViewComponent<
           />
         ) : null}
         {vectorStyleUrl ? (
-          <VectorBasemapLayer key={vectorStyleUrl} styleUrl={vectorStyleUrl} />
+          <VectorBasemapLayer
+            key={vectorStyleUrl}
+            styleUrl={vectorStyleUrl}
+            onError={(error) => onBasemapError?.(basemap, error)}
+          />
         ) : null}
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />
@@ -688,7 +698,11 @@ function MapViewComponent<
             <GeoJSON
               key={layer.id}
               data={data}
-              smoothFactor={0}
+              // Leaflet's default smoothFactor (1) simplifies just enough to
+              // round off the jagged real-world turns in OSM-derived transit
+              // route geometry; unlike the township outline below, there's
+              // no boundary-fidelity reason to disable it here.
+              smoothFactor={1}
               style={config.styleFn}
               pathOptions={{
                 ...config.pathOptions,

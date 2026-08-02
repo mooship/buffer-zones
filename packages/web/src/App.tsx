@@ -388,6 +388,7 @@ export function App() {
                 focusLocationTarget={focusLocationTarget}
                 onFeatureSelect={setSelectedFeatureId}
                 onLayerDataError={setFailedLayerIds}
+                onBasemapError={() => setBasemap("street")}
                 locateOnClick
                 renderFeaturePopup={(properties) => (
                   <TownshipPopup
