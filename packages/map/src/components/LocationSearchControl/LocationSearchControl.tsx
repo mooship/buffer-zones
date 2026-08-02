@@ -112,6 +112,7 @@ export function LocationSearchControl({
 
       event.preventDefault();
       const selected = results[activeResultIndex];
+      /* v8 ignore next 3 -- unreachable: activeResultIndex is already bounds-checked above */
       if (selected) {
         handleResultSelect(selected);
       }

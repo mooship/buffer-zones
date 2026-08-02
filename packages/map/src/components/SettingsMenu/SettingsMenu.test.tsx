@@ -71,6 +71,41 @@ describe("SettingsMenu", () => {
     expect(trigger).toHaveFocus();
   });
 
+  it("does not close when clicking inside the menu", () => {
+    render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+    const content = screen.getByTestId("settings-menu-content");
+
+    fireEvent.mouseDown(content);
+
+    expect(screen.getByTestId("settings-menu-content")).toBeInTheDocument();
+  });
+
+  it("ignores non-Escape keys while open", () => {
+    render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+
+    fireEvent.keyDown(document, { key: "a" });
+
+    expect(screen.getByTestId("settings-menu-content")).toBeInTheDocument();
+  });
+
   it("passes through basemap and theme change actions", () => {
     const onBasemapChange = vi.fn();
     const onThemePreferenceChange = vi.fn();
