@@ -61,10 +61,8 @@ export async function fetchFeatureCollection(
 
   cache.set(url, data);
   if (cache.size > CACHE_MAX_ENTRIES) {
-    const leastRecentlyUsedUrl = cache.keys().next().value;
-    if (leastRecentlyUsedUrl !== undefined) {
-      cache.delete(leastRecentlyUsedUrl);
-    }
+    // cache.size > CACHE_MAX_ENTRIES (>= 1) guarantees a first key exists.
+    cache.delete(cache.keys().next().value as string);
   }
 
   return data;
