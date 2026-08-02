@@ -25,5 +25,5 @@ export { TOWNSHIP_OUTLINE } from "./constants/mapStyles";
 export type { DomainRegistry } from "./context/DomainContext";
 export { DomainProvider, useDomain } from "./context/DomainContext";
 export type { LocationSearchResult } from "./data/locationSearch";
-export type { LayerDataMap } from "./hooks/useLayerData";
+export type { LayerDataMap, LayerDataResult } from "./hooks/useLayerData";
 export { useLayerData } from "./hooks/useLayerData";

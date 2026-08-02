@@ -32,6 +32,7 @@ export function initTheme(themeConfig: ThemeConfig): void {
   config = themeConfig;
   if (typeof window !== "undefined") {
     currentPreference = readStoredPreference();
+    applyThemeAttribute(currentPreference);
   }
 }
 

@@ -15,7 +15,7 @@ export function EvidenceSummary({
       <div className={styles.limitation}>
         <strong>Car time is only a baseline proxy.</strong>
         <span>
-          It shows the fastest modeled drive to the nearest of {jobCenterCount}{" "}
+          It shows the fastest modelled drive to the nearest of {jobCenterCount}{" "}
           selected job centres. It does not measure walking, waiting, transfers,
           service frequency or whether a household has access to a car.
         </span>

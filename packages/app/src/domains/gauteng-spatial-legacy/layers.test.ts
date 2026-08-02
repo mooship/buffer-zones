@@ -18,7 +18,7 @@ describe("GAUTENG_SPATIAL_LEGACY_LAYERS", () => {
     const layer = GAUTENG_SPATIAL_LEGACY_LAYERS.find(
       (l) => l.id === "townships",
     );
-    expect(layer?.label).toBe("Modeled car time");
+    expect(layer?.label).toBe("Modelled car time");
     expect(layer?.geometryKind).toBe("choropleth");
     expect(layer?.defaultVisible).toBe(true);
     expect(layer?.dataSource).toEqual([

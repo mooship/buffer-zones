@@ -15,13 +15,13 @@ const properties: TownshipProperties = {
 };
 
 describe("TownshipPopup", () => {
-  it("shows name, population, modeled car time, and nearest job center", () => {
+  it("shows name, population, modelled car time, and nearest job center", () => {
     render(<TownshipPopup properties={properties} />);
 
     expect(screen.getByText("Mamelodi SP")).toBeInTheDocument();
     expect(screen.getByText(/334[\s,]577/)).toBeInTheDocument();
     expect(screen.getByText("1h 2min")).toBeInTheDocument();
-    expect(screen.getByText("Modeled car time")).toBeInTheDocument();
+    expect(screen.getByText("Modelled car time")).toBeInTheDocument();
     expect(screen.getByText("Pretoria CBD")).toBeInTheDocument();
   });
 
@@ -36,7 +36,7 @@ describe("TownshipPopup", () => {
     expect(screen.queryByText(/distance/i)).not.toBeInTheDocument();
   });
 
-  it("shows 'No data' when the modeled car time is unknown", () => {
+  it("shows 'No data' when the modelled car time is unknown", () => {
     render(
       <TownshipPopup properties={{ ...properties, commuteMinutes: null }} />,
     );

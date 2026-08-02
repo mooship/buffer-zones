@@ -113,7 +113,7 @@ export function Legend({
           <h3 className={styles.groupTitle}>Transit routes</h3>
           <ul
             className={styles.legend}
-            aria-label={getLegendAriaLabel(mode, "Transit route colors")}
+            aria-label={getLegendAriaLabel(mode, "Transit route colours")}
           >
             {transitEntries.map((entry) => (
               <li key={entry.label} className={styles.entry}>

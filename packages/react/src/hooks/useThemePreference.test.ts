@@ -120,4 +120,17 @@ describe("useThemePreference theme-color meta sync", () => {
 
     expect(result.current).toBe("dark");
   });
+
+  it("applies the theme-color meta tag for an already-stored explicit preference on initTheme", async () => {
+    localStorage.setItem("test-theme", "dark");
+    const { initTheme } = await importFreshModule();
+
+    initTheme({ storageKey: "test-theme", colors: TEST_COLORS });
+
+    const meta = document.querySelector(
+      'meta[name="theme-color"][data-theme-override]',
+    );
+    expect(meta).toHaveAttribute("content", TEST_COLORS.dark);
+    expect(document.documentElement.dataset.theme).toBe("dark");
+  });
 });

@@ -5,9 +5,14 @@ import styles from "./LayerToggles.module.css";
 interface LayerTogglesProps {
   visibleLayerIds: string[];
   onToggle: (id: string) => void;
+  failedLayerIds?: string[];
 }
 
-export function LayerToggles({ visibleLayerIds, onToggle }: LayerTogglesProps) {
+export function LayerToggles({
+  visibleLayerIds,
+  onToggle,
+  failedLayerIds = [],
+}: LayerTogglesProps) {
   const groups = getLayerGroups();
 
   function renderLayer(layerId: string) {
@@ -16,6 +21,7 @@ export function LayerToggles({ visibleLayerIds, onToggle }: LayerTogglesProps) {
       return null;
     }
     const layerTestId = `layer-toggle-${layer.id}`;
+    const failed = failedLayerIds.includes(layer.id);
     return (
       <li key={layer.id}>
         <label
@@ -37,6 +43,16 @@ export function LayerToggles({ visibleLayerIds, onToggle }: LayerTogglesProps) {
           {layer.available ? null : (
             <span className={styles.badge}>Not yet available</span>
           )}
+          {layer.available && failed ? (
+            <span
+              className={styles.badgeError}
+              role="status"
+              data-testid={`${layerTestId}-error`}
+              data-e2e={`${layerTestId}-error`}
+            >
+              Failed to load — toggle off and on to retry
+            </span>
+          ) : null}
         </label>
       </li>
     );

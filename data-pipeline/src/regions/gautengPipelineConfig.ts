@@ -87,7 +87,10 @@ async function fetchRapidRail(): Promise<TransitLayerFeatureCollection> {
     const raw = await fetchGautrainRail(bbox);
     return normalizeGautrainOverpass(raw);
   } catch (error) {
-    console.warn("Skipping Gautrain rail due to fetch failure", error);
+    console.error(
+      "Skipping Gautrain rail due to fetch failure, falling back to last published output",
+      error,
+    );
     const fallback = await readExistingTransitLayer("rapid-rail");
     if (!fallback) {
       throw new Error(
@@ -104,7 +107,10 @@ async function fetchCommuterRail(): Promise<TransitLayerFeatureCollection> {
     const raw = await fetchPrasaRail(bbox);
     return normalizePrasaOverpass(raw);
   } catch (error) {
-    console.warn("Skipping PRASA rail due to fetch failure", error);
+    console.error(
+      "Skipping PRASA rail due to fetch failure, falling back to last published output",
+      error,
+    );
     const fallback = await readExistingTransitLayer("commuter-rail");
     if (!fallback) {
       throw new Error(
@@ -138,7 +144,10 @@ async function fetchGautrainBus(): Promise<TransitLayerFeatureCollection> {
     const raw = await fetchGautrainBusRoutes(bbox);
     return normalizeGautrainBusOverpass(raw);
   } catch (error) {
-    console.warn("Skipping Gautrain Bus due to fetch failure", error);
+    console.error(
+      "Skipping Gautrain Bus due to fetch failure, falling back to last published output",
+      error,
+    );
     const fallback = await readExistingTransitLayer("bus");
     if (!fallback) {
       throw new Error(

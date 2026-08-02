@@ -133,7 +133,7 @@ describe("App", () => {
     fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
 
     expect(
-      await screen.findByRole("checkbox", { name: "Modeled car time" }),
+      await screen.findByRole("checkbox", { name: "Modelled car time" }),
     ).toBeChecked();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
@@ -150,7 +150,7 @@ describe("App", () => {
 
     expect(screen.getByText(/apartheid law controlled/i)).toBeInTheDocument();
     expect(
-      screen.queryByRole("checkbox", { name: "Modeled car time" }),
+      screen.queryByRole("checkbox", { name: "Modelled car time" }),
     ).not.toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
@@ -236,7 +236,7 @@ describe("App", () => {
       await screen.findByRole("button", { name: /browse mamelodi/i }),
     );
     fireEvent.click(
-      screen.getByRole("button", { name: /mamelodi, modeled car time/i }),
+      screen.getByRole("button", { name: /mamelodi, modelled car time/i }),
     );
 
     expect(
@@ -254,13 +254,13 @@ describe("App", () => {
     fireEvent.click(trigger);
 
     expect(
-      screen.queryByRole("checkbox", { name: "Modeled car time" }),
+      screen.queryByRole("checkbox", { name: "Modelled car time" }),
     ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /explore/i }));
 
     expect(
-      screen.getByRole("checkbox", { name: "Modeled car time" }),
+      screen.getByRole("checkbox", { name: "Modelled car time" }),
     ).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
@@ -273,7 +273,7 @@ describe("App", () => {
     fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
 
     expect(
-      await screen.findByRole("checkbox", { name: "Modeled car time" }),
+      await screen.findByRole("checkbox", { name: "Modelled car time" }),
     ).toBeInTheDocument();
 
     expect(screen.getByTestId("desktop-legend")).toBeVisible();

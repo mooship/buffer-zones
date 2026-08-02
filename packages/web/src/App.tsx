@@ -77,6 +77,7 @@ export function App() {
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
   const [townshipAreas, setTownshipAreas] = useState<Feature[]>([]);
   const [dataError, setDataError] = useState(false);
+  const [failedLayerIds, setFailedLayerIds] = useState<string[]>([]);
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
   const [mobileSheetDragOffset, setMobileSheetDragOffset] = useState(0);
@@ -386,6 +387,7 @@ export function App() {
                 selectedFeatureId={selectedFeatureId}
                 focusLocationTarget={focusLocationTarget}
                 onFeatureSelect={setSelectedFeatureId}
+                onLayerDataError={setFailedLayerIds}
                 renderFeaturePopup={(properties) => (
                   <TownshipPopup
                     properties={properties as unknown as TownshipProperties}
@@ -565,6 +567,7 @@ export function App() {
                   <LayerToggles
                     visibleLayerIds={visibleLayerIds}
                     onToggle={toggleLayer}
+                    failedLayerIds={failedLayerIds}
                   />
                 </section>
               </div>

@@ -171,9 +171,13 @@ export async function fetchAReYengRoutes(): Promise<
       merged.push(...(collection as FeatureCollection).features);
     }
     return { type: "FeatureCollection", features: merged };
-  } catch {
+  } catch (error) {
     // fall through to the Overpass fallback below on any network/TLS/shape failure
     // for any of the three layers, so the layer is all-or-nothing per source.
+    console.warn(
+      "A Re Yeng open-data-portal fetch failed, falling back to Overpass",
+      error,
+    );
   }
 
   return fetchOverpass(AREYENG_OVERPASS_QUERY);
