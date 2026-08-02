@@ -62,6 +62,8 @@ interface MapViewProps<
   } | null;
   onFeatureSelect?: (featureId: string) => void;
   renderFeaturePopup?: (properties: TProperties) => ReactNode;
+  /** Called with the ids of overlay layers whose data failed to load, whenever that set changes. */
+  onLayerDataError?: (failedLayerIds: string[]) => void;
 }
 
 const TOWNSHIP_PANE = "townships";
@@ -453,6 +455,7 @@ function MapViewComponent<
   focusLocationTarget = null,
   onFeatureSelect,
   renderFeaturePopup,
+  onLayerDataError,
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
   const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
@@ -463,11 +466,15 @@ function MapViewComponent<
       ),
     [visibleLayerIds, getLayers],
   );
-  const overlayData = useLayerData(
+  const { data: overlayData, failedLayerIds } = useLayerData(
     visibleLayers
       .filter((layer) => layer.geometryKind !== "choropleth")
       .map((layer) => layer.id),
   );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: onLayerDataError intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
+  useEffect(() => {
+    onLayerDataError?.(failedLayerIds);
+  }, [failedLayerIds]);
   const prefersDark = usePrefersDarkMode();
   const themePreference = useThemePreference();
   const resolvedDark =

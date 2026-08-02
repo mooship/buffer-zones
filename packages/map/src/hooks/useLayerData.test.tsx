@@ -33,7 +33,7 @@ describe("useLayerData", () => {
     });
 
     await waitFor(() => {
-      expect(result.current).toHaveProperty("rapid-rail");
+      expect(result.current.data).toHaveProperty("rapid-rail");
     });
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
@@ -49,14 +49,14 @@ describe("useLayerData", () => {
     );
 
     await waitFor(() => {
-      expect(result.current).toHaveProperty("rapid-rail");
+      expect(result.current.data).toHaveProperty("rapid-rail");
     });
     vi.clearAllMocks();
 
     rerender({ ids: ["rapid-rail", "bus"] });
 
     await waitFor(() => {
-      expect(result.current).toHaveProperty("bus");
+      expect(result.current.data).toHaveProperty("bus");
     });
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -72,7 +72,7 @@ describe("useLayerData", () => {
     });
 
     await waitFor(() => {
-      expect(result.current).toEqual({});
+      expect(result.current.data).toEqual({});
     });
 
     expect(global.fetch).not.toHaveBeenCalled();
@@ -94,15 +94,41 @@ describe("useLayerData", () => {
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
-    expect(result.current).toEqual({});
+    expect(result.current.data).toEqual({});
+    await waitFor(() => {
+      expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+    });
 
     rerender({ ids: [] });
     rerender({ ids: ["rapid-rail"] });
 
     await waitFor(() => {
-      expect(result.current).toHaveProperty("rapid-rail");
+      expect(result.current.data).toHaveProperty("rapid-rail");
     });
     expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(result.current.failedLayerIds).toEqual([]);
+  });
+
+  it("logs a failed layer fetch to the console", async () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const fetchError = new Error("network");
+    vi.mocked(global.fetch).mockRejectedValueOnce(fetchError);
+
+    const { result } = renderHook(() => useLayerData(["rapid-rail"]), {
+      wrapper: withGautengDomain,
+    });
+
+    await waitFor(() => {
+      expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+    });
+    expect(consoleError).toHaveBeenCalledWith(
+      expect.stringContaining("rapid-rail"),
+      fetchError,
+    );
+
+    consoleError.mockRestore();
   });
 
   it("aborts in-flight fetches on unmount", async () => {
@@ -179,7 +205,7 @@ describe("useLayerData", () => {
     });
 
     await waitFor(() => {
-      expect(result.current.townships?.features).toHaveLength(2);
+      expect(result.current.data.townships?.features).toHaveLength(2);
     });
   });
 });

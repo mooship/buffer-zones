@@ -6,16 +6,25 @@ import { useDomain } from "../context/DomainContext";
 /** Maps a layer id to its fetched `FeatureCollection`, once loaded. */
 export type LayerDataMap = Partial<Record<string, FeatureCollection>>;
 
+/** Result of `useLayerData`: fetched data, plus ids of layers whose fetch failed. */
+export interface LayerDataResult {
+  data: LayerDataMap;
+  failedLayerIds: string[];
+}
+
 /**
  * Fetches and merges GeoJSON data for the given layer ids, resolved against
  * the domain registry provided by the nearest `DomainProvider`.
  * @param layerIds - Ids of layers to fetch data for. Unavailable layers are skipped.
- * @returns A map of layer id to its merged `FeatureCollection`, updated as data arrives.
+ * @returns The merged `FeatureCollection` per layer id, plus ids of layers whose
+ *   fetch failed (logged via `console.error`). A failed layer is retried if its id
+ *   is removed from `layerIds` and passed again.
  * @remarks Must be called from within a `DomainProvider`.
  */
-export function useLayerData(layerIds: string[]): LayerDataMap {
+export function useLayerData(layerIds: string[]): LayerDataResult {
   const { getLayer } = useDomain();
   const [data, setData] = useState<LayerDataMap>({});
+  const [failedLayerIds, setFailedLayerIds] = useState<string[]>([]);
   const requested = useRef(new Set<string>());
   const key = layerIds.join(",");
 
@@ -52,12 +61,21 @@ export function useLayerData(layerIds: string[]): LayerDataMap {
               ...current,
               [id]: mergeFeatureCollections(collections),
             }));
+            setFailedLayerIds((current) =>
+              current.includes(id) ? current.filter((f) => f !== id) : current,
+            );
           }
           controllers.delete(requestKey);
         })
-        .catch(() => {
+        .catch((error) => {
           requested.current.delete(requestKey);
           controllers.delete(requestKey);
+          if (!cancelled) {
+            console.error(`Failed to load layer data for "${id}"`, error);
+            setFailedLayerIds((current) =>
+              current.includes(id) ? current : [...current, id],
+            );
+          }
         });
     }
 
@@ -69,5 +87,5 @@ export function useLayerData(layerIds: string[]): LayerDataMap {
     };
   }, [key]);
 
-  return data;
+  return { data, failedLayerIds };
 }

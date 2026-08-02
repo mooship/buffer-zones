@@ -1040,6 +1040,29 @@ export const TOWNSHIP_GROUPS = TOWNSHIP_AREA_DEFINITIONS.map(
   (area) => area.name,
 );
 
+function findByCensusCode(
+  areas: TownshipAreaDefinition[],
+  censusId: string,
+): TownshipAreaDefinition | undefined {
+  return areas.find((area) =>
+    area.censusMainPlaceCodes?.some((code) => censusId.startsWith(code)),
+  );
+}
+
+function bestMatch(
+  matches: TownshipAreaDefinition[],
+  censusId: string | undefined,
+): TownshipAreaDefinition | undefined {
+  if (censusId) {
+    const codeMatch = findByCensusCode(matches, censusId);
+    if (codeMatch) {
+      return codeMatch;
+    }
+  }
+
+  return matches[0];
+}
+
 export function getTownshipAreaDefinition(
   name: string,
   censusId?: string,
@@ -1052,38 +1075,18 @@ export function getTownshipAreaDefinition(
     area.subPlaceNamePrefixes?.some((prefix) => name.startsWith(prefix)),
   );
   if (prefixMatches.length > 0) {
-    if (censusId) {
-      const prefixCodeMatch = prefixMatches.find((area) =>
-        area.censusMainPlaceCodes?.some((code) => censusId.startsWith(code)),
-      );
-      if (prefixCodeMatch) {
-        return prefixCodeMatch;
-      }
-    }
-
-    return prefixMatches[0];
+    return bestMatch(prefixMatches, censusId);
   }
 
   const nameMatches = availableAreas.filter((area) =>
     name.startsWith(area.name),
   );
   if (nameMatches.length > 0) {
-    if (censusId) {
-      const nameCodeMatch = nameMatches.find((area) =>
-        area.censusMainPlaceCodes?.some((code) => censusId.startsWith(code)),
-      );
-      if (nameCodeMatch) {
-        return nameCodeMatch;
-      }
-    }
-
-    return nameMatches[0];
+    return bestMatch(nameMatches, censusId);
   }
 
   if (censusId) {
-    return availableAreas.find((area) =>
-      area.censusMainPlaceCodes?.some((code) => censusId.startsWith(code)),
-    );
+    return findByCensusCode(availableAreas, censusId);
   }
 
   return undefined;

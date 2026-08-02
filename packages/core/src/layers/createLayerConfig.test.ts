@@ -75,6 +75,37 @@ describe("createLayerConfig", () => {
     });
   });
 
+  it("picks the correct bucket even when buckets are declared out of ascending order", () => {
+    const config = createLayerConfig(
+      choroplethLayer({
+        style: {
+          kind: "choropleth",
+          propertyKey: "commuteMinutes",
+          buckets: [
+            {
+              max: Number.POSITIVE_INFINITY,
+              color: "#C1502E",
+              label: "Very long (> 60 min)",
+            },
+            { max: 20, color: "#7A9B6E", label: "Short (≤ 20 min)" },
+            { max: 60, color: "#D6703F", label: "Long (41–60 min)" },
+            { max: 40, color: "#C9A227", label: "Moderate (21–40 min)" },
+          ],
+          baseOpacity: 0.18,
+        },
+      }),
+    );
+    const feature = {
+      type: "Feature",
+      properties: { commuteMinutes: 15 },
+      geometry: null,
+    } as unknown as Feature;
+
+    expect(config.styleFn?.(feature)).toMatchObject({
+      fillColor: "#7A9B6E",
+    });
+  });
+
   it("produces a styleFn for a choropleth layer that colors by nearestTransitKm", () => {
     const config = createLayerConfig(
       choroplethLayer({

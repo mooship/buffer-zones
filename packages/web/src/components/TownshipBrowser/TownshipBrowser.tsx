@@ -331,7 +331,7 @@ export function TownshipBrowser({
             deferredQuery.length > 0 || expandedGroup === group.name;
           const timeRange =
             group.shortestTime === undefined || group.longestTime === undefined
-              ? "No modeled time"
+              ? "No modelled time"
               : group.shortestTime === group.longestTime
                 ? formatCommuteTime(group.shortestTime)
                 : `${formatCommuteTime(group.shortestTime)}–${formatCommuteTime(group.longestTime)}`;
@@ -372,7 +372,7 @@ export function TownshipBrowser({
                           className={styles.place}
                           data-testid={`township-place-${properties.id}`}
                           data-e2e={`township-place-${properties.id}`}
-                          aria-label={`${properties.name}, modeled car time ${commuteTime}, nearest selected centre ${properties.nearestJobCenter}`}
+                          aria-label={`${properties.name}, modelled car time ${commuteTime}, nearest selected centre ${properties.nearestJobCenter}`}
                           aria-pressed={properties.id === selectedTownshipId}
                           onClick={() => onSelect(township)}
                         >

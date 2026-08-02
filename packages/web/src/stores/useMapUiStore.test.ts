@@ -33,7 +33,7 @@ describe("useMapUiStore", () => {
     );
   });
 
-  it("keeps modeled car time and nearest-transit mutually exclusive", () => {
+  it("keeps modelled car time and nearest-transit mutually exclusive", () => {
     act(() => {
       useMapUiStore.getState().toggleLayer("nearest-transit");
     });

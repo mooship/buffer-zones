@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import * as cache from "./cache";
 import { getNearestJobCenter } from "./osrmClient";
 
 describe("getNearestJobCenter", () => {
@@ -8,6 +9,7 @@ describe("getNearestJobCenter", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   const destinations = [
@@ -163,5 +165,30 @@ describe("getNearestJobCenter", () => {
     await assertion;
 
     expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it("falls back to cached durations once retries are exhausted", async () => {
+    vi.useFakeTimers();
+    const fetchMock = fetch as ReturnType<typeof vi.fn>;
+    fetchMock.mockResolvedValue({ ok: false, status: 429 });
+    vi.spyOn(cache, "readJsonCache").mockResolvedValue([[600, 1200]]);
+    const writeJsonCacheSpy = vi.spyOn(cache, "writeJsonCache");
+
+    const resultPromise = getNearestJobCenter(
+      [{ lat: -25.75, lon: 28.19 }],
+      destinations,
+    );
+    await vi.advanceTimersByTimeAsync(10_000);
+    const result = await resultPromise;
+
+    expect(result).toEqual([
+      {
+        minutes: 10,
+        jobCenterId: "pretoria-cbd",
+        jobCenterName: "Pretoria CBD",
+      },
+    ]);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(writeJsonCacheSpy).not.toHaveBeenCalled();
   });
 });

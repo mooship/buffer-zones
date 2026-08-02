@@ -304,4 +304,26 @@ describe("fetchAReYengRoutes", () => {
 
     expect("elements" in result).toBe(true);
   });
+
+  it("logs the portal failure before falling back to Overpass", async () => {
+    const consoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes("/api/interpreter")) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ elements: [] }),
+        });
+      }
+      return Promise.resolve({ ok: false });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await fetchAReYengRoutes();
+
+    expect(consoleWarn).toHaveBeenCalledWith(
+      expect.stringContaining("A Re Yeng"),
+      expect.any(Error),
+    );
+    consoleWarn.mockRestore();
+  });
 });

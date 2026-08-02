@@ -22,9 +22,9 @@ function resolveTownshipEmphasis(
 export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
   {
     id: "townships",
-    label: "Modeled car time",
+    label: "Modelled car time",
     description:
-      "Modeled car drive-time from each recognised township area to its nearest selected job centre.",
+      "Modelled car drive-time from each recognised township area to its nearest selected job centre.",
     dataSource: [dataUrl("townships.display.v1.geojson")],
     companionSource: dataUrl("township-areas.display.v1.geojson"),
     geometryKind: "choropleth",

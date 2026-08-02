@@ -25,7 +25,6 @@ function sleep(ms: number): Promise<void> {
 async function fetchTable(
   origins: LatLon[],
   destinations: readonly JobCenter[],
-  attempt = 1,
 ): Promise<(number | null)[][]> {
   const coords = [...origins, ...destinations]
     .map((c) => `${c.lon},${c.lat}`)
@@ -42,57 +41,59 @@ async function fetchTable(
     sourceIndices,
     destinationIndices,
   ]);
-  const cached =
-    attempt === 1
-      ? await readJsonCache<(number | null)[][]>("osrm", cacheKey, {
-          maxAgeMs: OSRM_CACHE_MAX_AGE_MS,
-        })
-      : null;
+  const cached = await readJsonCache<(number | null)[][]>("osrm", cacheKey, {
+    maxAgeMs: OSRM_CACHE_MAX_AGE_MS,
+  });
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => {
-    controller.abort();
-  }, OSRM_TIMEOUT_MS);
+  let lastError: unknown;
 
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) {
-      if ((response.status === 429 || response.status === 504) && attempt < 3) {
-        await sleep(BATCH_DELAY_MS * attempt);
-        return fetchTable(origins, destinations, attempt + 1);
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, OSRM_TIMEOUT_MS);
+
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) {
+        if (
+          (response.status === 429 || response.status === 504) &&
+          attempt < 3
+        ) {
+          await sleep(BATCH_DELAY_MS * attempt);
+          continue;
+        }
+        throw new Error(`OSRM table request failed: ${response.status}`);
       }
-      throw new Error(`OSRM table request failed: ${response.status}`);
-    }
 
-    const body = (await response.json()) as {
-      code: string;
-      durations: (number | null)[][];
-    };
-    if (body.code !== "Ok") {
-      throw new Error(`OSRM table returned code ${body.code}`);
+      const body = (await response.json()) as {
+        code: string;
+        durations: (number | null)[][];
+      };
+      if (body.code !== "Ok") {
+        throw new Error(`OSRM table returned code ${body.code}`);
+      }
+      await writeJsonCache("osrm", cacheKey, body.durations);
+      return body.durations;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        await sleep(BATCH_DELAY_MS * attempt);
+      }
+    } finally {
+      clearTimeout(timeout);
     }
-    await writeJsonCache("osrm", cacheKey, body.durations);
-    return body.durations;
-  } catch (error) {
-    if (attempt < 3) {
-      await sleep(BATCH_DELAY_MS * attempt);
-      return fetchTable(origins, destinations, attempt + 1);
-    }
-
-    if (cached) {
-      return cached;
-    }
-
-    if (error instanceof Error && error.name === "AbortError") {
-      throw new Error(
-        `OSRM table request timed out after ${OSRM_TIMEOUT_MS}ms`,
-      );
-    }
-
-    throw error;
-  } finally {
-    clearTimeout(timeout);
   }
+
+  if (cached) {
+    return cached;
+  }
+
+  if (lastError instanceof Error && lastError.name === "AbortError") {
+    throw new Error(`OSRM table request timed out after ${OSRM_TIMEOUT_MS}ms`);
+  }
+
+  throw lastError;
 }
 
 function pickNearest(

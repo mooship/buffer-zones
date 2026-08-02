@@ -14,7 +14,7 @@ describe("Legend", () => {
   it("renders each choropleth layer's bucket labels and colors from its style config", () => {
     render(withDomain(<Legend />));
     expect(
-      screen.getByRole("list", { name: /Modeled car time/i }),
+      screen.getByRole("list", { name: /Modelled car time/i }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("list", { name: /Distance to Nearest Transit/i }),

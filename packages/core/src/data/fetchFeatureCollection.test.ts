@@ -41,4 +41,26 @@ describe("fetchFeatureCollection", () => {
       fetchFeatureCollection("/data/broken.geojson"),
     ).rejects.toThrow(/features\.0\.geometry/i);
   });
+
+  it("rejects with the HTTP status on a non-2xx response", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: false, status: 404 }),
+    );
+
+    await expect(
+      fetchFeatureCollection("/data/missing.geojson"),
+    ).rejects.toThrow(/missing\.geojson.*404/i);
+  });
+
+  it("propagates a network failure", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new TypeError("Failed to fetch")),
+    );
+
+    await expect(
+      fetchFeatureCollection("/data/unreachable.geojson"),
+    ).rejects.toThrow("Failed to fetch");
+  });
 });
