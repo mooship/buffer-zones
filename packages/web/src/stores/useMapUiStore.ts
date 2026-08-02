@@ -1,5 +1,5 @@
+import type { Basemap } from "@stratum/map";
 import { create } from "zustand";
-import type { Basemap } from "../constants/basemaps";
 import { getLayerGroups, getLayers } from "../layers/registry";
 
 function findGroupContaining(id: string) {

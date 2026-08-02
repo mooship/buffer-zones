@@ -4,7 +4,17 @@ import {
   type TownshipFeature,
   type TownshipProperties,
 } from "@stratum/app";
-import { DomainProvider } from "@stratum/map";
+import { fetchFeatureCollection, mergeFeatureCollections } from "@stratum/core";
+import {
+  ControlButton,
+  DesktopLegend,
+  DomainProvider,
+  LocationSearchControl,
+  type LocationSearchResult,
+  MobileLegend,
+  SettingsMenu,
+} from "@stratum/map";
+import { setThemePreference, useThemePreference } from "@stratum/react";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
@@ -20,30 +30,18 @@ import {
 } from "react";
 import { useWindowSize } from "usehooks-ts";
 import styles from "./App.module.css";
-import { ControlButton } from "./components/ControlButton/ControlButton";
-import { DesktopLegend } from "./components/DesktopLegend/DesktopLegend";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
-import { LocationSearchControl } from "./components/LocationSearchControl/LocationSearchControl";
-import { MobileLegend } from "./components/MobileLegend/MobileLegend";
-import { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import { TownshipPopup } from "./components/TownshipPopup/TownshipPopup";
 import { DATA_SOURCES, REPOSITORY_URL } from "./constants/metadata";
-import { fetchFeatureCollection } from "./data/fetchFeatureCollection";
-import type { LocationSearchResult } from "./data/locationSearch";
-import { mergeFeatureCollections } from "./data/mergeFeatureCollections";
 import { buildRegionDataUrls } from "./data/regionDataUrls";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
-import {
-  setThemePreference,
-  useThemePreference,
-} from "./hooks/useThemePreference";
 import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
 
 const MapView = lazy(async () => {
-  const module = await import("./components/MapView/MapView");
-  return { default: module.MapView };
+  const { MapView } = await import("@stratum/map/MapView");
+  return { default: MapView };
 });
 
 const GAUTENG_BOUNDS: [[number, number], [number, number]] = [

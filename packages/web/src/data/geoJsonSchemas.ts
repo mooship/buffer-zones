@@ -1,21 +1,8 @@
 import {
-  createFeatureCollectionParser,
-  featureCollectionSchema,
   multiPolygonGeometrySchema,
   polygonGeometrySchema,
 } from "@stratum/core";
 import * as z from "zod/mini";
-
-export type {
-  FeatureCollectionParser,
-  FeatureCollectionSchema,
-} from "@stratum/core";
-export {
-  createFeatureCollectionParser,
-  featureCollectionSchema,
-  multiPolygonGeometrySchema,
-  polygonGeometrySchema,
-};
 
 const townshipGeometrySchema = z.union([
   polygonGeometrySchema,

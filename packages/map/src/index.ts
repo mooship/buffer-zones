@@ -1,3 +1,8 @@
+// `MapView` is intentionally NOT re-exported here: it pulls in Leaflet and
+// react-leaflet, and consumers that code-split it behind `lazy()`/`import()`
+// need `@stratum/map/MapView` (see package.json `exports`) to keep that
+// bundle boundary — re-exporting it from this barrel would make it
+// statically reachable from any import of this module, defeating the split.
 export { BasemapToggle } from "./components/BasemapToggle/BasemapToggle";
 export type {
   ControlButtonProps,
@@ -9,7 +14,6 @@ export { DesktopLegend } from "./components/DesktopLegend/DesktopLegend";
 export { IconButton } from "./components/IconButton/IconButton";
 export { Legend } from "./components/Legend/Legend";
 export { LocationSearchControl } from "./components/LocationSearchControl/LocationSearchControl";
-export { MapView } from "./components/MapView/MapView";
 export { MobileLegend } from "./components/MobileLegend/MobileLegend";
 export type { SegmentedControlOption } from "./components/SegmentedControl/SegmentedControl";
 export { SegmentedControl } from "./components/SegmentedControl/SegmentedControl";

@@ -1,5 +1,5 @@
 import type { TownshipFeature } from "@stratum/app";
-import { fetchFeatureCollection } from "./fetchFeatureCollection";
+import { fetchFeatureCollection } from "@stratum/core";
 import { townshipFeatureCollectionSchema } from "./geoJsonSchemas";
 
 export interface TownshipDataRepository {

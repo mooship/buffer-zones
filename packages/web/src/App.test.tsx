@@ -30,9 +30,13 @@ vi.mock("react-leaflet", () => ({
   }),
 }));
 
-vi.mock("./data/fetchFeatureCollection", () => ({
-  fetchFeatureCollection: dataMocks.fetchAreas,
-}));
+vi.mock("@stratum/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@stratum/core")>();
+  return {
+    ...actual,
+    fetchFeatureCollection: dataMocks.fetchAreas,
+  };
+});
 
 vi.mock("./data/TownshipDataRepository", () => ({
   createTownshipDataRepository: () => ({

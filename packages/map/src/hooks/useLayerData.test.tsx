@@ -1,9 +1,19 @@
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
+import type { DomainConfig } from "@stratum/core";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
+import { DomainProvider } from "../context/DomainContext";
 import { useLayerData } from "./useLayerData";
 
 global.fetch = vi.fn();
+
+function withGautengDomain({ children }: { children: React.ReactNode }) {
+  return (
+    <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
+      {children}
+    </DomainProvider>
+  );
+}
 
 describe("useLayerData", () => {
   beforeEach(() => {
@@ -18,7 +28,9 @@ describe("useLayerData", () => {
   });
 
   it("fetches layers when mounted", async () => {
-    const { result } = renderHook(() => useLayerData(["rapid-rail"]));
+    const { result } = renderHook(() => useLayerData(["rapid-rail"]), {
+      wrapper: withGautengDomain,
+    });
 
     await waitFor(() => {
       expect(result.current).toHaveProperty("rapid-rail");
@@ -33,7 +45,7 @@ describe("useLayerData", () => {
   it("adds newly requested layers without refetching existing ones", async () => {
     const { result, rerender } = renderHook(
       ({ ids }: { ids: string[] }) => useLayerData(ids),
-      { initialProps: { ids: ["rapid-rail"] } },
+      { initialProps: { ids: ["rapid-rail"] }, wrapper: withGautengDomain },
     );
 
     await waitFor(() => {
@@ -55,7 +67,9 @@ describe("useLayerData", () => {
   });
 
   it("does not fetch layers that are unavailable", async () => {
-    const { result } = renderHook(() => useLayerData(["myciti"]));
+    const { result } = renderHook(() => useLayerData(["myciti"]), {
+      wrapper: withGautengDomain,
+    });
 
     await waitFor(() => {
       expect(result.current).toEqual({});
@@ -74,7 +88,7 @@ describe("useLayerData", () => {
 
     const { result, rerender } = renderHook(
       ({ ids }: { ids: string[] }) => useLayerData(ids),
-      { initialProps: { ids: ["rapid-rail"] } },
+      { initialProps: { ids: ["rapid-rail"] }, wrapper: withGautengDomain },
     );
 
     await waitFor(() => {
@@ -100,7 +114,9 @@ describe("useLayerData", () => {
       return new Promise<Response>(() => {});
     });
 
-    const { unmount } = renderHook(() => useLayerData(["rapid-rail"]));
+    const { unmount } = renderHook(() => useLayerData(["rapid-rail"]), {
+      wrapper: withGautengDomain,
+    });
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -133,31 +149,37 @@ describe("useLayerData", () => {
         }),
       } as Response);
 
-    vi.doMock("../layers/registry", () => ({
-      getLayer: () => ({
-        id: "townships",
-        label: "Modeled car time",
-        dataSource: [
-          "/data/gauteng/townships.display.v1.geojson",
-          "/data/other/townships.display.v1.geojson",
-        ],
-        geometryKind: "choropleth",
-        defaultVisible: true,
-        available: true,
-      }),
-    }));
-    vi.resetModules();
-    const { useLayerData: useLayerDataWithTwoSources } = await import(
-      "./useLayerData"
-    );
+    const twoSourceDomain: DomainConfig = {
+      layers: [
+        {
+          id: "townships",
+          label: "Modeled car time",
+          dataSource: [
+            "/data/gauteng/townships.display.v1.geojson",
+            "/data/other/townships.display.v1.geojson",
+          ],
+          geometryKind: "choropleth",
+          defaultVisible: true,
+          available: true,
+          style: {
+            kind: "choropleth",
+            propertyKey: "commuteMinutes",
+            buckets: [],
+            baseOpacity: 0.18,
+          },
+        },
+      ],
+      layerGroups: [],
+    };
 
-    const { result } = renderHook(() =>
-      useLayerDataWithTwoSources(["townships"]),
-    );
+    const { result } = renderHook(() => useLayerData(["townships"]), {
+      wrapper: ({ children }) => (
+        <DomainProvider domain={twoSourceDomain}>{children}</DomainProvider>
+      ),
+    });
 
     await waitFor(() => {
       expect(result.current.townships?.features).toHaveLength(2);
     });
-    vi.doUnmock("../layers/registry");
   });
 });
