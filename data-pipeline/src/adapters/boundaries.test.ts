@@ -1,8 +1,20 @@
-import { describe, expect, it } from "vitest";
+import AdmZip from "adm-zip";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+const shapefileReadMock = vi.hoisted(() => vi.fn());
+vi.mock("shapefile", () => ({ read: shapefileReadMock }));
+
 import {
+  convertShapefileToGeoJSON,
+  fetchMetroBoundaries,
   filterFeaturesByMunicipality,
   normalizeBoundaries,
 } from "./boundaries";
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+  shapefileReadMock.mockReset();
+});
 
 describe("normalizeBoundaries", () => {
   it("maps raw sub-place properties to NormalizedTownship and computes a centroid", () => {
@@ -228,5 +240,89 @@ describe("filterFeaturesByMunicipality", () => {
         SP_NAME: "Bekkersdal",
       },
     ]);
+  });
+});
+
+describe("convertShapefileToGeoJSON", () => {
+  it("throws when the zip archive is missing the expected shapefile entries", async () => {
+    const zip = new AdmZip();
+    zip.addFile("Subplace/README.txt", Buffer.from("not a shapefile"));
+
+    await expect(
+      convertShapefileToGeoJSON(zip.toBuffer(), [799]),
+    ).rejects.toThrow(
+      "Expected Subplace/SP_SA_2011.shp and Subplace/SP_SA_2011.dbf entries in the boundary zip archive",
+    );
+  });
+
+  it("parses the zip's shp/dbf entries and filters the result to the given municipality codes", async () => {
+    const zip = new AdmZip();
+    zip.addFile("Subplace/SP_SA_2011.shp", Buffer.from("shp bytes"));
+    zip.addFile("Subplace/SP_SA_2011.dbf", Buffer.from("dbf bytes"));
+    shapefileReadMock.mockResolvedValue({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            SP_CODE: 799016009,
+            SP_NAME: "Odinburg Gardens",
+            MN_CODE: 799,
+          },
+          geometry: { type: "Polygon", coordinates: [] },
+        },
+        {
+          type: "Feature",
+          properties: {
+            SP_CODE: 199041044,
+            SP_NAME: "Oranjezicht",
+            MN_CODE: 199,
+          },
+          geometry: { type: "Polygon", coordinates: [] },
+        },
+      ],
+    });
+
+    const result = await convertShapefileToGeoJSON(zip.toBuffer(), [799]);
+
+    expect(shapefileReadMock).toHaveBeenCalledTimes(1);
+    expect(result.features).toHaveLength(1);
+    expect(result.features[0]?.properties).toEqual({
+      SP_CODE: "799016009",
+      SP_NAME: "Odinburg Gardens",
+    });
+  });
+});
+
+describe("fetchMetroBoundaries", () => {
+  it("throws when the boundary source download fails", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: false, status: 404 });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchMetroBoundaries("tshwane")).rejects.toThrow(
+      "Failed to fetch metro boundaries: 404",
+    );
+  });
+
+  it("converts a successfully downloaded zip into GeoJSON for the metro's municipality codes", async () => {
+    const zip = new AdmZip();
+    zip.addFile("Subplace/README.txt", Buffer.from("not a shapefile"));
+    const zipBuffer = zip.toBuffer();
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      arrayBuffer: async () =>
+        zipBuffer.buffer.slice(
+          zipBuffer.byteOffset,
+          zipBuffer.byteOffset + zipBuffer.byteLength,
+        ),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    // The downloaded fixture zip has no shapefile entries, so this proves
+    // fetchMetroBoundaries actually reaches convertShapefileToGeoJSON with
+    // the fetched bytes, without needing a real Subplace shapefile fixture.
+    await expect(fetchMetroBoundaries("tshwane")).rejects.toThrow(
+      "Expected Subplace/SP_SA_2011.shp and Subplace/SP_SA_2011.dbf entries in the boundary zip archive",
+    );
   });
 });

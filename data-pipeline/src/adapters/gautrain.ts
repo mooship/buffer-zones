@@ -129,6 +129,7 @@ async function waitForOverpassSlot(): Promise<void> {
     nextOverpassRequestAt = Date.now() + OVERPASS_MIN_GAP_MS;
   });
 
+  /* v8 ignore next 3 -- unreachable: waitTurn only rejects if sleep() throws, which it never does */
   overpassRequestQueue = waitTurn.catch(() => {
     return;
   });
@@ -158,6 +159,7 @@ export async function fetchOverpass(
   }
 
   const url = urls[(attempt - 1) % urls.length];
+  /* v8 ignore next 3 -- unreachable: (attempt - 1) % urls.length is always a valid index once urls.length > 0 is confirmed above */
   if (!url) {
     throw new Error("No Overpass endpoint available for this attempt");
   }

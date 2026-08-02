@@ -194,4 +194,21 @@ describe("createFeatureCollectionParser", () => {
     expect(message.split("; ")).toHaveLength(3);
     expect(message).not.toMatch(/features\.3\./);
   });
+
+  it("labels a root-level issue as 'root' instead of an empty path", () => {
+    const parse = createFeatureCollectionParser(
+      featureCollectionSchema,
+      "/data/broken.geojson",
+    );
+
+    let thrown: unknown;
+    try {
+      parse(null);
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(Error);
+    expect((thrown as Error).message).toMatch(/root:/);
+  });
 });

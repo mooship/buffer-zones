@@ -99,6 +99,26 @@ describe("createLayerConfig", () => {
     });
   });
 
+  it("falls back to baseOpacity when emphasised but no emphasisOpacity is set", () => {
+    const config = createLayerConfig(
+      choroplethLayer({
+        style: {
+          ...choroplethLayer().style,
+          emphasisOpacity: undefined,
+        } as Layer["style"],
+      }),
+    );
+    const feature = {
+      type: "Feature",
+      properties: { name: "Mamelodi Ext 17", commuteMinutes: 35 },
+      geometry: null,
+    } as unknown as Feature;
+
+    expect(config.styleFn?.(feature)).toMatchObject({
+      fillOpacity: 0.18,
+    });
+  });
+
   it("picks the correct bucket even when buckets are declared out of ascending order", () => {
     const config = createLayerConfig(
       choroplethLayer({

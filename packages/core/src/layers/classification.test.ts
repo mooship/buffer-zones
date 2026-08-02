@@ -51,6 +51,35 @@ describe("resolveClassification", () => {
         resolveClassification(classification, { commuteMinutes: "fast" }),
       ).toBe("#8A93A5");
     });
+
+    it("clamps to the last stop's value when the value exceeds every stop's max", () => {
+      const noOverflowStop: GraduatedClassification<string> = {
+        kind: "graduated",
+        propertyKey: "commuteMinutes",
+        stops: [
+          { max: 20, value: "#7A9B6E", label: "Short" },
+          { max: 40, value: "#C9A227", label: "Moderate" },
+        ],
+        fallback: "#8A93A5",
+      };
+
+      expect(
+        resolveClassification(noOverflowStop, { commuteMinutes: 1000 }),
+      ).toBe("#C9A227");
+    });
+
+    it("returns the fallback when the classification has no stops at all", () => {
+      const noStops: GraduatedClassification<string> = {
+        kind: "graduated",
+        propertyKey: "commuteMinutes",
+        stops: [],
+        fallback: "#8A93A5",
+      };
+
+      expect(resolveClassification(noStops, { commuteMinutes: 15 })).toBe(
+        "#8A93A5",
+      );
+    });
   });
 
   describe("categorized", () => {

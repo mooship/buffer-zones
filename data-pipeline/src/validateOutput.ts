@@ -50,6 +50,7 @@ export async function runAllRegionsOutputValidation(
     try {
       config = getRegionPipelineConfig(region.id);
     } catch (error) {
+      /* v8 ignore next -- unreachable: getRegionPipelineConfig only ever throws a real Error */
       const message = error instanceof Error ? error.message : String(error);
       console.error(`Output validation failed for ${outputDir}: ${message}`);
       misconfiguredRegionIds.push(region.id);
