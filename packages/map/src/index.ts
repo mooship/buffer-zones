@@ -27,6 +27,5 @@ export { usePrefersDarkMode } from "./hooks/usePrefersDarkMode";
 export type { ThemePreference } from "./hooks/useThemePreference";
 export {
   setThemePreference,
-  THEME_STORAGE_KEY,
   useThemePreference,
 } from "./hooks/useThemePreference";
