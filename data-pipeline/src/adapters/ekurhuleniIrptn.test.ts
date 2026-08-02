@@ -150,10 +150,15 @@ describe("fetchEkurhuleniIrptnRoutes", () => {
       });
 
     vi.stubGlobal("fetch", fetchMock);
+    vi.useFakeTimers();
 
-    const result = await fetchEkurhuleniIrptnRoutes();
+    const resultPromise = fetchEkurhuleniIrptnRoutes();
+    await vi.advanceTimersByTimeAsync(2000);
+    const result = await resultPromise;
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(result.features).toHaveLength(2);
+
+    vi.useRealTimers();
   });
 });
