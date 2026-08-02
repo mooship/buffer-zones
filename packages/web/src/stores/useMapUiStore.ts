@@ -12,7 +12,7 @@ function isExclusiveGroupMember(id: string): boolean {
 
 function groupSiblings(id: string): string[] {
   const group = findGroupContaining(id);
-  if (!group || group.selectionMode !== "exclusive") {
+  if (group?.selectionMode !== "exclusive") {
     return [];
   }
   return group.layerIds.filter((sibling) => sibling !== id);

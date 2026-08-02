@@ -59,6 +59,11 @@
   --color-on-surface: var(--color-paper);
   --color-on-surface-variant: var(--color-muted);
   --color-outline: color-mix(in srgb, var(--color-line) 52%, transparent);
+  --leaflet-zoom-divider: color-mix(
+    in srgb,
+    var(--color-line) 35%,
+    transparent
+  );
   --color-surface-container-low: var(--color-surface);
   --color-state-hover: var(--color-surface-hover);
   --color-map-label-surface: color-mix(
@@ -242,9 +247,12 @@ body {
 }
 
 .leaflet-control-zoom {
+  /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets these properties directly */
   border-radius: var(--radius-sm) !important;
+  /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets these properties directly */
   box-shadow: var(--shadow-md) !important;
   overflow: hidden;
+  /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets these properties directly */
   border: none !important;
 }
 
@@ -266,8 +274,8 @@ body {
 }
 
 .leaflet-container .leaflet-control-zoom-in {
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--color-line) 35%, transparent) !important;
+  /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets this property directly */
+  border-bottom: 1px solid var(--leaflet-zoom-divider) !important;
 }
 
 .leaflet-container .leaflet-control-zoom a:focus-visible {
@@ -286,11 +294,13 @@ body {
 
 @media (max-width: 768px) {
   .leaflet-control-zoom {
+    /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets this property directly */
     margin-right: 0.75rem !important;
     transform: translateY(-9.5rem);
   }
 
   .leaflet-control-scale {
+    /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets this property directly */
     margin-bottom: calc(env(safe-area-inset-bottom) + 0.875rem) !important;
   }
 }
@@ -299,8 +309,11 @@ body {
   *,
   *::before,
   *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: accessibility requirement — must override any other rule's animation/transition duration, regardless of specificity, for users who need reduced motion */
     animation-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: accessibility requirement — must override any other rule's animation/transition duration, regardless of specificity, for users who need reduced motion */
     animation-iteration-count: 1 !important;
+    /* biome-ignore lint/complexity/noImportantStyles: accessibility requirement — must override any other rule's animation/transition duration, regardless of specificity, for users who need reduced motion */
     transition-duration: 0.01ms !important;
   }
 }

@@ -9,7 +9,7 @@ export function parseMode(argv: readonly string[]): "all" | "stale" {
 }
 
 export function parseMaxAgeDays(argv: readonly string[]): number {
-  const index = argv.findIndex((arg) => arg === "--max-age-days");
+  const index = argv.indexOf("--max-age-days");
   if (index < 0) {
     return DEFAULT_MAX_AGE_DAYS;
   }
