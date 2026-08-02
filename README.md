@@ -21,10 +21,14 @@ Under apartheid, townships were deliberately separated from economic centers by 
 - [`docs/data/rand-west-city-area-classification.md`](docs/data/rand-west-city-area-classification.md) — the same, for Rand West City
 - [`docs/data/merafong-city-area-classification.md`](docs/data/merafong-city-area-classification.md) — the same, for Merafong City
 - [`data-pipeline/README.md`](data-pipeline/README.md) — how to (re-)run the data pipeline
+- [`packages/core/README.md`](packages/core/README.md) — `@stratum/core`, the domain-agnostic layer model and geodata utilities
+- [`packages/map/README.md`](packages/map/README.md) — `@stratum/map`, generic map rendering components and UI primitives
+- [`packages/react/README.md`](packages/react/README.md) — `@stratum/react`, generic React hooks (dark-mode detection, theme preference)
+- [`packages/app/README.md`](packages/app/README.md) — `@stratum/app`, the Gauteng-specific domain data and constants
 
 ## Stack
 
-React + TypeScript SSR app (React Router framework mode on Vite, `react-leaflet`, Zustand, Zod, CSS Modules), a Node/TypeScript offline data pipeline (public OSRM for routing, Overpass API + open data portals for transit, no Docker/GDAL required), and Cloudflare Workers for edge rendering and asset delivery. No accounts and no tracking beyond cookieless page views.
+React + TypeScript SSR app (React Router framework mode on Vite, `react-leaflet`, Zustand, Zod, CSS Modules) split into five npm workspace packages — `@stratum/core`, `@stratum/map`, `@stratum/react`, `@stratum/app`, and `@stratum/web` — plus a Node/TypeScript offline data pipeline (public OSRM for routing, Overpass API + open data portals for transit, no Docker/GDAL required), and Cloudflare Workers for edge rendering and asset delivery. No accounts and no tracking beyond cookieless page views.
 
 ## Contributing
 

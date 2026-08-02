@@ -17,7 +17,7 @@ participating, you agree to uphold those standards.
 npm install
 npm run test        # Vitest across all workspaces
 npm run test:coverage # same scope, with a coverage report
-npm run typecheck   # shared typecheck + web build + data-pipeline typecheck
+npm run typecheck   # tsc --noEmit for @stratum/core, @stratum/app, @stratum/map, @stratum/react + web build + data-pipeline typecheck
 npm run lint        # biome check .
 npm run format      # biome format --write .
 npm run dev --workspace @stratum/web
@@ -46,8 +46,18 @@ pull request, and Playwright end-to-end tests run in a dedicated workflow.
 
 Data flows in one direction: `data-pipeline` (run manually, offline) → static
 GeoJSON committed to `packages/web/public/data/` → `packages/web`, which only
-fetches those static files at runtime. `packages/shared` holds the types and
-constants both ends agree on. There are no runtime API calls.
+fetches those static files at runtime. `packages/app` holds the Gauteng-specific
+types and constants both ends agree on, built on the domain-agnostic model in
+`packages/core`. There are no runtime API calls.
+
+The codebase is split into five packages: `packages/core` (domain-agnostic
+layer model, Leaflet config factory, registry factory, geodata utils),
+`packages/map` (generic map rendering components and UI primitives, built on
+`packages/core`), `packages/react` (generic React hooks — dark-mode
+detection, theme preference), `packages/app` (Gauteng-specific domain data
+and constants, built on `packages/core`), and `packages/web` (the SSR app
+that wires the other four together for the published `gauteng-spatial-legacy`
+domain).
 
 Two consequences worth knowing before you start:
 
@@ -91,7 +101,7 @@ meaning rather than its code:
 - Prefer sources that can be fetched by script, so the pipeline stays
   reproducible.
 - Changes to which areas count as included township areas belong in
-  `packages/shared/src/constants/townships.ts`, and the reasoning belongs in
+  `packages/app/src/constants/townships.ts`, and the reasoning belongs in
   [`docs/data/tshwane-area-classification.md`](docs/data/tshwane-area-classification.md)
   and/or [`docs/data/johannesburg-area-classification.md`](docs/data/johannesburg-area-classification.md).
 - Don't overstate what the data supports. Keep copy within the limits the README

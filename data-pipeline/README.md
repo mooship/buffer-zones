@@ -10,7 +10,7 @@ npm install
 npm run run
 ```
 
-Runs a build for every `province`-kind region in `@stratum/shared`'s `REGIONS` registry (currently just `gauteng`) via `runAllProvinceRegions()`. To build a single region instead, pass `--region <id>`:
+Runs a build for every `province`-kind region in `@stratum/app`'s `REGIONS` registry (currently just `gauteng`) via `runAllProvinceRegions()`. To build a single region instead, pass `--region <id>`:
 
 ```bash
 npm run run -- --region gauteng
@@ -47,12 +47,12 @@ by the browser.
 
 ## Adding a new metro
 
-Add an entry to `METROS` in `packages/shared/src/constants/metros.ts` (id,
+Add an entry to `METROS` in `packages/app/src/constants/metros.ts` (id,
 name, `municipalityCodes` from the Stats SA Census 2011 sub-place shapefile,
 map centre/zoom), add a bounding box to `METRO_BBOX` in
 `src/constants/metroBbox.ts`, add that metro's job centres to `JOB_CENTERS` in
 `src/constants/jobCenters.ts`, and add its township area definitions to
-`packages/shared/src/constants/townships.ts` (see
+`packages/app/src/constants/townships.ts` (see
 `docs/data/tshwane-area-classification.md` and
 `docs/data/johannesburg-area-classification.md` for the selection
 methodology). `run.ts` loops over the region's `METROS` automatically and

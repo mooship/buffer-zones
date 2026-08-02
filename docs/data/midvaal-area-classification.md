@@ -14,7 +14,7 @@ Stats SA does not publish a `township` boundary type in this dataset. The inclus
 
 ## Selection rules
 
-Each included area is defined in `packages/shared/src/constants/townships.ts` using one of two reproducible rules:
+Each included area is defined in `packages/app/src/constants/townships.ts` using one of two reproducible rules:
 
 1. `census-main-place`: include sub-places whose Census code begins with one or more specified main-place codes.
 2. `named-sub-places`: include only sub-places matching specified name prefixes where the Census main place is mixed and cannot safely be included wholesale.
