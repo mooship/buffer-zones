@@ -1,7 +1,7 @@
+import type { ThemePreference } from "@stratum/react";
 import { Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { BASEMAPS, type Basemap } from "../../constants/basemaps";
-import type { ThemePreference } from "../../hooks/useThemePreference";
 import { BasemapToggle } from "../BasemapToggle/BasemapToggle";
 import { IconButton } from "../IconButton/IconButton";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";

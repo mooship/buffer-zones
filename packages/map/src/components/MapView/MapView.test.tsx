@@ -140,8 +140,8 @@ vi.mock("react-leaflet", () => ({
   ScaleControl: () => <div data-testid="scale-control" />,
 }));
 
+import { setThemePreference } from "@stratum/react";
 import { DomainProvider } from "../../context/DomainContext";
-import { setThemePreference } from "../../hooks/useThemePreference";
 import { MapView } from "./MapView";
 
 const bounds: [[number, number], [number, number]] = [

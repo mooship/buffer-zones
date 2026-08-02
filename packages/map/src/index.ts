@@ -27,9 +27,3 @@ export { DomainProvider, useDomain } from "./context/DomainContext";
 export type { LocationSearchResult } from "./data/locationSearch";
 export type { LayerDataMap } from "./hooks/useLayerData";
 export { useLayerData } from "./hooks/useLayerData";
-export { usePrefersDarkMode } from "./hooks/usePrefersDarkMode";
-export type { ThemePreference } from "./hooks/useThemePreference";
-export {
-  setThemePreference,
-  useThemePreference,
-} from "./hooks/useThemePreference";

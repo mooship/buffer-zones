@@ -17,7 +17,7 @@ function colorForValue(
     return noDataColor;
   }
   const bucket = buckets.find((b) => value <= b.max);
-  return bucket?.color ?? buckets[buckets.length - 1]?.color ?? noDataColor;
+  return bucket?.color ?? buckets.at(-1)?.color ?? noDataColor;
 }
 
 /**

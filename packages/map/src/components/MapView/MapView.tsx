@@ -1,4 +1,5 @@
 import { createLayerConfig, type Layer as DomainLayer } from "@stratum/core";
+import { usePrefersDarkMode, useThemePreference } from "@stratum/react";
 import type { Feature, FeatureCollection } from "geojson";
 import {
   circleMarker,
@@ -34,8 +35,6 @@ import { TOWNSHIP_OUTLINE } from "../../constants/mapStyles";
 import { useDomain } from "../../context/DomainContext";
 import type { LocationSearchResult } from "../../data/locationSearch";
 import { useLayerData } from "../../hooks/useLayerData";
-import { usePrefersDarkMode } from "../../hooks/usePrefersDarkMode";
-import { useThemePreference } from "../../hooks/useThemePreference";
 import styles from "./MapView.module.css";
 
 /**
