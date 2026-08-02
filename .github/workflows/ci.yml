@@ -27,6 +27,13 @@ jobs:
       - run: npm run cache:prune --prefix data-pipeline
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm run test
+      - run: npm run test:coverage
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
       - run: npm run validate --prefix data-pipeline
       - run: npm run build
