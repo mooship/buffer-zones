@@ -108,6 +108,41 @@ describe("VectorBasemapLayer", () => {
     consoleError.mockRestore();
   });
 
+  it("calls onError when the underlying MapLibre GL map fires a style load error", async () => {
+    const glMap = { on: vi.fn() };
+    const layer = {
+      addTo: vi.fn(),
+      remove: vi.fn(),
+      getMaplibreMap: () => glMap,
+    };
+    layerMocks.maplibreGL.mockReturnValue(layer);
+    const onError = vi.fn();
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    render(
+      <VectorBasemapLayer
+        styleUrl="https://example.com/style.json"
+        onError={onError}
+      />,
+    );
+    await waitFor(() => expect(layer.addTo).toHaveBeenCalled());
+
+    const errorHandler = glMap.on.mock.calls.find(
+      ([event]) => event === "error",
+    )?.[1] as ((event: { error: unknown }) => void) | undefined;
+    expect(errorHandler).toBeDefined();
+
+    const styleLoadError = new Error("Failed to fetch style.json");
+    errorHandler?.({ error: styleLoadError });
+
+    expect(onError).toHaveBeenCalledWith(styleLoadError);
+    expect(consoleError).toHaveBeenCalled();
+
+    consoleError.mockRestore();
+  });
+
   it("does not call onError if unmounted before the failure resolves", async () => {
     const loadError = new Error("network down");
     layerMocks.maplibreGL.mockImplementation(() => {
