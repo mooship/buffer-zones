@@ -42,6 +42,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
+    "@stratum/core": "file:../core",
     "@stratum/shared": "file:../shared",
     "clsx": "^2.1.1",
     "leaflet": "^1.9.4",

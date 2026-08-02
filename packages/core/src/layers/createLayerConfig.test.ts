@@ -1,4 +1,4 @@
-import type { Layer } from "@stratum/shared";
+import type { Layer } from "@stratum/core";
 import type { Feature } from "geojson";
 import { describe, expect, it } from "vitest";
 import { createLayerConfig } from "./createLayerConfig";

@@ -1,14 +1,17 @@
-import type { Layer, LayerGroup } from "@stratum/shared";
+import type { Layer, LayerGroup } from "@stratum/core";
+import { createRegistry } from "@stratum/core";
 import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
 
+const registry = createRegistry(GAUTENG_SPATIAL_LEGACY_DOMAIN);
+
 export function getLayers(): readonly Layer[] {
-  return GAUTENG_SPATIAL_LEGACY_DOMAIN.layers;
+  return registry.getLayers();
 }
 
 export function getLayer(id: string): Layer | undefined {
-  return GAUTENG_SPATIAL_LEGACY_DOMAIN.layers.find((layer) => layer.id === id);
+  return registry.getLayer(id);
 }
 
 export function getLayerGroups(): readonly LayerGroup[] {
-  return GAUTENG_SPATIAL_LEGACY_DOMAIN.layerGroups;
+  return registry.getLayerGroups();
 }
