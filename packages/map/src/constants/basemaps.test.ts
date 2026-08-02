@@ -104,4 +104,22 @@ describe("getBasemapTileSources", () => {
   it("throws for a vector basemap", () => {
     expect(() => getBasemapTileSources("voyager", false)).toThrow(/raster/i);
   });
+
+  it("falls back to the light attribution when a custom basemap has a darkUrl but no darkAttribution", () => {
+    registerBasemap("custom-dark", {
+      kind: "raster",
+      label: "Custom Dark",
+      description: "A custom basemap with a dark variant but no dark credit.",
+      url: "https://example.com/{z}/{x}/{y}.png",
+      attribution: "Example",
+      darkUrl: "https://example.com/dark/{z}/{x}/{y}.png",
+    });
+
+    const [source] = getBasemapTileSources("custom-dark", true);
+
+    expect(source).toEqual({
+      url: "https://example.com/dark/{z}/{x}/{y}.png",
+      attribution: "Example",
+    });
+  });
 });

@@ -70,4 +70,19 @@ describe("VectorBasemapLayer", () => {
 
     expect(layer.remove).toHaveBeenCalled();
   });
+
+  it("does not create a layer if unmounted before the dynamic import resolves", async () => {
+    const layer = { addTo: vi.fn(), remove: vi.fn() };
+    layerMocks.maplibreGL.mockReturnValue(layer);
+
+    const { unmount } = render(
+      <VectorBasemapLayer styleUrl="https://example.com/style.json" />,
+    );
+    unmount();
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(layerMocks.maplibreGL).not.toHaveBeenCalled();
+    expect(layer.addTo).not.toHaveBeenCalled();
+  });
 });

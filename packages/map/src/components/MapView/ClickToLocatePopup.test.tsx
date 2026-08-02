@@ -128,4 +128,38 @@ describe("ClickToLocatePopup", () => {
     });
     expect(firstAborted).toBe(true);
   });
+
+  it("ignores a stale lookup that resolves after being superseded by a newer click", async () => {
+    let resolveFirst: (value: { label: string } | null) => void = () => {};
+    geocodeMocks.fetchReverseGeocodeResult
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveFirst = resolve;
+          }),
+      )
+      .mockResolvedValueOnce({ label: "Second place" });
+
+    render(<ClickToLocatePopup />);
+    act(() => {
+      mapEventsMocks.handlers.click?.({ latlng: { lat: -26.2, lng: 28.0 } });
+    });
+    act(() => {
+      mapEventsMocks.handlers.click?.({ latlng: { lat: -26.3, lng: 28.1 } });
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("click-locate-popup")).toHaveTextContent(
+        "Second place",
+      );
+    });
+
+    await act(async () => {
+      resolveFirst({ label: "Stale first place" });
+    });
+
+    expect(screen.getByTestId("click-locate-popup")).toHaveTextContent(
+      "Second place",
+    );
+  });
 });

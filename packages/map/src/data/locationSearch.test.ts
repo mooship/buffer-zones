@@ -61,6 +61,49 @@ describe("fetchLocationSearchResults", () => {
 
     await expect(fetchLocationSearchResults("Soweto")).rejects.toThrow(/503/);
   });
+
+  it("omits bounds when the bounding box is malformed", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => [
+          {
+            place_id: 123,
+            display_name: "Soweto, Johannesburg, Gauteng, South Africa",
+            lat: "-26.267",
+            lon: "27.854",
+            boundingbox: ["-26.3", "not-a-number", "27.8", "27.9"],
+          },
+        ],
+      }),
+    );
+
+    const results = await fetchLocationSearchResults("Soweto");
+
+    expect(results[0]?.bounds).toBeUndefined();
+  });
+
+  it("skips a result whose latitude/longitude can't be parsed", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => [
+          {
+            place_id: 123,
+            display_name: "Somewhere odd",
+            lat: "not-a-number",
+            lon: "27.854",
+          },
+        ],
+      }),
+    );
+
+    const results = await fetchLocationSearchResults("Somewhere");
+
+    expect(results).toEqual([]);
+  });
 });
 
 describe("fetchReverseGeocodeResult", () => {
