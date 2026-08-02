@@ -51,6 +51,45 @@ describe("createTownshipDataRepository", () => {
     expect(result).toEqual(geojson.features);
   });
 
+  it("keeps an existing numeric nearestTransitKm value instead of the null fallback", async () => {
+    const geojson = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            id: "A",
+            name: "Mamelodi",
+            commuteMinutes: 20,
+            nearestJobCenter: "Pretoria CBD",
+            distanceKm: null,
+            nearestTransitKm: 1.5,
+          },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [28, -25],
+                [28.1, -25],
+                [28.1, -25.1],
+                [28, -25],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: true, json: async () => geojson }),
+    );
+
+    const repo = createTownshipDataRepository("/data/townships.v1.geojson");
+    const result = await repo.getTownships();
+
+    expect(result[0]?.properties.nearestTransitKm).toBe(1.5);
+  });
+
   it("throws a descriptive error when the fetch fails", async () => {
     vi.stubGlobal(
       "fetch",
