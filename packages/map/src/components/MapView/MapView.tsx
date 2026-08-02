@@ -30,12 +30,17 @@ import {
   useMap,
   ZoomControl,
 } from "react-leaflet";
-import { type Basemap, getBasemapTileSources } from "../../constants/basemaps";
+import {
+  type Basemap,
+  getBasemapDefinition,
+  getBasemapTileSources,
+} from "../../constants/basemaps";
 import { TOWNSHIP_OUTLINE } from "../../constants/mapStyles";
 import { useDomain } from "../../context/DomainContext";
 import type { LocationSearchResult } from "../../data/locationSearch";
 import { useLayerData } from "../../hooks/useLayerData";
 import styles from "./MapView.module.css";
+import { VectorBasemapLayer } from "./VectorBasemapLayer";
 
 /**
  * `@types/leaflet`'s `GeoJSONOptions` omits `smoothFactor`, even though
@@ -479,12 +484,25 @@ function MapViewComponent<
   const themePreference = useThemePreference();
   const resolvedDark =
     themePreference === "dark" || (themePreference === "system" && prefersDark);
-  const useDarkTiles = basemap === "street" && resolvedDark;
+  const basemapDefinition = getBasemapDefinition(basemap);
+  const isVectorBasemap = basemapDefinition.kind === "vector";
+  const useDarkTiles =
+    basemapDefinition.kind === "raster" &&
+    basemapDefinition.darkUrl !== undefined &&
+    resolvedDark;
   const tileSourceMode = `${basemap}-${useDarkTiles ? "dark" : "light"}`;
   const tileSources = useMemo(
-    () => getBasemapTileSources(basemap, useDarkTiles),
-    [basemap, useDarkTiles],
+    () =>
+      basemapDefinition.kind === "raster"
+        ? getBasemapTileSources(basemap, useDarkTiles)
+        : [],
+    [basemapDefinition, basemap, useDarkTiles],
   );
+  const vectorStyleUrl =
+    basemapDefinition.kind === "vector"
+      ? (resolvedDark && basemapDefinition.darkStyleUrl) ||
+        basemapDefinition.styleUrl
+      : null;
   const [tileSourceState, setTileSourceState] = useState(() => ({
     mode: tileSourceMode,
     index: 0,
@@ -571,7 +589,7 @@ function MapViewComponent<
   const useRetinaTiles =
     getDevicePixelRatio() > 1.25 && getViewportWidth() > MOBILE_BREAKPOINT_PX;
 
-  if (!tileSource) {
+  if (!isVectorBasemap && !tileSource) {
     return null;
   }
 
@@ -592,15 +610,20 @@ function MapViewComponent<
       >
         <ZoomControl position="bottomright" />
         <ScaleControl position="bottomleft" imperial={false} />
-        <TileLayer
-          key={`${tileSourceMode}-${tileSource.url}`}
-          url={tileSource.url}
-          attribution={tileSource.attribution}
-          className={useDarkTiles ? styles.darkTile : undefined}
-          detectRetina={useRetinaTiles}
-          updateWhenZooming
-          eventHandlers={{ tileerror: handleTileError }}
-        />
+        {basemapDefinition.kind === "raster" && tileSource ? (
+          <TileLayer
+            key={`${tileSourceMode}-${tileSource.url}`}
+            url={tileSource.url}
+            attribution={tileSource.attribution}
+            className={useDarkTiles ? styles.darkTile : undefined}
+            detectRetina={useRetinaTiles}
+            updateWhenZooming
+            eventHandlers={{ tileerror: handleTileError }}
+          />
+        ) : null}
+        {vectorStyleUrl ? (
+          <VectorBasemapLayer key={vectorStyleUrl} styleUrl={vectorStyleUrl} />
+        ) : null}
         <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
         <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />
         <Pane name={TRANSIT_PANE} style={{ zIndex: 450 }} />

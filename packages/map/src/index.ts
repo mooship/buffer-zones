@@ -19,8 +19,20 @@ export type { SegmentedControlOption } from "./components/SegmentedControl/Segme
 export { SegmentedControl } from "./components/SegmentedControl/SegmentedControl";
 export { SettingsMenu } from "./components/SettingsMenu/SettingsMenu";
 export { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
-export type { Basemap } from "./constants/basemaps";
-export { getBasemapTileSources } from "./constants/basemaps";
+export type {
+  Basemap,
+  BasemapDefinition,
+  BasemapTileSource,
+  RasterBasemapDefinition,
+  VectorBasemapDefinition,
+} from "./constants/basemaps";
+export {
+  getBasemapDefinition,
+  getBasemapTileSources,
+  getRegisteredBasemapIds,
+  registerBasemap,
+  resetBasemapRegistry,
+} from "./constants/basemaps";
 export { TOWNSHIP_OUTLINE } from "./constants/mapStyles";
 export type { DomainRegistry } from "./context/DomainContext";
 export { DomainProvider, useDomain } from "./context/DomainContext";

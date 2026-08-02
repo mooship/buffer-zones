@@ -1,4 +1,8 @@
-import { BASEMAPS, type Basemap } from "../../constants/basemaps";
+import {
+  type Basemap,
+  getBasemapDefinition,
+  getRegisteredBasemapIds,
+} from "../../constants/basemaps";
 import { SegmentedControl } from "../SegmentedControl/SegmentedControl";
 
 interface BasemapToggleProps {
@@ -6,17 +10,15 @@ interface BasemapToggleProps {
   onChange: (basemap: Basemap) => void;
 }
 
-const BASEMAP_IDS = Object.keys(BASEMAPS) as Basemap[];
-
 /** A `SegmentedControl` for choosing the active map basemap. */
 export function BasemapToggle({ basemap, onChange }: BasemapToggleProps) {
   return (
     <SegmentedControl
       label="Basemap"
-      options={BASEMAP_IDS.map((id) => ({
+      options={getRegisteredBasemapIds().map((id) => ({
         id,
-        label: BASEMAPS[id].label,
-        ariaLabel: `${BASEMAPS[id].label} basemap`,
+        label: getBasemapDefinition(id).label,
+        ariaLabel: `${getBasemapDefinition(id).label} basemap`,
       }))}
       value={basemap}
       onChange={onChange}
