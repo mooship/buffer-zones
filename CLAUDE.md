@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Stratum is a public-interest geospatial layer platform, built as an SSR web app on Cloudflare Workers — no accounts and no tracking beyond cookieless page views. Its first published domain, `gauteng-spatial-legacy`, maps apartheid-era spatial planning legacy across South African metros using one combined regional map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. That domain's data currently covers the `gauteng` region: all nine Gauteng municipalities, including Tshwane/Pretoria and Johannesburg.
+Stratum is a reusable SDK for building public-interest geospatial layer platforms: a domain-agnostic layer model, generic map rendering, and React hooks (`@stratum/core`, `@stratum/map`, `@stratum/react`) that any dataset can be wired into. `packages/app` and `packages/web` are the SDK's reference implementation, not the product — a real, published SSR app on Cloudflare Workers (no accounts, no tracking beyond cookieless page views) that proves the SDK out end-to-end. That implementation's one domain, `gauteng-spatial-legacy`, maps apartheid-era spatial planning legacy across South African metros using one combined regional map layer: recognized township areas, formal transit routes, and modeled car drive-time to selected job centers. That domain's data currently covers the `gauteng` region: all nine Gauteng municipalities, including Tshwane/Pretoria and Johannesburg.
 
 ## Commands
 

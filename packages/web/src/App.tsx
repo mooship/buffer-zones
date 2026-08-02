@@ -259,7 +259,8 @@ export function App() {
       pointerSamples.push({ timestamp: now, y: pointerEvent.clientY });
       while (
         pointerSamples.length > 1 &&
-        now - pointerSamples[0].timestamp > SHEET_VELOCITY_SAMPLE_WINDOW_MS
+        now - (pointerSamples[0]?.timestamp ?? now) >
+          SHEET_VELOCITY_SAMPLE_WINDOW_MS
       ) {
         pointerSamples.shift();
       }
@@ -291,7 +292,8 @@ export function App() {
       pointerSamples.push({ timestamp: now, y: pointerEvent.clientY });
       while (
         pointerSamples.length > 1 &&
-        now - pointerSamples[0].timestamp > SHEET_VELOCITY_SAMPLE_WINDOW_MS
+        now - (pointerSamples[0]?.timestamp ?? now) >
+          SHEET_VELOCITY_SAMPLE_WINDOW_MS
       ) {
         pointerSamples.shift();
       }
@@ -299,6 +301,10 @@ export function App() {
       const delta = latestPointerY - startY;
       const firstSample = pointerSamples[0];
       const lastSample = pointerSamples[pointerSamples.length - 1];
+      if (!firstSample || !lastSample) {
+        cleanup();
+        return;
+      }
       const elapsedMs = Math.max(
         1,
         lastSample.timestamp - firstSample.timestamp,
@@ -380,8 +386,10 @@ export function App() {
                 selectedFeatureId={selectedFeatureId}
                 focusLocationTarget={focusLocationTarget}
                 onFeatureSelect={setSelectedFeatureId}
-                renderFeaturePopup={(props) => (
-                  <TownshipPopup properties={props as TownshipProperties} />
+                renderFeaturePopup={(properties) => (
+                  <TownshipPopup
+                    properties={properties as unknown as TownshipProperties}
+                  />
                 )}
               />
             </Suspense>

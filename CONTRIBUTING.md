@@ -1,9 +1,11 @@
 # Contributing to Stratum
 
-Thanks for your interest. Stratum is a public-interest mapping project
-about the spatial legacy of apartheid-era planning across South African cities.
-Contributions are welcome — especially better data sources, accessibility
-improvements, and corrections to how areas are classified or described.
+Thanks for your interest. Stratum is a reusable SDK for public-interest
+geospatial layer platforms; its reference implementation, Gauteng spatial
+legacy, maps the spatial legacy of apartheid-era planning across South
+African cities. Contributions are welcome — to the SDK itself, and to the
+reference app: better data sources, accessibility improvements, and
+corrections to how areas are classified or described.
 
 Please read [`README.md`](README.md) first for what the project is, what v1
 deliberately does not claim, and where the documentation lives.

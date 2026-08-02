@@ -1,6 +1,6 @@
 # `@stratum/app`
 
-Gauteng-specific domain data and constants for Stratum's first published domain, `gauteng-spatial-legacy`, built on the domain-agnostic model in `@stratum/core`.
+Gauteng-specific domain data and constants for `gauteng-spatial-legacy`, the reference implementation proving out Stratum's SDK, built on the domain-agnostic model in `@stratum/core`.
 
 ## What belongs here
 
