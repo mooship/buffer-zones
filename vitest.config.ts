@@ -17,6 +17,12 @@ export default defineConfig({
         "packages/web/src/entry.server.tsx",
         "packages/web/src/routes/**",
       ],
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
     },
   },
 });
