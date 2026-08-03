@@ -62,12 +62,12 @@ function defaultBasemaps(): Record<string, BasemapDefinition> {
       attribution: "Tiles &copy; Esri, Maxar, Earthstar Geographics",
     },
     voyager: {
-      kind: "vector",
+      kind: "raster",
       label: "Voyager",
-      description:
-        "Vector-tile basemap with sharper labels at every zoom level.",
-      styleUrl: "https://tiles.openfreemap.org/styles/liberty",
-      darkStyleUrl: "https://tiles.openfreemap.org/styles/dark",
+      description: "Colourful basemap with bold roads and clear place labels.",
+      url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      attribution: CARTO_ATTRIBUTION,
+      fallbackUrls: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
     },
   };
 }

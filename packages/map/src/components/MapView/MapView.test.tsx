@@ -1564,6 +1564,12 @@ describe("MapView", () => {
   });
 
   it("renders a VectorBasemapLayer using the basemap's styleUrl for a vector basemap", () => {
+    registerBasemap("custom-vector", {
+      kind: "vector",
+      label: "Custom Vector",
+      description: "A custom vector basemap.",
+      styleUrl: "https://example.com/style.json",
+    });
     stubMatchMedia(false);
 
     render(
@@ -1572,14 +1578,14 @@ describe("MapView", () => {
           bounds={bounds}
           townships={[]}
           visibleLayerIds={[]}
-          basemap="voyager"
+          basemap="custom-vector"
         />,
       ),
     );
 
     expect(screen.queryByTestId("tile-layer")).not.toBeInTheDocument();
     expect(screen.getByTestId("vector-basemap-layer")).toHaveTextContent(
-      "https://tiles.openfreemap.org/styles/liberty",
+      "https://example.com/style.json",
     );
   });
 
@@ -1610,6 +1616,12 @@ describe("MapView", () => {
   });
 
   it("calls onBasemapError when the vector basemap layer fails to load", () => {
+    registerBasemap("custom-vector", {
+      kind: "vector",
+      label: "Custom Vector",
+      description: "A custom vector basemap.",
+      styleUrl: "https://example.com/style.json",
+    });
     const onBasemapError = vi.fn();
     stubMatchMedia(false);
 
@@ -1619,7 +1631,7 @@ describe("MapView", () => {
           bounds={bounds}
           townships={[]}
           visibleLayerIds={[]}
-          basemap="voyager"
+          basemap="custom-vector"
           onBasemapError={onBasemapError}
         />,
       ),
@@ -1628,6 +1640,6 @@ describe("MapView", () => {
     const loadError = new Error("network down");
     mapMocks.vectorBasemapOnError?.(loadError);
 
-    expect(onBasemapError).toHaveBeenCalledWith("voyager", loadError);
+    expect(onBasemapError).toHaveBeenCalledWith("custom-vector", loadError);
   });
 });
