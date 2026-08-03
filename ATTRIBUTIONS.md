@@ -7,7 +7,7 @@
 - **City of Tshwane** — A Re Yeng trunk, complementary, and feeder route data from the municipal e-GIS open data service.
 - **OSRM** — modeled car-time matrices computed with the public [Project OSRM](https://project-osrm.org/) demo server.
 - **South African History Online** — historical context for the Group Areas Act, [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
-- **Basemap tiles** — Positron (light theme) & Dark Matter (dark theme) tiles © OpenStreetMap contributors, [CARTO](https://carto.com/attributions); satellite imagery © Esri, Maxar, Earthstar Geographics; topographic tiles © Esri, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community.
+- **Basemap tiles** — Positron (light theme) & Dark Matter (dark theme) tiles © OpenStreetMap contributors, [CARTO](https://carto.com/attributions); satellite imagery © Esri, Maxar, Earthstar Geographics; topographic tiles © Esri, HERE, Garmin, and the GIS User Community.
 
 ## Software
 

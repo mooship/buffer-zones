@@ -95,27 +95,23 @@ describe("getBasemapTileSources", () => {
     expect(sources[2]?.url).toMatch(/tile\.openstreetmap\.org/);
   });
 
-  it("returns a single satellite source regardless of dark mode", () => {
-    expect(getBasemapTileSources("satellite", false)).toHaveLength(1);
-    expect(getBasemapTileSources("satellite", true)).toHaveLength(1);
-    expect(getBasemapTileSources("satellite", true)[0]?.url).toMatch(
-      /arcgisonline/,
-    );
-  });
+  it.each([
+    ["satellite", /arcgisonline/],
+    ["topo", /World_Topo_Map/],
+  ])(
+    "returns a single %s source regardless of dark mode",
+    (basemap, urlPattern) => {
+      expect(getBasemapTileSources(basemap, false)).toHaveLength(1);
+      expect(getBasemapTileSources(basemap, true)).toHaveLength(1);
+      expect(getBasemapTileSources(basemap, true)[0]?.url).toMatch(urlPattern);
+    },
+  );
 
   it("returns the CARTO Voyager source with an OpenStreetMap fallback", () => {
     const sources = getBasemapTileSources("voyager", false);
 
     expect(sources[0]?.url).toMatch(/rastertiles\/voyager/);
     expect(sources.at(-1)?.url).toMatch(/tile\.openstreetmap\.org/);
-  });
-
-  it("returns a single topo source regardless of dark mode", () => {
-    expect(getBasemapTileSources("topo", false)).toHaveLength(1);
-    expect(getBasemapTileSources("topo", true)).toHaveLength(1);
-    expect(getBasemapTileSources("topo", true)[0]?.url).toMatch(
-      /World_Topo_Map/,
-    );
   });
 
   it("returns a single source for a raster basemap with no dark or fallback URLs", () => {

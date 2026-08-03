@@ -94,31 +94,24 @@ test.describe("settings menu", () => {
     ).toHaveAttribute("src", /cartocdn\.com\/dark_all/);
   });
 
-  test("switches the basemap and requests different tiles", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    await expect(page.locator(".leaflet-tile-pane img").first()).toBeVisible();
+  for (const [label, basemap, urlPattern] of [
+    ["satellite", E2E.basemapOption.satellite, /arcgisonline\.com/],
+    ["topo", E2E.basemapOption.topo, /World_Topo_Map/],
+  ] as const) {
+    test(`switches to the ${label} basemap and requests different tiles`, async ({
+      page,
+    }) => {
+      await page.goto("/");
+      await expect(
+        page.locator(".leaflet-tile-pane img").first(),
+      ).toBeVisible();
 
-    await page.getByTestId(E2E.settingsMenuTrigger).click();
-    await page.getByTestId(E2E.basemapOption.satellite).click();
+      await page.getByTestId(E2E.settingsMenuTrigger).click();
+      await page.getByTestId(basemap).click();
 
-    await expect(
-      page.locator(".leaflet-tile-pane img").first(),
-    ).toHaveAttribute("src", /arcgisonline\.com/);
-  });
-
-  test("switches to the topo basemap and requests different tiles", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    await expect(page.locator(".leaflet-tile-pane img").first()).toBeVisible();
-
-    await page.getByTestId(E2E.settingsMenuTrigger).click();
-    await page.getByTestId(E2E.basemapOption.topo).click();
-
-    await expect(
-      page.locator(".leaflet-tile-pane img").first(),
-    ).toHaveAttribute("src", /World_Topo_Map/);
-  });
+      await expect(
+        page.locator(".leaflet-tile-pane img").first(),
+      ).toHaveAttribute("src", urlPattern);
+    });
+  }
 });

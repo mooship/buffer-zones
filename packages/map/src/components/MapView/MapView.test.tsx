@@ -703,37 +703,26 @@ describe("MapView", () => {
     expect(mapMocks.fitBounds).toHaveBeenCalled();
   });
 
-  it("switches tile source when the satellite basemap is selected", () => {
-    render(
-      withDomain(
-        <MapView
-          bounds={bounds}
-          townships={[]}
-          visibleLayerIds={[]}
-          basemap="satellite"
-        />,
-      ),
-    );
+  it.each([
+    ["satellite", /arcgisonline/i],
+    ["topo", /World_Topo_Map/i],
+  ])(
+    "switches tile source when the %s basemap is selected",
+    (basemap, urlPattern) => {
+      render(
+        withDomain(
+          <MapView
+            bounds={bounds}
+            townships={[]}
+            visibleLayerIds={[]}
+            basemap={basemap}
+          />,
+        ),
+      );
 
-    expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
-  });
-
-  it("switches tile source when the topo basemap is selected", () => {
-    render(
-      withDomain(
-        <MapView
-          bounds={bounds}
-          townships={[]}
-          visibleLayerIds={[]}
-          basemap="topo"
-        />,
-      ),
-    );
-
-    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
-      /World_Topo_Map/i,
-    );
-  });
+      expect(screen.getByTestId("tile-layer")).toHaveTextContent(urlPattern);
+    },
+  );
 
   it("uses the dark street tile source when the OS prefers dark mode", () => {
     stubMatchMedia(true);
