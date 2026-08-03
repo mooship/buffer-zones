@@ -8,9 +8,8 @@ export const E2E = {
   mobileLegendTrigger: "mobile-legend-trigger",
   mobileLegendContent: "mobile-legend-content",
   panelTab: {
-    story: "panel-tab-story",
-    places: "panel-tab-places",
     layers: "panel-tab-layers",
+    ask: "panel-tab-ask",
   },
   dataLoadError: "data-load-error",
   retryDataLoad: "retry-data-load",
@@ -33,9 +32,5 @@ export const E2E = {
     nearestTransit: "layer-toggle-nearest-transit",
     rapidRail: "layer-toggle-rapid-rail",
   },
-  townshipSearch: "township-search",
-  townshipGroupMamelodi: "township-group-mamelodi",
-  townshipSelection: "township-selection",
   townshipPopup: "township-popup",
-  townshipPlacePrefix: "township-place-",
 } as const;

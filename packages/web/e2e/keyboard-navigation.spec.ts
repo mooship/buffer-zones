@@ -10,24 +10,23 @@ test.describe("keyboard navigation", () => {
 
     await ensurePanelOpen(page);
 
-    const storyTab = page.getByTestId(E2E.panelTab.story);
-    const placesTab = page.getByTestId(E2E.panelTab.places);
     const layersTab = page.getByTestId(E2E.panelTab.layers);
+    const askTab = page.getByTestId(E2E.panelTab.ask);
 
-    await storyTab.focus();
-    await expect(storyTab).toHaveAttribute("aria-selected", "true");
+    await layersTab.focus();
+    await expect(layersTab).toHaveAttribute("aria-selected", "true");
 
     await page.keyboard.press("ArrowRight");
-    await expect(placesTab).toHaveAttribute("aria-selected", "true");
-    await expect(placesTab).toBeFocused();
+    await expect(askTab).toHaveAttribute("aria-selected", "true");
+    await expect(askTab).toBeFocused();
 
     await page.keyboard.press("End");
-    await expect(layersTab).toHaveAttribute("aria-selected", "true");
+    await expect(askTab).toHaveAttribute("aria-selected", "true");
 
     await page.keyboard.press("Home");
-    await expect(storyTab).toHaveAttribute("aria-selected", "true");
+    await expect(layersTab).toHaveAttribute("aria-selected", "true");
 
     await page.keyboard.press("ArrowLeft");
-    await expect(layersTab).toHaveAttribute("aria-selected", "true");
+    await expect(askTab).toHaveAttribute("aria-selected", "true");
   });
 });
