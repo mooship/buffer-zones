@@ -230,6 +230,11 @@ const bounds: [[number, number], [number, number]] = [
   [-25.3, 28.75],
 ];
 
+const DEFAULT_MAP_VIEW_PROPS = {
+  bounds,
+  ariaLabel: "Test map",
+};
+
 function withDomain(ui: ReactNode) {
   return <DomainProvider domain={TEST_DOMAIN}>{ui}</DomainProvider>;
 }
@@ -304,12 +309,7 @@ describe("MapView", () => {
   it("passes bounds to MapContainer", () => {
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
     expect(screen.getByTestId("map-container")).toHaveAttribute(
@@ -326,8 +326,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -350,8 +349,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -385,8 +383,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -406,8 +403,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -438,8 +434,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -464,8 +459,7 @@ describe("MapView", () => {
     const { rerender } = render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -480,8 +474,7 @@ describe("MapView", () => {
     rerender(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           selectedFeatureId="A"
@@ -499,8 +492,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -524,8 +516,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           selectedFeatureId="A"
@@ -542,12 +533,7 @@ describe("MapView", () => {
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -558,8 +544,7 @@ describe("MapView", () => {
     const { rerender } = render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={["areas"]}
         />,
@@ -571,8 +556,7 @@ describe("MapView", () => {
     rerender(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -586,8 +570,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["unavailable-layer"]}
         />,
@@ -612,8 +595,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={["rail"]}
         />,
@@ -634,8 +616,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -660,8 +641,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           areaBoundaries={areaBoundaries}
           visibleLayerIds={["areas"]}
@@ -688,8 +668,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           areaBoundaries={areaBoundaries}
           visibleLayerIds={["coverage"]}
@@ -708,8 +687,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={[]}
           focusLocationTarget={{
@@ -737,8 +715,7 @@ describe("MapView", () => {
       render(
         withDomain(
           <MapView
-            bounds={bounds}
-            ariaLabel="Test map"
+            {...DEFAULT_MAP_VIEW_PROPS}
             areas={[]}
             visibleLayerIds={[]}
             basemap={basemap}
@@ -755,12 +732,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -772,12 +744,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -789,12 +756,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -812,12 +774,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -840,8 +797,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={[]}
           basemap="satellite"
@@ -863,8 +819,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -887,12 +842,7 @@ describe("MapView", () => {
   it("does not reverse-geocode background clicks when locateOnClick is not set", () => {
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -911,8 +861,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={[]}
           locateOnClick
@@ -943,8 +892,7 @@ describe("MapView", () => {
     render(
       withNonSelectableDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={
             [
               {
@@ -978,8 +926,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={
             [{ type: "Feature", properties: null, geometry: null }] as never
           }
@@ -1005,8 +952,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -1023,8 +969,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -1052,8 +997,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -1080,8 +1024,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -1110,8 +1053,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -1135,8 +1077,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -1154,8 +1095,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={[]}
           focusLocationTarget={{
@@ -1189,8 +1129,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           areaBoundaries={
             [
@@ -1213,8 +1152,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           areaBoundaries={
             [
@@ -1240,8 +1178,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           areaBoundaries={
             [
@@ -1272,8 +1209,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           areaBoundaries={
             [
@@ -1302,12 +1238,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
-          areas={[]}
-          visibleLayerIds={[]}
-        />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -1345,8 +1276,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={["rail"]}
         />,
@@ -1386,8 +1316,7 @@ describe("MapView", () => {
       return render(
         withDomain(
           <MapView
-            bounds={bounds}
-            ariaLabel="Test map"
+            {...DEFAULT_MAP_VIEW_PROPS}
             areas={[]}
             areaBoundaries={areaBoundaries}
             visibleLayerIds={["areas"]}
@@ -1468,8 +1397,7 @@ describe("MapView", () => {
     render(
       <DomainProvider domain={domain}>
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={
             [
               {
@@ -1514,8 +1442,7 @@ describe("MapView", () => {
     render(
       <DomainProvider domain={domain}>
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={
             [
               {
@@ -1550,8 +1477,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
@@ -1574,8 +1500,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={
             [
               {
@@ -1610,8 +1535,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={areas}
           visibleLayerIds={["areas"]}
         />,
@@ -1638,8 +1562,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={["rail"]}
         />,
@@ -1664,8 +1587,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={[]}
           basemap="custom-vector"
@@ -1691,8 +1613,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={[]}
           basemap="custom-vector"
@@ -1713,8 +1634,7 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          ariaLabel="Test map"
+          {...DEFAULT_MAP_VIEW_PROPS}
           areas={[]}
           visibleLayerIds={[]}
           basemap="custom-vector"
