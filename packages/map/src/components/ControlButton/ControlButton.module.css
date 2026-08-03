@@ -24,7 +24,8 @@
     background-color var(--motion-duration-short) ease,
     border-color var(--motion-duration-short) ease,
     box-shadow var(--motion-duration-short) ease,
-    transform 120ms ease;
+    translate 120ms ease,
+    scale 120ms ease;
 }
 
 .button[data-shape="icon"] {
@@ -50,17 +51,17 @@
     var(--color-paper)
   );
   box-shadow: var(--elevation-overlay);
-  transform: translateY(-0.5px);
+  translate: 0 -0.5px;
 }
 
 .button:active {
-  transform: scale(0.97);
+  scale: 0.97;
 }
 
 .button[data-variant="embedded"]:hover {
   background: color-mix(in srgb, var(--color-primary) 14%, transparent);
   box-shadow: none;
-  transform: none;
+  translate: none;
 }
 
 .button:focus-visible {
