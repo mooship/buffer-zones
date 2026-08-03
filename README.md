@@ -1,29 +1,12 @@
 # Stratum
 
-**Stratum** is a reusable SDK for building public-interest geospatial layer platforms — a domain-agnostic layer model, generic map rendering, and React hooks that any dataset can be wired into, with no accounts and no tracking beyond cookieless page views. `@stratum/core`, `@stratum/map`, and `@stratum/react` are the SDK; **Gauteng spatial legacy** is its reference implementation, a real published app proving the SDK out end-to-end.
+**Stratum** is a reusable SDK for building public-interest geospatial layer platforms — a domain-agnostic layer model, generic map rendering, and React hooks that any dataset can be wired into, with no accounts and no tracking beyond cookieless page views. `@stratum/core`, `@stratum/map`, and `@stratum/react` are the SDK itself; it doesn't encode any particular geography or story.
 
-That reference implementation maps apartheid-era spatial planning legacy across South African cities: recognized township areas, formal transit routes, and modeled car time to selected job centers in a single combined view. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
-
-**Current scope: full Gauteng municipality coverage in one combined regional layer.** The app currently includes City of Tshwane, City of Johannesburg, City of Ekurhuleni, Emfuleni, Midvaal, Lesedi, Mogale City, Rand West City, and Merafong City. It uses Stats SA Census 2011 boundaries, modeled OSRM car routing to each municipality's selected job centers, and transit overlays sourced from Gautrain rail, Gautrain Bus, PRASA rail, A Re Yeng, and Rea Vaya. Route geometry shows where formal transit runs, not service frequency, reliability, waiting, transfers, or jobs reachable. Other South African metros (Cape Town, Durban) are not yet included, and this domain is not the only one the SDK is meant to support — it's the first proof of concept.
-
-## Why
-
-Stratum itself is domain-agnostic — it doesn't encode any particular geography or story. The apartheid framing below belongs entirely to the Gauteng spatial legacy demo, the one domain currently built on the SDK; a different domain built on Stratum could map anything from flood risk to public amenities and would carry none of this.
-
-Under apartheid, townships were deliberately separated from economic centers by distance and buffer strips of highways, industrial zoning, or vacant land. That geography did not disappear in 1994. The Gauteng spatial legacy reference app makes that spatial structure visible while being explicit about what its current data cannot yet establish, and doubles as the proving ground for the underlying SDK. The intended primary accessibility measure is the number of jobs reachable within 45, 60, and 90 minutes by public transport, including walking, waiting, and transfers.
+`packages/app` and `packages/web` are a reference implementation proving the SDK out end-to-end with one real, published domain: **Gauteng spatial legacy**, mapping apartheid-era spatial planning legacy across South African cities. That's just the first domain built on the SDK — a different one could map flood risk, public amenities, or anything else. See [`docs/domains/gauteng-spatial-legacy.md`](docs/domains/gauteng-spatial-legacy.md) for what it covers, why it exists, and how its per-metro area data is classified.
 
 ## Documentation
 
-- [`docs/design-system.md`](docs/design-system.md) — the app's Material-informed local design system, tokens, and shared UI primitives
-- [`docs/data/tshwane-area-classification.md`](docs/data/tshwane-area-classification.md) — how included Tshwane township and settlement areas are selected and displayed
-- [`docs/data/johannesburg-area-classification.md`](docs/data/johannesburg-area-classification.md) — the same, for Johannesburg
-- [`docs/data/ekurhuleni-area-classification.md`](docs/data/ekurhuleni-area-classification.md) — the same, for Ekurhuleni
-- [`docs/data/emfuleni-area-classification.md`](docs/data/emfuleni-area-classification.md) — the same, for Emfuleni
-- [`docs/data/midvaal-area-classification.md`](docs/data/midvaal-area-classification.md) — the same, for Midvaal
-- [`docs/data/lesedi-area-classification.md`](docs/data/lesedi-area-classification.md) — the same, for Lesedi
-- [`docs/data/mogale-city-area-classification.md`](docs/data/mogale-city-area-classification.md) — the same, for Mogale City
-- [`docs/data/rand-west-city-area-classification.md`](docs/data/rand-west-city-area-classification.md) — the same, for Rand West City
-- [`docs/data/merafong-city-area-classification.md`](docs/data/merafong-city-area-classification.md) — the same, for Merafong City
+- [`docs/domains/gauteng-spatial-legacy.md`](docs/domains/gauteng-spatial-legacy.md) — the reference implementation's domain, scope, and per-metro area classification
 - [`data-pipeline/README.md`](data-pipeline/README.md) — how to (re-)run the data pipeline
 - [`packages/core/README.md`](packages/core/README.md) — `@stratum/core`, the domain-agnostic layer model and geodata utilities
 - [`packages/map/README.md`](packages/map/README.md) — `@stratum/map`, generic map rendering components and UI primitives
