@@ -49,6 +49,26 @@ vi.mock("./data/TownshipDataRepository", () => ({
 import { App } from "./App";
 import { useMapUiStore } from "./stores/useMapUiStore";
 
+async function renderMobilePanel() {
+  Object.defineProperty(window, "innerWidth", {
+    configurable: true,
+    value: 375,
+    writable: true,
+  });
+  useMapUiStore.getState().reset();
+
+  render(<App />);
+  await waitFor(() =>
+    expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+  );
+  fireEvent.click(screen.getByRole("button", { name: /explore/i }));
+
+  return {
+    panel: screen.getByTestId("panel-container"),
+    handle: screen.getByTestId("panel-sheet-handle"),
+  };
+}
+
 describe("App", () => {
   const originalInnerWidth = window.innerWidth;
 
@@ -353,23 +373,7 @@ describe("App", () => {
   });
 
   it("supports drag gestures on the mobile sheet handle", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 375,
-      writable: true,
-    });
-    useMapUiStore.getState().reset();
-
-    render(<App />);
-
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
-
-    const panel = screen.getByTestId("panel-container");
-    const handle = screen.getByTestId("panel-sheet-handle");
+    const { panel, handle } = await renderMobilePanel();
 
     fireEvent.pointerDown(handle, {
       pointerType: "touch",
@@ -428,21 +432,7 @@ describe("App", () => {
   });
 
   it("suppresses the synthetic click that follows a drag past the threshold", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 375,
-      writable: true,
-    });
-    useMapUiStore.getState().reset();
-
-    render(<App />);
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
-
-    const panel = screen.getByTestId("panel-container");
-    const handle = screen.getByTestId("panel-sheet-handle");
+    const { panel, handle } = await renderMobilePanel();
 
     fireEvent.pointerDown(handle, {
       pointerType: "touch",
@@ -492,21 +482,7 @@ describe("App", () => {
   });
 
   it("ignores a non-primary mouse button on the sheet handle", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 375,
-      writable: true,
-    });
-    useMapUiStore.getState().reset();
-
-    render(<App />);
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
-
-    const panel = screen.getByTestId("panel-container");
-    const handle = screen.getByTestId("panel-sheet-handle");
+    const { panel, handle } = await renderMobilePanel();
 
     fireEvent.pointerDown(handle, {
       pointerType: "mouse",
@@ -519,21 +495,7 @@ describe("App", () => {
   });
 
   it("ignores pointer move and up events from a different pointer while dragging", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 375,
-      writable: true,
-    });
-    useMapUiStore.getState().reset();
-
-    render(<App />);
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
-
-    const panel = screen.getByTestId("panel-container");
-    const handle = screen.getByTestId("panel-sheet-handle");
+    const { panel, handle } = await renderMobilePanel();
 
     fireEvent.pointerDown(handle, {
       pointerType: "touch",
@@ -565,26 +527,12 @@ describe("App", () => {
   });
 
   it("prunes velocity samples older than the tracking window during a drag", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 375,
-      writable: true,
-    });
-    useMapUiStore.getState().reset();
-
     let now = 0;
     const performanceNow = vi
       .spyOn(performance, "now")
       .mockImplementation(() => now);
 
-    render(<App />);
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
-
-    const panel = screen.getByTestId("panel-container");
-    const handle = screen.getByTestId("panel-sheet-handle");
+    const { panel, handle } = await renderMobilePanel();
 
     fireEvent.pointerDown(handle, {
       pointerType: "touch",
@@ -623,23 +571,7 @@ describe("App", () => {
   });
 
   it("treats a small drag as a tap and skips releasing already-released pointer capture", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 375,
-      writable: true,
-    });
-    useMapUiStore.getState().reset();
-
-    render(<App />);
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
-
-    const panel = screen.getByTestId("panel-container");
-    const handle = screen.getByTestId("panel-sheet-handle") as HTMLElement & {
-      releasePointerCapture: (pointerId: number) => void;
-    };
+    const { panel, handle } = await renderMobilePanel();
 
     fireEvent.pointerDown(handle, {
       pointerType: "touch",
@@ -685,47 +617,35 @@ describe("App", () => {
     delete document.documentElement.dataset.reducedTransparency;
   });
 
-  it("does not update state if the component unmounts before township/area data resolves", async () => {
-    let resolveTownships: ((value: unknown[]) => void) | undefined;
-    dataMocks.getTownships.mockReset().mockReturnValue(
-      new Promise((resolve) => {
-        resolveTownships = resolve;
-      }),
-    );
-    const consoleError = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+  it.each(["resolve", "reject"] as const)(
+    "does not update state if the component unmounts before the township fetch settles (%s)",
+    async (mode) => {
+      let resolveTownships: ((value: unknown[]) => void) | undefined;
+      let rejectTownships: ((reason: unknown) => void) | undefined;
+      dataMocks.getTownships.mockReset().mockReturnValue(
+        new Promise((resolve, reject) => {
+          resolveTownships = resolve;
+          rejectTownships = reject;
+        }),
+      );
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
-    const { unmount } = render(<App />);
-    unmount();
-    resolveTownships?.([]);
+      const { unmount } = render(<App />);
+      unmount();
+      if (mode === "resolve") {
+        resolveTownships?.([]);
+      } else {
+        rejectTownships?.(new Error("data load failed"));
+      }
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
-    expect(consoleError).not.toHaveBeenCalled();
-    consoleError.mockRestore();
-  });
-
-  it("does not set a data error if the component unmounts before the fetch rejects", async () => {
-    let rejectTownships: ((reason: unknown) => void) | undefined;
-    dataMocks.getTownships.mockReset().mockReturnValue(
-      new Promise((_resolve, reject) => {
-        rejectTownships = reject;
-      }),
-    );
-    const consoleError = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
-
-    const { unmount } = render(<App />);
-    unmount();
-    rejectTownships?.(new Error("data load failed"));
-
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    expect(consoleError).not.toHaveBeenCalled();
-    consoleError.mockRestore();
-  });
+      expect(consoleError).not.toHaveBeenCalled();
+      consoleError.mockRestore();
+    },
+  );
 
   it("shows a data error and retries the validated requests", async () => {
     dataMocks.getTownships.mockRejectedValueOnce(new Error("invalid data"));
