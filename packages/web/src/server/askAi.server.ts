@@ -7,9 +7,6 @@ import type { Env, WorkersAiChatMessage } from "./env";
 /** Workers AI model id. `@cf/zai-org/glm-4.7-flash` is available on the Workers Free plan. */
 export const ASK_AI_MODEL = "@cf/zai-org/glm-4.7-flash";
 
-/** Maximum characters accepted for a single question or history message. Mirrors the client's `ASK_AI_MAX_MESSAGE_LENGTH`. */
-export const MAX_MESSAGE_LENGTH = ASK_AI_MAX_MESSAGE_LENGTH;
-
 /** Maximum number of prior turns accepted in a request's `history`. */
 export const MAX_HISTORY_MESSAGES = 8;
 
@@ -21,12 +18,12 @@ export const RATE_LIMIT_RETRY_AFTER_SECONDS = 60;
 
 const askAiMessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
-  content: z.string().min(1).max(MAX_MESSAGE_LENGTH),
+  content: z.string().min(1).max(ASK_AI_MAX_MESSAGE_LENGTH),
 });
 
 /** Validates an incoming `POST /api/ask` request body. */
 export const askAiRequestSchema = z.object({
-  message: z.string().min(1).max(MAX_MESSAGE_LENGTH),
+  message: z.string().min(1).max(ASK_AI_MAX_MESSAGE_LENGTH),
   history: z.array(askAiMessageSchema).max(MAX_HISTORY_MESSAGES).default([]),
 });
 

@@ -24,11 +24,17 @@ export interface AskAiConfig {
   endpoint: string;
 }
 
-let config: AskAiConfig | null = null;
+/** The conversation snapshot `useAskAi` reads via `useSyncExternalStore`. */
+interface AskAiState {
+  messages: AskAiMessage[];
+  status: AskAiStatus;
+  error: string | null;
+}
 
-let messages: AskAiMessage[] = [];
-let status: AskAiStatus = "idle";
-let error: string | null = null;
+const SERVER_STATE: AskAiState = { messages: [], status: "idle", error: null };
+
+let config: AskAiConfig | null = null;
+let state: AskAiState = { messages: [], status: "idle", error: null };
 let nextMessageId = 0;
 const listeners = new Set<() => void>();
 
@@ -43,33 +49,22 @@ function notify() {
   }
 }
 
+function setState(patch: Partial<AskAiState>) {
+  state = { ...state, ...patch };
+  notify();
+}
+
 function subscribe(callback: () => void) {
   listeners.add(callback);
   return () => listeners.delete(callback);
 }
 
-function getMessagesSnapshot() {
-  return messages;
+function getSnapshot(): AskAiState {
+  return state;
 }
 
-function getStatusSnapshot() {
-  return status;
-}
-
-function getErrorSnapshot() {
-  return error;
-}
-
-function getServerMessagesSnapshot(): AskAiMessage[] {
-  return [];
-}
-
-function getServerStatusSnapshot(): AskAiStatus {
-  return "idle";
-}
-
-function getServerErrorSnapshot(): null {
-  return null;
+function getServerSnapshot(): AskAiState {
+  return SERVER_STATE;
 }
 
 async function readErrorMessage(response: Response): Promise<string> {
@@ -111,15 +106,22 @@ export async function askAi(question: string): Promise<void> {
   if (!config) {
     throw new Error("initAskAi must be called before askAi");
   }
-  if (status === "streaming") {
+  if (state.status === "streaming") {
     return;
   }
 
-  const history = messages.map(({ role, content }) => ({ role, content }));
-  messages = [...messages, { id: nextId(), role: "user", content: question }];
-  status = "streaming";
-  error = null;
-  notify();
+  const history = state.messages.map(({ role, content }) => ({
+    role,
+    content,
+  }));
+  setState({
+    messages: [
+      ...state.messages,
+      { id: nextId(), role: "user", content: question },
+    ],
+    status: "streaming",
+    error: null,
+  });
 
   try {
     const response = await fetch(config.endpoint, {
@@ -129,13 +131,16 @@ export async function askAi(question: string): Promise<void> {
     });
 
     if (!response.ok || !response.body) {
-      error = await readErrorMessage(response);
-      status = "error";
-      notify();
+      setState({ status: "error", error: await readErrorMessage(response) });
       return;
     }
 
-    messages = [...messages, { id: nextId(), role: "assistant", content: "" }];
+    setState({
+      messages: [
+        ...state.messages,
+        { id: nextId(), role: "assistant", content: "" },
+      ],
+    });
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     while (true) {
@@ -144,33 +149,31 @@ export async function askAi(question: string): Promise<void> {
         break;
       }
       const chunk = decoder.decode(value, { stream: true });
-      const lastMessage = messages[messages.length - 1];
+      const lastMessage = state.messages[state.messages.length - 1];
       /* v8 ignore next 3 -- unreachable: the assistant placeholder message is always pushed immediately above, before this loop can run */
       if (!lastMessage) {
         break;
       }
-      messages = [
-        ...messages.slice(0, -1),
-        { ...lastMessage, content: lastMessage.content + chunk },
-      ];
-      notify();
+      setState({
+        messages: [
+          ...state.messages.slice(0, -1),
+          { ...lastMessage, content: lastMessage.content + chunk },
+        ],
+      });
     }
-    status = "idle";
-    notify();
+    setState({ status: "idle" });
   } catch {
-    error = "Something went wrong. Please try again.";
-    status = "error";
-    notify();
+    setState({
+      status: "error",
+      error: "Something went wrong. Please try again.",
+    });
   }
 }
 
 /** Clears the conversation and resets `useAskAi`'s state to idle. */
 export function resetAskAi(): void {
-  messages = [];
-  status = "idle";
-  error = null;
   nextMessageId = 0;
-  notify();
+  setState({ messages: [], status: "idle", error: null });
 }
 
 /**
@@ -186,25 +189,15 @@ export function useAskAi(): {
   ask: (question: string) => Promise<void>;
   reset: () => void;
 } {
-  const currentMessages = useSyncExternalStore(
+  const current = useSyncExternalStore(
     subscribe,
-    getMessagesSnapshot,
-    getServerMessagesSnapshot,
-  );
-  const currentStatus = useSyncExternalStore(
-    subscribe,
-    getStatusSnapshot,
-    getServerStatusSnapshot,
-  );
-  const currentError = useSyncExternalStore(
-    subscribe,
-    getErrorSnapshot,
-    getServerErrorSnapshot,
+    getSnapshot,
+    getServerSnapshot,
   );
   return {
-    messages: currentMessages,
-    status: currentStatus,
-    error: currentError,
+    messages: current.messages,
+    status: current.status,
+    error: current.error,
     ask: askAi,
     reset: resetAskAi,
   };

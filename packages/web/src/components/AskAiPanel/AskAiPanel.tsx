@@ -17,6 +17,13 @@ export function AskAiPanel() {
   const [draft, setDraft] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
   const isStreaming = status === "streaming";
+  const lastMessage = messages.at(-1);
+  const pendingAssistantMessageId =
+    isStreaming &&
+    lastMessage?.role === "assistant" &&
+    lastMessage.content === ""
+      ? lastMessage.id
+      : null;
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: messages isn't read in the effect body, but its identity changing is exactly what should re-trigger the scroll-to-bottom
   useEffect(() => {
@@ -55,12 +62,9 @@ export function AskAiPanel() {
             place — use the map or the Browse places tab for that.
           </p>
         ) : null}
-        {messages.map((message, index) => {
+        {messages.map((message) => {
           const isPendingAssistantReply =
-            isStreaming &&
-            index === messages.length - 1 &&
-            message.role === "assistant" &&
-            message.content === "";
+            message.id === pendingAssistantMessageId;
           return (
             <p
               key={message.id}

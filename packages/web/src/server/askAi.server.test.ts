@@ -1,5 +1,6 @@
 import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import { describe, expect, it, vi } from "vitest";
+import { ASK_AI_MAX_MESSAGE_LENGTH } from "../constants/askAi";
 import {
   ASK_AI_MODEL,
   askAiRequestSchema,
@@ -8,7 +9,6 @@ import {
   createPlainTextTransform,
   getRateLimitKey,
   handleAskAiRequest,
-  MAX_MESSAGE_LENGTH,
   RATE_LIMIT_RETRY_AFTER_SECONDS,
   streamAiReply,
 } from "./askAi.server";
@@ -207,7 +207,7 @@ describe("askAiRequestSchema", () => {
 
   it("rejects a message over the max length", () => {
     const result = askAiRequestSchema.safeParse({
-      message: "x".repeat(MAX_MESSAGE_LENGTH + 1),
+      message: "x".repeat(ASK_AI_MAX_MESSAGE_LENGTH + 1),
     });
 
     expect(result.success).toBe(false);
