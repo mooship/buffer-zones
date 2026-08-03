@@ -167,4 +167,66 @@ describe("VectorBasemapLayer", () => {
 
     consoleError.mockRestore();
   });
+
+  it("does not call onError if the component unmounts between the style throwing and the catch handler running", async () => {
+    const loadError = new Error("network down");
+    let unmountComponent: (() => void) | undefined;
+    layerMocks.maplibreGL.mockImplementation(() => {
+      unmountComponent?.();
+      throw loadError;
+    });
+    const onError = vi.fn();
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { unmount } = render(
+      <VectorBasemapLayer
+        styleUrl="https://example.com/style.json"
+        onError={onError}
+      />,
+    );
+    unmountComponent = unmount;
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(onError).not.toHaveBeenCalled();
+    expect(consoleError).toHaveBeenCalled();
+
+    consoleError.mockRestore();
+  });
+
+  it("does not call onError when the underlying map fires a style load error after unmount", async () => {
+    const glMap = { on: vi.fn() };
+    const layer = {
+      addTo: vi.fn(),
+      remove: vi.fn(),
+      getMaplibreMap: () => glMap,
+    };
+    layerMocks.maplibreGL.mockReturnValue(layer);
+    const onError = vi.fn();
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { unmount } = render(
+      <VectorBasemapLayer
+        styleUrl="https://example.com/style.json"
+        onError={onError}
+      />,
+    );
+    await waitFor(() => expect(layer.addTo).toHaveBeenCalled());
+
+    const errorHandler = glMap.on.mock.calls.find(
+      ([event]) => event === "error",
+    )?.[1] as ((event: { error: unknown }) => void) | undefined;
+    expect(errorHandler).toBeDefined();
+
+    unmount();
+    errorHandler?.({ error: new Error("style load failed after unmount") });
+
+    expect(onError).not.toHaveBeenCalled();
+
+    consoleError.mockRestore();
+  });
 });

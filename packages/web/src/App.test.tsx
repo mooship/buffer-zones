@@ -414,6 +414,10 @@ describe("App", () => {
       clientY: 210,
     });
 
+    await waitFor(() =>
+      expect(panel).toHaveAttribute("data-panel-drag-direction", "down"),
+    );
+
     fireEvent.pointerUp(window, {
       pointerType: "touch",
       pointerId: 8,
@@ -421,6 +425,306 @@ describe("App", () => {
     });
 
     expect(panel).toHaveAttribute("data-panel-size", "medium");
+  });
+
+  it("suppresses the synthetic click that follows a drag past the threshold", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    render(<App />);
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 9,
+      clientY: 200,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 9,
+      clientY: 100,
+    });
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 9,
+      clientY: 100,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-size", "full");
+
+    fireEvent.click(handle);
+    expect(panel).toHaveAttribute("data-panel-size", "full");
+
+    fireEvent.click(handle);
+    expect(panel).toHaveAttribute("data-panel-size", "medium");
+  });
+
+  it("ignores sheet handle interactions on desktop viewports", async () => {
+    render(<App />);
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 100,
+      button: 0,
+    });
+    fireEvent.click(handle);
+
+    expect(panel).toHaveAttribute("data-panel-dragging", "false");
+    expect(panel).toHaveAttribute("data-panel-size", "medium");
+  });
+
+  it("ignores a non-primary mouse button on the sheet handle", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    render(<App />);
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "mouse",
+      pointerId: 2,
+      clientY: 150,
+      button: 2,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-dragging", "false");
+  });
+
+  it("ignores pointer move and up events from a different pointer while dragging", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    render(<App />);
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 200,
+      button: 0,
+    });
+
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 99,
+      clientY: 60,
+    });
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 99,
+      clientY: 60,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-dragging", "true");
+
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 200,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-dragging", "false");
+  });
+
+  it("prunes velocity samples older than the tracking window during a drag", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    let now = 0;
+    const performanceNow = vi
+      .spyOn(performance, "now")
+      .mockImplementation(() => now);
+
+    render(<App />);
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 4,
+      clientY: 200,
+      button: 0,
+    });
+    now = 50;
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 4,
+      clientY: 190,
+    });
+    now = 300;
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 4,
+      clientY: 100,
+    });
+    now = 310;
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 4,
+      clientY: 95,
+    });
+    now = 460;
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 4,
+      clientY: 90,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-size", "full");
+
+    performanceNow.mockRestore();
+  });
+
+  it("treats a small drag as a tap and skips releasing already-released pointer capture", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 375,
+      writable: true,
+    });
+    useMapUiStore.getState().reset();
+
+    render(<App />);
+    await waitFor(() =>
+      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByRole("button", { name: /explore/i }));
+
+    const panel = screen.getByTestId("panel-container");
+    const handle = screen.getByTestId("panel-sheet-handle") as HTMLElement & {
+      releasePointerCapture: (pointerId: number) => void;
+    };
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 5,
+      clientY: 200,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 5,
+      clientY: 205,
+    });
+    handle.releasePointerCapture(5);
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 5,
+      clientY: 205,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-size", "medium");
+    expect(panel).toHaveAttribute("data-panel-dragging", "false");
+  });
+
+  it("marks the document as reduced-transparency when the OS preference is set", async () => {
+    const originalMatchMedia = window.matchMedia.bind(window);
+    vi.spyOn(window, "matchMedia").mockImplementation((query: string) => {
+      if (query === "(prefers-reduced-transparency: reduce)") {
+        return {
+          matches: true,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        } as unknown as MediaQueryList;
+      }
+      return originalMatchMedia(query);
+    });
+
+    render(<App />);
+
+    await waitFor(() =>
+      expect(document.documentElement.dataset.reducedTransparency).toBe("true"),
+    );
+
+    delete document.documentElement.dataset.reducedTransparency;
+  });
+
+  it("does not update state if the component unmounts before township/area data resolves", async () => {
+    let resolveTownships: ((value: unknown[]) => void) | undefined;
+    dataMocks.getTownships.mockReset().mockReturnValue(
+      new Promise((resolve) => {
+        resolveTownships = resolve;
+      }),
+    );
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { unmount } = render(<App />);
+    unmount();
+    resolveTownships?.([]);
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
+  it("does not set a data error if the component unmounts before the fetch rejects", async () => {
+    let rejectTownships: ((reason: unknown) => void) | undefined;
+    dataMocks.getTownships.mockReset().mockReturnValue(
+      new Promise((_resolve, reject) => {
+        rejectTownships = reject;
+      }),
+    );
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { unmount } = render(<App />);
+    unmount();
+    rejectTownships?.(new Error("data load failed"));
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
   });
 
   it("shows a data error and retries the validated requests", async () => {
