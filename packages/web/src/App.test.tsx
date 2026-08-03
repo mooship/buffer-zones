@@ -176,18 +176,13 @@ describe("App", () => {
     );
   });
 
-  it("separates the evidence narrative from map controls", async () => {
+  it("selects the Map layers tab by default", async () => {
     render(<App />);
 
-    expect(screen.getByRole("tab", { name: "The pattern" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-
-    expect(screen.getByText(/apartheid law controlled/i)).toBeInTheDocument();
-    expect(
-      screen.queryByRole("checkbox", { name: "Modelled car time" }),
-    ).not.toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );
@@ -196,37 +191,27 @@ describe("App", () => {
   it("supports arrow-key navigation between panel tabs", async () => {
     render(<App />);
 
-    const storyTab = screen.getByRole("tab", { name: "The pattern" });
-    fireEvent.keyDown(storyTab, { key: "ArrowRight" });
+    const layersTab = screen.getByRole("tab", { name: "Map layers" });
+    fireEvent.keyDown(layersTab, { key: "ArrowRight" });
 
-    expect(screen.getByRole("tab", { name: "Browse places" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "Ask AI" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
     expect(screen.getByRole("tabpanel")).toHaveAttribute(
       "aria-labelledby",
-      "panel-tab-places",
+      "panel-tab-ask",
     );
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );
   });
 
-  it("offers a non-map way to browse township evidence", async () => {
-    render(<App />);
-
-    fireEvent.click(screen.getByRole("tab", { name: "Browse places" }));
-
-    expect(
-      await screen.findByRole("button", { name: /browse mamelodi/i }),
-    ).toBeInTheDocument();
-  });
-
   it("supports Home, End, and ArrowLeft tab navigation shortcuts", async () => {
     render(<App />);
 
-    const storyTab = screen.getByRole("tab", { name: "The pattern" });
-    fireEvent.keyDown(storyTab, { key: "End" });
+    const layersTab = screen.getByRole("tab", { name: "Map layers" });
+    fireEvent.keyDown(layersTab, { key: "End" });
     expect(screen.getByRole("tab", { name: "Ask AI" })).toHaveAttribute(
       "aria-selected",
       "true",
@@ -241,17 +226,9 @@ describe("App", () => {
     );
 
     fireEvent.keyDown(screen.getByRole("tab", { name: "Map layers" }), {
-      key: "ArrowLeft",
-    });
-    expect(screen.getByRole("tab", { name: "Browse places" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-
-    fireEvent.keyDown(screen.getByRole("tab", { name: "Browse places" }), {
       key: "Home",
     });
-    expect(screen.getByRole("tab", { name: "The pattern" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
@@ -263,29 +240,13 @@ describe("App", () => {
   it("ignores keys other than the supported arrow/Home/End tab shortcuts", async () => {
     render(<App />);
 
-    const storyTab = screen.getByRole("tab", { name: "The pattern" });
-    fireEvent.keyDown(storyTab, { key: "a" });
+    const layersTab = screen.getByRole("tab", { name: "Map layers" });
+    fireEvent.keyDown(layersTab, { key: "a" });
 
-    expect(storyTab).toHaveAttribute("aria-selected", "true");
+    expect(layersTab).toHaveAttribute("aria-selected", "true");
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );
-  });
-
-  it("selecting a place in the browser updates the shared selection", async () => {
-    render(<App />);
-
-    fireEvent.click(screen.getByRole("tab", { name: "Browse places" }));
-    fireEvent.click(
-      await screen.findByRole("button", { name: /browse mamelodi/i }),
-    );
-    fireEvent.click(
-      screen.getByRole("button", { name: /mamelodi, modelled car time/i }),
-    );
-
-    expect(
-      screen.getByRole("heading", { name: "Mamelodi" }),
-    ).toBeInTheDocument();
   });
 
   it("collapses and restores the controls panel", async () => {

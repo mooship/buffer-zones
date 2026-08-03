@@ -1,6 +1,5 @@
 import {
   GAUTENG_SPATIAL_LEGACY_DOMAIN,
-  METROS,
   type TownshipFeature,
   type TownshipProperties,
 } from "@stratum/app";
@@ -31,11 +30,8 @@ import {
 import { useWindowSize } from "usehooks-ts";
 import styles from "./App.module.css";
 import { AskAiPanel } from "./components/AskAiPanel/AskAiPanel";
-import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
-import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
 import { TownshipPopup } from "./components/TownshipPopup/TownshipPopup";
-import { DATA_SOURCES, REPOSITORY_URL } from "./constants/metadata";
 import { buildRegionDataUrls } from "./data/regionDataUrls";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
 import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
@@ -50,7 +46,7 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
   [-25.3, 28.75],
 ];
 
-const PANEL_VIEWS = ["story", "places", "layers", "ask"] as const;
+const PANEL_VIEWS = ["layers", "ask"] as const;
 const MOBILE_BREAKPOINT_PX = 768;
 const SHEET_DRAG_THRESHOLD_PX = 36;
 const SHEET_DRAG_PREVIEW_LIMIT_PX = 96;
@@ -58,16 +54,9 @@ const SHEET_PROJECTION_DECELERATION = 0.992;
 const SHEET_VELOCITY_SAMPLE_WINDOW_MS = 140;
 
 const PANEL_LABELS: Record<PanelView, string> = {
-  story: "The pattern",
-  places: "Browse places",
   layers: "Map layers",
   ask: "Ask AI",
 };
-
-const NATIONAL_JOB_CENTER_COUNT = METROS.reduce(
-  (total, metro) => total + metro.jobCenterCount,
-  0,
-);
 
 interface FocusLocationTarget {
   token: number;
@@ -97,7 +86,7 @@ function pruneStalePointerSamples(samples: PointerSample[], now: number) {
  * The reference app's root shell: fetches and merges the Gauteng township
  * choropleth data, wraps the render tree in a `DomainProvider` for
  * `gauteng-spatial-legacy`, and renders the map alongside the desktop/mobile
- * info panel (story, place browser, layer toggles) and its settings menu.
+ * info panel (layer toggles, Ask AI) and its settings menu.
  * @remarks Owns the mobile bottom-sheet drag/swipe gesture state (pointer
  *   sampling, velocity-based snap projection) in addition to layout state
  *   from `useMapUiStore`.
@@ -412,17 +401,11 @@ export function App() {
                 onLayerDataError={setFailedLayerIds}
                 onBasemapError={() => setBasemap("street")}
                 locateOnClick
-                renderFeaturePopup={
-                  panelOpen && panelView === "places"
-                    ? undefined
-                    : (properties) => (
-                        <TownshipPopup
-                          properties={
-                            properties as unknown as TownshipProperties
-                          }
-                        />
-                      )
-                }
+                renderFeaturePopup={(properties) => (
+                  <TownshipPopup
+                    properties={properties as unknown as TownshipProperties}
+                  />
+                )}
               />
             </Suspense>
           ) : (
@@ -554,45 +537,6 @@ export function App() {
             className={styles.panelViewport}
             data-view={panelView}
           >
-            {panelView === "story" ? (
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>
-                  {GAUTENG_SPATIAL_LEGACY_DOMAIN.story.title}
-                </h2>
-                <EvidenceSummary
-                  jobCenterCount={NATIONAL_JOB_CENTER_COUNT}
-                  contextText={GAUTENG_SPATIAL_LEGACY_DOMAIN.story.body}
-                />
-                <details className={styles.panelSources}>
-                  <summary>Data sources and method</summary>
-                  <div className={styles.panelSourceList}>
-                    {DATA_SOURCES.map((source) => (
-                      <span key={source}>{source}</span>
-                    ))}
-                    <a
-                      className={styles.panelSourceLink}
-                      href={REPOSITORY_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Source code: mooship/stratum
-                    </a>
-                  </div>
-                </details>
-              </section>
-            ) : null}
-            {panelView === "places" ? (
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Included areas</h2>
-                <TownshipBrowser
-                  townships={townships}
-                  selectedTownshipId={selectedFeatureId}
-                  onSelect={(township) =>
-                    setSelectedFeatureId(township.properties.id)
-                  }
-                />
-              </section>
-            ) : null}
             {panelView === "layers" ? (
               <div className={styles.panelContent}>
                 <section className={styles.section}>

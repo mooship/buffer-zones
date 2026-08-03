@@ -13,7 +13,7 @@ import styles from "./AskAiPanel.module.css";
  * output is untrusted content and must never be interpreted as markup.
  */
 export function AskAiPanel() {
-  const { messages, status, error, ask } = useAskAi();
+  const { messages, status, error, ask, reset } = useAskAi();
   const [draft, setDraft] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
   const isStreaming = status === "streaming";
@@ -46,6 +46,17 @@ export function AskAiPanel() {
 
   return (
     <div className={styles.panel}>
+      {messages.length > 0 ? (
+        <button
+          type="button"
+          className={styles.clear}
+          data-testid="ask-ai-clear"
+          data-e2e="ask-ai-clear"
+          onClick={reset}
+        >
+          Clear conversation
+        </button>
+      ) : null}
       <div
         className={styles.log}
         role="log"
@@ -59,7 +70,7 @@ export function AskAiPanel() {
           <p className={styles.hint}>
             Ask what this map shows, how the drive-time model works, or which
             layers you can turn on. It can't look up an exact figure for one
-            place — use the map or the Browse places tab for that.
+            place — click that place on the map for that.
           </p>
         ) : null}
         {messages.map((message) => {

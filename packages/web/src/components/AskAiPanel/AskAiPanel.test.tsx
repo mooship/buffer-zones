@@ -9,16 +9,18 @@ function mockUseAskAi(overrides?: {
   status?: stratumReact.AskAiStatus;
   error?: string | null;
   ask?: (question: string) => Promise<void>;
+  reset?: () => void;
 }) {
   const ask = overrides?.ask ?? vi.fn(async () => {});
+  const reset = overrides?.reset ?? vi.fn();
   vi.spyOn(stratumReact, "useAskAi").mockReturnValue({
     messages: overrides?.messages ?? [],
     status: overrides?.status ?? "idle",
     error: overrides?.error ?? null,
     ask,
-    reset: vi.fn(),
+    reset,
   });
-  return { ask };
+  return { ask, reset };
 }
 
 describe("AskAiPanel", () => {
@@ -136,5 +138,24 @@ describe("AskAiPanel", () => {
       "maxlength",
       String(ASK_AI_MAX_MESSAGE_LENGTH),
     );
+  });
+
+  it("hides the clear-conversation button when there's no conversation yet", () => {
+    mockUseAskAi();
+
+    render(<AskAiPanel />);
+
+    expect(screen.queryByTestId("ask-ai-clear")).not.toBeInTheDocument();
+  });
+
+  it("clears the conversation when the clear button is clicked", () => {
+    const { reset } = mockUseAskAi({
+      messages: [{ id: 1, role: "user", content: "Hi" }],
+    });
+
+    render(<AskAiPanel />);
+    fireEvent.click(screen.getByTestId("ask-ai-clear"));
+
+    expect(reset).toHaveBeenCalled();
   });
 });

@@ -5,6 +5,32 @@
   min-height: 0;
 }
 
+.clear {
+  align-self: flex-end;
+  min-height: 32px;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.clear:hover {
+  background: color-mix(in srgb, var(--color-surface-hover) 52%, transparent);
+  color: var(--color-paper);
+}
+
+.clear:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
 .log {
   display: flex;
   flex-direction: column;
@@ -27,6 +53,7 @@
   display: grid;
   gap: 0.1875rem;
   margin: 0;
+  max-width: 85%;
   padding: 0.5rem 0.625rem;
   border-radius: var(--radius-sm);
   font-size: 0.8125rem;
@@ -36,11 +63,17 @@
 }
 
 .message[data-role="user"] {
-  background: color-mix(in srgb, var(--color-surface-hover) 45%, transparent);
+  align-self: flex-end;
+  background: color-mix(
+    in srgb,
+    var(--color-ochre) 22%,
+    var(--color-surface-hover)
+  );
   color: var(--color-paper);
 }
 
 .message[data-role="assistant"] {
+  align-self: flex-start;
   border: 1px solid color-mix(in srgb, var(--color-line) 55%, transparent);
   color: var(--color-paper);
 }
@@ -90,7 +123,10 @@
   background: transparent;
   color: var(--color-paper);
   font: inherit;
-  font-size: 0.8125rem;
+  /* Intentionally 16px, not the design system's smaller type scale: an
+   * input focused at under 16px triggers automatic zoom on iOS/Android,
+   * which this avoids without disabling pinch-zoom in the viewport meta. */
+  font-size: 1rem;
 }
 
 .textarea:disabled {

@@ -20,7 +20,7 @@ function groupSiblings(id: string): string[] {
 }
 
 /** Which tab of the mobile/desktop info panel is active. */
-export type PanelView = "story" | "places" | "layers" | "ask";
+export type PanelView = "layers" | "ask";
 
 /** The app's UI state: layer visibility, basemap, panel state, and feature selection. */
 interface MapUiState {
@@ -46,7 +46,7 @@ function createInitialState() {
       .map((layer) => layer.id),
     basemap: "street" as const,
     panelOpen: false,
-    panelView: "story" as const,
+    panelView: "layers" as const,
     titleExpanded: false,
     selectedFeatureId: null,
   };
