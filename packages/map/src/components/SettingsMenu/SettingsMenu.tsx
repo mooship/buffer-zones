@@ -27,14 +27,16 @@ export function SettingsMenu({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const onOpenChangeRef = useRef(onOpenChange);
 
-  const updateOpen = useCallback(
-    (value: boolean) => {
-      setOpen(value);
-      onOpenChange?.(value);
-    },
-    [onOpenChange],
-  );
+  useEffect(() => {
+    onOpenChangeRef.current = onOpenChange;
+  });
+
+  const updateOpen = useCallback((value: boolean) => {
+    setOpen(value);
+    onOpenChangeRef.current?.(value);
+  }, []);
 
   useEffect(() => {
     if (!open) {

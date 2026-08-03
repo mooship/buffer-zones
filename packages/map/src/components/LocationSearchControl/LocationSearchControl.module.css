@@ -68,7 +68,8 @@
 }
 
 .input:focus-visible,
-.resultButton:focus-visible {
+.resultButton:focus-visible,
+.retryButton:focus-visible {
   outline: 2px solid var(--color-paper);
   outline-offset: 2px;
 }
@@ -92,11 +93,6 @@
   font: inherit;
   font-size: 0.6875rem;
   cursor: pointer;
-}
-
-.retryButton:focus-visible {
-  outline: 2px solid var(--color-paper);
-  outline-offset: 2px;
 }
 
 .results {

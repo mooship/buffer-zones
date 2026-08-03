@@ -25,6 +25,8 @@ interface LocationSearchControlProps {
 const MIN_SEARCH_QUERY_LENGTH = 2;
 const SEARCH_DEBOUNCE_MS = 260;
 const DEFAULT_PLACEHOLDER = "Search town, suburb or station";
+const SEARCH_UNAVAILABLE_MESSAGE =
+  "Search is unavailable right now. Please try again.";
 
 /**
  * A debounced, keyboard-navigable place search box backed by Nominatim.
@@ -40,16 +42,15 @@ export function LocationSearchControl({
   const [results, setResults] = useState<LocationSearchResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [searchFailed, setSearchFailed] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const { next, abort } = useAbortController();
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchFailed = searchError === SEARCH_UNAVAILABLE_MESSAGE;
 
   async function runSearch(trimmedQuery: string) {
     const signal = next();
     setSearching(true);
     setSearchError(null);
-    setSearchFailed(false);
     setActiveResultIndex(-1);
 
     try {
@@ -64,8 +65,7 @@ export function LocationSearchControl({
         return;
       }
       setResults([]);
-      setSearchError("Search is unavailable right now. Please try again.");
-      setSearchFailed(true);
+      setSearchError(SEARCH_UNAVAILABLE_MESSAGE);
     } finally {
       if (!signal.aborted) {
         setSearching(false);
@@ -79,7 +79,6 @@ export function LocationSearchControl({
     if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
       setResults([]);
       setSearchError(null);
-      setSearchFailed(false);
       setSearching(false);
       setActiveResultIndex(-1);
       abort();

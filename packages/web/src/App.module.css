@@ -593,4 +593,8 @@
     transition: opacity 180ms ease;
     transform: none;
   }
+
+  .mapLoading {
+    animation: none;
+  }
 }
