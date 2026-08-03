@@ -1,20 +1,38 @@
 import type { MetroId } from "./metros";
 
+/**
+ * How a township area's boundary is identified: by an explicit census
+ * main-place code (`censusMainPlaceCodes`), or by matching sub-place names
+ * (`subPlaceNamePrefixes`).
+ */
 export type TownshipAreaSelectionBasis =
   | "census-main-place"
   | "named-sub-places";
 
+/**
+ * How eagerly this area's map label is revealed while zooming in.
+ * @remarks A large `"primary"` area (many sub-places) shows its label
+ *   immediately; smaller `"primary"` areas reveal at a medium zoom, and
+ *   `"secondary"` areas only at a closer zoom still — see
+ *   `PRIMARY_LABEL_REVEAL_ZOOM`/`SECONDARY_LABEL_REVEAL_ZOOM` in
+ *   `@stratum/map`'s `MapView`.
+ */
 export type TownshipAreaLabelPriority = "primary" | "secondary";
 
+/** One recognised township area: its identity, metro, and matching rules for the census sub-place features that make it up. */
 export interface TownshipAreaDefinition {
   id: string;
   name: string;
   metroId: MetroId;
   selectionBasis: TownshipAreaSelectionBasis;
   labelPriority: TownshipAreaLabelPriority;
+  /** Pixel offset `[x, y]` for this area's map label, to avoid overlapping nearby features. */
   labelOffset?: readonly [number, number];
+  /** Census 2011 main-place code prefixes identifying this area's boundary features. */
   censusMainPlaceCodes?: readonly string[];
+  /** Name prefixes matching this area's census sub-place features, when a main-place code isn't specific enough. */
   subPlaceNamePrefixes?: readonly string[];
+  /** Sub-place names explicitly excluded from this area, to override an otherwise-matching prefix/name. */
   excludedSubPlaceNames?: readonly string[];
 }
 
@@ -997,6 +1015,7 @@ const MERAFONG_CITY_TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinitionIn
     },
   ];
 
+/** Every recognised township area across all nine Gauteng metros, flattened from each metro's own list with `metroId` attached. */
 export const TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinition[] = [
   ...TSHWANE_TOWNSHIP_AREA_DEFINITIONS.map((definition) => ({
     ...definition,
@@ -1036,6 +1055,7 @@ export const TOWNSHIP_AREA_DEFINITIONS: readonly TownshipAreaDefinition[] = [
   })),
 ];
 
+/** Every township area's display name, in the same order as `TOWNSHIP_AREA_DEFINITIONS`. */
 export const TOWNSHIP_GROUPS = TOWNSHIP_AREA_DEFINITIONS.map(
   (area) => area.name,
 );
@@ -1063,6 +1083,15 @@ function bestMatch(
   return matches[0];
 }
 
+/**
+ * Finds the township area a census sub-place belongs to, by matching its
+ * name (and, to disambiguate multiple matches, its census id) against every
+ * area's `subPlaceNamePrefixes`/`censusMainPlaceCodes`.
+ * @param name - The sub-place's name.
+ * @param censusId - The sub-place's census code, used to disambiguate when
+ *   more than one area's name/prefix matches.
+ * @returns The matching area, or `undefined` if none matches.
+ */
 export function getTownshipAreaDefinition(
   name: string,
   censusId?: string,
@@ -1092,6 +1121,7 @@ export function getTownshipAreaDefinition(
   return undefined;
 }
 
+/** Like `getTownshipAreaDefinition`, but returns just the matched area's display name. */
 export function getTownshipGroup(
   name: string,
   censusId?: string,

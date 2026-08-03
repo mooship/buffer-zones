@@ -113,8 +113,11 @@ export interface FeatureCollectionSchema {
  * @param url - The source URL, included in error messages for debugging.
  * @returns A function that parses `input` and throws on failure.
  * @remarks Error messages are truncated to the first 3 validation issues.
+ *   `schema` can be `featureCollectionSchema` itself, or a caller's own
+ *   stricter schema built on top of it (e.g. one requiring specific feature
+ *   properties for a particular domain).
  * @example
- * const parse = createFeatureCollectionParser(townshipFeatureCollectionSchema, url);
+ * const parse = createFeatureCollectionParser(featureCollectionSchema, url);
  * const data = parse(await response.json());
  */
 export function createFeatureCollectionParser(

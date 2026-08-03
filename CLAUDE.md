@@ -63,6 +63,7 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 ## Conventions
 
 - **TDD.** Write the failing test before implementation code, for both bug fixes and new features.
+- **JSDoc on every exported function, const, type, interface, class, and component** (TSDoc-compatible: `@param`, `@returns`, `@remarks`, `@example`) — across every package, not just the SDK ones (`@stratum/core`/`map`/`react`). Document the *why*/non-obvious behaviour, not just a restatement of the name; skip fields that are already self-evident from their name and type.
 - **SOLID, DRY, KISS, YAGNI.** Prefer the simplest design that satisfies current requirements; don't build for hypothetical future needs.
 - **No code comments** unless they capture a genuinely non-obvious *why* (a constraint, a workaround, an invariant) — never restate what the code already says.
 - **Expanded `if` statements with braces**, never single-line/braceless conditionals. Biome's `useBlockStatements: error` rule enforces this — don't disable it.

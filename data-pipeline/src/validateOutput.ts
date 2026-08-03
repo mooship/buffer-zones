@@ -8,6 +8,7 @@ import type { RegionPipelineConfig } from "./pipelineSource";
 import { getRegionPipelineConfig } from "./regionPipelineConfigs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+/** Root directory every region's output is written under and validated from. */
 export const OUTPUT_ROOT = resolve(__dirname, "../../packages/web/public/data");
 
 async function pathExists(path: string): Promise<boolean> {
@@ -19,6 +20,10 @@ async function pathExists(path: string): Promise<boolean> {
   }
 }
 
+/**
+ * Validates one region's output directory, logging every issue found.
+ * @throws If `validateOutputDirectory` reports any issue.
+ */
 export async function runOutputValidation(
   outputDir: string,
   config: RegionPipelineConfig,
@@ -34,6 +39,14 @@ export async function runOutputValidation(
   console.log(`Output validation passed for ${outputDir}.`);
 }
 
+/**
+ * `npm run validate` entry point: validates every configured region whose
+ * output directory exists under `outputRoot`, skipping regions that haven't
+ * been built yet.
+ * @throws If no region output directories exist at all, if a region with an
+ *   existing output directory has no registered pipeline config, or if any
+ *   validated region reports an issue.
+ */
 export async function runAllRegionsOutputValidation(
   outputRoot = OUTPUT_ROOT,
 ): Promise<void> {

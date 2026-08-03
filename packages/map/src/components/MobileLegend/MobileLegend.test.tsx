@@ -1,14 +1,12 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import { fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { describe, expect, it } from "vitest";
 import { DomainProvider } from "../../context/DomainContext";
+import { TEST_DOMAIN } from "../../testFixtures/domain";
 import { MobileLegend } from "./MobileLegend";
 
 function withDomain(ui: ReactElement) {
-  return (
-    <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>{ui}</DomainProvider>
-  );
+  return <DomainProvider domain={TEST_DOMAIN}>{ui}</DomainProvider>;
 }
 
 describe("MobileLegend", () => {
@@ -16,7 +14,7 @@ describe("MobileLegend", () => {
     render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen={false}
           panelExpanded={false}
@@ -40,7 +38,7 @@ describe("MobileLegend", () => {
     render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen={false}
           panelExpanded={false}
@@ -64,7 +62,7 @@ describe("MobileLegend", () => {
     render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen={false}
           panelExpanded={false}
@@ -89,7 +87,7 @@ describe("MobileLegend", () => {
     render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed
           panelOpen={false}
           panelExpanded={false}
@@ -106,7 +104,7 @@ describe("MobileLegend", () => {
     const { rerender } = render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen={false}
           panelExpanded={false}
@@ -120,7 +118,7 @@ describe("MobileLegend", () => {
     rerender(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed
           panelOpen={false}
           panelExpanded={false}
@@ -134,7 +132,7 @@ describe("MobileLegend", () => {
     rerender(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen={false}
           panelExpanded={false}
@@ -153,7 +151,7 @@ describe("MobileLegend", () => {
     render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen={false}
           panelExpanded={false}
@@ -173,7 +171,7 @@ describe("MobileLegend", () => {
     render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen={false}
           panelExpanded={false}
@@ -192,7 +190,7 @@ describe("MobileLegend", () => {
     const { container } = render(
       withDomain(
         <MobileLegend
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           suppressed={false}
           panelOpen
           panelExpanded

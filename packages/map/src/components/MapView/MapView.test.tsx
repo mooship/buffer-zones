@@ -1,4 +1,3 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import type { DomainConfig } from "@stratum/core";
 import {
   act,
@@ -216,6 +215,7 @@ import {
   type VectorBasemapDefinition,
 } from "../../constants/basemaps";
 import { DomainProvider } from "../../context/DomainContext";
+import { TEST_DOMAIN } from "../../testFixtures/domain";
 import { MapView } from "./MapView";
 
 const CUSTOM_VECTOR_BASEMAP: VectorBasemapDefinition = {
@@ -230,10 +230,13 @@ const bounds: [[number, number], [number, number]] = [
   [-25.3, 28.75],
 ];
 
+const DEFAULT_MAP_VIEW_PROPS = {
+  bounds,
+  ariaLabel: "Test map",
+};
+
 function withDomain(ui: ReactNode) {
-  return (
-    <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>{ui}</DomainProvider>
-  );
+  return <DomainProvider domain={TEST_DOMAIN}>{ui}</DomainProvider>;
 }
 
 const NON_SELECTABLE_DOMAIN: DomainConfig = {
@@ -264,7 +267,7 @@ function testRenderFeaturePopup(properties: Record<string, unknown>) {
   return <div>{String(properties.name)}</div>;
 }
 
-const townships = [
+const areas = [
   {
     type: "Feature",
     properties: { id: "A", name: "Mamelodi", commuteMinutes: 10 },
@@ -306,7 +309,7 @@ describe("MapView", () => {
   it("passes bounds to MapContainer", () => {
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
     expect(screen.getByTestId("map-container")).toHaveAttribute(
@@ -323,9 +326,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={renderFeaturePopup}
         />,
@@ -346,9 +349,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -380,9 +383,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -393,16 +396,16 @@ describe("MapView", () => {
     );
   });
 
-  it("binds township popup markup lazily on first click", () => {
+  it("binds feature popup markup lazily on first click", () => {
     vi.useFakeTimers();
     const onFeatureSelect = vi.fn();
 
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -425,15 +428,15 @@ describe("MapView", () => {
     expect(onFeatureSelect).toHaveBeenCalledTimes(2);
   });
 
-  it("opens township popup via keyboard when the feature is focused", () => {
+  it("opens feature popup via keyboard when the feature is focused", () => {
     const onFeatureSelect = vi.fn();
 
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -452,13 +455,13 @@ describe("MapView", () => {
     expect(onFeatureSelect).toHaveBeenCalledWith("A");
   });
 
-  it("removes township-layer reference when a feature layer is removed", () => {
+  it("removes area-layer reference when a feature layer is removed", () => {
     const { rerender } = render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -471,9 +474,9 @@ describe("MapView", () => {
     rerender(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           selectedFeatureId="A"
         />,
       ),
@@ -482,16 +485,16 @@ describe("MapView", () => {
     expect(firstLayer?.openPopup).not.toHaveBeenCalled();
   });
 
-  it("does not open popup or select township on double-click", () => {
+  it("does not open popup or select a feature on double-click", () => {
     vi.useFakeTimers();
     const onFeatureSelect = vi.fn();
 
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
         />,
       ),
@@ -509,13 +512,13 @@ describe("MapView", () => {
     expect(firstLayer?.openPopup).not.toHaveBeenCalled();
   });
 
-  it("opens the selected township popup without scanning every layer", () => {
+  it("opens the selected feature popup without scanning every layer", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           selectedFeatureId="A"
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -530,20 +533,20 @@ describe("MapView", () => {
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
   });
 
-  it("waits for township data before mounting the choropleth", () => {
+  it("waits for area data before mounting the choropleth", () => {
     const { rerender } = render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -553,9 +556,9 @@ describe("MapView", () => {
     rerender(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -567,9 +570,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["myciti"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["unavailable-layer"]}
         />,
       ),
     );
@@ -592,9 +595,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          visibleLayerIds={["rapid-rail"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          visibleLayerIds={["rail"]}
         />,
       ),
     );
@@ -604,30 +607,30 @@ describe("MapView", () => {
       "transit",
     );
     expect(fetch).toHaveBeenCalledWith(
-      "/data/gauteng/rapid-rail.display.v1.geojson",
+      "/data/example/rail.display.v1.geojson",
       expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
 
-  it("keeps township polygons in the pane below transit overlays", () => {
+  it("keeps area polygons in the pane below transit overlays", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
 
     expect(screen.getByTestId("geojson-layer")).toHaveAttribute(
       "data-pane",
-      "townships",
+      "areas",
     );
   });
 
-  it("renders dissolved township borders in a separate outline pane", () => {
-    const townshipAreas = [
+  it("renders dissolved area borders in a separate outline pane", () => {
+    const areaBoundaries = [
       {
         type: "Feature",
         properties: { name: "Mamelodi" },
@@ -638,10 +641,10 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          townshipAreas={townshipAreas}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          areaBoundaries={areaBoundaries}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -649,12 +652,12 @@ describe("MapView", () => {
     expect(
       screen
         .getAllByTestId("geojson-layer")
-        .some((layer) => layer.dataset.pane === "township-outlines"),
+        .some((layer) => layer.dataset.pane === "area-outlines"),
     ).toBe(true);
   });
 
-  it("renders dissolved township borders when nearest-transit is active", () => {
-    const townshipAreas = [
+  it("renders dissolved area borders when a second choropleth layer is active", () => {
+    const areaBoundaries = [
       {
         type: "Feature",
         properties: { name: "Mamelodi" },
@@ -665,10 +668,10 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          townshipAreas={townshipAreas}
-          visibleLayerIds={["nearest-transit"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          areaBoundaries={areaBoundaries}
+          visibleLayerIds={["coverage"]}
         />,
       ),
     );
@@ -676,7 +679,7 @@ describe("MapView", () => {
     expect(
       screen
         .getAllByTestId("geojson-layer")
-        .some((layer) => layer.dataset.pane === "township-outlines"),
+        .some((layer) => layer.dataset.pane === "area-outlines"),
     ).toBe(true);
   });
 
@@ -684,8 +687,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
           visibleLayerIds={[]}
           focusLocationTarget={{
             token: 1,
@@ -712,8 +715,8 @@ describe("MapView", () => {
       render(
         withDomain(
           <MapView
-            bounds={bounds}
-            townships={[]}
+            {...DEFAULT_MAP_VIEW_PROPS}
+            areas={[]}
             visibleLayerIds={[]}
             basemap={basemap}
           />,
@@ -729,7 +732,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -741,7 +744,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -753,7 +756,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -771,7 +774,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -794,8 +797,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
           visibleLayerIds={[]}
           basemap="satellite"
         />,
@@ -816,9 +819,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -839,7 +842,7 @@ describe("MapView", () => {
   it("does not reverse-geocode background clicks when locateOnClick is not set", () => {
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -858,8 +861,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
           visibleLayerIds={[]}
           locateOnClick
         />,
@@ -889,8 +892,8 @@ describe("MapView", () => {
     render(
       withNonSelectableDomain(
         <MapView
-          bounds={bounds}
-          townships={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={
             [
               {
                 type: "Feature",
@@ -923,11 +926,11 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={
             [{ type: "Feature", properties: null, geometry: null }] as never
           }
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -949,9 +952,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -966,9 +969,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -994,9 +997,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -1021,9 +1024,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -1050,9 +1053,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -1074,9 +1077,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -1092,8 +1095,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
           visibleLayerIds={[]}
           focusLocationTarget={{
             token: 1,
@@ -1122,13 +1125,13 @@ describe("MapView", () => {
     );
   });
 
-  it("skips tooltip binding for a township-area feature with no name", () => {
+  it("skips tooltip binding for a area-boundary feature with no name", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          townshipAreas={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          areaBoundaries={
             [
               {
                 type: "Feature",
@@ -1137,7 +1140,7 @@ describe("MapView", () => {
               },
             ] as never
           }
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -1145,13 +1148,13 @@ describe("MapView", () => {
     expect(mapMocks.featureLayers[0]?.bindTooltip).not.toHaveBeenCalled();
   });
 
-  it("positions the township-area tooltip using a valid labelOffset", () => {
+  it("positions the area-boundary tooltip using a valid labelOffset", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          townshipAreas={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          areaBoundaries={
             [
               {
                 type: "Feature",
@@ -1160,7 +1163,7 @@ describe("MapView", () => {
               },
             ] as never
           }
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -1171,13 +1174,13 @@ describe("MapView", () => {
     );
   });
 
-  it("uses the secondary label class for a secondary-priority township area", () => {
+  it("uses the secondary label class for a secondary-priority area boundary", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          townshipAreas={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          areaBoundaries={
             [
               {
                 type: "Feature",
@@ -1189,7 +1192,7 @@ describe("MapView", () => {
               },
             ] as never
           }
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -1197,18 +1200,18 @@ describe("MapView", () => {
     expect(mapMocks.featureLayers[0]?.bindTooltip).toHaveBeenCalledWith(
       "Rest of Mamelodi",
       expect.objectContaining({
-        className: expect.stringContaining("townshipLabelSecondary"),
+        className: expect.stringContaining("areaLabelSecondary"),
       }),
     );
   });
 
-  it("uses the major-primary label class for a large primary township area", () => {
+  it("uses the major-primary label class for a large primary area boundary", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          townshipAreas={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          areaBoundaries={
             [
               {
                 type: "Feature",
@@ -1217,7 +1220,7 @@ describe("MapView", () => {
               },
             ] as never
           }
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -1225,7 +1228,7 @@ describe("MapView", () => {
     expect(mapMocks.featureLayers[0]?.bindTooltip).toHaveBeenCalledWith(
       "Soweto",
       expect.objectContaining({
-        className: expect.stringContaining("townshipLabelMajor"),
+        className: expect.stringContaining("areaLabelMajor"),
       }),
     );
   });
@@ -1235,7 +1238,7 @@ describe("MapView", () => {
 
     render(
       withDomain(
-        <MapView bounds={bounds} townships={[]} visibleLayerIds={[]} />,
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
       ),
     );
 
@@ -1273,9 +1276,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          visibleLayerIds={["rapid-rail"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          visibleLayerIds={["rail"]}
         />,
       ),
     );
@@ -1296,7 +1299,7 @@ describe("MapView", () => {
     });
   });
 
-  it("resolves the township-area outline style across dark/light and secondary/primary and overview/detail combinations", () => {
+  it("resolves the area-boundary outline style across dark/light and secondary/primary and overview/detail combinations", () => {
     const secondaryFeature = {
       type: "Feature",
       properties: { labelPriority: "secondary" },
@@ -1307,16 +1310,16 @@ describe("MapView", () => {
       properties: {},
       geometry: null,
     } as never;
-    const townshipAreas = [secondaryFeature, primaryFeature] as never;
+    const areaBoundaries = [secondaryFeature, primaryFeature] as never;
 
     function renderOutline() {
       return render(
         withDomain(
           <MapView
-            bounds={bounds}
-            townships={[]}
-            townshipAreas={townshipAreas}
-            visibleLayerIds={["townships"]}
+            {...DEFAULT_MAP_VIEW_PROPS}
+            areas={[]}
+            areaBoundaries={areaBoundaries}
+            visibleLayerIds={["areas"]}
           />,
         ),
       );
@@ -1326,7 +1329,7 @@ describe("MapView", () => {
     stubMatchMedia(false);
     mapMocks.zoom = 8;
     let view = renderOutline();
-    let style = mapMocks.geoJsonProps["township-outlines"]?.style;
+    let style = mapMocks.geoJsonProps["area-outlines"]?.style;
     expect(style?.(secondaryFeature)).toMatchObject({
       weight: 1,
       opacity: 0.72,
@@ -1337,7 +1340,7 @@ describe("MapView", () => {
     // light mode, detail zoom (>= 9)
     mapMocks.zoom = 10;
     view = renderOutline();
-    style = mapMocks.geoJsonProps["township-outlines"]?.style;
+    style = mapMocks.geoJsonProps["area-outlines"]?.style;
     expect(style?.(secondaryFeature)).toMatchObject({
       weight: 2,
       opacity: 0.72,
@@ -1349,7 +1352,7 @@ describe("MapView", () => {
     stubMatchMedia(true);
     mapMocks.zoom = 8;
     view = renderOutline();
-    style = mapMocks.geoJsonProps["township-outlines"]?.style;
+    style = mapMocks.geoJsonProps["area-outlines"]?.style;
     expect(style?.(secondaryFeature)).toMatchObject({
       weight: 1,
       opacity: 0.42,
@@ -1360,7 +1363,7 @@ describe("MapView", () => {
     // dark mode, detail zoom
     mapMocks.zoom = 10;
     view = renderOutline();
-    style = mapMocks.geoJsonProps["township-outlines"]?.style;
+    style = mapMocks.geoJsonProps["area-outlines"]?.style;
     expect(style?.(secondaryFeature)).toMatchObject({
       weight: 1,
       opacity: 0.42,
@@ -1394,8 +1397,8 @@ describe("MapView", () => {
     render(
       <DomainProvider domain={domain}>
         <MapView
-          bounds={bounds}
-          townships={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={
             [
               {
                 type: "Feature",
@@ -1439,8 +1442,8 @@ describe("MapView", () => {
     render(
       <DomainProvider domain={domain}>
         <MapView
-          bounds={bounds}
-          townships={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={
             [
               {
                 type: "Feature",
@@ -1474,9 +1477,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -1497,8 +1500,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={
             [
               {
                 type: "Feature",
@@ -1507,7 +1510,7 @@ describe("MapView", () => {
               },
             ] as never
           }
-          visibleLayerIds={["townships"]}
+          visibleLayerIds={["areas"]}
           onFeatureSelect={onFeatureSelect}
           renderFeaturePopup={testRenderFeaturePopup}
         />,
@@ -1532,9 +1535,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={townships}
-          visibleLayerIds={["townships"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
         />,
       ),
     );
@@ -1559,9 +1562,9 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
-          visibleLayerIds={["rapid-rail"]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          visibleLayerIds={["rail"]}
         />,
       ),
     );
@@ -1584,8 +1587,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
           visibleLayerIds={[]}
           basemap="custom-vector"
         />,
@@ -1610,8 +1613,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
           visibleLayerIds={[]}
           basemap="custom-vector"
         />,
@@ -1631,8 +1634,8 @@ describe("MapView", () => {
     render(
       withDomain(
         <MapView
-          bounds={bounds}
-          townships={[]}
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
           visibleLayerIds={[]}
           basemap="custom-vector"
           onBasemapError={onBasemapError}

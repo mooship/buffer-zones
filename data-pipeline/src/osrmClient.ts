@@ -2,12 +2,15 @@ import { hashKey, readJsonCache, writeJsonCache } from "./cache";
 import type { JobCenter } from "./constants/jobCenters";
 import { getOsrmBaseUrl } from "./constants/serviceUrls";
 
+/** A geographic point in decimal degrees. */
 export interface LatLon {
   lat: number;
   lon: number;
 }
 
+/** The nearest job centre to an origin point, and the modelled drive time to reach it. */
 export interface NearestJobCenterResult {
+  /** Rounded to two decimal places. `null` if OSRM found no route to any destination. */
   minutes: number | null;
   jobCenterId: string | null;
   jobCenterName: string | null;
@@ -127,6 +130,13 @@ function pickNearest(
   };
 }
 
+/**
+ * For each origin, finds the nearest of `destinations` by modelled car
+ * drive time, via OSRM's table API. Origins are queried in batches of
+ * `BATCH_SIZE` (a single table request covers a whole batch × all
+ * destinations), with a fixed delay between batches and a fall back to a
+ * cached response if a batch's requests are all exhausted.
+ */
 export async function getNearestJobCenter(
   origins: LatLon[],
   destinations: readonly JobCenter[],

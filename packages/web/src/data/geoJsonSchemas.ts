@@ -19,6 +19,11 @@ const townshipPropertiesSchema = z.looseObject({
   nearestTransitKm: z.optional(z.nullable(z.number())),
 });
 
+/**
+ * Validates a township choropleth `FeatureCollection`, extending
+ * `@stratum/core`'s generic `featureCollectionSchema` with the specific
+ * properties `TownshipProperties` requires (see `@stratum/app`).
+ */
 export const townshipFeatureCollectionSchema = z.looseObject({
   type: z.literal("FeatureCollection"),
   features: z.array(

@@ -205,6 +205,13 @@ const sources: PipelineSource[] = [
   },
 ];
 
+/**
+ * The `gauteng` region's pipeline config: its nine metros, and one
+ * `PipelineSource` per transit network (Gautrain rail/bus, PRASA rail,
+ * A Re Yeng, Rea Vaya, Ekurhuleni IRPTN, Tshwane bus, and the combined
+ * `bus-rapid-transit` layer merging A Re Yeng/Rea Vaya/Ekurhuleni IRPTN).
+ * Registered in `REGION_PIPELINE_CONFIGS` (`../regionPipelineConfigs.ts`).
+ */
 export const GAUTENG_PIPELINE_CONFIG: RegionPipelineConfig = {
   regionId: REGION_ID,
   metros: gautengMetros,

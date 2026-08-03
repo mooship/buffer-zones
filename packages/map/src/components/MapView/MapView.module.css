@@ -32,7 +32,7 @@
   }
 }
 
-.townshipLabel {
+.areaLabel {
   padding: 3px 6px;
   border: 1px solid var(--color-map-label-outline);
   border-radius: var(--shape-small);
@@ -46,19 +46,19 @@
   pointer-events: none;
 }
 
-.townshipLabel::before {
+.areaLabel::before {
   display: none;
 }
 
-.townshipLabelPrimary {
+.areaLabelPrimary {
   display: none;
 }
 
-.townshipLabelMajor {
+.areaLabelMajor {
   display: block;
 }
 
-.townshipLabelSecondary {
+.areaLabelSecondary {
   display: none;
   background: var(--color-map-label-surface-secondary);
   font-size: 9px;
@@ -66,10 +66,10 @@
   opacity: 0.94;
 }
 
-.showPrimaryLabels .townshipLabelPrimary {
+.showPrimaryLabels .areaLabelPrimary {
   display: block;
 }
 
-.showSecondaryLabels .townshipLabelSecondary {
+.showSecondaryLabels .areaLabelSecondary {
   display: block;
 }

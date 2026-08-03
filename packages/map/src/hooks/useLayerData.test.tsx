@@ -1,18 +1,14 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import { clearFeatureCollectionCache, type DomainConfig } from "@stratum/core";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DomainProvider } from "../context/DomainContext";
+import { TEST_DOMAIN } from "../testFixtures/domain";
 import { useLayerData } from "./useLayerData";
 
 global.fetch = vi.fn();
 
-function withGautengDomain({ children }: { children: React.ReactNode }) {
-  return (
-    <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
-      {children}
-    </DomainProvider>
-  );
+function withTestDomain({ children }: { children: React.ReactNode }) {
+  return <DomainProvider domain={TEST_DOMAIN}>{children}</DomainProvider>;
 }
 
 describe("useLayerData", () => {
@@ -29,16 +25,16 @@ describe("useLayerData", () => {
   });
 
   it("fetches layers when mounted", async () => {
-    const { result } = renderHook(() => useLayerData(["rapid-rail"]), {
-      wrapper: withGautengDomain,
+    const { result } = renderHook(() => useLayerData(["rail"]), {
+      wrapper: withTestDomain,
     });
 
     await waitFor(() => {
-      expect(result.current.data).toHaveProperty("rapid-rail");
+      expect(result.current.data).toHaveProperty("rail");
     });
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/data/gauteng/rapid-rail.display.v1.geojson"),
+      expect.stringContaining("/data/example/rail.display.v1.geojson"),
       expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
@@ -46,15 +42,15 @@ describe("useLayerData", () => {
   it("adds newly requested layers without refetching existing ones", async () => {
     const { result, rerender } = renderHook(
       ({ ids }: { ids: string[] }) => useLayerData(ids),
-      { initialProps: { ids: ["rapid-rail"] }, wrapper: withGautengDomain },
+      { initialProps: { ids: ["rail"] }, wrapper: withTestDomain },
     );
 
     await waitFor(() => {
-      expect(result.current.data).toHaveProperty("rapid-rail");
+      expect(result.current.data).toHaveProperty("rail");
     });
     vi.clearAllMocks();
 
-    rerender({ ids: ["rapid-rail", "bus"] });
+    rerender({ ids: ["rail", "bus"] });
 
     await waitFor(() => {
       expect(result.current.data).toHaveProperty("bus");
@@ -62,14 +58,14 @@ describe("useLayerData", () => {
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/data/gauteng/bus.display.v1.geojson"),
+      expect.stringContaining("/data/example/bus.display.v1.geojson"),
       expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
 
   it("does not fetch layers that are unavailable", async () => {
-    const { result } = renderHook(() => useLayerData(["myciti"]), {
-      wrapper: withGautengDomain,
+    const { result } = renderHook(() => useLayerData(["unavailable-layer"]), {
+      wrapper: withTestDomain,
     });
 
     await waitFor(() => {
@@ -89,7 +85,7 @@ describe("useLayerData", () => {
 
     const { result, rerender } = renderHook(
       ({ ids }: { ids: string[] }) => useLayerData(ids),
-      { initialProps: { ids: ["rapid-rail"] }, wrapper: withGautengDomain },
+      { initialProps: { ids: ["rail"] }, wrapper: withTestDomain },
     );
 
     await waitFor(() => {
@@ -97,14 +93,14 @@ describe("useLayerData", () => {
     });
     expect(result.current.data).toEqual({});
     await waitFor(() => {
-      expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+      expect(result.current.failedLayerIds).toEqual(["rail"]);
     });
 
     rerender({ ids: [] });
-    rerender({ ids: ["rapid-rail"] });
+    rerender({ ids: ["rail"] });
 
     await waitFor(() => {
-      expect(result.current.data).toHaveProperty("rapid-rail");
+      expect(result.current.data).toHaveProperty("rail");
     });
     expect(global.fetch).toHaveBeenCalledTimes(2);
     expect(result.current.failedLayerIds).toEqual([]);
@@ -117,15 +113,15 @@ describe("useLayerData", () => {
     const fetchError = new Error("network");
     vi.mocked(global.fetch).mockRejectedValueOnce(fetchError);
 
-    const { result } = renderHook(() => useLayerData(["rapid-rail"]), {
-      wrapper: withGautengDomain,
+    const { result } = renderHook(() => useLayerData(["rail"]), {
+      wrapper: withTestDomain,
     });
 
     await waitFor(() => {
-      expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+      expect(result.current.failedLayerIds).toEqual(["rail"]);
     });
     expect(consoleError).toHaveBeenCalledWith(
-      expect.stringContaining("rapid-rail"),
+      expect.stringContaining("rail"),
       fetchError,
     );
 
@@ -141,8 +137,8 @@ describe("useLayerData", () => {
       return new Promise<Response>(() => {});
     });
 
-    const { unmount } = renderHook(() => useLayerData(["rapid-rail"]), {
-      wrapper: withGautengDomain,
+    const { unmount } = renderHook(() => useLayerData(["rail"]), {
+      wrapper: withTestDomain,
     });
 
     await waitFor(() => {
@@ -164,8 +160,8 @@ describe("useLayerData", () => {
         }),
     );
 
-    const { result, unmount } = renderHook(() => useLayerData(["rapid-rail"]), {
-      wrapper: withGautengDomain,
+    const { result, unmount } = renderHook(() => useLayerData(["rail"]), {
+      wrapper: withTestDomain,
     });
 
     await waitFor(() => {
@@ -195,8 +191,8 @@ describe("useLayerData", () => {
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    const { result, unmount } = renderHook(() => useLayerData(["rapid-rail"]), {
-      wrapper: withGautengDomain,
+    const { result, unmount } = renderHook(() => useLayerData(["rail"]), {
+      wrapper: withTestDomain,
     });
 
     await waitFor(() => {
@@ -222,20 +218,20 @@ describe("useLayerData", () => {
 
     const { result, rerender } = renderHook(
       ({ ids }: { ids: string[] }) => useLayerData(ids),
-      { initialProps: { ids: ["rapid-rail"] }, wrapper: withGautengDomain },
+      { initialProps: { ids: ["rail"] }, wrapper: withTestDomain },
     );
 
     await waitFor(() => {
-      expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+      expect(result.current.failedLayerIds).toEqual(["rail"]);
     });
 
     rerender({ ids: [] });
-    rerender({ ids: ["rapid-rail"] });
+    rerender({ ids: ["rail"] });
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
-    expect(result.current.failedLayerIds).toEqual(["rapid-rail"]);
+    expect(result.current.failedLayerIds).toEqual(["rail"]);
 
     consoleError.mockRestore();
   });
@@ -264,18 +260,18 @@ describe("useLayerData", () => {
     const twoSourceDomain: DomainConfig = {
       layers: [
         {
-          id: "townships",
-          label: "Modeled car time",
+          id: "areas",
+          label: "Coverage level",
           dataSource: [
-            "/data/gauteng/townships.display.v1.geojson",
-            "/data/other/townships.display.v1.geojson",
+            "/data/example/areas.display.v1.geojson",
+            "/data/other/areas.display.v1.geojson",
           ],
           geometryKind: "choropleth",
           defaultVisible: true,
           available: true,
           style: {
             kind: "choropleth",
-            propertyKey: "commuteMinutes",
+            propertyKey: "value",
             buckets: [],
             baseOpacity: 0.18,
           },
@@ -284,14 +280,14 @@ describe("useLayerData", () => {
       layerGroups: [],
     };
 
-    const { result } = renderHook(() => useLayerData(["townships"]), {
+    const { result } = renderHook(() => useLayerData(["areas"]), {
       wrapper: ({ children }) => (
         <DomainProvider domain={twoSourceDomain}>{children}</DomainProvider>
       ),
     });
 
     await waitFor(() => {
-      expect(result.current.data.townships?.features).toHaveLength(2);
+      expect(result.current.data.areas?.features).toHaveLength(2);
     });
   });
 });

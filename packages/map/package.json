@@ -22,12 +22,13 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^1.28.0",
     "maplibre-gl": "^6.1.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
     "react-leaflet": "^5.0.0"
   },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
   "devDependencies": {
-    "@stratum/app": "file:../app",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.0.1",
     "@types/leaflet": "^1.9.14",
@@ -35,6 +36,8 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
     "happy-dom": "^20.11.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "typescript": "^7.0.2",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"

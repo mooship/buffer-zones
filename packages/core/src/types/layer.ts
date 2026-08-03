@@ -20,7 +20,12 @@ export interface ChoroplethLayerStyle {
   /** GeoJSON feature property whose numeric value drives color classification. */
   propertyKey: string;
   buckets: ColorBucket[];
+  /** Fill opacity (0–1) applied when a feature isn't emphasised via `resolveEmphasis`. */
   baseOpacity: number;
+  /**
+   * Fill opacity (0–1) applied instead of `baseOpacity` when `resolveEmphasis`
+   * returns `true` for a feature. Falls back to `baseOpacity` when omitted.
+   */
   emphasisOpacity?: number;
   /**
    * Optional resolver that returns `true` for features that should use
@@ -54,6 +59,7 @@ export interface PointLayerStyle {
   color: string;
   /** Fallback radius, used when `radiusClassification` is absent or unmatched. */
   radius: number;
+  /** Label shown in the transit legend. */
   legendLabel: string;
   /** Optional per-feature color classification, overriding `color`. */
   colorClassification?: Classification<string>;
@@ -118,9 +124,15 @@ export type Classification<T> =
 
 /** Interaction configuration for selectable features. */
 export interface LayerInteraction {
+  /** Whether clicking or keyboard-activating a feature selects it and can open a popup. */
   selectable: boolean;
   /** Feature property used as the accessible label. Defaults to `"name"`. */
   labelField?: string;
+  /**
+   * Feature properties relevant to this layer's popup content, for a caller's
+   * own reference. Not read by `@stratum/core` or `@stratum/map` — popup
+   * content is entirely up to the caller's `renderFeaturePopup`.
+   */
   popupFields?: string[];
 }
 
@@ -132,6 +144,11 @@ export interface Layer {
   id: string;
   label: string;
   description?: string;
+  /**
+   * URLs to fetch and merge into one `FeatureCollection` for this layer (see
+   * `mergeFeatureCollections`). Usually a single URL; multiple entries
+   * combine several source files into one layer.
+   */
   dataSource: readonly string[];
   /**
    * URL of a secondary GeoJSON file loaded alongside `dataSource` (e.g. area
@@ -139,7 +156,13 @@ export interface Layer {
    */
   companionSource?: string;
   geometryKind: FeatureGeometryKind;
+  /** Whether this layer is switched on by default when the domain first loads. */
   defaultVisible: boolean;
+  /**
+   * Whether this layer is offered at all. `false` hides it from layer
+   * toggles entirely — distinct from `defaultVisible`, which only controls
+   * its initial visibility state once available.
+   */
   available: boolean;
   style: LayerStyleConfig;
   interaction?: LayerInteraction;
@@ -160,6 +183,7 @@ export interface LayerGroup {
   title: string;
   description?: string;
   selectionMode: LayerGroupSelectionMode;
+  /** Ids of the `Layer`s belonging to this group, in display order. */
   layerIds: string[];
 }
 

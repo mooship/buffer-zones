@@ -14,12 +14,14 @@ out geom;
 `;
 }
 
+/** Normalizes a Rea Vaya Overpass query's route relations into `LineString` features. */
 export function normalizeReaVayaOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
   return normalizeRelationTransitOverpass(raw, "Rea Vaya");
 }
 
+/** Fetches Rea Vaya route relations within `bbox` via Overpass. */
 export async function fetchReaVayaRoutes(
   bbox: string,
 ): Promise<OverpassResponse> {

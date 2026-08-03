@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import type { FeatureCollection } from "geojson";
 import type { RegionPipelineConfig } from "./pipelineSource";
 
+/** A minimum-feature-count check for one required output file. */
 export interface OutputLayerRule {
   fileName: string;
   minFeatures: number;
@@ -14,6 +15,7 @@ const TOWNSHIP_OUTPUT_RULES: readonly OutputLayerRule[] = [
   { fileName: "township-areas.display.v1.geojson", minFeatures: 1 },
 ];
 
+/** Every output file a region's build must produce: the fixed township/area files plus one per configured `PipelineSource`. */
 export function buildOutputLayerRules(
   config: RegionPipelineConfig,
 ): OutputLayerRule[] {
@@ -26,6 +28,7 @@ export function buildOutputLayerRules(
   ];
 }
 
+/** Transit networks every published region output must have at least one feature for. */
 export const REQUIRED_TRANSIT_NETWORKS = [
   "Gautrain",
   "PRASA",
@@ -35,6 +38,7 @@ export const REQUIRED_TRANSIT_NETWORKS = [
   "Tshwane Bus Services",
 ] as const;
 
+/** Checksum/size/feature-count record for one output file, as recorded in the manifest. */
 export interface OutputFileManifestEntry {
   fileName: string;
   featureCount: number;
@@ -42,11 +46,13 @@ export interface OutputFileManifestEntry {
   bytes: number;
 }
 
+/** A region's build manifest: what was produced, when, and for which metros/networks. */
 export interface OutputManifest {
   version: 1;
   generatedAt: string;
   metroIds: string[];
   files: OutputFileManifestEntry[];
+  /** Feature count per transit network name, from `countTransitNetworks`. */
   networkCoverage: Record<string, number>;
 }
 
@@ -54,6 +60,7 @@ function digest(content: Buffer): string {
   return createHash("sha256").update(content).digest("hex");
 }
 
+/** Counts features per `network` property value across a transit `FeatureCollection`. */
 export function countTransitNetworks(
   collection: FeatureCollection,
 ): Record<string, number> {
@@ -69,6 +76,10 @@ export function countTransitNetworks(
   return counts;
 }
 
+/**
+ * Builds an `OutputManifest` by hashing and counting features in every
+ * required output file already written to `outputDir`.
+ */
 export async function buildOutputManifest(
   outputDir: string,
   metroIds: string[],
@@ -101,6 +112,13 @@ export async function buildOutputManifest(
   };
 }
 
+/**
+ * Validates a built region's output directory against its manifest: every
+ * required file exists, meets its `minFeatures` threshold, matches its
+ * recorded checksum/feature count, and every `REQUIRED_TRANSIT_NETWORKS`
+ * entry has at least one feature.
+ * @returns A list of human-readable issue descriptions; empty if valid.
+ */
 export async function validateOutputDirectory(
   outputDir: string,
   config: RegionPipelineConfig,

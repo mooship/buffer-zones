@@ -3,10 +3,15 @@ import { isDirectExecution } from "./cliEntry";
 
 const DEFAULT_MAX_AGE_DAYS = 7;
 
+/** Parses `npm run cache:clean`'s mode: `"all"` for `--all`, `"stale"` otherwise. */
 export function parseMode(argv: readonly string[]): "all" | "stale" {
   return argv.includes("--all") ? "all" : "stale";
 }
 
+/**
+ * Parses `--max-age-days <n>` from argv, defaulting to `DEFAULT_MAX_AGE_DAYS`.
+ * @throws If `--max-age-days` is given without a positive numeric value.
+ */
 export function parseMaxAgeDays(argv: readonly string[]): number {
   const index = argv.indexOf("--max-age-days");
   if (index < 0) {
@@ -22,6 +27,10 @@ export function parseMaxAgeDays(argv: readonly string[]): number {
   return parsed;
 }
 
+/**
+ * `npm run cache:clean` entry point: deletes the whole cache directory in
+ * `"all"` mode, or prunes files older than `--max-age-days` otherwise.
+ */
 export async function runCleanCache(argv: readonly string[]): Promise<void> {
   const mode = parseMode(argv);
   const cacheDir = getCacheDir();

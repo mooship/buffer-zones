@@ -25,25 +25,34 @@ const BOUNDARY_SOURCE_URL =
 const SHP_ENTRY_NAME = "Subplace/SP_SA_2011.shp";
 const DBF_ENTRY_NAME = "Subplace/SP_SA_2011.dbf";
 
+/** A Census 2011 sub-place feature's properties, as they appear in the source shapefile. */
 export interface RawSubPlaceProperties {
   SP_CODE: string;
   SP_NAME: string;
   TotalPop?: number;
 }
 
+/** A geographic point in decimal degrees. */
 export interface LatLon {
   lat: number;
   lon: number;
 }
 
+/** A sub-place boundary, normalized into the shape the rest of the pipeline works with. */
 export interface NormalizedTownship {
   id: string;
   name: string;
   population: number | undefined;
+  /** The boundary's centroid, used as the routing origin for job-centre drive-time queries. */
   centroid: LatLon;
   geometry: Polygon | MultiPolygon;
 }
 
+/**
+ * Normalizes a raw sub-place `FeatureCollection` (as produced by
+ * `convertShapefileToGeoJSON`/`filterFeaturesByMunicipality`) into
+ * `NormalizedTownship`s, computing each feature's centroid via Turf.
+ */
 export function normalizeBoundaries(
   raw: FeatureCollection,
 ): NormalizedTownship[] {
@@ -130,6 +139,11 @@ export async function convertShapefileToGeoJSON(
   return filterFeaturesByMunicipality(collection, municipalityCodes);
 }
 
+/**
+ * Fetches the national sub-place boundary shapefile zip and returns just
+ * `metroId`'s sub-place features, via `convertShapefileToGeoJSON`.
+ * @throws If the network fetch fails.
+ */
 export async function fetchMetroBoundaries(
   metroId: MetroId,
 ): Promise<FeatureCollection> {

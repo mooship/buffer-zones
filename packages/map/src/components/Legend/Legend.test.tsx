@@ -1,24 +1,22 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
 import type { DomainConfig } from "@stratum/core";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DomainProvider } from "../../context/DomainContext";
+import { TEST_DOMAIN } from "../../testFixtures/domain";
 import { Legend } from "./Legend";
 
 function withDomain(ui: React.ReactElement) {
-  return (
-    <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>{ui}</DomainProvider>
-  );
+  return <DomainProvider domain={TEST_DOMAIN}>{ui}</DomainProvider>;
 }
 
 describe("Legend", () => {
   it("renders each choropleth layer's bucket labels and colors from its style config", () => {
     render(withDomain(<Legend />));
     expect(
-      screen.getByRole("list", { name: /Modelled car time/i }),
+      screen.getByRole("list", { name: /Coverage level/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("list", { name: /Distance to Nearest Transit/i }),
+      screen.getByRole("list", { name: /Alternate coverage/i }),
     ).toBeInTheDocument();
   });
 
@@ -34,8 +32,8 @@ describe("Legend", () => {
 
   it("renders one transit entry per line layer with label and color", () => {
     render(withDomain(<Legend />));
-    expect(screen.getByText("Rapid Rail")).toBeInTheDocument();
-    expect(screen.getByText("Rapid Rail").closest("li")).toHaveTextContent(
+    expect(screen.getByText("Rail")).toBeInTheDocument();
+    expect(screen.getByText("Rail").closest("li")).toHaveTextContent(
       "line + stations",
     );
     expect(screen.getByText("Bus").closest("li")).toHaveTextContent(
@@ -43,22 +41,22 @@ describe("Legend", () => {
     );
   });
 
-  it("marks rapid-rail and commuter-rail as line + stations via hasPointGeometry", () => {
+  it("marks rail and shuttle as line + stations via hasPointGeometry", () => {
     render(withDomain(<Legend />));
-    expect(screen.getByText("Commuter Rail").closest("li")).toHaveTextContent(
+    expect(screen.getByText("Shuttle").closest("li")).toHaveTextContent(
       "line + stations",
     );
-    expect(screen.getByText("A Re Yeng").closest("li")).toHaveTextContent(
+    expect(screen.getByText("North Line").closest("li")).toHaveTextContent(
       "route only",
     );
   });
 
   it("renders one entry per operator for a line layer with a categorized color classification", () => {
     render(withDomain(<Legend />));
-    expect(screen.getByText("A Re Yeng")).toBeInTheDocument();
-    expect(screen.getByText("Rea Vaya")).toBeInTheDocument();
-    expect(screen.getByText("Ekurhuleni IRPTN")).toBeInTheDocument();
-    expect(screen.queryByText("Bus Rapid Transit")).not.toBeInTheDocument();
+    expect(screen.getByText("North Line")).toBeInTheDocument();
+    expect(screen.getByText("South Line")).toBeInTheDocument();
+    expect(screen.getByText("East Line")).toBeInTheDocument();
+    expect(screen.queryByText("Bus Network")).not.toBeInTheDocument();
   });
 
   it("renders one entry per stop for a line layer with a graduated color classification", () => {
@@ -103,13 +101,11 @@ describe("Legend", () => {
   });
 
   it("in active mode, shows only visible layer sections", () => {
-    render(
-      withDomain(<Legend mode="active" visibleLayerIds={["townships"]} />),
-    );
+    render(withDomain(<Legend mode="active" visibleLayerIds={["areas"]} />));
     expect(
       screen.getByRole("list", { name: /Active map layers legend/i }),
     ).toBeInTheDocument();
-    expect(screen.queryByText("Rapid Rail")).not.toBeInTheDocument();
+    expect(screen.queryByText("Rail")).not.toBeInTheDocument();
   });
 
   it("shows empty-state message when no layers are active", () => {

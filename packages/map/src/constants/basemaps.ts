@@ -7,7 +7,12 @@ export interface RasterBasemapDefinition {
   attribution: string;
   darkUrl?: string;
   darkAttribution?: string;
+  /**
+   * Additional tile sources tried in order, after `url`, if the current
+   * source's tiles fail to load. See `getBasemapTileSources`.
+   */
   fallbackUrls?: string[];
+  /** Same as `fallbackUrls`, but tried after `darkUrl` when dark tiles are preferred. */
   darkFallbackUrls?: string[];
 }
 

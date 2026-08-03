@@ -56,14 +56,21 @@ interface OverpassRelationElement {
   }[];
 }
 
+/** A single element in an Overpass API response: a way, node, or relation. */
 export type OverpassElement =
   | OverpassWayElement
   | OverpassNodeElement
   | OverpassRelationElement;
+/** The shape of a raw Overpass API JSON response. */
 export interface OverpassResponse {
   elements: OverpassElement[];
 }
 
+/**
+ * Normalizes a Gautrain Overpass query's rail ways and station nodes into
+ * `LineString`/`Point` features (relation elements are skipped — Gautrain
+ * rail has no route relations, only tagged ways/nodes).
+ */
 export function normalizeGautrainOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
@@ -105,6 +112,7 @@ export function normalizeGautrainOverpass(
   return { type: "FeatureCollection", features };
 }
 
+/** Normalizes a Gautrain Bus Overpass query's route relations into `LineString` features. */
 export function normalizeGautrainBusOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
@@ -137,10 +145,16 @@ async function waitForOverpassSlot(): Promise<void> {
   await waitTurn;
 }
 
-// Retries with backoff on a single mirror before rotating to the next one
-// (see constants/serviceUrls.ts) on repeated 429/504 responses, since a
-// single public Overpass instance can be temporarily rate-limited or
-// overloaded while others are not.
+/**
+ * Runs an Overpass QL query against a public Overpass instance, with
+ * disk caching, rate-limiting, and cross-mirror retry.
+ * @remarks Retries with backoff on a single mirror before rotating to the
+ *   next one (see `constants/serviceUrls.ts`) on repeated 429/504
+ *   responses, since a single public Overpass instance can be temporarily
+ *   rate-limited or overloaded while others are not. Falls back to a stale
+ *   cached response if every retry attempt is exhausted.
+ * @param attempt - Internal retry counter; callers should omit it.
+ */
 export async function fetchOverpass(
   query: string,
   attempt = 1,
@@ -221,12 +235,14 @@ export async function fetchOverpass(
   }
 }
 
+/** Fetches Gautrain rail ways and station nodes within `bbox` via Overpass. */
 export async function fetchGautrainRail(
   bbox: string,
 ): Promise<OverpassResponse> {
   return fetchOverpass(gautrainQuery(bbox));
 }
 
+/** Fetches Gautrain Bus route relations within `bbox` via Overpass. */
 export async function fetchGautrainBusRoutes(
   bbox: string,
 ): Promise<OverpassResponse> {

@@ -1,22 +1,7 @@
-import type { DomainConfig } from "@stratum/core";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { TEST_DOMAIN } from "../testFixtures/domain";
 import { DomainProvider, useDomain } from "./DomainContext";
-
-const domain: DomainConfig = {
-  layers: [
-    {
-      id: "test-layer",
-      label: "Test",
-      dataSource: ["/data/test.geojson"],
-      geometryKind: "line",
-      defaultVisible: true,
-      available: true,
-      style: { kind: "line", color: "#000", weight: 1, legendLabel: "Test" },
-    },
-  ],
-  layerGroups: [],
-};
 
 function Consumer() {
   const registry = useDomain();
@@ -26,11 +11,11 @@ function Consumer() {
 describe("DomainProvider / useDomain", () => {
   it("provides layer data to consumers", () => {
     render(
-      <DomainProvider domain={domain}>
+      <DomainProvider domain={TEST_DOMAIN}>
         <Consumer />
       </DomainProvider>,
     );
-    expect(screen.getByTestId("layer-id")).toHaveTextContent("test-layer");
+    expect(screen.getByTestId("layer-id")).toHaveTextContent("areas");
   });
 
   it("throws when useDomain is called outside a DomainProvider", () => {

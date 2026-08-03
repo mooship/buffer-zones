@@ -5,9 +5,16 @@ import styles from "./LayerToggles.module.css";
 interface LayerTogglesProps {
   visibleLayerIds: string[];
   onToggle: (id: string) => void;
+  /** Ids of layers whose data failed to load, shown with a retry hint badge. */
   failedLayerIds?: string[];
 }
 
+/**
+ * Renders every layer group from the domain registry as a checkbox list,
+ * grouped under its title/description. An unavailable layer's checkbox is
+ * disabled with a "Not yet available" badge; a failed-to-load visible layer
+ * shows a "Failed to load" badge instead.
+ */
 export function LayerToggles({
   visibleLayerIds,
   onToggle,

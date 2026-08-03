@@ -19,8 +19,10 @@ function groupSiblings(id: string): string[] {
   return group.layerIds.filter((sibling) => sibling !== id);
 }
 
+/** Which tab of the mobile/desktop info panel is active. */
 export type PanelView = "story" | "places" | "layers";
 
+/** The app's UI state: layer visibility, basemap, panel state, and feature selection. */
 interface MapUiState {
   visibleLayerIds: string[];
   basemap: Basemap;
@@ -50,6 +52,12 @@ function createInitialState() {
   };
 }
 
+/**
+ * The app's Zustand UI-state store.
+ * @remarks `toggleLayer` enforces each layer group's `selectionMode`: toggling
+ *   on a member of an `"exclusive"` group turns off its sibling layers in the
+ *   same group; `"independent"` groups don't affect each other's layers.
+ */
 export const useMapUiStore = create<MapUiState>()((set) => ({
   ...createInitialState(),
   toggleLayer: (id) =>
