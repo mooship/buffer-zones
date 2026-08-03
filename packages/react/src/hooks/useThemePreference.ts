@@ -43,6 +43,7 @@ function isExplicitTheme(value: string | null): value is "light" | "dark" {
 }
 
 function readStoredPreference(): ThemePreference {
+  /* v8 ignore next 3 -- unreachable: both call sites (initTheme, module init) already guard with the same `typeof window === "undefined"` check before calling this */
   if (typeof window === "undefined") {
     return "system";
   }
@@ -51,6 +52,7 @@ function readStoredPreference(): ThemePreference {
 }
 
 function syncThemeColorMeta(preference: ThemePreference) {
+  /* v8 ignore next 3 -- unreachable: syncThemeColorMeta is only called from applyThemeAttribute, which already returns before calling it if document is undefined */
   if (typeof document === "undefined") {
     return;
   }

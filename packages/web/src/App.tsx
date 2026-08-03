@@ -72,6 +72,25 @@ interface FocusLocationTarget {
   location: LocationSearchResult;
 }
 
+interface PointerSample {
+  timestamp: number;
+  y: number;
+}
+
+function pruneStalePointerSamples(samples: PointerSample[], now: number) {
+  while (samples.length > 1) {
+    const oldest = samples[0];
+    /* v8 ignore next 3 -- unreachable: the length check above guarantees samples[0] exists */
+    if (!oldest) {
+      break;
+    }
+    if (now - oldest.timestamp <= SHEET_VELOCITY_SAMPLE_WINDOW_MS) {
+      break;
+    }
+    samples.shift();
+  }
+}
+
 export function App() {
   const [hydrated, setHydrated] = useState(false);
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
@@ -243,7 +262,7 @@ export function App() {
     const handleElement = event.currentTarget;
     const startY = event.clientY;
     let latestPointerY = startY;
-    const pointerSamples: Array<{ timestamp: number; y: number }> = [
+    const pointerSamples: PointerSample[] = [
       { timestamp: performance.now(), y: startY },
     ];
     activeSheetPointerIdRef.current = event.pointerId;
@@ -258,13 +277,7 @@ export function App() {
       latestPointerY = pointerEvent.clientY;
       const now = performance.now();
       pointerSamples.push({ timestamp: now, y: pointerEvent.clientY });
-      while (
-        pointerSamples.length > 1 &&
-        now - (pointerSamples[0]?.timestamp ?? now) >
-          SHEET_VELOCITY_SAMPLE_WINDOW_MS
-      ) {
-        pointerSamples.shift();
-      }
+      pruneStalePointerSamples(pointerSamples, now);
       const delta = pointerEvent.clientY - startY;
       const clampedDelta = Math.max(
         -SHEET_DRAG_PREVIEW_LIMIT_PX,
@@ -291,17 +304,12 @@ export function App() {
       }
       const now = performance.now();
       pointerSamples.push({ timestamp: now, y: pointerEvent.clientY });
-      while (
-        pointerSamples.length > 1 &&
-        now - (pointerSamples[0]?.timestamp ?? now) >
-          SHEET_VELOCITY_SAMPLE_WINDOW_MS
-      ) {
-        pointerSamples.shift();
-      }
+      pruneStalePointerSamples(pointerSamples, now);
 
       const delta = latestPointerY - startY;
       const firstSample = pointerSamples[0];
       const lastSample = pointerSamples[pointerSamples.length - 1];
+      /* v8 ignore next 4 -- unreachable: pointerSamples is seeded with one entry on pointer down and the prune loop above always stops at length 1, so it's never empty here */
       if (!firstSample || !lastSample) {
         cleanup();
         return;
@@ -351,6 +359,7 @@ export function App() {
     }
     event.preventDefault();
     const nextView = PANEL_VIEWS[nextIndex];
+    /* v8 ignore next 3 -- unreachable: nextIndex is always derived via modulo of PANEL_VIEWS.length or clamped to its bounds above, so it always indexes an existing entry */
     if (!nextView) {
       return;
     }
