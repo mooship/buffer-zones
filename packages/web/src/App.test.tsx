@@ -227,6 +227,14 @@ describe("App", () => {
 
     const storyTab = screen.getByRole("tab", { name: "The pattern" });
     fireEvent.keyDown(storyTab, { key: "End" });
+    expect(screen.getByRole("tab", { name: "Ask AI" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Ask AI" }), {
+      key: "ArrowLeft",
+    });
     expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
       "aria-selected",
       "true",

@@ -30,6 +30,7 @@ import {
 } from "react";
 import { useWindowSize } from "usehooks-ts";
 import styles from "./App.module.css";
+import { AskAiPanel } from "./components/AskAiPanel/AskAiPanel";
 import { EvidenceSummary } from "./components/EvidenceSummary/EvidenceSummary";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { TownshipBrowser } from "./components/TownshipBrowser/TownshipBrowser";
@@ -49,7 +50,7 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
   [-25.3, 28.75],
 ];
 
-const PANEL_VIEWS = ["story", "places", "layers"] as const;
+const PANEL_VIEWS = ["story", "places", "layers", "ask"] as const;
 const MOBILE_BREAKPOINT_PX = 768;
 const SHEET_DRAG_THRESHOLD_PX = 36;
 const SHEET_DRAG_PREVIEW_LIMIT_PX = 96;
@@ -60,6 +61,7 @@ const PANEL_LABELS: Record<PanelView, string> = {
   story: "The pattern",
   places: "Browse places",
   layers: "Map layers",
+  ask: "Ask AI",
 };
 
 const NATIONAL_JOB_CENTER_COUNT = METROS.reduce(
@@ -602,6 +604,12 @@ export function App() {
                   />
                 </section>
               </div>
+            ) : null}
+            {panelView === "ask" ? (
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>Ask AI</h2>
+                <AskAiPanel />
+              </section>
             ) : null}
           </div>
         </aside>
