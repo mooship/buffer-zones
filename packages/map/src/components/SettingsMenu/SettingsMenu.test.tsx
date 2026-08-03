@@ -26,6 +26,24 @@ describe("SettingsMenu", () => {
     expect(screen.getByTestId("settings-menu-content")).toBeInTheDocument();
   });
 
+  it("labels the menu content as a region, not a menu, since its controls are toggles", () => {
+    render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+
+    expect(
+      screen.getByRole("region", { name: "Map settings" }),
+    ).toHaveAttribute("data-testid", "settings-menu-content");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
   it("closes when clicking outside of the menu container", () => {
     render(
       <SettingsMenu
@@ -69,6 +87,32 @@ describe("SettingsMenu", () => {
       screen.queryByTestId("settings-menu-content"),
     ).not.toBeInTheDocument();
     expect(trigger).toHaveFocus();
+  });
+
+  it("reports open state via onOpenChange on trigger click, outside click, and Escape", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+        onOpenChange={onOpenChange}
+      />,
+    );
+
+    const trigger = screen.getByTestId("settings-menu-trigger");
+    fireEvent.click(trigger);
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+
+    fireEvent.mouseDown(document.body);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+
+    fireEvent.click(trigger);
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
   });
 
   it("does not close when clicking inside the menu", () => {

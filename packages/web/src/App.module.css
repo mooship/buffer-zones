@@ -20,6 +20,18 @@
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   text-transform: uppercase;
+  animation: mapLoadingPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes mapLoadingPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .dataError {

@@ -40,9 +40,38 @@ export function LocationSearchControl({
   const [results, setResults] = useState<LocationSearchResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchFailed, setSearchFailed] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const { next, abort } = useAbortController();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  async function runSearch(trimmedQuery: string) {
+    const signal = next();
+    setSearching(true);
+    setSearchError(null);
+    setSearchFailed(false);
+    setActiveResultIndex(-1);
+
+    try {
+      const nextResults = await provider.search(trimmedQuery, signal);
+      setResults(nextResults);
+
+      if (nextResults.length === 0) {
+        setSearchError("No places matched that search.");
+      }
+    } catch {
+      if (signal.aborted) {
+        return;
+      }
+      setResults([]);
+      setSearchError("Search is unavailable right now. Please try again.");
+      setSearchFailed(true);
+    } finally {
+      if (!signal.aborted) {
+        setSearching(false);
+      }
+    }
+  }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: provider intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
   useEffect(() => {
@@ -50,44 +79,30 @@ export function LocationSearchControl({
     if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
       setResults([]);
       setSearchError(null);
+      setSearchFailed(false);
       setSearching(false);
       setActiveResultIndex(-1);
       abort();
       return;
     }
 
-    const signal = next();
-
-    const debounceTimer = setTimeout(async () => {
-      setSearching(true);
-      setSearchError(null);
-      setActiveResultIndex(-1);
-
-      try {
-        const nextResults = await provider.search(trimmedQuery, signal);
-        setResults(nextResults);
-
-        if (nextResults.length === 0) {
-          setSearchError("No places matched that search.");
-        }
-      } catch {
-        if (signal.aborted) {
-          return;
-        }
-        setResults([]);
-        setSearchError("Search is unavailable right now. Please try again.");
-      } finally {
-        if (!signal.aborted) {
-          setSearching(false);
-        }
-      }
+    const debounceTimer = setTimeout(() => {
+      runSearch(trimmedQuery);
     }, SEARCH_DEBOUNCE_MS);
 
     return () => {
       clearTimeout(debounceTimer);
       abort();
     };
-  }, [query, next, abort]);
+  }, [query, abort]);
+
+  function handleRetry() {
+    const trimmedQuery = query.trim();
+    if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
+      return;
+    }
+    runSearch(trimmedQuery);
+  }
 
   function handleInputKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
     if (event.key === "ArrowDown") {
@@ -204,7 +219,20 @@ export function LocationSearchControl({
         <output className={styles.status}>Searching places...</output>
       ) : null}
       {searchError ? (
-        <output className={styles.status}>{searchError}</output>
+        <output className={styles.status}>
+          {searchError}
+          {searchFailed ? (
+            <button
+              type="button"
+              className={styles.retryButton}
+              data-testid="location-search-retry"
+              data-e2e="location-search-retry"
+              onClick={handleRetry}
+            >
+              Retry
+            </button>
+          ) : null}
+        </output>
       ) : null}
       {results.length > 0 ? (
         <ul

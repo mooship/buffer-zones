@@ -157,7 +157,7 @@ describe("LocationSearchControl", () => {
     });
   });
 
-  it("shows a no-results message when the search returns nothing", async () => {
+  it("shows a no-results message when the search returns nothing, without a retry button", async () => {
     searchMocks.fetchLocationSearchResults.mockResolvedValue([]);
 
     render(<LocationSearchControl onLocationSelect={vi.fn()} />);
@@ -170,6 +170,9 @@ describe("LocationSearchControl", () => {
         screen.getByText("No places matched that search."),
       ).toBeInTheDocument();
     });
+    expect(
+      screen.queryByTestId("location-search-retry"),
+    ).not.toBeInTheDocument();
   });
 
   it("shows an error message when the search fails", async () => {
@@ -187,6 +190,49 @@ describe("LocationSearchControl", () => {
         screen.getByText("Search is unavailable right now. Please try again."),
       ).toBeInTheDocument();
     });
+  });
+
+  it("re-issues the last query when Retry is clicked after a failed search", async () => {
+    searchMocks.fetchLocationSearchResults.mockRejectedValueOnce(
+      new Error("network"),
+    );
+    searchMocks.fetchLocationSearchResults.mockResolvedValueOnce([
+      { id: "1", label: "Soweto, Johannesburg", latitude: 0, longitude: 0 },
+    ]);
+
+    render(<LocationSearchControl onLocationSelect={vi.fn()} />);
+    fireEvent.change(screen.getByTestId("location-search-input"), {
+      target: { value: "Soweto" },
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Search is unavailable right now. Please try again."),
+      ).toBeInTheDocument();
+    });
+    expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByTestId("location-search-retry"));
+
+    await waitFor(() => {
+      expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledTimes(2);
+    });
+    expect(searchMocks.fetchLocationSearchResults).toHaveBeenLastCalledWith(
+      "Soweto",
+      expect.any(AbortSignal),
+    );
+    await screen.findByText("Soweto, Johannesburg");
+    expect(
+      screen.queryByText("Search is unavailable right now. Please try again."),
+    ).not.toBeInTheDocument();
+  });
+
+  it("does not show a retry button when there is no search error", () => {
+    render(<LocationSearchControl onLocationSelect={vi.fn()} />);
+
+    expect(
+      screen.queryByTestId("location-search-retry"),
+    ).not.toBeInTheDocument();
   });
 
   it("keeps showing Searching for the active request even if a superseded request settles", async () => {

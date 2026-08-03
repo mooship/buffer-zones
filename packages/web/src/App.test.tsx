@@ -149,6 +149,20 @@ describe("App", () => {
     );
   });
 
+  it("hides the desktop legend while settings is open so the two panels don't overlap", async () => {
+    render(<App />);
+
+    await waitFor(() =>
+      expect(screen.getByTestId("desktop-legend")).toBeInTheDocument(),
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+    expect(screen.queryByTestId("desktop-legend")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+    expect(screen.getByTestId("desktop-legend")).toBeInTheDocument();
+  });
+
   it("shows layer controls immediately in the layers tab", async () => {
     render(<App />);
 
