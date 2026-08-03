@@ -3,6 +3,8 @@ import styles from "./DesktopLegend.module.css";
 
 interface DesktopLegendProps {
   visibleLayerIds: string[];
+  /** Hides the panel, e.g. while another bottom-left overlay (Settings) is open over it. */
+  suppressed?: boolean;
 }
 
 /**
@@ -10,7 +12,14 @@ interface DesktopLegendProps {
  * currently active layers.
  * @remarks Must be rendered inside a `DomainProvider`.
  */
-export function DesktopLegend({ visibleLayerIds }: DesktopLegendProps) {
+export function DesktopLegend({
+  visibleLayerIds,
+  suppressed = false,
+}: DesktopLegendProps) {
+  if (suppressed) {
+    return null;
+  }
+
   return (
     <section
       className={styles.container}

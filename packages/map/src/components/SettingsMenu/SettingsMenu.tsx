@@ -1,6 +1,6 @@
 import type { ThemePreference } from "@stratum/react";
 import { Settings, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { type Basemap, getBasemapDefinition } from "../../constants/basemaps";
 import { BasemapToggle } from "../BasemapToggle/BasemapToggle";
 import { IconButton } from "../IconButton/IconButton";
@@ -12,6 +12,8 @@ interface SettingsMenuProps {
   onBasemapChange: (basemap: Basemap) => void;
   themePreference: ThemePreference;
   onThemePreferenceChange: (preference: ThemePreference) => void;
+  /** Called whenever the menu opens or closes, e.g. so a caller can hide other overlays it would cover. */
+  onOpenChange?: (open: boolean) => void;
 }
 
 /** A dropdown menu combining basemap and theme preference controls. */
@@ -20,10 +22,21 @@ export function SettingsMenu({
   onBasemapChange,
   themePreference,
   onThemePreferenceChange,
+  onOpenChange,
 }: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const onOpenChangeRef = useRef(onOpenChange);
+
+  useEffect(() => {
+    onOpenChangeRef.current = onOpenChange;
+  });
+
+  const updateOpen = useCallback((value: boolean) => {
+    setOpen(value);
+    onOpenChangeRef.current?.(value);
+  }, []);
 
   useEffect(() => {
     if (!open) {
@@ -32,13 +45,13 @@ export function SettingsMenu({
 
     function handlePointerDown(event: MouseEvent) {
       if (!containerRef.current?.contains(event.target as Node)) {
-        setOpen(false);
+        updateOpen(false);
       }
     }
 
     function handleKeyDown(event: globalThis.KeyboardEvent) {
       if (event.key === "Escape") {
-        setOpen(false);
+        updateOpen(false);
         triggerRef.current?.focus();
       }
     }
@@ -49,7 +62,7 @@ export function SettingsMenu({
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [open]);
+  }, [open, updateOpen]);
 
   return (
     <div
@@ -66,15 +79,14 @@ export function SettingsMenu({
         aria-expanded={open}
         aria-controls="map-settings-menu"
         label={open ? "Close map settings" : "Map settings"}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => updateOpen(!open)}
       >
         {open ? <X aria-hidden="true" /> : <Settings aria-hidden="true" />}
       </IconButton>
       {open ? (
-        <div
+        <section
           id="map-settings-menu"
           className={styles.menu}
-          role="menu"
           aria-labelledby="map-settings-menu-title"
           data-testid="settings-menu-content"
           data-e2e="settings-menu-content"
@@ -94,7 +106,7 @@ export function SettingsMenu({
             preference={themePreference}
             onChange={onThemePreferenceChange}
           />
-        </div>
+        </section>
       ) : null}
     </div>
   );

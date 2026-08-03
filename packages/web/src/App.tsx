@@ -98,6 +98,7 @@ export function App() {
   const [dataError, setDataError] = useState(false);
   const [failedLayerIds, setFailedLayerIds] = useState<string[]>([]);
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
   const [mobileSheetDragOffset, setMobileSheetDragOffset] = useState(0);
   const [mobileSheetDragging, setMobileSheetDragging] = useState(false);
@@ -399,11 +400,17 @@ export function App() {
                 onLayerDataError={setFailedLayerIds}
                 onBasemapError={() => setBasemap("street")}
                 locateOnClick
-                renderFeaturePopup={(properties) => (
-                  <TownshipPopup
-                    properties={properties as unknown as TownshipProperties}
-                  />
-                )}
+                renderFeaturePopup={
+                  panelOpen && panelView === "places"
+                    ? undefined
+                    : (properties) => (
+                        <TownshipPopup
+                          properties={
+                            properties as unknown as TownshipProperties
+                          }
+                        />
+                      )
+                }
               />
             </Suspense>
           ) : (
@@ -456,7 +463,10 @@ export function App() {
         </ControlButton>
 
         {isDesktopViewport ? (
-          <DesktopLegend visibleLayerIds={visibleLayerIds} />
+          <DesktopLegend
+            visibleLayerIds={visibleLayerIds}
+            suppressed={settingsOpen}
+          />
         ) : (
           <MobileLegend
             visibleLayerIds={visibleLayerIds}
@@ -592,6 +602,7 @@ export function App() {
             onBasemapChange={setBasemap}
             themePreference={themePreference}
             onThemePreferenceChange={setThemePreference}
+            onOpenChange={setSettingsOpen}
           />
         </div>
       </div>
