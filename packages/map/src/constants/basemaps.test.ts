@@ -29,11 +29,12 @@ describe("basemap registry", () => {
     resetBasemapRegistry();
   });
 
-  it("includes the built-in street, satellite, and voyager basemaps by default", () => {
+  it("includes the built-in street, satellite, voyager, and topo basemaps by default", () => {
     expect(getRegisteredBasemapIds()).toEqual([
       "street",
       "satellite",
       "voyager",
+      "topo",
     ]);
   });
 
@@ -69,6 +70,7 @@ describe("basemap registry", () => {
       "street",
       "satellite",
       "voyager",
+      "topo",
     ]);
   });
 });
@@ -93,13 +95,17 @@ describe("getBasemapTileSources", () => {
     expect(sources[2]?.url).toMatch(/tile\.openstreetmap\.org/);
   });
 
-  it("returns a single satellite source regardless of dark mode", () => {
-    expect(getBasemapTileSources("satellite", false)).toHaveLength(1);
-    expect(getBasemapTileSources("satellite", true)).toHaveLength(1);
-    expect(getBasemapTileSources("satellite", true)[0]?.url).toMatch(
-      /arcgisonline/,
-    );
-  });
+  it.each([
+    ["satellite", /arcgisonline/],
+    ["topo", /World_Topo_Map/],
+  ])(
+    "returns a single %s source regardless of dark mode",
+    (basemap, urlPattern) => {
+      expect(getBasemapTileSources(basemap, false)).toHaveLength(1);
+      expect(getBasemapTileSources(basemap, true)).toHaveLength(1);
+      expect(getBasemapTileSources(basemap, true)[0]?.url).toMatch(urlPattern);
+    },
+  );
 
   it("returns the CARTO Voyager source with an OpenStreetMap fallback", () => {
     const sources = getBasemapTileSources("voyager", false);

@@ -398,7 +398,11 @@
   .panelTrigger {
     top: auto;
     right: var(--mobile-control-edge);
-    bottom: var(--mobile-control-bottom);
+    /* Leaflet's bottom-right attribution control shares this corner and can
+     * wrap onto two or three lines depending on viewport width and the
+     * active basemap's credit length; clear it with a fixed margin rather
+     * than the shared control-spacing baseline. */
+    bottom: calc(var(--mobile-control-bottom) + 2rem);
   }
 
   .panel {

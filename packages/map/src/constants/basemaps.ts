@@ -70,6 +70,14 @@ function defaultBasemaps(): Record<string, BasemapDefinition> {
       attribution: CARTO_ATTRIBUTION,
       fallbackUrls: [OSM_FALLBACK_URL],
     },
+    topo: {
+      kind: "raster",
+      label: "Topographic",
+      description: "Terrain shading and roads for geographic context.",
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+      attribution:
+        "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, and the GIS User Community",
+    },
   };
 }
 
@@ -112,7 +120,7 @@ export function getBasemapDefinition(id: Basemap): BasemapDefinition {
 }
 
 /**
- * Resets the registry to its built-in defaults (`street`, `satellite`, `voyager`).
+ * Resets the registry to its built-in defaults.
  * @remarks For test isolation — the registry is a module-level singleton.
  */
 export function resetBasemapRegistry(): void {
