@@ -35,7 +35,7 @@ import {
   getBasemapDefinition,
   getBasemapTileSources,
 } from "../../constants/basemaps";
-import { TOWNSHIP_OUTLINE } from "../../constants/mapStyles";
+import { AREA_OUTLINE } from "../../constants/mapStyles";
 import { useDomain } from "../../context/DomainContext";
 import type { LocationSearchResult } from "../../data/locationSearch";
 import { useLayerData } from "../../hooks/useLayerData";
@@ -57,8 +57,10 @@ interface MapViewProps<
   TProperties extends Record<string, unknown> = Record<string, unknown>,
 > {
   bounds: [[number, number], [number, number]];
-  townships: Feature[];
-  townshipAreas?: Feature[];
+  /** The accessible name for the map region, e.g. "Map of flood risk near Cape Town". */
+  ariaLabel: string;
+  areas: Feature[];
+  areaBoundaries?: Feature[];
   visibleLayerIds: string[];
   basemap?: Basemap;
   selectedFeatureId?: string | null;
@@ -82,11 +84,11 @@ interface MapViewProps<
   locateOnClick?: boolean;
 }
 
-const TOWNSHIP_PANE = "townships";
-const TOWNSHIP_OUTLINE_PANE = "township-outlines";
+const AREA_PANE = "areas";
+const AREA_OUTLINE_PANE = "area-outlines";
 const TRANSIT_PANE = "transit";
 const MOBILE_BREAKPOINT_PX = 768;
-const TOWNSHIP_CLICK_DELAY_MS = 220;
+const AREA_CLICK_DELAY_MS = 220;
 const PRIMARY_LABEL_REVEAL_ZOOM = 10;
 const SECONDARY_LABEL_REVEAL_ZOOM = 12;
 const MAJOR_PRIMARY_LABEL_MIN_SUBPLACES = 12;
@@ -226,7 +228,7 @@ function bindSelectableFeatureInteractions<
       if (typeof featureId === "string") {
         onSelect?.(featureId);
       }
-    }, TOWNSHIP_CLICK_DELAY_MS);
+    }, AREA_CLICK_DELAY_MS);
   });
 
   leafletLayer.on("dblclick", () => {
@@ -431,7 +433,7 @@ function FocusLocationTarget({
   return null;
 }
 
-function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
+function bindAreaBoundaryLabel(feature: Feature, layer: Layer) {
   const name = feature.properties?.name;
   const labelPriority = feature.properties?.labelPriority;
   const subPlaceCount = feature.properties?.subPlaceCount;
@@ -457,10 +459,10 @@ function bindTownshipAreaLabel(feature: Feature, layer: Layer) {
     ...(offset ? { offset: offset as [number, number] } : {}),
     className:
       labelPriority === "secondary"
-        ? `${styles.townshipLabel} ${styles.townshipLabelSecondary}`
+        ? `${styles.areaLabel} ${styles.areaLabelSecondary}`
         : isMajorPrimaryLabel
-          ? `${styles.townshipLabel} ${styles.townshipLabelMajor}`
-          : `${styles.townshipLabel} ${styles.townshipLabelPrimary}`,
+          ? `${styles.areaLabel} ${styles.areaLabelMajor}`
+          : `${styles.areaLabel} ${styles.areaLabelPrimary}`,
   });
 }
 
@@ -468,8 +470,9 @@ function MapViewComponent<
   TProperties extends Record<string, unknown> = Record<string, unknown>,
 >({
   bounds,
-  townships,
-  townshipAreas = [],
+  ariaLabel,
+  areas,
+  areaBoundaries = [],
   visibleLayerIds,
   basemap = "street",
   selectedFeatureId = null,
@@ -552,19 +555,19 @@ function MapViewComponent<
   const isOverviewZoom = mapZoom < OVERVIEW_ZOOM_THRESHOLD;
   const isDetailZoom = mapZoom >= DETAIL_ZOOM_THRESHOLD;
   const transitStopRadius = isOverviewZoom ? 2 : isDetailZoom ? 4 : 3;
-  const townshipAreaData = useMemo<FeatureCollection>(
+  const areaBoundaryData = useMemo<FeatureCollection>(
     () => ({
       type: "FeatureCollection",
-      features: townshipAreas,
+      features: areaBoundaries,
     }),
-    [townshipAreas],
+    [areaBoundaries],
   );
-  const townshipData = useMemo<FeatureCollection>(
+  const areaData = useMemo<FeatureCollection>(
     () => ({
       type: "FeatureCollection",
-      features: townships,
+      features: areas,
     }),
-    [townships],
+    [areas],
   );
   const layerConfigById = useMemo(
     () =>
@@ -612,7 +615,7 @@ function MapViewComponent<
       className={styles.mapWrapper}
       data-testid="map-view"
       data-e2e="map-view"
-      aria-label="Map of South African township access to job centres"
+      aria-label={ariaLabel}
     >
       <MapContainer
         bounds={bounds}
@@ -642,21 +645,21 @@ function MapViewComponent<
             onError={(error) => onBasemapError?.(basemap, error)}
           />
         ) : null}
-        <Pane name={TOWNSHIP_PANE} style={{ zIndex: 400 }} />
-        <Pane name={TOWNSHIP_OUTLINE_PANE} style={{ zIndex: 425 }} />
+        <Pane name={AREA_PANE} style={{ zIndex: 400 }} />
+        <Pane name={AREA_OUTLINE_PANE} style={{ zIndex: 425 }} />
         <Pane name={TRANSIT_PANE} style={{ zIndex: 450 }} />
-        {showAreaLabels && townshipAreas.length > 0 ? (
+        {showAreaLabels && areaBoundaries.length > 0 ? (
           <GeoJSON
-            data={townshipAreaData}
+            data={areaBoundaryData}
             smoothFactor={0}
             pathOptions={{
-              pane: TOWNSHIP_OUTLINE_PANE,
+              pane: AREA_OUTLINE_PANE,
               fillOpacity: 0,
               interactive: false,
             }}
             style={(feature: Feature | undefined) => ({
-              ...TOWNSHIP_OUTLINE,
-              color: resolvedDark ? "#5b6476" : TOWNSHIP_OUTLINE.color,
+              ...AREA_OUTLINE,
+              color: resolvedDark ? "#5b6476" : AREA_OUTLINE.color,
               opacity: resolvedDark
                 ? feature?.properties?.labelPriority === "secondary"
                   ? 0.42
@@ -678,7 +681,7 @@ function MapViewComponent<
                     ? 2
                     : 4,
             })}
-            onEachFeature={bindTownshipAreaLabel}
+            onEachFeature={bindAreaBoundaryLabel}
           />
         ) : null}
         {visibleLayers.map((layer) => {
@@ -688,9 +691,9 @@ function MapViewComponent<
             return null;
           }
           const isChoropleth = layer.geometryKind === "choropleth";
-          const data = isChoropleth ? townshipData : overlayData[layer.id];
+          const data = isChoropleth ? areaData : overlayData[layer.id];
 
-          if (!data || (isChoropleth && townships.length === 0)) {
+          if (!data || (isChoropleth && areas.length === 0)) {
             return null;
           }
 
@@ -700,13 +703,13 @@ function MapViewComponent<
               data={data}
               // Leaflet's default smoothFactor (1) simplifies just enough to
               // round off the jagged real-world turns in OSM-derived transit
-              // route geometry; unlike the township outline below, there's
+              // route geometry; unlike the area outline below, there's
               // no boundary-fidelity reason to disable it here.
               smoothFactor={1}
               style={config.styleFn}
               pathOptions={{
                 ...config.pathOptions,
-                pane: isChoropleth ? TOWNSHIP_PANE : TRANSIT_PANE,
+                pane: isChoropleth ? AREA_PANE : TRANSIT_PANE,
               }}
               onEachFeature={
                 isChoropleth
@@ -744,8 +747,8 @@ function MapViewComponent<
 
 /**
  * Renders the interactive Leaflet map for a domain: tile basemap, choropleth
- * and transit overlays resolved from the active `DomainProvider`, township
- * area outline labels, feature selection/keyboard interaction, and
+ * and transit overlays resolved from the active `DomainProvider`, area
+ * boundary outline labels, feature selection/keyboard interaction, and
  * location-search fly-to behaviour.
  * @remarks Must be rendered inside a `DomainProvider`. `renderFeaturePopup`
  *   is invoked to produce the popup markup for a selectable feature; when
@@ -754,7 +757,8 @@ function MapViewComponent<
  * <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
  *   <MapView
  *     bounds={[[-27.15, 27.1], [-25.3, 28.75]]}
- *     townships={townships}
+ *     ariaLabel="Map of South African township access to job centres"
+ *     areas={townships}
  *     visibleLayerIds={["townships"]}
  *     renderFeaturePopup={(props) => <TownshipPopup properties={props} />}
  *   />

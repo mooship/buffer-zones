@@ -33,7 +33,7 @@ export {
   registerBasemap,
   resetBasemapRegistry,
 } from "./constants/basemaps";
-export { TOWNSHIP_OUTLINE } from "./constants/mapStyles";
+export { AREA_OUTLINE } from "./constants/mapStyles";
 export type { DomainRegistry } from "./context/DomainContext";
 export { DomainProvider, useDomain } from "./context/DomainContext";
 export type {

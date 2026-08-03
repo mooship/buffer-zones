@@ -390,8 +390,9 @@ export function App() {
             >
               <MapView
                 bounds={GAUTENG_BOUNDS}
-                townships={townships}
-                townshipAreas={townshipAreas}
+                ariaLabel="Map of South African township access to job centres"
+                areas={townships}
+                areaBoundaries={townshipAreas}
                 visibleLayerIds={visibleLayerIds}
                 basemap={basemap}
                 selectedFeatureId={selectedFeatureId}
