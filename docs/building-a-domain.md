@@ -78,11 +78,11 @@ export { PUBLIC_AMENITIES_LAYERS } from "./layers";
 
 `DomainConfig` only requires `layers` and `layerGroups` — you can add extra fields (`@stratum/app`'s `GAUTENG_SPATIAL_LEGACY_DOMAIN` adds an `id` and a `story` for its own "why this map exists" copy) as long as those two are present; `createRegistry` and `useDomain()` only read `layers`/`layerGroups`.
 
-A `Layer`'s `style.kind` — `"choropleth"`, `"line"`, or `"point"` — drives both its Leaflet rendering (via `createLayerConfig`, see below) and its `Legend` entry, so pick it to match the geometry your GeoJSON actually contains. `line`/`point` styles also accept an optional `colorClassification` (see `@stratum/core`'s README) for data-driven per-feature colour instead of one flat colour — used by `gauteng-spatial-legacy`'s bus-rapid-transit layer to colour each operator's route differently.
+A `Layer`'s `style.kind` — `"choropleth"`, `"line"`, or `"point"` — drives both its Leaflet rendering (via `createLayerConfig`, see below) and its `Legend` entry, so pick it to match the geometry your GeoJSON actually contains. `line`/`point` styles also accept an optional `colorClassification` for data-driven per-feature colour instead of one flat colour — used by `gauteng-spatial-legacy`'s bus-rapid-transit layer to colour each operator's route differently. See [`packages/core/README.md`](../packages/core/README.md) for the full type reference.
 
 ## 2. Wire it up
 
-`createRegistry(domain)` from `@stratum/core` gives you `getLayers()`/`getLayer(id)`/`getLayerGroups()` — useful outside React (e.g. in the data pipeline). Inside a React tree, `@stratum/map`'s `DomainProvider`/`useDomain()` do the same thing via context, so components don't need the domain threaded through props. `createLayerConfig(layer)` converts a `Layer` into the Leaflet `pathOptions`/`styleFn` pair `MapView` and any custom rendering use.
+[`packages/core/README.md`](../packages/core/README.md) documents `createRegistry`/`createLayerConfig` in full; in short, `createRegistry(domain)` gives you `getLayers()`/`getLayer(id)`/`getLayerGroups()` — useful outside React (e.g. in the data pipeline) — and `@stratum/map`'s `DomainProvider`/`useDomain()` ([`packages/map/README.md`](../packages/map/README.md)) do the same thing via context, so components don't need the domain threaded through props. `createLayerConfig(layer)` converts a `Layer` into the Leaflet `pathOptions`/`styleFn` pair `MapView` and any custom rendering use.
 
 ```ts
 import { createLayerConfig, createRegistry } from "@stratum/core";
@@ -127,10 +127,10 @@ function App() {
 
 ## 4. Handle the data
 
-Host GeoJSON files matching each layer's `dataSource` URLs. `@stratum/core` gives you validation and merging so a malformed or multi-source dataset fails loudly instead of rendering garbage:
+Host GeoJSON files matching each layer's `dataSource` URLs. `@stratum/core` gives you validation and merging (full reference in [`packages/core/README.md`](../packages/core/README.md)) so a malformed or multi-source dataset fails loudly instead of rendering garbage — in short:
 
-- **`fetchFeatureCollection(url, schema?, signal?)`** — fetches and validates a `FeatureCollection` against a Zod schema, defaulting to the generic `featureCollectionSchema`. Write your own schema (with `createFeatureCollectionParser`) if your properties need stricter validation than "some GeoJSON" — `@stratum/app`'s `townshipFeatureCollectionSchema` is an example of extending the generic schema with domain-specific required fields.
-- **`mergeFeatureCollections(collections)`** — concatenates several `FeatureCollection`s' features into one, for a layer backed by more than one source file.
+- `fetchFeatureCollection(url, schema?, signal?)` fetches and validates against a Zod schema, defaulting to the generic `featureCollectionSchema`. Write your own schema (with `createFeatureCollectionParser`) if your properties need stricter validation than "some GeoJSON" — `@stratum/app`'s `townshipFeatureCollectionSchema` is an example of extending the generic schema with domain-specific required fields.
+- `mergeFeatureCollections(collections)` concatenates several `FeatureCollection`s' features into one, for a layer backed by more than one source file.
 
 ```ts
 import { fetchFeatureCollection, mergeFeatureCollections } from "@stratum/core";

@@ -303,7 +303,14 @@ describe("MapView", () => {
 
   it("passes bounds to MapContainer", () => {
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
     expect(screen.getByTestId("map-container")).toHaveAttribute(
       "data-has-bounds",
@@ -534,7 +541,14 @@ describe("MapView", () => {
 
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
 
     expect(screen.queryByTestId("geojson-layer")).not.toBeInTheDocument();
@@ -740,7 +754,14 @@ describe("MapView", () => {
     stubMatchMedia(true);
 
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/dark_all/i);
@@ -750,7 +771,14 @@ describe("MapView", () => {
     stubMatchMedia(false);
 
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
@@ -760,7 +788,14 @@ describe("MapView", () => {
     stubMatchMedia(false);
 
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/light_all/i);
@@ -776,7 +811,14 @@ describe("MapView", () => {
     stubMatchMedia(true);
 
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
 
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/dark_all/i);
@@ -844,7 +886,14 @@ describe("MapView", () => {
 
   it("does not reverse-geocode background clicks when locateOnClick is not set", () => {
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
 
     expect(screen.queryByTestId("click-locate-popup")).not.toBeInTheDocument();
@@ -1252,7 +1301,14 @@ describe("MapView", () => {
     stubMatchMedia(false);
 
     render(
-      withDomain(<MapView bounds={bounds} areas={[]} visibleLayerIds={[]} />),
+      withDomain(
+        <MapView
+          bounds={bounds}
+          ariaLabel="Test map"
+          areas={[]}
+          visibleLayerIds={[]}
+        />,
+      ),
     );
 
     act(() => {
