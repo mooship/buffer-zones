@@ -718,6 +718,23 @@ describe("MapView", () => {
     expect(screen.getByTestId("tile-layer")).toHaveTextContent(/arcgisonline/i);
   });
 
+  it("switches tile source when the topo basemap is selected", () => {
+    render(
+      withDomain(
+        <MapView
+          bounds={bounds}
+          townships={[]}
+          visibleLayerIds={[]}
+          basemap="topo"
+        />,
+      ),
+    );
+
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent(
+      /World_Topo_Map/i,
+    );
+  });
+
   it("uses the dark street tile source when the OS prefers dark mode", () => {
     stubMatchMedia(true);
 

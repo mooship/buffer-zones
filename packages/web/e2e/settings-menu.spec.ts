@@ -107,4 +107,18 @@ test.describe("settings menu", () => {
       page.locator(".leaflet-tile-pane img").first(),
     ).toHaveAttribute("src", /arcgisonline\.com/);
   });
+
+  test("switches to the topo basemap and requests different tiles", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await expect(page.locator(".leaflet-tile-pane img").first()).toBeVisible();
+
+    await page.getByTestId(E2E.settingsMenuTrigger).click();
+    await page.getByTestId(E2E.basemapOption.topo).click();
+
+    await expect(
+      page.locator(".leaflet-tile-pane img").first(),
+    ).toHaveAttribute("src", /World_Topo_Map/);
+  });
 });

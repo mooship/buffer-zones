@@ -29,11 +29,12 @@ describe("basemap registry", () => {
     resetBasemapRegistry();
   });
 
-  it("includes the built-in street, satellite, and voyager basemaps by default", () => {
+  it("includes the built-in street, satellite, voyager, and topo basemaps by default", () => {
     expect(getRegisteredBasemapIds()).toEqual([
       "street",
       "satellite",
       "voyager",
+      "topo",
     ]);
   });
 
@@ -69,6 +70,7 @@ describe("basemap registry", () => {
       "street",
       "satellite",
       "voyager",
+      "topo",
     ]);
   });
 });
@@ -106,6 +108,14 @@ describe("getBasemapTileSources", () => {
 
     expect(sources[0]?.url).toMatch(/rastertiles\/voyager/);
     expect(sources.at(-1)?.url).toMatch(/tile\.openstreetmap\.org/);
+  });
+
+  it("returns a single topo source regardless of dark mode", () => {
+    expect(getBasemapTileSources("topo", false)).toHaveLength(1);
+    expect(getBasemapTileSources("topo", true)).toHaveLength(1);
+    expect(getBasemapTileSources("topo", true)[0]?.url).toMatch(
+      /World_Topo_Map/,
+    );
   });
 
   it("returns a single source for a raster basemap with no dark or fallback URLs", () => {

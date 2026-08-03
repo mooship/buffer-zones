@@ -70,6 +70,14 @@ function defaultBasemaps(): Record<string, BasemapDefinition> {
       attribution: CARTO_ATTRIBUTION,
       fallbackUrls: [OSM_FALLBACK_URL],
     },
+    topo: {
+      kind: "raster",
+      label: "Topographic",
+      description: "Terrain shading and roads for geographic context.",
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+      attribution:
+        "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community",
+    },
   };
 }
 

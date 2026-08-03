@@ -21,6 +21,7 @@ export const E2E = {
   basemapOption: {
     street: "basemap-option-street",
     satellite: "basemap-option-satellite",
+    topo: "basemap-option-topo",
   },
   themeOption: {
     system: "theme-option-system",
