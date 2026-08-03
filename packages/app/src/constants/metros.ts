@@ -1,3 +1,4 @@
+/** Identifier for one of the nine Gauteng municipalities the SDK's reference domain covers. */
 export type MetroId =
   | "tshwane"
   | "johannesburg"
@@ -9,13 +10,21 @@ export type MetroId =
   | "rand-west-city"
   | "merafong-city";
 
+/** Metadata describing one Gauteng municipality used to build and render the `gauteng` region's dataset. */
 export interface MetroDefinition {
   id: MetroId;
   name: string;
   shortName: string;
   regionId: string;
+  /**
+   * Census 2011 municipality codes, used by the data pipeline to filter the
+   * national boundary shapefile down to this metro's features (see
+   * `filterFeaturesByMunicipality` in `data-pipeline/src/adapters/boundaries.ts`).
+   */
   municipalityCodes: readonly number[];
+  /** The metro's approximate map center. */
   center: { lat: number; lon: number };
+  /** A reasonable map zoom level for viewing this metro alone. */
   zoom: number;
   // Must match `getJobCentersForMetro(id).length` in
   // data-pipeline/src/constants/jobCenters.ts — kept here too since the web
@@ -24,6 +33,7 @@ export interface MetroDefinition {
   jobCenterCount: number;
 }
 
+/** The nine Gauteng municipalities covered by the `gauteng-spatial-legacy` domain. */
 export const METROS: readonly MetroDefinition[] = [
   {
     id: "tshwane",
@@ -117,6 +127,10 @@ export const METROS: readonly MetroDefinition[] = [
   },
 ] as const satisfies readonly MetroDefinition[];
 
+/**
+ * Looks up a metro's definition by id.
+ * @throws If `id` isn't one of `METROS`'s ids.
+ */
 export function getMetroDefinition(id: MetroId): MetroDefinition {
   const metro = METROS.find((candidate) => candidate.id === id);
   if (!metro) {

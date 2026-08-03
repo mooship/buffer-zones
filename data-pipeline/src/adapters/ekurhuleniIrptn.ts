@@ -68,6 +68,7 @@ function resolveName(props: RawIrptnProperties): string {
   return "Unnamed";
 }
 
+/** Normalizes Ekurhuleni's ArcGIS IRPTN GeoJSON export into `LineString` features. */
 export function normalizeEkurhuleniIrptn(
   raw: FeatureCollection,
 ): TransitLayerFeatureCollection {
@@ -113,6 +114,11 @@ export function normalizeEkurhuleniIrptn(
   return { type: "FeatureCollection", features };
 }
 
+/**
+ * Fetches all Ekurhuleni IRPTN route features from the metro's ArcGIS
+ * MapServer, paging through results (`resultOffset`/`resultRecordCount`)
+ * until the server stops reporting `exceededTransferLimit`.
+ */
 export async function fetchEkurhuleniIrptnRoutes(): Promise<FeatureCollection> {
   const features = [];
   let resultOffset = 0;

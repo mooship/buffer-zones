@@ -70,6 +70,11 @@ function resolveName(props: RawAReYengProperties): string {
   );
 }
 
+/**
+ * Normalizes A Re Yeng's open-data-portal GeoJSON export into
+ * `LineString` features, splitting any `MultiLineString` into its
+ * constituent parts rather than concatenating them.
+ */
 export function normalizeAReYeng(
   raw: FeatureCollection,
 ): TransitLayerFeatureCollection {
@@ -117,6 +122,7 @@ export function normalizeAReYeng(
   return { type: "FeatureCollection", features };
 }
 
+/** Normalizes the Overpass fallback query's busway/bus-route ways into `LineString` features. */
 export function normalizeAReYengOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
@@ -146,6 +152,14 @@ export function normalizeAReYengOverpass(
   return { type: "FeatureCollection", features };
 }
 
+/**
+ * Fetches A Re Yeng routes from the City of Tshwane open-data portal
+ * (trunk, complementary, and feeder layers merged), falling back to the
+ * (trunk-heavy) Overpass query if the portal is unreachable or returns an
+ * unexpected shape.
+ * @returns The portal's raw `FeatureCollection` (pass to `normalizeAReYeng`)
+ *   or the Overpass fallback's `OverpassResponse` (pass to `normalizeAReYengOverpass`).
+ */
 export async function fetchAReYengRoutes(): Promise<
   FeatureCollection | OverpassResponse
 > {

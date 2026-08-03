@@ -19,6 +19,13 @@ function resolveTownshipEmphasis(
   );
 }
 
+/**
+ * The `gauteng-spatial-legacy` domain's layer catalogue: two choropleth
+ * layers (modelled car time, distance to nearest transit) sharing the same
+ * township-area data, and one line layer per transit network. `rapid-rail`
+ * and `commuter-rail` set `hasPointGeometry: true` since real station/stop
+ * Point geometry only exists for those two networks.
+ */
 export const GAUTENG_SPATIAL_LEGACY_LAYERS: Layer[] = [
   {
     id: "townships",

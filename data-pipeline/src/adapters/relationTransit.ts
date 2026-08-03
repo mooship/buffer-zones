@@ -1,6 +1,13 @@
 import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
 import type { OverpassResponse } from "./gautrain";
 
+/**
+ * Normalizes an Overpass response's `relation` elements (OSM public
+ * transport routes, each grouping several `way` members) into one
+ * `LineString` feature per relation member way, deduplicated across
+ * relations that share a way.
+ * @param network - Value written to every produced feature's `network` property.
+ */
 export function normalizeRelationTransitOverpass(
   raw: OverpassResponse,
   network: string,

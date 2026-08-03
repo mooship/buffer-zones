@@ -19,6 +19,7 @@ out geom;
 `;
 }
 
+/** Normalizes a PRASA/Metrorail Overpass query's rail ways and station nodes into `LineString`/`Point` features. */
 export function normalizePrasaOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
@@ -57,6 +58,7 @@ export function normalizePrasaOverpass(
   return { type: "FeatureCollection", features };
 }
 
+/** Fetches PRASA/Metrorail rail ways and station nodes within `bbox` via Overpass. */
 export async function fetchPrasaRail(bbox: string): Promise<OverpassResponse> {
   return fetchOverpass(prasaQuery(bbox));
 }

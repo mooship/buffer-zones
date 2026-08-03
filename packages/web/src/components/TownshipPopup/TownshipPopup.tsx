@@ -6,6 +6,11 @@ interface TownshipPopupProps {
   properties: TownshipProperties;
 }
 
+/**
+ * Renders a selected township's popup content: modelled car time, nearest
+ * job centre, and (when present) population, straight-line distance, and
+ * distance to nearest transit. Passed as `MapView`'s `renderFeaturePopup`.
+ */
 export function TownshipPopup({ properties }: TownshipPopupProps) {
   return (
     <div

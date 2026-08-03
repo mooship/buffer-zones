@@ -27,6 +27,7 @@ function cacheDir(): string {
   return process.env.PIPELINE_CACHE_DIR ?? DEFAULT_CACHE_DIR;
 }
 
+/** The on-disk directory JSON cache entries are read/written under, honouring `PIPELINE_CACHE_DIR`. */
 export function getCacheDir(): string {
   return cacheDir();
 }
@@ -35,6 +36,7 @@ function cachePath(namespace: string, key: string): string {
   return resolve(cacheDir(), namespace, `${key}.json`);
 }
 
+/** Deterministically hashes `parts` into a cache key (e.g. a query string), for use with `readJsonCache`/`writeJsonCache`. */
 export function hashKey(parts: readonly string[]): string {
   const hash = createHash("sha256");
   for (const part of parts) {
@@ -44,6 +46,11 @@ export function hashKey(parts: readonly string[]): string {
   return hash.digest("hex");
 }
 
+/**
+ * Reads a cached JSON value, or `null` if disabled (`PIPELINE_CACHE=0` or
+ * running under vitest), missing, unreadable, or older than `maxAgeMs`
+ * (unless `allowStale` is set).
+ */
 export async function readJsonCache<T>(
   namespace: string,
   key: string,
@@ -73,6 +80,7 @@ export async function readJsonCache<T>(
   }
 }
 
+/** Writes a JSON value to the cache under `namespace`/`key`. A no-op if caching is disabled. */
 export async function writeJsonCache<T>(
   namespace: string,
   key: string,
@@ -87,6 +95,7 @@ export async function writeJsonCache<T>(
   await writeFile(path, JSON.stringify(value));
 }
 
+/** Deletes the entire cache directory. */
 export async function clearCache(): Promise<void> {
   await rm(cacheDir(), { recursive: true, force: true });
 }
@@ -128,6 +137,10 @@ async function pruneDirectory(path: string, cutoffMs: number): Promise<number> {
   return removed;
 }
 
+/**
+ * Recursively deletes every cache file older than `maxAgeMs`.
+ * @returns The number of files removed.
+ */
 export async function pruneCache(maxAgeMs: number): Promise<number> {
   const cutoffMs = Date.now() - maxAgeMs;
   return pruneDirectory(cacheDir(), cutoffMs);

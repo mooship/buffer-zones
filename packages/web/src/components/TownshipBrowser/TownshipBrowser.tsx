@@ -132,10 +132,18 @@ function compareGroups(
 
 interface TownshipBrowserProps {
   townships: TownshipFeature[];
+  /** The currently map-selected township's id, if any, used to scroll/highlight its entry. */
   selectedTownshipId: string | null;
   onSelect: (township: TownshipFeature) => void;
 }
 
+/**
+ * Searchable, sortable list of included townships, grouped by their
+ * `getTownshipGroup` area — each group is a collapsed row showing its
+ * commute-time range and sub-place count, expanding on click to list its
+ * individual census sub-places, any of which can be selected via `onSelect`.
+ * A non-empty search query force-expands every matching group.
+ */
 export function TownshipBrowser({
   townships,
   selectedTownshipId,

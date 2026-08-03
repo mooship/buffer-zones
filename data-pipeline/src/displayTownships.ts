@@ -10,6 +10,13 @@ const MINIMUM_TRIANGLE_WEIGHT = 3e-8;
 // ~11cm at the equator - far finer than anything visible on a township map,
 // but cuts several redundant digits off every coordinate in the payload.
 
+/**
+ * Builds a simplified, coordinate-truncated copy of a township polygon
+ * collection for display, via a topology-preserving simplify (so shared
+ * borders between adjacent townships stay aligned — a per-feature simplify
+ * would drift them apart) followed by coordinate truncation to
+ * `GEOJSON_COORDINATE_PRECISION`.
+ */
 export function createDisplayPolygons<
   Geometry extends Polygon | MultiPolygon,
   Properties extends object,

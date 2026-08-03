@@ -4,6 +4,7 @@ export interface LocationSearchResult {
   label: string;
   latitude: number;
   longitude: number;
+  /** The place's bounding box, as `[[south, west], [north, east]]`, if the geocoder provided one. */
   bounds?: [[number, number], [number, number]];
 }
 

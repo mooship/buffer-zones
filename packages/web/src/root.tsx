@@ -13,6 +13,12 @@ import {
 import appStylesHref from "./index.css?url";
 import { getLayers } from "./layers/registry";
 
+/**
+ * Builds `<link rel=preload>` entries for every configured layer's GeoJSON
+ * data source, deduplicated by URL (a URL shared by multiple layers preloads
+ * once). Sources for a default-visible layer preload at normal priority;
+ * everything else preloads at `fetchPriority: "low"`.
+ */
 function getGeoJsonPreloadLinks() {
   const defaultVisibleByUrl = new Map<string, boolean>();
   for (const layer of getLayers()) {
@@ -31,6 +37,7 @@ function getGeoJsonPreloadLinks() {
   }));
 }
 
+/** React Router route module export: page `<title>`/`<meta>` tags. */
 export const meta: MetaFunction = () => {
   return [
     { title: "Stratum" },
@@ -46,6 +53,11 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+/**
+ * React Router route module export: `<link>` tags — self-hosted font/style
+ * stylesheets, favicons, basemap-provider preconnects, and this layer's
+ * GeoJSON preload links from `getGeoJsonPreloadLinks`.
+ */
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: interStylesHref },
   { rel: "stylesheet", href: martianMonoStylesHref },
@@ -71,6 +83,11 @@ export const links: LinksFunction = () => [
   ...getGeoJsonPreloadLinks(),
 ];
 
+/**
+ * React Router route module export: the document shell (`<html>`/`<head>`/`<body>`)
+ * wrapping every route. Sets the pre-hydration `theme-color` meta tags and
+ * loads `/theme-bootstrap.js` to apply the stored theme before paint.
+ */
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -99,6 +116,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** React Router route module export: the root route component. */
 export default function Root() {
   return <Outlet />;
 }

@@ -91,6 +91,15 @@ function pruneStalePointerSamples(samples: PointerSample[], now: number) {
   }
 }
 
+/**
+ * The reference app's root shell: fetches and merges the Gauteng township
+ * choropleth data, wraps the render tree in a `DomainProvider` for
+ * `gauteng-spatial-legacy`, and renders the map alongside the desktop/mobile
+ * info panel (story, place browser, layer toggles) and its settings menu.
+ * @remarks Owns the mobile bottom-sheet drag/swipe gesture state (pointer
+ *   sampling, velocity-based snap projection) in addition to layout state
+ *   from `useMapUiStore`.
+ */
 export function App() {
   const [hydrated, setHydrated] = useState(false);
   const [townships, setTownships] = useState<TownshipFeature[]>([]);

@@ -1,5 +1,6 @@
 import type { MetroId } from "@stratum/app";
 
+/** A selected employment hub the pipeline computes drive-time to. */
 export interface JobCenter {
   id: string;
   name: string;
@@ -8,6 +9,7 @@ export interface JobCenter {
   metroId?: MetroId;
 }
 
+/** Every selected job centre across all nine Gauteng metros. */
 export const JOB_CENTERS = [
   {
     id: "pretoria-cbd",
@@ -417,6 +419,7 @@ export const JOB_CENTERS = [
   },
 ] as const satisfies readonly JobCenter[];
 
+/** Returns `JOB_CENTERS` filtered to one metro. */
 export function getJobCentersForMetro(metroId: MetroId): JobCenter[] {
   return JOB_CENTERS.filter((jobCenter) => jobCenter.metroId === metroId);
 }

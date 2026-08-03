@@ -8,15 +8,23 @@ import * as turf from "@turf/turf";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import type { NormalizedTownship } from "./adapters/boundaries";
 
+/** Per-feature properties for a dissolved township-area outline polygon. */
 interface TownshipAreaProperties {
   id: string;
   name: string;
   labelPriority: TownshipAreaLabelPriority;
   labelOffset?: [number, number];
   selectionBasis: TownshipAreaSelectionBasis;
+  /** Number of Census sub-place boundaries dissolved into this one area outline. */
   subPlaceCount: number;
 }
 
+/**
+ * Groups normalized township sub-place boundaries by their
+ * `TOWNSHIP_AREA_DEFINITIONS` area (via `getTownshipAreaDefinition`) and
+ * dissolves each group's polygons into one combined outline per area, for
+ * `MapView`'s area-boundary label layer (`companionSource`).
+ */
 export function createTownshipAreas(
   townships: NormalizedTownship[],
 ): FeatureCollection<Polygon | MultiPolygon, TownshipAreaProperties> {

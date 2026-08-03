@@ -1,10 +1,17 @@
 import styles from "./EvidenceSummary.module.css";
 
 interface EvidenceSummaryProps {
+  /** Total selected job centres across all metros, interpolated into the methodology copy. */
   jobCenterCount: number;
+  /** Region-specific framing copy shown above the fixed methodology/limitations text. */
   contextText: string;
 }
 
+/**
+ * Renders the "story" panel's fixed methodology and limitations copy:
+ * what the modelled car-time metric does and doesn't measure, how included
+ * areas were classified, and a link to further historical context.
+ */
 export function EvidenceSummary({
   jobCenterCount,
   contextText,
