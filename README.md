@@ -8,6 +8,8 @@ That reference implementation maps apartheid-era spatial planning legacy across 
 
 ## Why
 
+Stratum itself is domain-agnostic — it doesn't encode any particular geography or story. The apartheid framing below belongs entirely to the Gauteng spatial legacy demo, the one domain currently built on the SDK; a different domain built on Stratum could map anything from flood risk to public amenities and would carry none of this.
+
 Under apartheid, townships were deliberately separated from economic centers by distance and buffer strips of highways, industrial zoning, or vacant land. That geography did not disappear in 1994. The Gauteng spatial legacy reference app makes that spatial structure visible while being explicit about what its current data cannot yet establish, and doubles as the proving ground for the underlying SDK. The intended primary accessibility measure is the number of jobs reachable within 45, 60, and 90 minutes by public transport, including walking, waiting, and transfers.
 
 ## Documentation

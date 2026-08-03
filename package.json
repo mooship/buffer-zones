@@ -1,7 +1,7 @@
 {
   "name": "stratum",
   "version": "1.0.0",
-  "description": "Spatial planning legacy & transit accessibility mapping in Tshwane",
+  "description": "Reusable SDK for public-interest geospatial layer platforms",
   "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
