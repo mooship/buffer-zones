@@ -37,6 +37,7 @@ const OPEN_STREET_MAP_ATTRIBUTION =
   "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors";
 const CARTO_ATTRIBUTION =
   "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/attributions'>CARTO</a>";
+const OSM_FALLBACK_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 function defaultBasemaps(): Record<string, BasemapDefinition> {
   return {
@@ -48,10 +49,10 @@ function defaultBasemaps(): Record<string, BasemapDefinition> {
       attribution: CARTO_ATTRIBUTION,
       darkUrl: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
       darkAttribution: CARTO_ATTRIBUTION,
-      fallbackUrls: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      fallbackUrls: [OSM_FALLBACK_URL],
       darkFallbackUrls: [
         "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        OSM_FALLBACK_URL,
       ],
     },
     satellite: {
@@ -62,11 +63,12 @@ function defaultBasemaps(): Record<string, BasemapDefinition> {
       attribution: "Tiles &copy; Esri, Maxar, Earthstar Geographics",
     },
     voyager: {
-      kind: "vector",
+      kind: "raster",
       label: "Voyager",
-      description:
-        "Vector-tile basemap with sharper labels at every zoom level.",
-      styleUrl: "https://tiles.openfreemap.org/styles/liberty",
+      description: "Colourful basemap with bold roads and clear place labels.",
+      url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      attribution: CARTO_ATTRIBUTION,
+      fallbackUrls: [OSM_FALLBACK_URL],
     },
   };
 }

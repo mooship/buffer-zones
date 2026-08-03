@@ -6,6 +6,7 @@ import {
   type RasterBasemapDefinition,
   registerBasemap,
   resetBasemapRegistry,
+  type VectorBasemapDefinition,
 } from "./basemaps";
 
 const CUSTOM_RASTER_BASEMAP: RasterBasemapDefinition = {
@@ -14,6 +15,13 @@ const CUSTOM_RASTER_BASEMAP: RasterBasemapDefinition = {
   description: "A custom basemap.",
   url: "https://example.com/{z}/{x}/{y}.png",
   attribution: "Example",
+};
+
+const CUSTOM_VECTOR_BASEMAP: VectorBasemapDefinition = {
+  kind: "vector",
+  label: "Custom Vector",
+  description: "A custom vector basemap.",
+  styleUrl: "https://example.com/style.json",
 };
 
 describe("basemap registry", () => {
@@ -93,6 +101,13 @@ describe("getBasemapTileSources", () => {
     );
   });
 
+  it("returns the CARTO Voyager source with an OpenStreetMap fallback", () => {
+    const sources = getBasemapTileSources("voyager", false);
+
+    expect(sources[0]?.url).toMatch(/rastertiles\/voyager/);
+    expect(sources.at(-1)?.url).toMatch(/tile\.openstreetmap\.org/);
+  });
+
   it("returns a single source for a raster basemap with no dark or fallback URLs", () => {
     registerBasemap("custom", CUSTOM_RASTER_BASEMAP);
 
@@ -102,7 +117,11 @@ describe("getBasemapTileSources", () => {
   });
 
   it("throws for a vector basemap", () => {
-    expect(() => getBasemapTileSources("voyager", false)).toThrow(/raster/i);
+    registerBasemap("custom-vector", CUSTOM_VECTOR_BASEMAP);
+
+    expect(() => getBasemapTileSources("custom-vector", false)).toThrow(
+      /raster/i,
+    );
   });
 
   it("falls back to the light attribution when a custom basemap has a darkUrl but no darkAttribution", () => {

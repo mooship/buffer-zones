@@ -5,9 +5,11 @@ interface VectorBasemapLayerProps {
   /** URL of a MapLibre GL style JSON document to render as the basemap. */
   styleUrl: string;
   /**
-   * Called if the style/plugin fails to load or the MapLibre layer fails to
-   * initialize, so a caller can fall back to another basemap instead of
-   * leaving the map blank. Always logged to `console.error` regardless.
+   * Called if the style/plugin fails to load, the MapLibre layer fails to
+   * initialize, or the style JSON itself fails to load once the layer is
+   * attached (e.g. the style host is unreachable), so a caller can fall back
+   * to another basemap instead of leaving the map blank. Always logged to
+   * `console.error` regardless.
    */
   onError?: (error: unknown) => void;
 }
@@ -38,6 +40,15 @@ export function VectorBasemapLayer({
         }
         layer = L.maplibreGL({ style: styleUrl });
         layer.addTo(map);
+        layer.getMaplibreMap().on("error", (event: { error: unknown }) => {
+          console.error(
+            `Vector basemap style failed to load: ${styleUrl}`,
+            event.error,
+          );
+          if (!cancelled) {
+            onError?.(event.error);
+          }
+        });
       })
       .catch((error) => {
         console.error(`Failed to load vector basemap style ${styleUrl}`, error);
