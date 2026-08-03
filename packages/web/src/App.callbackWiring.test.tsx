@@ -119,20 +119,9 @@ describe("App map/location callback wiring", () => {
     expect(screen.getByTestId("township-popup")).toHaveTextContent("Mamelodi");
   });
 
-  it("omits renderFeaturePopup while the Browse Places panel is open, since it already shows the same detail", async () => {
+  it("always provides renderFeaturePopup, regardless of which panel tab is open", async () => {
     useMapUiStore.getState().setPanelOpen(true);
-    useMapUiStore.getState().setPanelView("places");
-
-    render(<App />);
-
-    await waitFor(() => expect(mapViewMocks.latestProps).toBeDefined());
-
-    expect(mapViewMocks.latestProps?.renderFeaturePopup).toBeUndefined();
-  });
-
-  it("still shows the map popup when the panel is open on a tab other than Browse Places", async () => {
-    useMapUiStore.getState().setPanelOpen(true);
-    useMapUiStore.getState().setPanelView("story");
+    useMapUiStore.getState().setPanelView("ask");
 
     render(<App />);
 
