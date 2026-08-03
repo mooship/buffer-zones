@@ -6,6 +6,7 @@ import {
   type RasterBasemapDefinition,
   registerBasemap,
   resetBasemapRegistry,
+  type VectorBasemapDefinition,
 } from "./basemaps";
 
 const CUSTOM_RASTER_BASEMAP: RasterBasemapDefinition = {
@@ -14,6 +15,13 @@ const CUSTOM_RASTER_BASEMAP: RasterBasemapDefinition = {
   description: "A custom basemap.",
   url: "https://example.com/{z}/{x}/{y}.png",
   attribution: "Example",
+};
+
+const CUSTOM_VECTOR_BASEMAP: VectorBasemapDefinition = {
+  kind: "vector",
+  label: "Custom Vector",
+  description: "A custom vector basemap.",
+  styleUrl: "https://example.com/style.json",
 };
 
 describe("basemap registry", () => {
@@ -109,12 +117,7 @@ describe("getBasemapTileSources", () => {
   });
 
   it("throws for a vector basemap", () => {
-    registerBasemap("custom-vector", {
-      kind: "vector",
-      label: "Custom Vector",
-      description: "A custom vector basemap.",
-      styleUrl: "https://example.com/style.json",
-    });
+    registerBasemap("custom-vector", CUSTOM_VECTOR_BASEMAP);
 
     expect(() => getBasemapTileSources("custom-vector", false)).toThrow(
       /raster/i,
