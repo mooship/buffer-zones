@@ -52,6 +52,13 @@ describe("basemap registry", () => {
     expect(getBasemapDefinition("street").label).toBe("Replaced");
   });
 
+  it("gives the built-in voyager basemap a dark style so it isn't stuck light in dark mode", () => {
+    expect(getBasemapDefinition("voyager")).toMatchObject({
+      styleUrl: "https://tiles.openfreemap.org/styles/liberty",
+      darkStyleUrl: "https://tiles.openfreemap.org/styles/dark",
+    });
+  });
+
   it("resetBasemapRegistry restores the built-in defaults", () => {
     registerBasemap("custom", CUSTOM_RASTER_BASEMAP);
 

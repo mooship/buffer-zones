@@ -67,6 +67,7 @@ function defaultBasemaps(): Record<string, BasemapDefinition> {
       description:
         "Vector-tile basemap with sharper labels at every zoom level.",
       styleUrl: "https://tiles.openfreemap.org/styles/liberty",
+      darkStyleUrl: "https://tiles.openfreemap.org/styles/dark",
     },
   };
 }
