@@ -10,7 +10,6 @@ export interface WorkersAiRunOptions {
   stream: true;
   max_tokens: number;
   temperature: number;
-  reasoning_effort: "low" | "medium" | "high";
 }
 
 /**
@@ -40,5 +39,13 @@ export interface RateLimiterBinding {
 /** Cloudflare Worker bindings the Ask AI feature relies on. */
 export interface Env {
   AI: WorkersAiBinding;
+  /** Per-client-IP request cap (see `getRateLimitKey`). */
   ASK_AI_RATE_LIMITER: RateLimiterBinding;
+  /**
+   * Site-wide request cap, keyed by a constant string rather than the
+   * client IP. Protects the shared Workers AI free-tier daily Neuron
+   * budget from being exhausted by a single sustained abuser — or many
+   * distributed ones — which the per-IP limiter alone can't bound.
+   */
+  ASK_AI_GLOBAL_RATE_LIMITER: RateLimiterBinding;
 }

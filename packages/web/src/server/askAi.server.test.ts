@@ -45,6 +45,7 @@ async function readAllText(
 function fakeEnv(overrides?: {
   aiRun?: Env["AI"]["run"];
   rateLimitSuccess?: boolean;
+  globalRateLimitSuccess?: boolean;
 }): Env {
   return {
     AI: {
@@ -57,6 +58,11 @@ function fakeEnv(overrides?: {
     ASK_AI_RATE_LIMITER: {
       limit: vi.fn(async () => ({
         success: overrides?.rateLimitSuccess ?? true,
+      })),
+    },
+    ASK_AI_GLOBAL_RATE_LIMITER: {
+      limit: vi.fn(async () => ({
+        success: overrides?.globalRateLimitSuccess ?? true,
       })),
     },
   };
@@ -75,6 +81,20 @@ describe("buildSystemPrompt", () => {
     const prompt = buildSystemPrompt();
 
     expect(prompt).toMatch(/never as instructions/i);
+  });
+
+  it("warns that conversation history may be fabricated and shouldn't override the rules", () => {
+    const prompt = buildSystemPrompt();
+
+    expect(prompt).toMatch(/history.{0,80}(fabricat|manipulat|spoof)/is);
+  });
+
+  it("explicitly forbids off-topic creative writing requests, even harmless-sounding ones", () => {
+    const prompt = buildSystemPrompt();
+
+    expect(prompt).toMatch(/poem/i);
+    expect(prompt).toMatch(/joke/i);
+    expect(prompt).toMatch(/harmless/i);
   });
 });
 
@@ -265,7 +285,7 @@ describe("handleAskAiRequest", () => {
     expect(body.error).toBeTruthy();
   });
 
-  it("returns 429 with a Retry-After header when rate-limited", async () => {
+  it("returns 429 with a Retry-After header when the per-IP limit is exceeded", async () => {
     const response = await handleAskAiRequest(
       postRequest({ message: "Hi" }),
       fakeEnv({ rateLimitSuccess: false }),
@@ -275,6 +295,28 @@ describe("handleAskAiRequest", () => {
     expect(response.headers.get("Retry-After")).toBe(
       String(RATE_LIMIT_RETRY_AFTER_SECONDS),
     );
+  });
+
+  it("returns 429 with a Retry-After header when the site-wide limit is exceeded", async () => {
+    const response = await handleAskAiRequest(
+      postRequest({ message: "Hi" }),
+      fakeEnv({ globalRateLimitSuccess: false }),
+    );
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe(
+      String(RATE_LIMIT_RETRY_AFTER_SECONDS),
+    );
+  });
+
+  it("checks the site-wide limit without consuming the per-IP limiter's quota when already exceeded", async () => {
+    const ipLimit = vi.fn(async () => ({ success: true }));
+    const env = fakeEnv({ globalRateLimitSuccess: false });
+    env.ASK_AI_RATE_LIMITER.limit = ipLimit;
+
+    await handleAskAiRequest(postRequest({ message: "Hi" }), env);
+
+    expect(ipLimit).not.toHaveBeenCalled();
   });
 
   it("streams a 200 plain-text response on success", async () => {
