@@ -1,16 +1,13 @@
-import { readdir, rename, rm, stat } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  METROS,
-  REGIONS,
-  type TransitLayerFeatureCollection,
-} from "@stratum/app";
+import { REGIONS, type TransitLayerFeatureCollection } from "@stratum/app";
 import {
   fetchMetroBoundaries,
   normalizeBoundaries,
 } from "./adapters/boundaries";
 import { pruneCache } from "./cache";
+import { isDirectExecution } from "./cliEntry";
 import { getJobCentersForMetro } from "./constants/jobCenters";
 import { createDisplayPolygons } from "./displayTownships";
 import { createDisplayTransit } from "./displayTransit";
@@ -20,7 +17,6 @@ import { getNearestJobCenter } from "./osrmClient";
 import {
   buildOutputManifest,
   countTransitNetworks,
-  REQUIRED_TRANSIT_NETWORKS,
   validateOutputDirectory,
 } from "./outputManifest";
 import type { RegionPipelineConfig } from "./pipelineSource";
@@ -28,18 +24,19 @@ import {
   getRegionPipelineConfig,
   REGION_PIPELINE_CONFIGS,
 } from "./regionPipelineConfigs";
+import {
+  assertCompleteNetworkCoverage,
+  assertMetroSetup,
+  cleanupStagingDirectories,
+  formatDuration,
+  mergeNetworkCoverage,
+  promoteStagedOutput,
+} from "./runHelpers";
 import { createTownshipAreas } from "./townshipAreas";
 import { computeNearestTransitKm } from "./transitDistance";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_ROOT = resolve(__dirname, "../../packages/web/public/data");
-
-function formatDuration(ms: number): string {
-  if (ms < 1000) {
-    return `${ms}ms`;
-  }
-  return `${(ms / 1000).toFixed(2)}s`;
-}
 
 async function timedStep<T>(
   label: string,
@@ -59,100 +56,6 @@ async function timedStep<T>(
     console.log(`  failed after ${formatDuration(elapsed)}`);
     throw error;
   }
-}
-
-async function pathExists(path: string): Promise<boolean> {
-  try {
-    await stat(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function assertCompleteNetworkCoverage(
-  networkCoverage: Record<string, number>,
-): void {
-  const missing = REQUIRED_TRANSIT_NETWORKS.filter(
-    (network) => (networkCoverage[network] ?? 0) < 1,
-  );
-  if (missing.length > 0) {
-    throw new Error(
-      `Missing required transit network coverage: ${missing.join(", ")}`,
-    );
-  }
-}
-
-function mergeNetworkCoverage(
-  ...maps: ReadonlyArray<Record<string, number>>
-): Record<string, number> {
-  const merged: Record<string, number> = {};
-  for (const map of maps) {
-    for (const [network, count] of Object.entries(map)) {
-      merged[network] = (merged[network] ?? 0) + count;
-    }
-  }
-  return merged;
-}
-
-function assertMetroSetup(): void {
-  for (const metro of METROS) {
-    const count = getJobCentersForMetro(metro.id).length;
-    if (count !== metro.jobCenterCount) {
-      throw new Error(
-        `Job center count mismatch for ${metro.id}: expected ${metro.jobCenterCount}, got ${count}`,
-      );
-    }
-  }
-}
-
-async function promoteStagedOutput(
-  stagedDir: string,
-  publishDir: string,
-): Promise<void> {
-  const backupDir = `${publishDir}.backup`;
-
-  await rm(backupDir, { recursive: true, force: true });
-
-  const publishExists = await pathExists(publishDir);
-  if (publishExists) {
-    await rename(publishDir, backupDir);
-  }
-
-  try {
-    await rename(stagedDir, publishDir);
-  } catch (error) {
-    if (publishExists && (await pathExists(backupDir))) {
-      await rename(backupDir, publishDir);
-    }
-    throw error;
-  }
-
-  await rm(backupDir, { recursive: true, force: true });
-}
-
-async function cleanupStagingDirectories(
-  rootDir: string,
-  regionId: string,
-): Promise<void> {
-  const entries = await readdir(rootDir, {
-    withFileTypes: true,
-    encoding: "utf8",
-  }).catch(() => {
-    return [];
-  });
-
-  await Promise.all(
-    entries
-      .filter(
-        (entry) =>
-          entry.isDirectory() &&
-          entry.name.startsWith(`${regionId}.__staging__`),
-      )
-      .map((entry) =>
-        rm(resolve(rootDir, entry.name), { recursive: true, force: true }),
-      ),
-  );
 }
 
 async function runRegion(config: RegionPipelineConfig): Promise<void> {
@@ -310,15 +213,19 @@ async function runAllProvinceRegions(): Promise<void> {
   }
 }
 
-const regionArgIndex = process.argv.indexOf("--region");
-const requestedRegionId =
-  regionArgIndex >= 0 ? process.argv[regionArgIndex + 1] : undefined;
+/* v8 ignore start -- exercised via `npm run run`, not unit tests: runs the real pipeline against live external services */
+if (isDirectExecution(process.argv, import.meta.url)) {
+  const regionArgIndex = process.argv.indexOf("--region");
+  const requestedRegionId =
+    regionArgIndex >= 0 ? process.argv[regionArgIndex + 1] : undefined;
 
-const work = requestedRegionId
-  ? runRegion(getRegionPipelineConfig(requestedRegionId))
-  : runAllProvinceRegions();
+  const work = requestedRegionId
+    ? runRegion(getRegionPipelineConfig(requestedRegionId))
+    : runAllProvinceRegions();
 
-work.catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+  work.catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
+/* v8 ignore stop */

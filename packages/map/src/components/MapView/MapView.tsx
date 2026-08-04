@@ -8,6 +8,8 @@ import {
   type Layer,
   type LeafletMouseEvent,
   type Path,
+  type Renderer,
+  svg,
 } from "leaflet";
 import {
   type ComponentType,
@@ -44,13 +46,17 @@ import styles from "./MapView.module.css";
 import { VectorBasemapLayer } from "./VectorBasemapLayer";
 
 /**
- * `@types/leaflet`'s `GeoJSONOptions` omits `smoothFactor`, even though
- * Leaflet forwards it to every Polyline/Polygon layer it creates. Widen the
- * prop type locally rather than dropping the (real, behaviour-affecting)
- * `smoothFactor={0}` usage below.
+ * `@types/leaflet`'s `GeoJSONOptions` omits `smoothFactor` and `renderer`,
+ * even though react-leaflet forwards both straight through to Leaflet's
+ * `GeoJSON` constructor for every Polyline/Polygon layer it creates (`{
+ * data, ...options }` in `createPathComponent`'s `createGeoJSON`, unlike
+ * `pathOptions`, which is only applied post-construction via `setStyle` and
+ * so can't select a renderer). Widen the prop type locally rather than
+ * dropping the (real, behaviour-affecting) `smoothFactor={0}`/`renderer`
+ * usage below.
  */
 const GeoJSON = LeafletGeoJSON as ComponentType<
-  GeoJSONProps & { smoothFactor?: number }
+  GeoJSONProps & { smoothFactor?: number; renderer?: Renderer }
 >;
 
 interface MapViewProps<
@@ -266,8 +272,12 @@ function SelectedFeatureHighlight<TProperties extends Record<string, unknown>>({
   renderFeaturePopup,
 }: SelectedFeatureHighlightProps<TProperties>) {
   const map = useMap();
+  const previousSelectedElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    previousSelectedElement.current?.removeAttribute("aria-current");
+    previousSelectedElement.current = null;
+
     if (!selectedFeatureId) {
       return;
     }
@@ -291,7 +301,19 @@ function SelectedFeatureHighlight<TProperties extends Record<string, unknown>>({
       });
     }
     featureLayer.openPopup?.();
+
+    const element = featureLayer.getElement?.();
+    if (element) {
+      element.setAttribute("aria-current", "true");
+      previousSelectedElement.current = element;
+    }
   }, [map, selectedFeatureId, layerById, renderFeaturePopup]);
+
+  useEffect(
+    () => () =>
+      previousSelectedElement.current?.removeAttribute("aria-current"),
+    [],
+  );
 
   return null;
 }
@@ -485,6 +507,7 @@ function MapViewComponent<
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
   const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
+  const choroplethRenderer = useMemo(() => svg({ pane: AREA_PANE }), []);
   const visibleLayers = useMemo(
     () =>
       getLayers().filter(
@@ -707,6 +730,13 @@ function MapViewComponent<
               // no boundary-fidelity reason to disable it here.
               smoothFactor={1}
               style={config.styleFn}
+              // The map defaults to the canvas renderer (`preferCanvas` on
+              // `MapContainer`) since most overlay geometry doesn't need
+              // per-feature DOM nodes, but the choropleth layer does:
+              // bindSelectableFeatureInteractions calls `getElement()` to
+              // attach `tabindex`/keyboard handlers, which canvas-rendered
+              // paths never have.
+              renderer={isChoropleth ? choroplethRenderer : undefined}
               pathOptions={{
                 ...config.pathOptions,
                 pane: isChoropleth ? AREA_PANE : TRANSIT_PANE,

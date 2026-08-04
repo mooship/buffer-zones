@@ -49,3 +49,47 @@ export function normalizeRelationTransitOverpass(
 
   return { type: "FeatureCollection", features };
 }
+
+/**
+ * Normalizes an Overpass response's `way` and `node` elements into
+ * `LineString`/`Point` features. `relation` elements, if present, are skipped.
+ * @param network - Value written to every produced feature's `network` property.
+ */
+export function normalizeWayNodeTransitOverpass(
+  raw: OverpassResponse,
+  network: string,
+): TransitLayerFeatureCollection {
+  const features: TransitLayerFeatureCollection["features"] = [];
+
+  for (const element of raw.elements) {
+    const stop: TransitStop = {
+      id: `${element.type}/${element.id}`,
+      name: element.tags?.name ?? "Unnamed",
+      network,
+    };
+
+    if (element.type === "way") {
+      features.push({
+        type: "Feature",
+        properties: stop,
+        geometry: {
+          type: "LineString",
+          coordinates: element.geometry.map(
+            (point) => [point.lon, point.lat] as [number, number],
+          ),
+        },
+      });
+    } else if (element.type === "node") {
+      features.push({
+        type: "Feature",
+        properties: stop,
+        geometry: {
+          type: "Point",
+          coordinates: [element.lon, element.lat] as [number, number],
+        },
+      });
+    }
+  }
+
+  return { type: "FeatureCollection", features };
+}

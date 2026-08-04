@@ -1,12 +1,8 @@
+import type { LatLon } from "./adapters/boundaries";
+import { sleep } from "./asyncUtils";
 import { hashKey, readJsonCache, writeJsonCache } from "./cache";
 import type { JobCenter } from "./constants/jobCenters";
 import { getOsrmBaseUrl } from "./constants/serviceUrls";
-
-/** A geographic point in decimal degrees. */
-export interface LatLon {
-  lat: number;
-  lon: number;
-}
 
 /** The nearest job centre to an origin point, and the modelled drive time to reach it. */
 export interface NearestJobCenterResult {
@@ -20,10 +16,6 @@ const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 1000;
 const OSRM_TIMEOUT_MS = 30_000;
 const OSRM_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 3;
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 async function fetchTable(
   origins: LatLon[],

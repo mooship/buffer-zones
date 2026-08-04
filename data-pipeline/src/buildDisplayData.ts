@@ -8,6 +8,7 @@ import {
   type TransitLayerFeatureCollection,
 } from "@stratum/app";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
+import { isDirectExecution } from "./cliEntry";
 import { createDisplayPolygons } from "./displayTownships";
 import { createDisplayTransit } from "./displayTransit";
 import { writeGeoJsonFile } from "./export";
@@ -24,7 +25,15 @@ async function readPolygonCollection<Properties extends object>(
   ) as FeatureCollection<Polygon | MultiPolygon, Properties>;
 }
 
-async function rebuildTownshipDisplay(dataDir: string): Promise<boolean> {
+/**
+ * Rebuilds a metro's `townships`/`township-areas` compact display files from
+ * whichever source file exists (`.display.v1.geojson`, falling back to the
+ * plain `.v1.geojson`).
+ * @returns `false` if the metro has no township source file at all yet.
+ */
+export async function rebuildTownshipDisplay(
+  dataDir: string,
+): Promise<boolean> {
   try {
     const source = await readPolygonCollection<TownshipFeature["properties"]>(
       dataDir,
@@ -60,7 +69,12 @@ async function rebuildTownshipDisplay(dataDir: string): Promise<boolean> {
   }
 }
 
-async function rebuildTransitDisplay(
+/**
+ * Rebuilds a metro's transit-operator compact display files from whichever
+ * source file exists (`.display.v1.geojson`, falling back to the plain
+ * `.v1.geojson`), logging and skipping any operator with no source file.
+ */
+export async function rebuildTransitDisplay(
   dataDir: string,
   metroId: string,
 ): Promise<void> {
@@ -103,7 +117,11 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+/* v8 ignore start -- exercised via `npm run display`, not unit tests */
+if (isDirectExecution(process.argv, import.meta.url)) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
+/* v8 ignore stop */

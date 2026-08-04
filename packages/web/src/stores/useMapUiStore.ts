@@ -28,13 +28,11 @@ interface MapUiState {
   basemap: Basemap;
   panelOpen: boolean;
   panelView: PanelView;
-  titleExpanded: boolean;
   selectedFeatureId: string | null;
   toggleLayer: (id: string) => void;
   setBasemap: (basemap: Basemap) => void;
   setPanelOpen: (open: boolean) => void;
   setPanelView: (view: PanelView) => void;
-  setTitleExpanded: (expanded: boolean) => void;
   setSelectedFeatureId: (id: string | null) => void;
   reset: () => void;
 }
@@ -47,7 +45,6 @@ function createInitialState() {
     basemap: "street" as const,
     panelOpen: false,
     panelView: "layers" as const,
-    titleExpanded: false,
     selectedFeatureId: null,
   };
 }
@@ -87,7 +84,6 @@ export const useMapUiStore = create<MapUiState>()((set) => ({
   setBasemap: (basemap) => set({ basemap }),
   setPanelOpen: (panelOpen) => set({ panelOpen }),
   setPanelView: (panelView) => set({ panelView }),
-  setTitleExpanded: (titleExpanded) => set({ titleExpanded }),
   setSelectedFeatureId: (selectedFeatureId) => set({ selectedFeatureId }),
   reset: () => set(createInitialState()),
 }));

@@ -15,7 +15,6 @@ describe("useMapUiStore", () => {
       basemap: "street",
       panelOpen: false,
       panelView: "layers",
-      titleExpanded: false,
       selectedFeatureId: null,
     });
   });
@@ -69,17 +68,5 @@ describe("useMapUiStore", () => {
       useMapUiStore.getState().setBasemap("satellite");
     });
     expect(useMapUiStore.getState().basemap).toBe("satellite");
-  });
-
-  it("sets whether the title is expanded", () => {
-    act(() => {
-      useMapUiStore.getState().setTitleExpanded(true);
-    });
-    expect(useMapUiStore.getState().titleExpanded).toBe(true);
-
-    act(() => {
-      useMapUiStore.getState().setTitleExpanded(false);
-    });
-    expect(useMapUiStore.getState().titleExpanded).toBe(false);
   });
 });

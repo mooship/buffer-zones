@@ -1,7 +1,11 @@
-import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
+import type { TransitLayerFeatureCollection } from "@stratum/app";
+import { sleep } from "../asyncUtils";
 import { hashKey, readJsonCache, writeJsonCache } from "../cache";
 import { getOverpassUrls } from "../constants/serviceUrls";
-import { normalizeRelationTransitOverpass } from "./relationTransit";
+import {
+  normalizeRelationTransitOverpass,
+  normalizeWayNodeTransitOverpass,
+} from "./overpassNormalizers";
 
 const OVERPASS_TIMEOUT_MS = 45_000;
 const OVERPASS_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
@@ -74,42 +78,7 @@ export interface OverpassResponse {
 export function normalizeGautrainOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
-  const features: TransitLayerFeatureCollection["features"] = [];
-
-  for (const element of raw.elements) {
-    if (element.type === "relation") {
-      continue;
-    }
-    const stop: TransitStop = {
-      id: `${element.type}/${element.id}`,
-      name: element.tags?.name ?? "Unnamed",
-      network: "Gautrain",
-    };
-
-    if (element.type === "way") {
-      features.push({
-        type: "Feature",
-        properties: stop,
-        geometry: {
-          type: "LineString",
-          coordinates: element.geometry.map(
-            (p) => [p.lon, p.lat] as [number, number],
-          ),
-        },
-      });
-    } else {
-      features.push({
-        type: "Feature",
-        properties: stop,
-        geometry: {
-          type: "Point",
-          coordinates: [element.lon, element.lat] as [number, number],
-        },
-      });
-    }
-  }
-
-  return { type: "FeatureCollection", features };
+  return normalizeWayNodeTransitOverpass(raw, "Gautrain");
 }
 
 /** Normalizes a Gautrain Bus Overpass query's route relations into `LineString` features. */
@@ -117,10 +86,6 @@ export function normalizeGautrainBusOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
   return normalizeRelationTransitOverpass(raw, "Gautrain Bus");
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function backoffDelayMs(attempt: number): number {

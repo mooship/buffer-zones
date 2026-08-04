@@ -464,6 +464,10 @@ export function App() {
           Skip to map information
         </a>
 
+        <h1 className={styles.visuallyHidden}>
+          Stratum: Gauteng spatial legacy map
+        </h1>
+
         <main id="map-information" tabIndex={-1}>
           {hydrated ? (
             <Suspense
@@ -621,6 +625,8 @@ export function App() {
                 id={`panel-view-${panelView}`}
                 role="tabpanel"
                 aria-labelledby={`panel-tab-${panelView}`}
+                // biome-ignore lint/a11y/noNoninteractiveTabindex: WAI-ARIA APG recommends tabindex=0 on a tabpanel so keyboard users can reach panels (like Story) whose content has no focusable element of its own
+                tabIndex={0}
               >
                 {panelViewContent}
               </div>

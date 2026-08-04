@@ -2,6 +2,7 @@ import type { ThemePreference } from "@stratum/react";
 import { Settings, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type Basemap, getBasemapDefinition } from "../../constants/basemaps";
+import { useDismissableOverlay } from "../../hooks/useDismissableOverlay";
 import { BasemapToggle } from "../BasemapToggle/BasemapToggle";
 import { IconButton } from "../IconButton/IconButton";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
@@ -27,6 +28,7 @@ export function SettingsMenu({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const onOpenChangeRef = useRef(onOpenChange);
 
   useEffect(() => {
@@ -37,32 +39,15 @@ export function SettingsMenu({
     setOpen(value);
     onOpenChangeRef.current?.(value);
   }, []);
+  const close = useCallback(() => updateOpen(false), [updateOpen]);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    function handlePointerDown(event: MouseEvent) {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        updateOpen(false);
-      }
-    }
-
-    function handleKeyDown(event: globalThis.KeyboardEvent) {
-      if (event.key === "Escape") {
-        updateOpen(false);
-        triggerRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open, updateOpen]);
+  useDismissableOverlay({
+    open,
+    onClose: close,
+    containerRef,
+    triggerRef,
+    initialFocusRef: titleRef,
+  });
 
   return (
     <div
@@ -91,7 +76,12 @@ export function SettingsMenu({
           data-testid="settings-menu-content"
           data-e2e="settings-menu-content"
         >
-          <h2 id="map-settings-menu-title" className={styles.title}>
+          <h2
+            id="map-settings-menu-title"
+            className={styles.title}
+            ref={titleRef}
+            tabIndex={-1}
+          >
             Map settings
           </h2>
           <BasemapToggle basemap={basemap} onChange={onBasemapChange} />

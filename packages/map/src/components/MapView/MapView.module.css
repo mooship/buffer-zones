@@ -14,6 +14,16 @@
 }
 
 /*
+ * Selectable choropleth features get `tabindex="0"` so they're keyboard
+ * operable (see bindSelectableFeatureInteractions in MapView.tsx), but
+ * Leaflet's SVG renderer gives them no default focus styling of their own.
+ */
+:global(.leaflet-interactive:focus-visible) {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
+/*
  * Combined OSM + basemap-provider attribution text can run long enough to
  * span most of the viewport width and collide with the bottom-left scale
  * control on narrow screens. Cap its width and let it wrap onto a second

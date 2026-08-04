@@ -1,4 +1,4 @@
-import { readFile, stat } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { METROS, type TransitLayerFeatureCollection } from "@stratum/app";
@@ -27,6 +27,7 @@ import {
   normalizeTshwaneBusOverpass,
 } from "../adapters/tshwaneBus";
 import { getMetroBbox, getSharedTransitBbox } from "../constants/metroBbox";
+import { pathExists } from "../fsUtils";
 import type { PipelineSource, RegionPipelineConfig } from "../pipelineSource";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -36,15 +37,6 @@ const REGION_ID = "gauteng";
 
 const gautengMetros = METROS.filter((metro) => metro.regionId === REGION_ID);
 const gautengMetroIds = gautengMetros.map((metro) => metro.id);
-
-async function pathExists(path: string): Promise<boolean> {
-  try {
-    await stat(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 async function readExistingTransitLayer(
   layerName: string,
@@ -65,7 +57,9 @@ async function readExistingTransitLayer(
       if (Array.isArray(parsed.features) && parsed.features.length > 0) {
         return parsed;
       }
-    } catch {}
+    } catch (error) {
+      console.warn("Failed to read fallback candidate", filePath, error);
+    }
   }
 
   return null;
@@ -81,44 +75,71 @@ function mergeFeatureCollections(
   return { type: "FeatureCollection", features };
 }
 
-async function fetchRapidRail(): Promise<TransitLayerFeatureCollection> {
-  const bbox = getSharedTransitBbox(gautengMetroIds);
+interface FetchWithPublishedFallbackOptions {
+  /** Human-readable name used in log/error messages (e.g. "Gautrain rail"). */
+  sourceName: string;
+  /** Basename `readExistingTransitLayer` looks up (e.g. `"rapid-rail"`). */
+  fallbackLayerName: string;
+  fetch: () => Promise<TransitLayerFeatureCollection>;
+  /**
+   * Transforms the raw fallback `FeatureCollection` into the final result,
+   * e.g. filtering a merged fallback file down to just this source's
+   * features. Defaults to using the fallback as-is.
+   */
+  recoverFromFallback?: (
+    fallback: TransitLayerFeatureCollection,
+  ) => TransitLayerFeatureCollection;
+}
+
+/**
+ * Runs `fetch`, falling back to the last published output for
+ * `fallbackLayerName` if it throws, so a single unreachable/rate-limited
+ * source doesn't fail the whole pipeline run.
+ * @throws If `fetch` fails and no usable fallback output exists.
+ */
+async function fetchWithPublishedFallback({
+  sourceName,
+  fallbackLayerName,
+  fetch,
+  recoverFromFallback = (fallback) => fallback,
+}: FetchWithPublishedFallbackOptions): Promise<TransitLayerFeatureCollection> {
   try {
-    const raw = await fetchGautrainRail(bbox);
-    return normalizeGautrainOverpass(raw);
+    return await fetch();
   } catch (error) {
     console.error(
-      "Skipping Gautrain rail due to fetch failure, falling back to last published output",
+      `Skipping ${sourceName} due to fetch failure, falling back to last published output`,
       error,
     );
-    const fallback = await readExistingTransitLayer("rapid-rail");
+    const fallback = await readExistingTransitLayer(fallbackLayerName);
     if (!fallback) {
       throw new Error(
-        "Failed to fetch Gautrain rail and no fallback output exists",
+        `Failed to fetch ${sourceName} and no fallback output exists`,
       );
     }
-    return fallback;
+    const recovered = recoverFromFallback(fallback);
+    if (recovered.features.length === 0) {
+      throw new Error(`Failed to recover ${sourceName} from fallback output`);
+    }
+    return recovered;
   }
+}
+
+async function fetchRapidRail(): Promise<TransitLayerFeatureCollection> {
+  const bbox = getSharedTransitBbox(gautengMetroIds);
+  return fetchWithPublishedFallback({
+    sourceName: "Gautrain rail",
+    fallbackLayerName: "rapid-rail",
+    fetch: async () => normalizeGautrainOverpass(await fetchGautrainRail(bbox)),
+  });
 }
 
 async function fetchCommuterRail(): Promise<TransitLayerFeatureCollection> {
   const bbox = getSharedTransitBbox(gautengMetroIds);
-  try {
-    const raw = await fetchPrasaRail(bbox);
-    return normalizePrasaOverpass(raw);
-  } catch (error) {
-    console.error(
-      "Skipping PRASA rail due to fetch failure, falling back to last published output",
-      error,
-    );
-    const fallback = await readExistingTransitLayer("commuter-rail");
-    if (!fallback) {
-      throw new Error(
-        "Failed to fetch PRASA rail and no fallback output exists",
-      );
-    }
-    return fallback;
-  }
+  return fetchWithPublishedFallback({
+    sourceName: "PRASA rail",
+    fallbackLayerName: "commuter-rail",
+    fetch: async () => normalizePrasaOverpass(await fetchPrasaRail(bbox)),
+  });
 }
 
 async function fetchBusRapidTransit(): Promise<TransitLayerFeatureCollection> {
@@ -140,33 +161,22 @@ async function fetchBusRapidTransit(): Promise<TransitLayerFeatureCollection> {
 
 async function fetchGautrainBus(): Promise<TransitLayerFeatureCollection> {
   const bbox = getSharedTransitBbox(gautengMetroIds);
-  try {
-    const raw = await fetchGautrainBusRoutes(bbox);
-    return normalizeGautrainBusOverpass(raw);
-  } catch (error) {
-    console.error(
-      "Skipping Gautrain Bus due to fetch failure, falling back to last published output",
-      error,
-    );
-    const fallback = await readExistingTransitLayer("bus");
-    if (!fallback) {
-      throw new Error(
-        "Failed to fetch Gautrain Bus and no fallback output exists",
-      );
-    }
-    const gautrainBus: TransitLayerFeatureCollection = {
+  return fetchWithPublishedFallback({
+    sourceName: "Gautrain Bus",
+    fallbackLayerName: "bus",
+    fetch: async () =>
+      normalizeGautrainBusOverpass(await fetchGautrainBusRoutes(bbox)),
+    // The "bus" fallback file is a merged Gautrain Bus + Tshwane bus layer,
+    // so only the Gautrain Bus features are recoverable from it.
+    recoverFromFallback: (fallback) => ({
       type: "FeatureCollection",
       features: fallback.features.filter(
         (feature) =>
           (feature.properties as { network?: unknown } | null)?.network ===
           "Gautrain Bus",
       ),
-    };
-    if (gautrainBus.features.length === 0) {
-      throw new Error("Failed to recover Gautrain Bus from fallback output");
-    }
-    return gautrainBus;
-  }
+    }),
+  });
 }
 
 async function fetchBus(): Promise<TransitLayerFeatureCollection> {

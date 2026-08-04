@@ -530,6 +530,59 @@ describe("MapView", () => {
     expect(mapMocks.featureLayers[0]?.openPopup).toHaveBeenCalledTimes(1);
   });
 
+  it("marks the selected feature's element with aria-current, moving it when selection changes", () => {
+    const twoAreas = [
+      {
+        type: "Feature",
+        properties: { id: "A", name: "Mamelodi", commuteMinutes: 10 },
+        geometry: null,
+      },
+      {
+        type: "Feature",
+        properties: { id: "B", name: "Soweto", commuteMinutes: 20 },
+        geometry: null,
+      },
+    ] as never;
+
+    const { rerender } = render(
+      withDomain(
+        <MapView
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={twoAreas}
+          visibleLayerIds={["areas"]}
+          selectedFeatureId="A"
+          renderFeaturePopup={testRenderFeaturePopup}
+        />,
+      ),
+    );
+
+    expect(
+      mapMocks.featureLayers[0]?.__element.getAttribute("aria-current"),
+    ).toBe("true");
+    expect(
+      mapMocks.featureLayers[1]?.__element.getAttribute("aria-current"),
+    ).toBeNull();
+
+    rerender(
+      withDomain(
+        <MapView
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={twoAreas}
+          visibleLayerIds={["areas"]}
+          selectedFeatureId="B"
+          renderFeaturePopup={testRenderFeaturePopup}
+        />,
+      ),
+    );
+
+    expect(
+      mapMocks.featureLayers[0]?.__element.getAttribute("aria-current"),
+    ).toBeNull();
+    expect(
+      mapMocks.featureLayers[1]?.__element.getAttribute("aria-current"),
+    ).toBe("true");
+  });
+
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
     render(
       withDomain(

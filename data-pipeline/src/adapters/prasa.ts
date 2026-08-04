@@ -1,5 +1,6 @@
-import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
+import type { TransitLayerFeatureCollection } from "@stratum/app";
 import { fetchOverpass, type OverpassResponse } from "./gautrain";
+import { normalizeWayNodeTransitOverpass } from "./overpassNormalizers";
 
 // Rail ways carry operator=PRASA; stations are tagged network=Metrorail Gauteng (verified 2026-07-28).
 function prasaQuery(bbox: string): string {
@@ -23,39 +24,7 @@ out geom;
 export function normalizePrasaOverpass(
   raw: OverpassResponse,
 ): TransitLayerFeatureCollection {
-  const features: TransitLayerFeatureCollection["features"] = [];
-
-  for (const element of raw.elements) {
-    const stop: TransitStop = {
-      id: `${element.type}/${element.id}`,
-      name: element.tags?.name ?? "Unnamed",
-      network: "PRASA",
-    };
-
-    if (element.type === "way") {
-      features.push({
-        type: "Feature",
-        properties: stop,
-        geometry: {
-          type: "LineString",
-          coordinates: element.geometry.map(
-            (p) => [p.lon, p.lat] as [number, number],
-          ),
-        },
-      });
-    } else if (element.type === "node") {
-      features.push({
-        type: "Feature",
-        properties: stop,
-        geometry: {
-          type: "Point",
-          coordinates: [element.lon, element.lat] as [number, number],
-        },
-      });
-    }
-  }
-
-  return { type: "FeatureCollection", features };
+  return normalizeWayNodeTransitOverpass(raw, "PRASA");
 }
 
 /** Fetches PRASA/Metrorail rail ways and station nodes within `bbox` via Overpass. */
