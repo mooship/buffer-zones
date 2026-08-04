@@ -66,6 +66,21 @@ describe("SettingsMenu", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("moves focus to the panel heading when it opens", () => {
+    render(
+      <SettingsMenu
+        basemap="street"
+        onBasemapChange={vi.fn()}
+        themePreference="system"
+        onThemePreferenceChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("settings-menu-trigger"));
+
+    expect(screen.getByText("Map settings")).toHaveFocus();
+  });
+
   it("closes on Escape and restores focus to the trigger", () => {
     render(
       <SettingsMenu

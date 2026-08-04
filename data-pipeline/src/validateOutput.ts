@@ -1,8 +1,8 @@
-import { stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { REGIONS } from "@stratum/app";
 import { isDirectExecution } from "./cliEntry";
+import { pathExists } from "./fsUtils";
 import { validateOutputDirectory } from "./outputManifest";
 import type { RegionPipelineConfig } from "./pipelineSource";
 import { getRegionPipelineConfig } from "./regionPipelineConfigs";
@@ -10,15 +10,6 @@ import { getRegionPipelineConfig } from "./regionPipelineConfigs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 /** Root directory every region's output is written under and validated from. */
 export const OUTPUT_ROOT = resolve(__dirname, "../../packages/web/public/data");
-
-async function pathExists(path: string): Promise<boolean> {
-  try {
-    await stat(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 /**
  * Validates one region's output directory, logging every issue found.

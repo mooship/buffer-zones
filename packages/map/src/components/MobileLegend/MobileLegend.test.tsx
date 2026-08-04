@@ -58,6 +58,23 @@ describe("MobileLegend", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("moves focus to the panel heading when it opens", () => {
+    render(
+      withDomain(
+        <MobileLegend
+          visibleLayerIds={["areas"]}
+          suppressed={false}
+          panelOpen={false}
+          panelExpanded={false}
+        />,
+      ),
+    );
+
+    fireEvent.click(screen.getByTestId("mobile-legend-trigger"));
+
+    expect(screen.getByText("Map legend")).toHaveFocus();
+  });
+
   it("closes on Escape and restores focus to the trigger", () => {
     render(
       withDomain(

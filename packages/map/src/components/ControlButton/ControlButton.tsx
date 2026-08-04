@@ -10,6 +10,12 @@ export type ControlButtonVariant = "surface" | "embedded";
 export interface ControlButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
   children: ReactNode;
+  /**
+   * Sets `aria-label`, which overrides any visible text in `children` as the
+   * button's accessible name. Pass this only for icon-only buttons; for a
+   * button with visible text content, omit it and let that text stand as
+   * the accessible name instead.
+   */
   label?: string;
   shape?: ControlButtonShape;
   variant?: ControlButtonVariant;

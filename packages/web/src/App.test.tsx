@@ -107,12 +107,13 @@ describe("App", () => {
       writable: true,
     });
   });
-  it("provides skip navigation and a main landmark", async () => {
+  it("provides skip navigation, a page heading, and a main landmark", async () => {
     render(<App />);
 
     expect(
       screen.getByRole("link", { name: /skip to map information/i }),
     ).toHaveAttribute("href", "#map-information");
+    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     expect(screen.getByRole("main")).toHaveAttribute("id", "map-information");
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
@@ -193,6 +194,10 @@ describe("App", () => {
     expect(
       screen.queryByRole("checkbox", { name: "Modelled car time" }),
     ).not.toBeInTheDocument();
+    expect(screen.getByTestId("panel-viewport")).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
   });
 
   it("moves tab focus with arrow keys and activates the focused tab", async () => {

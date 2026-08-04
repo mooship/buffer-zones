@@ -1,5 +1,6 @@
 import { BookOpen, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDismissableOverlay } from "../../hooks/useDismissableOverlay";
 import { IconButton } from "../IconButton/IconButton";
 import { Legend } from "../Legend/Legend";
 import styles from "./MobileLegend.module.css";
@@ -25,6 +26,7 @@ export function MobileLegend({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     if (!suppressed) {
@@ -33,31 +35,15 @@ export function MobileLegend({
     setOpen(false);
   }, [suppressed]);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
+  const close = useCallback(() => setOpen(false), []);
 
-    function handlePointerDown(event: MouseEvent) {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-        triggerRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
+  useDismissableOverlay({
+    open,
+    onClose: close,
+    containerRef,
+    triggerRef,
+    initialFocusRef: titleRef,
+  });
 
   if (suppressed) {
     return null;
@@ -90,7 +76,9 @@ export function MobileLegend({
           data-testid="mobile-legend-content"
           data-e2e="mobile-legend-content"
         >
-          <h2 className={styles.title}>Map legend</h2>
+          <h2 className={styles.title} ref={titleRef} tabIndex={-1}>
+            Map legend
+          </h2>
           <Legend mode="active" visibleLayerIds={visibleLayerIds} compact />
         </section>
       ) : null}

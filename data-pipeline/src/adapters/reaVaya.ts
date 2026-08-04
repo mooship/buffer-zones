@@ -1,6 +1,6 @@
 import type { TransitLayerFeatureCollection } from "@stratum/app";
 import { fetchOverpass, type OverpassResponse } from "./gautrain";
-import { normalizeRelationTransitOverpass } from "./relationTransit";
+import { normalizeRelationTransitOverpass } from "./overpassNormalizers";
 
 // No open-data portal found (unlike A Re Yeng's Tshwane e-GIS MapServer), so
 // Overpass-only. Rea Vaya tags network/route on the route RELATION, not on

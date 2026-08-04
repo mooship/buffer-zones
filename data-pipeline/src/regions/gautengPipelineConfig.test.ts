@@ -367,13 +367,21 @@ describe("readExistingTransitLayer fallback file resolution", () => {
     expect(result).toEqual(fallback);
   });
 
-  it("skips a candidate with corrupt JSON and falls through to no-fallback", async () => {
+  it("skips a candidate with corrupt JSON, warning about it, and falls through to no-fallback", async () => {
     statMock.mockResolvedValue(undefined);
     readFileMock.mockResolvedValue("{not json");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     await expect(findSource("rapid-rail").fetch()).rejects.toThrow(
       "Failed to fetch Gautrain rail and no fallback output exists",
     );
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Failed to read fallback candidate"),
+      expect.any(String),
+      expect.any(Error),
+    );
+    warnSpy.mockRestore();
   });
 
   it("skips a candidate whose parsed content has no features and falls through", async () => {

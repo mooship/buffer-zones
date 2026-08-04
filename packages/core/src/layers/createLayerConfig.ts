@@ -8,7 +8,15 @@ import type {
 } from "../types/layer";
 import { resolveClassification } from "./classification";
 
-/** Leaflet path configuration for a single layer. */
+/**
+ * Leaflet path configuration for a single layer.
+ * @remarks
+ * Exactly one of `pathOptions`/`styleFn` is populated, never both: a layer
+ * whose style has no data-driven `Classification` resolves to a single
+ * static `pathOptions` object, while a layer with at least one
+ * `Classification` resolves to a `styleFn` so each feature's style is
+ * computed per-feature from its properties.
+ */
 export interface LeafletLayerConfig {
   pathOptions?: PathOptions & { noClip?: boolean; radius?: number };
   styleFn?: (
@@ -38,6 +46,10 @@ function bucketsToClassification(
   };
 }
 
+/**
+ * Resolves a per-feature style value from a `Classification` when one is
+ * configured, falling back to the layer's static style value otherwise.
+ */
 function resolveStyleValue<T>(
   classification: Classification<T> | undefined,
   properties: Record<string, unknown> | null | undefined,

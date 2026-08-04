@@ -1,12 +1,7 @@
 import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
-import type {
-  Feature,
-  FeatureCollection,
-  Geometry,
-  LineString,
-  MultiLineString,
-} from "geojson";
+import type { Feature, FeatureCollection } from "geojson";
 import { fetchOverpass, type OverpassResponse } from "./gautrain";
+import { normalizeLineStringTransitFeatureCollection } from "./lineStringTransit";
 
 // Source: City of Tshwane Open Data / e-GIS ArcGIS Server, "Other_WS/BRT_A_Re_Yeng"
 // MapServer. Verified reachable and returning real route geometry via GeoJSON export
@@ -78,48 +73,14 @@ function resolveName(props: RawAReYengProperties): string {
 export function normalizeAReYeng(
   raw: FeatureCollection,
 ): TransitLayerFeatureCollection {
-  const features: TransitLayerFeatureCollection["features"] = [];
-
-  for (const feature of raw.features) {
-    const props = (feature.properties ?? {}) as RawAReYengProperties;
-    const stop: TransitStop = {
+  return normalizeLineStringTransitFeatureCollection(
+    raw,
+    (props: RawAReYengProperties) => ({
       id: resolveId(props),
       name: resolveName(props),
-      network: "A Re Yeng",
-    };
-
-    const geometry = feature.geometry as Geometry;
-
-    if (geometry.type === "MultiLineString") {
-      // Split each part of a MultiLineString into its own LineString feature rather
-      // than concatenating coordinates, which would draw phantom segments between
-      // disjoint branches. All parts share the same route id.
-      for (const part of (geometry as MultiLineString).coordinates) {
-        features.push({
-          type: "Feature",
-          properties: stop,
-          geometry: {
-            type: "LineString",
-            coordinates: part.map((p) => [p[0], p[1]] as [number, number]),
-          },
-        });
-      }
-    } else if (geometry.type === "LineString") {
-      const line = geometry as LineString;
-      features.push({
-        type: "Feature",
-        properties: stop,
-        geometry: {
-          type: "LineString",
-          coordinates: line.coordinates.map(
-            (p) => [p[0], p[1]] as [number, number],
-          ),
-        },
-      } as Feature<LineString, TransitStop>);
-    }
-  }
-
-  return { type: "FeatureCollection", features };
+    }),
+    "A Re Yeng",
+  );
 }
 
 /** Normalizes the Overpass fallback query's busway/bus-route ways into `LineString` features. */

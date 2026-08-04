@@ -97,6 +97,36 @@ describe("useThemePreference theme-color meta sync", () => {
     expect(result.current).toBe("dark");
   });
 
+  it("persists the preference to localStorage and removes it for system", async () => {
+    const { setThemePreference, initTheme } = await importFreshModule();
+    initTheme({ storageKey: "test-theme", colors: TEST_COLORS });
+
+    setThemePreference("dark");
+    expect(localStorage.getItem("test-theme")).toBe("dark");
+
+    setThemePreference("light");
+    expect(localStorage.getItem("test-theme")).toBe("light");
+
+    setThemePreference("system");
+    expect(localStorage.getItem("test-theme")).toBeNull();
+  });
+
+  it("notifies already-mounted subscribers when initTheme re-reads a changed stored preference", async () => {
+    const { initTheme, useThemePreference } = await importFreshModule();
+    const { act, renderHook } = await import("@testing-library/react");
+    initTheme({ storageKey: "test-theme", colors: TEST_COLORS });
+
+    const { result } = renderHook(() => useThemePreference());
+    expect(result.current).toBe("system");
+
+    localStorage.setItem("test-theme", "dark");
+    act(() => {
+      initTheme({ storageKey: "test-theme", colors: TEST_COLORS });
+    });
+
+    expect(result.current).toBe("dark");
+  });
+
   it("uses fallback colors when initTheme has not been called", async () => {
     const { setThemePreference } = await importFreshModule();
     // No initTheme call — should use fallback

@@ -24,7 +24,9 @@ let config: ThemeConfig = DEFAULT_CONFIG;
  * @remarks Call once at app bootstrap before any component renders. Re-reads
  *   the stored preference under the new `storageKey`, since the module's
  *   initial read (at import time, before `initTheme` can run) used whatever
- *   config was active then — typically the built-in default.
+ *   config was active then — typically the built-in default. Notifies any
+ *   already-subscribed components in case this runs after mount (e.g. HMR),
+ *   so the store never holds a stale preference silently.
  * @example
  * initTheme({ storageKey: "stratum-theme", colors: THEME_COLOR });
  */
@@ -33,6 +35,9 @@ export function initTheme(themeConfig: ThemeConfig): void {
   if (typeof window !== "undefined") {
     currentPreference = readStoredPreference();
     applyThemeAttribute(currentPreference);
+    for (const listener of listeners) {
+      listener();
+    }
   }
 }
 

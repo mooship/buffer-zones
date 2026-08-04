@@ -1,10 +1,7 @@
-import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
-import type {
-  FeatureCollection,
-  Geometry,
-  LineString,
-  MultiLineString,
-} from "geojson";
+import type { TransitLayerFeatureCollection } from "@stratum/app";
+import type { FeatureCollection } from "geojson";
+import { sleep } from "../asyncUtils";
+import { normalizeLineStringTransitFeatureCollection } from "./lineStringTransit";
 
 const EKURHULENI_IRPTN_URL =
   "https://gis.ekurhuleni.gov.za/arcgis/rest/services/Ekurhuleni/Ekurhuleni_Transportation_Map_v1/MapServer/2/query";
@@ -20,10 +17,6 @@ interface RawIrptnProperties {
 
 interface ArcGisGeoJsonResponse extends FeatureCollection {
   exceededTransferLimit?: boolean;
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function createQueryUrl(resultOffset: number): string {
@@ -72,46 +65,14 @@ function resolveName(props: RawIrptnProperties): string {
 export function normalizeEkurhuleniIrptn(
   raw: FeatureCollection,
 ): TransitLayerFeatureCollection {
-  const features: TransitLayerFeatureCollection["features"] = [];
-
-  for (const feature of raw.features) {
-    const props = (feature.properties ?? {}) as RawIrptnProperties;
-    const stop: TransitStop = {
+  return normalizeLineStringTransitFeatureCollection(
+    raw,
+    (props: RawIrptnProperties) => ({
       id: resolveId(props),
       name: resolveName(props),
-      network: "Ekurhuleni IRPTN",
-    };
-    const geometry = feature.geometry as Geometry;
-
-    if (geometry.type === "MultiLineString") {
-      for (const part of (geometry as MultiLineString).coordinates) {
-        features.push({
-          type: "Feature",
-          properties: stop,
-          geometry: {
-            type: "LineString",
-            coordinates: part.map((p) => [p[0], p[1]] as [number, number]),
-          },
-        });
-      }
-    }
-
-    if (geometry.type === "LineString") {
-      const line = geometry as LineString;
-      features.push({
-        type: "Feature",
-        properties: stop,
-        geometry: {
-          type: "LineString",
-          coordinates: line.coordinates.map(
-            (p) => [p[0], p[1]] as [number, number],
-          ),
-        },
-      });
-    }
-  }
-
-  return { type: "FeatureCollection", features };
+    }),
+    "Ekurhuleni IRPTN",
+  );
 }
 
 /**

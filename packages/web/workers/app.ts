@@ -8,6 +8,12 @@ const requestHandler = createRequestHandler(
   import.meta.env?.MODE ?? "production",
 );
 
+/**
+ * The Cloudflare Workers entry point. Permanently redirects requests for the
+ * app's old hostname to its current one, then delegates everything else to
+ * the built React Router server bundle. There are no Cloudflare bindings to
+ * thread through, so the request is passed on with no `RouterContextProvider`.
+ */
 export default {
   fetch(request: Request) {
     const url = new URL(request.url);
