@@ -95,12 +95,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta
           name="theme-color"
-          content="#edeff2"
+          content="#f5f1e6"
           media="(prefers-color-scheme: light)"
         />
         <meta
           name="theme-color"
-          content="#23262c"
+          content="#15110b"
           media="(prefers-color-scheme: dark)"
         />
         <script src="/theme-bootstrap.js" />

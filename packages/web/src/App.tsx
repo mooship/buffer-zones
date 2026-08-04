@@ -18,6 +18,7 @@ import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
 import {
+  type AnimationEvent,
   type CSSProperties,
   lazy,
   type PointerEvent,
@@ -81,7 +82,12 @@ function pruneStalePointerSamples(samples: PointerSample[], now: number) {
  * info panel (layer toggles) and its settings menu.
  * @remarks Owns the mobile bottom-sheet drag/swipe gesture state (pointer
  *   sampling, velocity-based snap projection) in addition to layout state
- *   from `useMapUiStore`.
+ *   from `useMapUiStore`. Swiping down from the sheet's medium height closes
+ *   it entirely: `closePanel` plays an exit animation and `finishClose`
+ *   (unmounting the panel from the a11y tree) fires from that animation's
+ *   `animationend`, so the CSS duration in App.module.css stays the single
+ *   source of truth — except under `prefers-reduced-motion`/desktop, where
+ *   no animation plays and `closePanel` calls `finishClose` immediately.
  */
 export function App() {
   const [hydrated, setHydrated] = useState(false);
@@ -94,6 +100,7 @@ export function App() {
   const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
   const [mobileSheetDragOffset, setMobileSheetDragOffset] = useState(0);
   const [mobileSheetDragging, setMobileSheetDragging] = useState(false);
+  const [mobileSheetClosing, setMobileSheetClosing] = useState(false);
   const [focusLocationTarget, setFocusLocationTarget] =
     useState<FocusLocationTarget | null>(null);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
@@ -198,10 +205,36 @@ export function App() {
     });
   }
 
+  function finishClose() {
+    setMobileSheetClosing(false);
+    setPanelOpen(false);
+    requestAnimationFrame(() => panelTriggerRef.current?.focus());
+  }
+
+  function closePanel() {
+    const playsExitAnimation =
+      !isDesktopViewport &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!playsExitAnimation) {
+      finishClose();
+      return;
+    }
+    setMobileSheetClosing(true);
+  }
+
+  function handleSheetAnimationEnd(event: AnimationEvent<HTMLElement>) {
+    // CSS Modules hashes @keyframes names, so animationName can't be matched
+    // against a literal here; requiring the event to originate on the panel
+    // itself (not bubble up from a child like .panelViewport's own entrance
+    // animation) is enough, since .panel only ever animates while closing.
+    if (mobileSheetClosing && event.target === event.currentTarget) {
+      finishClose();
+    }
+  }
+
   function handlePanelToggle() {
     if (panelOpen) {
-      setPanelOpen(false);
-      requestAnimationFrame(() => panelTriggerRef.current?.focus());
+      closePanel();
       return;
     }
     setMobilePanelExpanded(false);
@@ -303,7 +336,13 @@ export function App() {
         return;
       }
       suppressNextHandleClickRef.current = true;
-      setMobilePanelExpanded(projectedDelta < 0);
+      if (projectedDelta < 0) {
+        setMobilePanelExpanded(true);
+      } else if (mobilePanelExpanded) {
+        setMobilePanelExpanded(false);
+      } else {
+        closePanel();
+      }
       cleanup();
     }
 
@@ -423,8 +462,10 @@ export function App() {
           data-panel-size={mobilePanelExpanded ? "full" : "medium"}
           data-panel-dragging={mobileSheetDragging ? "true" : "false"}
           data-panel-drag-direction={mobileSheetDragDirection}
+          data-panel-closing={mobileSheetClosing ? "true" : "false"}
           style={mobilePanelDragStyle}
           hidden={!panelOpen}
+          onAnimationEnd={handleSheetAnimationEnd}
         >
           <button
             type="button"
@@ -444,7 +485,11 @@ export function App() {
           >
             <span className={styles.sheetHandle} aria-hidden="true" />
           </button>
-          <div className={styles.panelViewport} data-testid="panel-viewport">
+          <div
+            className={styles.panelViewport}
+            data-testid="panel-viewport"
+            data-e2e="panel-viewport"
+          >
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Layers</h2>
               <LayerToggles

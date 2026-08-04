@@ -110,6 +110,11 @@ test.describe("responsive panel", () => {
     const handle = page.getByTestId(E2E.panelSheetHandle);
 
     async function dragHandleBy(deltaY: number) {
+      // Waits out the handle's own entrance/settle animation (hover()'s
+      // actionability checks include an element-stable wait) so the
+      // subsequent boundingBox() read reflects its resting position, not a
+      // mid-animation frame the synthetic drag below would then miss.
+      await handle.hover();
       const box = await handle.boundingBox();
       if (!box) {
         throw new Error("Panel sheet handle was not rendered");
