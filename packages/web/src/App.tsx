@@ -445,16 +445,14 @@ export function App() {
             <span className={styles.sheetHandle} aria-hidden="true" />
           </button>
           <div className={styles.panelViewport} data-testid="panel-viewport">
-            <div className={styles.panelContent}>
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Layers</h2>
-                <LayerToggles
-                  visibleLayerIds={visibleLayerIds}
-                  onToggle={toggleLayer}
-                  failedLayerIds={failedLayerIds}
-                />
-              </section>
-            </div>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>Layers</h2>
+              <LayerToggles
+                visibleLayerIds={visibleLayerIds}
+                onToggle={toggleLayer}
+                failedLayerIds={failedLayerIds}
+              />
+            </section>
           </div>
         </aside>
 
