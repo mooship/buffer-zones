@@ -369,11 +369,82 @@ describe("App", () => {
       "true",
     );
 
+    fireEvent.animationEnd(panel);
+
     await waitFor(() => expect(panel).not.toBeVisible());
     expect(screen.getByRole("button", { name: /explore/i })).toHaveAttribute(
       "aria-expanded",
       "false",
     );
+  });
+
+  it("ignores an animationend bubbling up from inside the panel while closing", async () => {
+    const { panel, handle } = await renderMobilePanel();
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 13,
+      clientY: 140,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 13,
+      clientY: 210,
+    });
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 13,
+      clientY: 230,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-closing", "true");
+
+    fireEvent.animationEnd(screen.getByTestId("panel-viewport"));
+
+    expect(panel).toBeVisible();
+    expect(panel).toHaveAttribute("data-panel-closing", "true");
+
+    fireEvent.animationEnd(panel);
+    await waitFor(() => expect(panel).not.toBeVisible());
+  });
+
+  it("closes the panel immediately under prefers-reduced-motion, skipping the exit animation", async () => {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn((query: string) => ({
+        matches: query.includes("prefers-reduced-motion"),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    );
+
+    const { panel, handle } = await renderMobilePanel();
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 12,
+      clientY: 140,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 12,
+      clientY: 210,
+    });
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 12,
+      clientY: 230,
+    });
+
+    expect(panel).not.toBeVisible();
+    expect(screen.getByRole("button", { name: /explore/i })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+
+    vi.unstubAllGlobals();
   });
 
   it("suppresses the synthetic click that follows a drag past the threshold", async () => {

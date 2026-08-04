@@ -18,6 +18,7 @@ import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
 import {
+  type AnimationEvent,
   type CSSProperties,
   lazy,
   type PointerEvent,
@@ -49,7 +50,6 @@ const SHEET_DRAG_THRESHOLD_PX = 36;
 const SHEET_DRAG_PREVIEW_LIMIT_PX = 96;
 const SHEET_PROJECTION_DECELERATION = 0.992;
 const SHEET_VELOCITY_SAMPLE_WINDOW_MS = 140;
-const SHEET_CLOSE_ANIMATION_MS = 220;
 
 interface FocusLocationTarget {
   token: number;
@@ -83,9 +83,11 @@ function pruneStalePointerSamples(samples: PointerSample[], now: number) {
  * @remarks Owns the mobile bottom-sheet drag/swipe gesture state (pointer
  *   sampling, velocity-based snap projection) in addition to layout state
  *   from `useMapUiStore`. Swiping down from the sheet's medium height closes
- *   it entirely, playing an exit animation (`closePanel`) before the panel
- *   actually unmounts from the a11y tree, rather than toggling `hidden`
- *   instantly.
+ *   it entirely: `closePanel` plays an exit animation and `finishClose`
+ *   (unmounting the panel from the a11y tree) fires from that animation's
+ *   `animationend`, so the CSS duration in App.module.css stays the single
+ *   source of truth — except under `prefers-reduced-motion`/desktop, where
+ *   no animation plays and `closePanel` calls `finishClose` immediately.
  */
 export function App() {
   const [hydrated, setHydrated] = useState(false);
@@ -120,7 +122,6 @@ export function App() {
   const activeSheetPointerIdRef = useRef<number | null>(null);
   const pendingSheetDragOffsetRef = useRef(0);
   const sheetDragFrameRef = useRef<number | null>(null);
-  const sheetCloseTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     setHydrated(true);
@@ -180,9 +181,6 @@ export function App() {
       if (sheetDragFrameRef.current !== null) {
         cancelAnimationFrame(sheetDragFrameRef.current);
       }
-      if (sheetCloseTimeoutRef.current !== null) {
-        window.clearTimeout(sheetCloseTimeoutRef.current);
-      }
     };
   }, []);
 
@@ -207,23 +205,31 @@ export function App() {
     });
   }
 
+  function finishClose() {
+    setMobileSheetClosing(false);
+    setPanelOpen(false);
+    requestAnimationFrame(() => panelTriggerRef.current?.focus());
+  }
+
   function closePanel() {
-    if (sheetCloseTimeoutRef.current !== null) {
-      window.clearTimeout(sheetCloseTimeoutRef.current);
-      sheetCloseTimeoutRef.current = null;
-    }
-    if (isDesktopViewport) {
-      setPanelOpen(false);
-      requestAnimationFrame(() => panelTriggerRef.current?.focus());
+    const playsExitAnimation =
+      !isDesktopViewport &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!playsExitAnimation) {
+      finishClose();
       return;
     }
     setMobileSheetClosing(true);
-    sheetCloseTimeoutRef.current = window.setTimeout(() => {
-      sheetCloseTimeoutRef.current = null;
-      setMobileSheetClosing(false);
-      setPanelOpen(false);
-      requestAnimationFrame(() => panelTriggerRef.current?.focus());
-    }, SHEET_CLOSE_ANIMATION_MS);
+  }
+
+  function handleSheetAnimationEnd(event: AnimationEvent<HTMLElement>) {
+    // CSS Modules hashes @keyframes names, so animationName can't be matched
+    // against a literal here; requiring the event to originate on the panel
+    // itself (not bubble up from a child like .panelViewport's own entrance
+    // animation) is enough, since .panel only ever animates while closing.
+    if (mobileSheetClosing && event.target === event.currentTarget) {
+      finishClose();
+    }
   }
 
   function handlePanelToggle() {
@@ -459,6 +465,7 @@ export function App() {
           data-panel-closing={mobileSheetClosing ? "true" : "false"}
           style={mobilePanelDragStyle}
           hidden={!panelOpen}
+          onAnimationEnd={handleSheetAnimationEnd}
         >
           <button
             type="button"
