@@ -37,7 +37,7 @@
   border: 1px solid var(--color-map-label-outline);
   border-radius: var(--shape-small);
   background: var(--color-map-label-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--elevation-1);
   color: var(--color-map-label-text);
   font-family: var(--font-mono);
   font-size: 10px;

@@ -48,14 +48,14 @@
   gap: 0.25rem 0.625rem;
   padding: 0.5rem 0.625rem;
   min-height: 48px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--shape-small);
   cursor: pointer;
   font-size: 0.8125rem;
   transition: background-color 0.15s ease;
 }
 
 .row:hover {
-  background: color-mix(in srgb, var(--color-surface-hover) 52%, transparent);
+  background: var(--state-hover);
 }
 
 .row[data-unavailable="true"] {
@@ -74,7 +74,7 @@
   width: 2.25rem;
   height: 1.25rem;
   margin: 0;
-  border-radius: 999px;
+  border-radius: var(--shape-full);
   background: color-mix(in srgb, var(--color-line) 42%, transparent);
   cursor: pointer;
   transition: background-color 0.15s ease;
@@ -87,22 +87,18 @@
   left: 2px;
   width: 1rem;
   height: 1rem;
-  border-radius: 999px;
+  border-radius: var(--shape-full);
   background: var(--color-paper);
   transition: transform 0.15s ease;
 }
 
 .checkbox:checked {
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--color-ochre) 82%, var(--color-panel)) 0%,
-    color-mix(in srgb, var(--color-ochre) 62%, var(--color-panel)) 100%
-  );
+  background: var(--color-primary);
 }
 
 .checkbox:checked::before {
   transform: translateX(1rem);
-  background: var(--color-ink);
+  background: var(--color-on-primary);
 }
 
 .checkbox:disabled {
@@ -130,7 +126,7 @@
   white-space: nowrap;
   color: var(--color-muted);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-sm);
+  border-radius: var(--shape-small);
   padding: 0.125rem 0.375rem;
 }
 

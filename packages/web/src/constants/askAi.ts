@@ -8,3 +8,13 @@ export const ASK_AI_ENDPOINT = "/api/ask";
  * one shared constant, so the two limits can't drift apart.
  */
 export const ASK_AI_MAX_MESSAGE_LENGTH = 400;
+
+/**
+ * Starter prompts shown as tappable chips before the first message, so a
+ * new visitor sees example questions rather than a blank composer.
+ */
+export const ASK_AI_SUGGESTED_QUESTIONS: readonly string[] = [
+  "What does the drive-time colour scale mean?",
+  "Which layers can I turn on?",
+  "How is this different from an official map?",
+];

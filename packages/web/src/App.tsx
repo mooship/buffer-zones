@@ -135,26 +135,6 @@ export function App() {
   }, [setPanelOpen]);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      "(prefers-reduced-transparency: reduce)",
-    );
-
-    function applyPreference() {
-      if (mediaQuery.matches) {
-        document.documentElement.dataset.reducedTransparency = "true";
-        return;
-      }
-      delete document.documentElement.dataset.reducedTransparency;
-    }
-
-    applyPreference();
-    mediaQuery.addEventListener("change", applyPreference);
-    return () => {
-      mediaQuery.removeEventListener("change", applyPreference);
-    };
-  }, []);
-
-  useEffect(() => {
     let cancelled = false;
     setDataError(false);
     setTownships([]);
@@ -431,7 +411,7 @@ export function App() {
           ) : null}
         </main>
 
-        <div className={clsx(styles.locationSearchControl, styles.glassPanel)}>
+        <div className={clsx(styles.locationSearchControl, styles.surface)}>
           <LocationSearchControl
             placeholder="Search town, suburb or station"
             onLocationSelect={(location) => {
@@ -473,7 +453,7 @@ export function App() {
 
         <aside
           id="map-controls"
-          className={clsx(styles.panel, styles.glassPanel)}
+          className={clsx(styles.panel, styles.surface)}
           data-testid="panel-container"
           data-e2e="panel-container"
           data-panel-size={mobilePanelExpanded ? "full" : "medium"}
