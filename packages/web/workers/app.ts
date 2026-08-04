@@ -1,6 +1,4 @@
-import { createRequestHandler, RouterContextProvider } from "react-router";
-import type { Env } from "../src/server/env";
-import { envContext } from "../src/server/envContext";
+import { createRequestHandler } from "react-router";
 
 const OLD_HOSTNAME = "buffer-zones.timothybrits.co.za";
 const NEW_HOSTNAME = "stratum.timothybrits.co.za";
@@ -11,14 +9,12 @@ const requestHandler = createRequestHandler(
 );
 
 export default {
-  fetch(request: Request, env: Env) {
+  fetch(request: Request) {
     const url = new URL(request.url);
     if (url.hostname === OLD_HOSTNAME) {
       url.hostname = NEW_HOSTNAME;
       return Response.redirect(url.toString(), 301);
     }
-    const context = new RouterContextProvider();
-    context.set(envContext, env);
-    return requestHandler(request, context);
+    return requestHandler(request);
   },
-} satisfies ExportedHandler<Env>;
+} satisfies ExportedHandler;

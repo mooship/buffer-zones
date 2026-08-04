@@ -19,21 +19,16 @@ function groupSiblings(id: string): string[] {
   return group.layerIds.filter((sibling) => sibling !== id);
 }
 
-/** Which tab of the mobile/desktop info panel is active. */
-export type PanelView = "layers" | "ask";
-
 /** The app's UI state: layer visibility, basemap, panel state, and feature selection. */
 interface MapUiState {
   visibleLayerIds: string[];
   basemap: Basemap;
   panelOpen: boolean;
-  panelView: PanelView;
   titleExpanded: boolean;
   selectedFeatureId: string | null;
   toggleLayer: (id: string) => void;
   setBasemap: (basemap: Basemap) => void;
   setPanelOpen: (open: boolean) => void;
-  setPanelView: (view: PanelView) => void;
   setTitleExpanded: (expanded: boolean) => void;
   setSelectedFeatureId: (id: string | null) => void;
   reset: () => void;
@@ -46,7 +41,6 @@ function createInitialState() {
       .map((layer) => layer.id),
     basemap: "street" as const,
     panelOpen: false,
-    panelView: "layers" as const,
     titleExpanded: false,
     selectedFeatureId: null,
   };
@@ -86,7 +80,6 @@ export const useMapUiStore = create<MapUiState>()((set) => ({
     }),
   setBasemap: (basemap) => set({ basemap }),
   setPanelOpen: (panelOpen) => set({ panelOpen }),
-  setPanelView: (panelView) => set({ panelView }),
   setTitleExpanded: (titleExpanded) => set({ titleExpanded }),
   setSelectedFeatureId: (selectedFeatureId) => set({ selectedFeatureId }),
   reset: () => set(createInitialState()),

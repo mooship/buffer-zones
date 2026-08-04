@@ -10,19 +10,6 @@
   "assets": {
     "directory": "./packages/web/build/client"
   },
-  // Workers AI has no local simulation — `wrangler dev` always proxies it to
-  // the real Cloudflare API, which needs CLOUDFLARE_API_TOKEN and fails in a
-  // non-interactive environment. The Playwright suite never exercises the
-  // Ask AI feature, so this config omits the `ai` binding entirely and is
-  // used only for the e2e preview server (see packages/web's `preview:e2e`
-  // script) — never for an actual deploy.
-  "ratelimits": [
-    {
-      "name": "ASK_AI_RATE_LIMITER",
-      "namespace_id": "1",
-      "simple": { "limit": 8, "period": 60 }
-    }
-  ],
   "observability": {
     "logs": {
       "enabled": true,

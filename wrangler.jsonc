@@ -10,37 +10,6 @@
   "assets": {
     "directory": "./packages/web/build/client"
   },
-  // Workers AI: included on the Workers Free plan, 10,000 Neurons/day at no
-  // charge. No API key/secret needed — access is via this binding only.
-  "ai": {
-    "binding": "AI"
-  },
-  // Workers Rate Limiting bindings (GA, included on Workers Free — no paid
-  // WAF rate limiting rule needed). `namespace_id` is a small integer you
-  // choose yourself, unique per binding in this account, not a resource you
-  // provision separately. Two layers protect the Ask AI feature: caps
-  // requests to 8 per client IP per 60s (ASK_AI_RATE_LIMITER), and a
-  // site-wide 20 per 60s across all clients combined (ASK_AI_GLOBAL_RATE_LIMITER)
-  // so a single sustained abuser — or many distributed ones — can't burn
-  // through the account's shared free-tier Neuron budget and lock the
-  // feature out for everyone else for the rest of the day. See
-  // RATE_LIMIT_RETRY_AFTER_SECONDS, getRateLimitKey, and
-  // GLOBAL_RATE_LIMIT_KEY in packages/web/src/server/askAi.server.ts.
-  // Verify this block's exact shape against
-  // https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
-  // before first deploy, in case the binding config format has moved on.
-  "ratelimits": [
-    {
-      "name": "ASK_AI_RATE_LIMITER",
-      "namespace_id": "1",
-      "simple": { "limit": 8, "period": 60 }
-    },
-    {
-      "name": "ASK_AI_GLOBAL_RATE_LIMITER",
-      "namespace_id": "2",
-      "simple": { "limit": 20, "period": 60 }
-    }
-  ],
   "observability": {
     "logs": {
       "enabled": true,

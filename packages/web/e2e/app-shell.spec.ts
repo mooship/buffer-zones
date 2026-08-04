@@ -39,14 +39,12 @@ test.describe("app shell", () => {
     ).toEqual([]);
   });
 
-  test("shows layer controls in the layers tab and keeps legend toggle available", async ({
+  test("shows layer controls in the panel and keeps legend toggle available", async ({
     page,
   }) => {
     await page.goto("/");
 
     await ensurePanelOpen(page);
-
-    await page.getByTestId(E2E.panelTab.layers).click();
 
     await expect(page.getByTestId(E2E.layerToggle.townships)).toBeChecked();
 

@@ -119,9 +119,8 @@ describe("App map/location callback wiring", () => {
     expect(screen.getByTestId("township-popup")).toHaveTextContent("Mamelodi");
   });
 
-  it("always provides renderFeaturePopup, regardless of which panel tab is open", async () => {
+  it("always provides renderFeaturePopup, regardless of panel open state", async () => {
     useMapUiStore.getState().setPanelOpen(true);
-    useMapUiStore.getState().setPanelView("ask");
 
     render(<App />);
 
