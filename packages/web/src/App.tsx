@@ -60,6 +60,11 @@ const PANEL_LABELS: Record<PanelView, string> = {
   layers: "Layers",
   story: "Story",
 };
+const PANEL_VIEWPORT_PROPS = {
+  className: styles.panelViewport,
+  "data-testid": "panel-viewport",
+  "data-e2e": "panel-viewport",
+} as const;
 
 const MOBILE_BREAKPOINT_PX = 768;
 const SHEET_DRAG_THRESHOLD_PX = 36;
@@ -108,7 +113,12 @@ function PanelViewContent({
   story,
 }: PanelViewContentProps) {
   if (panelView === "story" && story) {
-    return <DomainStory story={story} />;
+    return (
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>{story.title}</h2>
+        <DomainStory story={story} />
+      </section>
+    );
   }
   return (
     <section className={styles.section}>
@@ -431,6 +441,16 @@ export function App() {
     window.addEventListener("pointercancel", cleanup);
   }
 
+  const panelViewContent = (
+    <PanelViewContent
+      panelView={panelView}
+      visibleLayerIds={visibleLayerIds}
+      onToggle={toggleLayer}
+      failedLayerIds={failedLayerIds}
+      story={STORY}
+    />
+  );
+
   return (
     <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
       <div
@@ -597,36 +617,16 @@ export function App() {
                 ))}
               </div>
               <div
+                {...PANEL_VIEWPORT_PROPS}
                 id={`panel-view-${panelView}`}
                 role="tabpanel"
                 aria-labelledby={`panel-tab-${panelView}`}
-                className={styles.panelViewport}
-                data-testid="panel-viewport"
-                data-e2e="panel-viewport"
               >
-                <PanelViewContent
-                  panelView={panelView}
-                  visibleLayerIds={visibleLayerIds}
-                  onToggle={toggleLayer}
-                  failedLayerIds={failedLayerIds}
-                  story={STORY}
-                />
+                {panelViewContent}
               </div>
             </>
           ) : (
-            <div
-              className={styles.panelViewport}
-              data-testid="panel-viewport"
-              data-e2e="panel-viewport"
-            >
-              <PanelViewContent
-                panelView={panelView}
-                visibleLayerIds={visibleLayerIds}
-                onToggle={toggleLayer}
-                failedLayerIds={failedLayerIds}
-                story={STORY}
-              />
-            </div>
+            <div {...PANEL_VIEWPORT_PROPS}>{panelViewContent}</div>
           )}
         </aside>
 
