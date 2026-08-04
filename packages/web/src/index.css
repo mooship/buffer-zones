@@ -138,14 +138,18 @@ html,
 body,
 #root {
   height: 100%;
+  /* The app is a single fixed-height view with no page-level scroll: every
+   * scrollable region lives inside .app (packages/web/src/App.module.css),
+   * which has its own overflow: hidden. Safari doesn't honour
+   * overscroll-behavior on the document (unlike Chromium), so it still
+   * rubber-bands and can reload the page on a downward drag unless the
+   * document itself has no scroll region to bounce in the first place. */
+  overflow: hidden;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* The app is a single fixed-height view with no page-level scroll, so a
-   * touch drag anywhere should never trigger the browser's own
-   * pull-to-refresh/rubber-band bounce chrome around it. */
   overscroll-behavior: none;
 }
 
