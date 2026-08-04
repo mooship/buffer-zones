@@ -32,7 +32,11 @@ const MAX_DRAG_OFFSET_PX = 120;
  * caller's CSS transition can animate the sheet back into place.
  * @remarks Deliberately simpler than a full velocity-projected drag (see
  *   `App.tsx`'s bottom-sheet gesture): this only ever dismisses, never
- *   resizes, so a plain distance threshold is enough.
+ *   resizes, so a plain distance threshold is enough. `dragOffsetPx` updates
+ *   are batched to one `requestAnimationFrame` per frame (like that same
+ *   `App.tsx` gesture's `scheduleSheetDragOffset`) so a burst of pointermove
+ *   events doesn't force a React re-render each; `dragging` flips
+ *   synchronously on pointerdown/up since it isn't a per-pixel value.
  */
 export function useSwipeToDismiss({
   enabled,
@@ -40,7 +44,26 @@ export function useSwipeToDismiss({
 }: UseSwipeToDismissOptions): UseSwipeToDismissResult {
   const [dragOffsetPx, setDragOffsetPx] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const activePointerIdRef = useRef<number | null>(null);
+  const pendingOffsetRef = useRef(0);
+  const frameRef = useRef<number | null>(null);
+
+  function scheduleOffset(nextOffset: number) {
+    pendingOffsetRef.current = nextOffset;
+    if (frameRef.current !== null) {
+      return;
+    }
+    frameRef.current = requestAnimationFrame(() => {
+      setDragOffsetPx(pendingOffsetRef.current);
+      frameRef.current = null;
+    });
+  }
+
+  function cancelScheduledOffset() {
+    if (frameRef.current !== null) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
+  }
 
   function onPointerDown(event: ReactPointerEvent<HTMLElement>) {
     if (!enabled) {
@@ -51,38 +74,37 @@ export function useSwipeToDismiss({
     }
 
     const handleElement = event.currentTarget;
+    const pointerId = event.pointerId;
     const startY = event.clientY;
-    activePointerIdRef.current = event.pointerId;
-    setDragging(true);
-    handleElement.setPointerCapture(event.pointerId);
-
     let latestDelta = 0;
+    setDragging(true);
+    handleElement.setPointerCapture(pointerId);
 
     function handlePointerMove(pointerEvent: globalThis.PointerEvent) {
-      if (pointerEvent.pointerId !== activePointerIdRef.current) {
+      if (pointerEvent.pointerId !== pointerId) {
         return;
       }
       latestDelta = Math.max(
         0,
         Math.min(MAX_DRAG_OFFSET_PX, pointerEvent.clientY - startY),
       );
-      setDragOffsetPx(latestDelta);
+      scheduleOffset(latestDelta);
     }
 
     function cleanup() {
+      cancelScheduledOffset();
       setDragging(false);
       setDragOffsetPx(0);
-      activePointerIdRef.current = null;
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointercancel", cleanup);
-      if (handleElement.hasPointerCapture(event.pointerId)) {
-        handleElement.releasePointerCapture(event.pointerId);
+      if (handleElement.hasPointerCapture(pointerId)) {
+        handleElement.releasePointerCapture(pointerId);
       }
     }
 
     function handlePointerUp(pointerEvent: globalThis.PointerEvent) {
-      if (pointerEvent.pointerId !== activePointerIdRef.current) {
+      if (pointerEvent.pointerId !== pointerId) {
         return;
       }
       const shouldDismiss = latestDelta >= DISMISS_THRESHOLD_PX;

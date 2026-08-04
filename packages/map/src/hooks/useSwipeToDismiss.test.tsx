@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useState } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { useSwipeToDismiss } from "./useSwipeToDismiss";
 
 function TestHandle({ enabled = true }: { enabled?: boolean }) {
@@ -25,47 +25,57 @@ function TestHandle({ enabled = true }: { enabled?: boolean }) {
   );
 }
 
+interface DragSequenceOptions {
+  pointerId?: number;
+  pointerType?: string;
+  downY: number;
+  moveY?: number;
+  upY?: number;
+  button?: number;
+}
+
+/** Fires a pointerdown/pointermove/pointerup (or pointercancel) sequence against `handle`, matching how a real touch drag dispatches events. */
+function dragHandle(
+  handle: HTMLElement,
+  {
+    pointerId = 1,
+    pointerType = "touch",
+    downY,
+    moveY,
+    upY,
+    button = 0,
+  }: DragSequenceOptions,
+) {
+  fireEvent.pointerDown(handle, {
+    pointerType,
+    pointerId,
+    clientY: downY,
+    button,
+  });
+  if (moveY !== undefined) {
+    fireEvent.pointerMove(window, { pointerType, pointerId, clientY: moveY });
+  }
+  if (upY !== undefined) {
+    fireEvent.pointerUp(window, { pointerType, pointerId, clientY: upY });
+  }
+}
+
 describe("useSwipeToDismiss", () => {
-  it("tracks downward drag offset while dragging", () => {
+  it("tracks downward drag offset while dragging", async () => {
     render(<TestHandle />);
     const handle = screen.getByTestId("handle");
 
-    fireEvent.pointerDown(handle, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 100,
-      button: 0,
-    });
-    fireEvent.pointerMove(window, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 130,
-    });
+    dragHandle(handle, { downY: 100, moveY: 130 });
 
     expect(handle).toHaveAttribute("data-dragging", "true");
-    expect(handle).toHaveTextContent("drag offset: 30");
+    await waitFor(() => expect(handle).toHaveTextContent("drag offset: 30"));
   });
 
   it("calls onDismiss when released past the threshold", () => {
     render(<TestHandle />);
     const handle = screen.getByTestId("handle");
 
-    fireEvent.pointerDown(handle, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 100,
-      button: 0,
-    });
-    fireEvent.pointerMove(window, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 150,
-    });
-    fireEvent.pointerUp(window, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 150,
-    });
+    dragHandle(handle, { downY: 100, moveY: 150, upY: 150 });
 
     expect(screen.getByTestId("dismissed")).toHaveTextContent("true");
     expect(handle).toHaveAttribute("data-dragging", "false");
@@ -76,22 +86,7 @@ describe("useSwipeToDismiss", () => {
     render(<TestHandle />);
     const handle = screen.getByTestId("handle");
 
-    fireEvent.pointerDown(handle, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 100,
-      button: 0,
-    });
-    fireEvent.pointerMove(window, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 115,
-    });
-    fireEvent.pointerUp(window, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 115,
-    });
+    dragHandle(handle, { downY: 100, moveY: 115, upY: 115 });
 
     expect(screen.getByTestId("dismissed")).toHaveTextContent("false");
     expect(handle).toHaveTextContent("drag offset: 0");
@@ -101,17 +96,7 @@ describe("useSwipeToDismiss", () => {
     render(<TestHandle enabled={false} />);
     const handle = screen.getByTestId("handle");
 
-    fireEvent.pointerDown(handle, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 100,
-      button: 0,
-    });
-    fireEvent.pointerMove(window, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 150,
-    });
+    dragHandle(handle, { downY: 100, moveY: 150 });
 
     expect(handle).toHaveAttribute("data-dragging", "false");
     expect(handle).toHaveTextContent("drag offset: 0");
@@ -121,12 +106,7 @@ describe("useSwipeToDismiss", () => {
     render(<TestHandle />);
     const handle = screen.getByTestId("handle");
 
-    fireEvent.pointerDown(handle, {
-      pointerType: "mouse",
-      pointerId: 1,
-      clientY: 100,
-      button: 2,
-    });
+    dragHandle(handle, { pointerType: "mouse", downY: 100, button: 2 });
 
     expect(handle).toHaveAttribute("data-dragging", "false");
   });
@@ -135,21 +115,8 @@ describe("useSwipeToDismiss", () => {
     render(<TestHandle />);
     const handle = screen.getByTestId("handle");
 
-    fireEvent.pointerDown(handle, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 100,
-      button: 0,
-    });
-    fireEvent.pointerMove(window, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 150,
-    });
-    fireEvent.pointerCancel(window, {
-      pointerType: "touch",
-      pointerId: 1,
-    });
+    dragHandle(handle, { downY: 100, moveY: 150 });
+    fireEvent.pointerCancel(window, { pointerType: "touch", pointerId: 1 });
 
     expect(screen.getByTestId("dismissed")).toHaveTextContent("false");
     expect(handle).toHaveAttribute("data-dragging", "false");
@@ -159,12 +126,7 @@ describe("useSwipeToDismiss", () => {
     render(<TestHandle />);
     const handle = screen.getByTestId("handle");
 
-    fireEvent.pointerDown(handle, {
-      pointerType: "touch",
-      pointerId: 1,
-      clientY: 100,
-      button: 0,
-    });
+    dragHandle(handle, { pointerId: 1, downY: 100 });
     fireEvent.pointerMove(window, {
       pointerType: "touch",
       pointerId: 2,
@@ -180,7 +142,5 @@ describe("useSwipeToDismiss", () => {
     });
 
     expect(screen.getByTestId("dismissed")).toHaveTextContent("false");
-    const dismissSpy = vi.fn();
-    expect(dismissSpy).not.toHaveBeenCalled();
   });
 });

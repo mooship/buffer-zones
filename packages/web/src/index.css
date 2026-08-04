@@ -84,6 +84,9 @@
   --control-gap: var(--space-1);
   --control-padding: var(--space-1);
 
+  --drag-handle-width: 2.5rem;
+  --drag-handle-height: 0.25rem;
+
   --motion-duration-short: 150ms;
   --motion-duration-medium: 180ms;
 
