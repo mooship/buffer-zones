@@ -478,7 +478,11 @@ export function App() {
           >
             <span className={styles.sheetHandle} aria-hidden="true" />
           </button>
-          <div className={styles.panelViewport} data-testid="panel-viewport">
+          <div
+            className={styles.panelViewport}
+            data-testid="panel-viewport"
+            data-e2e="panel-viewport"
+          >
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Layers</h2>
               <LayerToggles

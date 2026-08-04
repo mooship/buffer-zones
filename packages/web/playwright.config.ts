@@ -10,6 +10,11 @@ export default defineConfig({
     baseURL: "http://localhost:4173",
     trace: "on-first-retry",
     testIdAttribute: "data-e2e",
+    // Collapses CSS transitions/animations to ~instant via the app's own
+    // prefers-reduced-motion handling, so entrance/exit animations (e.g. the
+    // mobile sheet's open/close slide) can't race gesture simulation and
+    // make timing-sensitive assertions flaky.
+    reducedMotion: "reduce",
   },
   projects: [
     {
