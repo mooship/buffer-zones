@@ -41,7 +41,6 @@ test.describe("layer toggles", () => {
   }) => {
     await page.goto("/");
     await ensurePanelOpen(page);
-    await page.getByTestId(E2E.panelTab.layers).click();
 
     const rapidRailCheckbox = page.getByTestId(E2E.layerToggle.rapidRail);
     await expect(rapidRailCheckbox).not.toBeChecked();
@@ -83,7 +82,6 @@ test.describe("layer toggles", () => {
   }) => {
     await page.goto("/");
     await ensurePanelOpen(page);
-    await page.getByTestId(E2E.panelTab.layers).click();
 
     const modeledCarTimeCheckbox = page.getByTestId(E2E.layerToggle.townships);
     const nearestTransitCheckbox = page.getByTestId(

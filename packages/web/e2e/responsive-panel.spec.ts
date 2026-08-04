@@ -43,14 +43,14 @@ test.describe("responsive panel", () => {
     await page.goto("/");
 
     const trigger = page.getByTestId(E2E.panelToggle);
-    const tablist = page.getByTestId(E2E.panelTablist);
+    const viewport = page.getByTestId(E2E.panelViewport);
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
-    await expect(tablist).toBeHidden();
+    await expect(viewport).toBeHidden();
 
     await trigger.click();
 
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
-    await expect(tablist).toBeVisible();
+    await expect(viewport).toBeVisible();
   });
 
   test("provides one-tap map legend access on mobile without opening Explore", async ({

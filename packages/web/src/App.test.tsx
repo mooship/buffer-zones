@@ -163,10 +163,8 @@ describe("App", () => {
     expect(screen.getByTestId("desktop-legend")).toBeInTheDocument();
   });
 
-  it("shows layer controls immediately in the layers tab", async () => {
+  it("shows layer controls immediately in the panel", async () => {
     render(<App />);
-
-    fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
 
     expect(
       await screen.findByRole("checkbox", { name: "Modelled car time" }),
@@ -176,83 +174,9 @@ describe("App", () => {
     );
   });
 
-  it("selects the Map layers tab by default", async () => {
-    render(<App />);
-
-    expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-  });
-
-  it("supports arrow-key navigation between panel tabs", async () => {
-    render(<App />);
-
-    const layersTab = screen.getByRole("tab", { name: "Map layers" });
-    fireEvent.keyDown(layersTab, { key: "ArrowRight" });
-
-    expect(screen.getByRole("tab", { name: "Ask AI" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-    expect(screen.getByRole("tabpanel")).toHaveAttribute(
-      "aria-labelledby",
-      "panel-tab-ask",
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-  });
-
-  it("supports Home, End, and ArrowLeft tab navigation shortcuts", async () => {
-    render(<App />);
-
-    const layersTab = screen.getByRole("tab", { name: "Map layers" });
-    fireEvent.keyDown(layersTab, { key: "End" });
-    expect(screen.getByRole("tab", { name: "Ask AI" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-
-    fireEvent.keyDown(screen.getByRole("tab", { name: "Ask AI" }), {
-      key: "ArrowLeft",
-    });
-    expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-
-    fireEvent.keyDown(screen.getByRole("tab", { name: "Map layers" }), {
-      key: "Home",
-    });
-    expect(screen.getByRole("tab", { name: "Map layers" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-  });
-
-  it("ignores keys other than the supported arrow/Home/End tab shortcuts", async () => {
-    render(<App />);
-
-    const layersTab = screen.getByRole("tab", { name: "Map layers" });
-    fireEvent.keyDown(layersTab, { key: "a" });
-
-    expect(layersTab).toHaveAttribute("aria-selected", "true");
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
-  });
-
   it("collapses and restores the controls panel", async () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
     const trigger = screen.getByRole("button", { name: /close/i });
     expect(trigger).toHaveAttribute("aria-expanded", "true");
 
@@ -274,8 +198,6 @@ describe("App", () => {
 
   it("keeps the legend visible on desktop while layer controls are open", async () => {
     render(<App />);
-
-    fireEvent.click(screen.getByRole("tab", { name: "Map layers" }));
 
     expect(
       await screen.findByRole("checkbox", { name: "Modelled car time" }),

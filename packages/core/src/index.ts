@@ -4,5 +4,4 @@ export * from "./data/mergeFeatureCollections";
 export * from "./layers/classification";
 export * from "./layers/createLayerConfig";
 export * from "./layers/createRegistry";
-export * from "./layers/describeDomainForPrompt";
 export * from "./types/layer";

@@ -19,7 +19,6 @@ import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
 import {
   type CSSProperties,
-  type KeyboardEvent,
   lazy,
   type PointerEvent,
   Suspense,
@@ -29,12 +28,11 @@ import {
 } from "react";
 import { useWindowSize } from "usehooks-ts";
 import styles from "./App.module.css";
-import { AskAiPanel } from "./components/AskAiPanel/AskAiPanel";
 import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { TownshipPopup } from "./components/TownshipPopup/TownshipPopup";
 import { buildRegionDataUrls } from "./data/regionDataUrls";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
-import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
+import { useMapUiStore } from "./stores/useMapUiStore";
 
 const MapView = lazy(async () => {
   const { MapView } = await import("@stratum/map/MapView");
@@ -46,17 +44,11 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
   [-25.3, 28.75],
 ];
 
-const PANEL_VIEWS = ["layers", "ask"] as const;
 const MOBILE_BREAKPOINT_PX = 768;
 const SHEET_DRAG_THRESHOLD_PX = 36;
 const SHEET_DRAG_PREVIEW_LIMIT_PX = 96;
 const SHEET_PROJECTION_DECELERATION = 0.992;
 const SHEET_VELOCITY_SAMPLE_WINDOW_MS = 140;
-
-const PANEL_LABELS: Record<PanelView, string> = {
-  layers: "Map layers",
-  ask: "Ask AI",
-};
 
 interface FocusLocationTarget {
   token: number;
@@ -86,7 +78,7 @@ function pruneStalePointerSamples(samples: PointerSample[], now: number) {
  * The reference app's root shell: fetches and merges the Gauteng township
  * choropleth data, wraps the render tree in a `DomainProvider` for
  * `gauteng-spatial-legacy`, and renders the map alongside the desktop/mobile
- * info panel (layer toggles, Ask AI) and its settings menu.
+ * info panel (layer toggles) and its settings menu.
  * @remarks Owns the mobile bottom-sheet drag/swipe gesture state (pointer
  *   sampling, velocity-based snap projection) in addition to layout state
  *   from `useMapUiStore`.
@@ -107,12 +99,10 @@ export function App() {
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
-  const panelView = useMapUiStore((state) => state.panelView);
   const selectedFeatureId = useMapUiStore((state) => state.selectedFeatureId);
   const toggleLayer = useMapUiStore((state) => state.toggleLayer);
   const setBasemap = useMapUiStore((state) => state.setBasemap);
   const setPanelOpen = useMapUiStore((state) => state.setPanelOpen);
-  const setPanelView = useMapUiStore((state) => state.setPanelView);
   const setSelectedFeatureId = useMapUiStore(
     (state) => state.setSelectedFeatureId,
   );
@@ -121,7 +111,6 @@ export function App() {
   const isDesktopViewport =
     (width ?? MOBILE_BREAKPOINT_PX) > MOBILE_BREAKPOINT_PX;
   const panelTriggerRef = useRef<HTMLButtonElement>(null);
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const suppressNextHandleClickRef = useRef(false);
   const activeSheetPointerIdRef = useRef<number | null>(null);
   const pendingSheetDragOffsetRef = useRef(0);
@@ -323,31 +312,6 @@ export function App() {
     window.addEventListener("pointercancel", cleanup);
   }
 
-  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
-    const currentIndex = PANEL_VIEWS.indexOf(panelView);
-    let nextIndex: number | null = null;
-    if (event.key === "ArrowRight") {
-      nextIndex = (currentIndex + 1) % PANEL_VIEWS.length;
-    } else if (event.key === "ArrowLeft") {
-      nextIndex = (currentIndex - 1 + PANEL_VIEWS.length) % PANEL_VIEWS.length;
-    } else if (event.key === "Home") {
-      nextIndex = 0;
-    } else if (event.key === "End") {
-      nextIndex = PANEL_VIEWS.length - 1;
-    }
-    if (nextIndex === null) {
-      return;
-    }
-    event.preventDefault();
-    const nextView = PANEL_VIEWS[nextIndex];
-    /* v8 ignore next 3 -- unreachable: nextIndex is always derived via modulo of PANEL_VIEWS.length or clamped to its bounds above, so it always indexes an existing entry */
-    if (!nextView) {
-      return;
-    }
-    setPanelView(nextView);
-    tabRefs.current[nextIndex]?.focus();
-  }
-
   return (
     <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
       <div
@@ -480,61 +444,15 @@ export function App() {
           >
             <span className={styles.sheetHandle} aria-hidden="true" />
           </button>
-          <div
-            className={styles.panelTabs}
-            role="tablist"
-            aria-label="Map panel"
-            data-testid="panel-tablist"
-            data-e2e="panel-tablist"
-          >
-            {PANEL_VIEWS.map((view, index) => (
-              <button
-                key={view}
-                type="button"
-                data-testid={`panel-tab-${view}`}
-                data-e2e={`panel-tab-${view}`}
-                ref={(element) => {
-                  tabRefs.current[index] = element;
-                }}
-                id={`panel-tab-${view}`}
-                role="tab"
-                tabIndex={panelView === view ? 0 : -1}
-                aria-selected={panelView === view}
-                aria-controls={`panel-view-${view}`}
-                className={styles.panelTab}
-                onClick={() => setPanelView(view)}
-                onKeyDown={handleTabKeyDown}
-              >
-                {PANEL_LABELS[view]}
-              </button>
-            ))}
-          </div>
-
-          <div
-            id={`panel-view-${panelView}`}
-            role="tabpanel"
-            aria-labelledby={`panel-tab-${panelView}`}
-            className={styles.panelViewport}
-            data-view={panelView}
-          >
-            {panelView === "layers" ? (
-              <div className={styles.panelContent}>
-                <section className={styles.section}>
-                  <h2 className={styles.sectionTitle}>Layers</h2>
-                  <LayerToggles
-                    visibleLayerIds={visibleLayerIds}
-                    onToggle={toggleLayer}
-                    failedLayerIds={failedLayerIds}
-                  />
-                </section>
-              </div>
-            ) : null}
-            {panelView === "ask" ? (
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Ask AI</h2>
-                <AskAiPanel />
-              </section>
-            ) : null}
+          <div className={styles.panelViewport} data-testid="panel-viewport">
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>Layers</h2>
+              <LayerToggles
+                visibleLayerIds={visibleLayerIds}
+                onToggle={toggleLayer}
+                failedLayerIds={failedLayerIds}
+              />
+            </section>
           </div>
         </aside>
 
