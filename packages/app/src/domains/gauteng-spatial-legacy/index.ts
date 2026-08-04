@@ -12,7 +12,7 @@ export const GAUTENG_SPATIAL_LEGACY_DOMAIN = {
   layerGroups: GAUTENG_SPATIAL_LEGACY_LAYER_GROUPS,
   story: {
     title: "Why this map exists",
-    body: "Apartheid law controlled where Black, Coloured and Indian people could live. Black townships were deliberately separated from economic centres; those distances still shape access to work.",
+    body: "Apartheid law controlled where Black, Coloured and Indian people could live. Black townships were deliberately separated from economic centres, and those distances still shape access to work today. This map measures that gap with modelled car time and distance to transit.",
   },
 };
 

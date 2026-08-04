@@ -53,6 +53,67 @@ describe("LayerToggles", () => {
     expect(onToggle).toHaveBeenCalledWith("rapid-rail");
   });
 
+  it("shows a layer's description when it has one", () => {
+    const layerWithDescription: Layer = {
+      id: "townships",
+      label: "Modelled car time",
+      description:
+        "Modelled car drive-time from each recognised township area to its nearest selected job centre.",
+      dataSource: ["/data/townships.geojson"],
+      geometryKind: "choropleth",
+      defaultVisible: true,
+      available: true,
+      style: {
+        kind: "choropleth",
+        propertyKey: "commuteMinutes",
+        buckets: [],
+        baseOpacity: 0.2,
+      },
+    };
+    const group: LayerGroup = {
+      id: "access-to-opportunity",
+      title: "Accessibility overlays",
+      selectionMode: "exclusive",
+      layerIds: ["townships"],
+    };
+    vi.spyOn(registry, "getLayer").mockReturnValue(layerWithDescription);
+    vi.spyOn(registry, "getLayerGroups").mockReturnValue([group]);
+
+    render(<LayerToggles visibleLayerIds={[]} onToggle={vi.fn()} />);
+
+    expect(
+      screen.getByTestId("layer-toggle-townships-description"),
+    ).toHaveTextContent(
+      "Modelled car drive-time from each recognised township area to its nearest selected job centre.",
+    );
+  });
+
+  it("shows no description for a layer that doesn't have one", () => {
+    const layerWithoutDescription: Layer = {
+      id: "myciti",
+      label: "MyCiTi",
+      dataSource: ["/data/myciti.geojson"],
+      geometryKind: "line",
+      defaultVisible: false,
+      available: true,
+      style: { kind: "line", color: "#000", weight: 2 },
+    };
+    const group: LayerGroup = {
+      id: "transit",
+      title: "Transit",
+      selectionMode: "independent",
+      layerIds: ["myciti"],
+    };
+    vi.spyOn(registry, "getLayer").mockReturnValue(layerWithoutDescription);
+    vi.spyOn(registry, "getLayerGroups").mockReturnValue([group]);
+
+    render(<LayerToggles visibleLayerIds={[]} onToggle={vi.fn()} />);
+
+    expect(
+      screen.queryByTestId("layer-toggle-myciti-description"),
+    ).not.toBeInTheDocument();
+  });
+
   it("shows no failure badge by default", () => {
     render(<LayerToggles visibleLayerIds={[]} onToggle={vi.fn()} />);
 
