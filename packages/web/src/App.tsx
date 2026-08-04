@@ -49,6 +49,7 @@ const SHEET_DRAG_THRESHOLD_PX = 36;
 const SHEET_DRAG_PREVIEW_LIMIT_PX = 96;
 const SHEET_PROJECTION_DECELERATION = 0.992;
 const SHEET_VELOCITY_SAMPLE_WINDOW_MS = 140;
+const SHEET_CLOSE_ANIMATION_MS = 220;
 
 interface FocusLocationTarget {
   token: number;
@@ -81,7 +82,10 @@ function pruneStalePointerSamples(samples: PointerSample[], now: number) {
  * info panel (layer toggles) and its settings menu.
  * @remarks Owns the mobile bottom-sheet drag/swipe gesture state (pointer
  *   sampling, velocity-based snap projection) in addition to layout state
- *   from `useMapUiStore`.
+ *   from `useMapUiStore`. Swiping down from the sheet's medium height closes
+ *   it entirely, playing an exit animation (`closePanel`) before the panel
+ *   actually unmounts from the a11y tree, rather than toggling `hidden`
+ *   instantly.
  */
 export function App() {
   const [hydrated, setHydrated] = useState(false);
@@ -94,6 +98,7 @@ export function App() {
   const [mobilePanelExpanded, setMobilePanelExpanded] = useState(false);
   const [mobileSheetDragOffset, setMobileSheetDragOffset] = useState(0);
   const [mobileSheetDragging, setMobileSheetDragging] = useState(false);
+  const [mobileSheetClosing, setMobileSheetClosing] = useState(false);
   const [focusLocationTarget, setFocusLocationTarget] =
     useState<FocusLocationTarget | null>(null);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
@@ -115,6 +120,7 @@ export function App() {
   const activeSheetPointerIdRef = useRef<number | null>(null);
   const pendingSheetDragOffsetRef = useRef(0);
   const sheetDragFrameRef = useRef<number | null>(null);
+  const sheetCloseTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     setHydrated(true);
@@ -174,6 +180,9 @@ export function App() {
       if (sheetDragFrameRef.current !== null) {
         cancelAnimationFrame(sheetDragFrameRef.current);
       }
+      if (sheetCloseTimeoutRef.current !== null) {
+        window.clearTimeout(sheetCloseTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -198,10 +207,28 @@ export function App() {
     });
   }
 
-  function handlePanelToggle() {
-    if (panelOpen) {
+  function closePanel() {
+    if (sheetCloseTimeoutRef.current !== null) {
+      window.clearTimeout(sheetCloseTimeoutRef.current);
+      sheetCloseTimeoutRef.current = null;
+    }
+    if (isDesktopViewport) {
       setPanelOpen(false);
       requestAnimationFrame(() => panelTriggerRef.current?.focus());
+      return;
+    }
+    setMobileSheetClosing(true);
+    sheetCloseTimeoutRef.current = window.setTimeout(() => {
+      sheetCloseTimeoutRef.current = null;
+      setMobileSheetClosing(false);
+      setPanelOpen(false);
+      requestAnimationFrame(() => panelTriggerRef.current?.focus());
+    }, SHEET_CLOSE_ANIMATION_MS);
+  }
+
+  function handlePanelToggle() {
+    if (panelOpen) {
+      closePanel();
       return;
     }
     setMobilePanelExpanded(false);
@@ -303,7 +330,13 @@ export function App() {
         return;
       }
       suppressNextHandleClickRef.current = true;
-      setMobilePanelExpanded(projectedDelta < 0);
+      if (projectedDelta < 0) {
+        setMobilePanelExpanded(true);
+      } else if (mobilePanelExpanded) {
+        setMobilePanelExpanded(false);
+      } else {
+        closePanel();
+      }
       cleanup();
     }
 
@@ -423,6 +456,7 @@ export function App() {
           data-panel-size={mobilePanelExpanded ? "full" : "medium"}
           data-panel-dragging={mobileSheetDragging ? "true" : "false"}
           data-panel-drag-direction={mobileSheetDragDirection}
+          data-panel-closing={mobileSheetClosing ? "true" : "false"}
           style={mobilePanelDragStyle}
           hidden={!panelOpen}
         >

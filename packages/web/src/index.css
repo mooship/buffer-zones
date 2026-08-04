@@ -3,26 +3,26 @@
   --font-body: "Inter Variable", sans-serif;
   --font-mono: "Martian Mono Variable", monospace;
 
-  --color-ink: #eaf0fb;
-  --color-panel: #ffffff;
-  --color-line: #ccd6e7;
-  --color-paper: #101a2a;
-  --color-ochre: #5e87ff;
-  --color-redearth: #cc415c;
-  --color-muted: #5c6e8b;
+  --color-ink: #f5f1e6;
+  --color-panel: #fffdf8;
+  --color-line: #ddd3bd;
+  --color-paper: #241d14;
+  --color-ochre: #8a5a1e;
+  --color-redearth: #b23a2a;
+  --color-muted: #6e6250;
 
-  --color-surface: #f8faff;
-  --color-surface-hover: #edf3ff;
+  --color-surface: #f7f2e6;
+  --color-surface-hover: #ece3cf;
 
   --shape-small: 8px;
   --shape-medium: 12px;
   --shape-large: 20px;
   --shape-full: 999px;
 
-  --elevation-1: 0 1px 2px rgb(20 33 62 / 10%), 0 3px 8px rgb(16 31 65 / 8%);
-  --elevation-2: 0 8px 22px rgb(20 36 72 / 16%), 0 2px 8px rgb(16 31 65 / 10%);
+  --elevation-1: 0 1px 2px rgb(35 27 17 / 10%), 0 3px 8px rgb(30 24 15 / 8%);
+  --elevation-2: 0 8px 22px rgb(36 28 17 / 16%), 0 2px 8px rgb(30 24 15 / 10%);
   --elevation-3:
-    0 18px 44px rgb(20 38 75 / 22%), 0 6px 20px rgb(14 28 62 / 16%);
+    0 18px 44px rgb(38 29 17 / 22%), 0 6px 20px rgb(28 22 13 / 16%);
 
   --color-primary: var(--color-ochre);
   --color-on-primary: var(--color-ink);
@@ -92,40 +92,40 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-ink: #090f18;
-    --color-panel: #1d2431;
-    --color-line: #4f5f7c;
-    --color-paper: #f3f6fe;
-    --color-ochre: #8aabff;
-    --color-redearth: #f08ca0;
-    --color-muted: #b5c1d8;
+    --color-ink: #15110b;
+    --color-panel: #282219;
+    --color-line: #6b6046;
+    --color-paper: #f5efe1;
+    --color-ochre: #d9a441;
+    --color-redearth: #e8846c;
+    --color-muted: #c3b79e;
 
-    --color-surface: #1f2a3a;
-    --color-surface-hover: #2b384c;
+    --color-surface: #241f17;
+    --color-surface-hover: #332c21;
 
     --elevation-1: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
-    --elevation-2: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
-    --elevation-3: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
+    --elevation-2: 0 10px 26px rgb(10 7 3 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
+    --elevation-3: 0 24px 56px rgb(8 6 2 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --color-ink: #090f18;
-  --color-panel: #1d2431;
-  --color-line: #4f5f7c;
-  --color-paper: #f3f6fe;
-  --color-ochre: #8aabff;
-  --color-redearth: #f08ca0;
-  --color-muted: #b5c1d8;
+  --color-ink: #15110b;
+  --color-panel: #282219;
+  --color-line: #6b6046;
+  --color-paper: #f5efe1;
+  --color-ochre: #d9a441;
+  --color-redearth: #e8846c;
+  --color-muted: #c3b79e;
 
-  --color-surface: #1f2a3a;
-  --color-surface-hover: #2b384c;
+  --color-surface: #241f17;
+  --color-surface-hover: #332c21;
 
   --elevation-1: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
-  --elevation-2: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
-  --elevation-3: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
+  --elevation-2: 0 10px 26px rgb(10 7 3 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
+  --elevation-3: 0 24px 56px rgb(8 6 2 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
   color-scheme: dark;
 }

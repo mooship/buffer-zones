@@ -1,7 +1,7 @@
 /** The `<meta name="theme-color">` value for each theme, passed to `@stratum/react`'s `initTheme`. */
 export const THEME_COLOR = {
-  light: "#edeff2",
-  dark: "#23262c",
+  light: "#f5f1e6",
+  dark: "#15110b",
 } as const;
 
 /**

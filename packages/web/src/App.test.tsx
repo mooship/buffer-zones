@@ -336,6 +336,46 @@ describe("App", () => {
     expect(panel).toHaveAttribute("data-panel-size", "medium");
   });
 
+  it("closes the panel when swiping down from medium height", async () => {
+    const { panel, handle } = await renderMobilePanel();
+
+    expect(panel).toHaveAttribute("data-panel-size", "medium");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 11,
+      clientY: 140,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 11,
+      clientY: 210,
+    });
+
+    await waitFor(() =>
+      expect(panel).toHaveAttribute("data-panel-drag-direction", "down"),
+    );
+
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 11,
+      clientY: 230,
+    });
+
+    expect(panel).toHaveAttribute("data-panel-closing", "true");
+    expect(screen.getByRole("button", { name: /close/i })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+
+    await waitFor(() => expect(panel).not.toBeVisible());
+    expect(screen.getByRole("button", { name: /explore/i })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+
   it("suppresses the synthetic click that follows a drag past the threshold", async () => {
     const { panel, handle } = await renderMobilePanel();
 
