@@ -44,10 +44,10 @@
   width: min(22rem, calc(100% - 2rem));
   padding: 1rem;
   border: 1px solid var(--color-redearth);
-  border-radius: var(--radius-md);
+  border-radius: var(--shape-medium);
   background: var(--color-panel);
   color: var(--color-paper);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--elevation-3);
   transform: translate(-50%, -50%);
 }
 
@@ -58,11 +58,15 @@
 .dataError button {
   min-height: 48px;
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-sm);
+  border-radius: var(--shape-small);
   background: transparent;
   color: var(--color-paper);
   font: inherit;
   cursor: pointer;
+}
+
+.dataError button:hover {
+  background: var(--state-hover);
 }
 
 .dataError button:focus-visible {
@@ -76,11 +80,11 @@
   left: 0.5rem;
   z-index: 2000;
   padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--shape-small);
   background: var(--color-paper);
   color: var(--color-ink);
   font-weight: 700;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--elevation-3);
   transform: translateY(-160%);
 }
 
@@ -88,23 +92,12 @@
   transform: translateY(0);
 }
 
-.glassPanel {
+.surface {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--glass-panel-border);
-  background: var(--glass-panel-bg);
-  backdrop-filter: blur(var(--glass-panel-blur)) saturate(182%);
-  box-shadow: var(--shadow-lg);
-}
-
-.glassPanel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: var(--glass-sheen);
+  border-radius: var(--shape-large);
+  border: 1px solid var(--color-outline);
+  background: var(--color-surface-container-high);
+  box-shadow: var(--elevation-3);
 }
 
 .titleBlock {
@@ -241,7 +234,7 @@
 .panelTabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-bottom: 1px solid var(--glass-chip-border);
+  border-bottom: 1px solid var(--color-outline);
 }
 
 .panelTab {
@@ -259,15 +252,16 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: background-color var(--motion-duration-short) ease;
+}
+
+.panelTab:hover {
+  background: var(--state-hover);
 }
 
 .panelTab[aria-selected="true"] {
-  border-bottom-color: var(--color-ochre);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-ochre) 24%, transparent) 0%,
-    color-mix(in srgb, var(--color-ochre) 10%, transparent) 100%
-  );
+  border-bottom-color: var(--color-primary);
+  background: var(--state-selected);
   color: var(--color-paper);
 }
 
@@ -371,7 +365,7 @@
     gap: 0.75rem;
     border-inline: 0;
     border-bottom: 0;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-radius: var(--shape-large) var(--shape-large) 0 0;
     transform: translateY(calc(var(--panel-drag-offset, 0px) * 0.14));
     transition:
       height 320ms cubic-bezier(0.2, 0.9, 0.24, 1),
@@ -380,7 +374,7 @@
   }
 
   .panel[data-panel-dragging="true"] {
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--elevation-3);
     transition: none;
   }
 
@@ -397,7 +391,7 @@
     min-height: var(--mobile-control-size);
     padding: 0;
     overflow: hidden;
-    border-radius: 999px;
+    border-radius: var(--shape-full);
     gap: 0;
     justify-content: center;
     align-items: center;
@@ -412,7 +406,7 @@
     min-height: var(--mobile-control-size);
     padding: 0;
     overflow: hidden;
-    border-radius: 999px;
+    border-radius: var(--shape-full);
     gap: 0;
     justify-content: center;
     align-items: center;
@@ -435,7 +429,7 @@
     min-height: 40px;
     padding: 0;
     border: 0;
-    border-radius: var(--radius-sm);
+    border-radius: var(--shape-small);
     background: transparent;
     cursor: pointer;
   }
@@ -445,7 +439,7 @@
   }
 
   .sheetHandleButton[data-drag-direction="up"] .sheetHandle {
-    background: color-mix(in srgb, var(--color-ochre) 38%, var(--color-line));
+    background: color-mix(in srgb, var(--color-primary) 38%, var(--color-line));
   }
 
   .sheetHandleButton[data-drag-direction="down"] .sheetHandle {
@@ -462,12 +456,8 @@
     width: 2.5rem;
     height: 0.25rem;
     margin: 0 auto;
-    border-radius: 999px;
-    background: color-mix(
-      in srgb,
-      var(--glass-specular-top) 42%,
-      var(--color-line)
-    );
+    border-radius: var(--shape-full);
+    background: var(--color-line);
     transition:
       width 120ms ease,
       background-color 120ms ease;

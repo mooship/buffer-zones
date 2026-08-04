@@ -578,28 +578,6 @@ describe("App", () => {
     expect(panel).toHaveAttribute("data-panel-dragging", "false");
   });
 
-  it("marks the document as reduced-transparency when the OS preference is set", async () => {
-    const originalMatchMedia = window.matchMedia.bind(window);
-    vi.spyOn(window, "matchMedia").mockImplementation((query: string) => {
-      if (query === "(prefers-reduced-transparency: reduce)") {
-        return {
-          matches: true,
-          addEventListener: vi.fn(),
-          removeEventListener: vi.fn(),
-        } as unknown as MediaQueryList;
-      }
-      return originalMatchMedia(query);
-    });
-
-    render(<App />);
-
-    await waitFor(() =>
-      expect(document.documentElement.dataset.reducedTransparency).toBe("true"),
-    );
-
-    delete document.documentElement.dataset.reducedTransparency;
-  });
-
   it.each(["resolve", "reject"] as const)(
     "does not update state if the component unmounts before the township fetch settles (%s)",
     async (mode) => {

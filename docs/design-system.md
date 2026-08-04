@@ -1,28 +1,30 @@
 # Stratum Design System
 
-Stratum uses an app-owned design system aligned to Apple Human Interface
-Guidelines and a restrained glass visual language. The app remains plain React,
-CSS Modules, and CSS custom properties; no framework design library is introduced.
-
-Primary reference skills and guidance:
-
-- `.github/skills/apple-design/SKILL.md`
-- `.claude/skills/apple-design.md`
-- Apple HIG foundations: layout, materials, colour, typography, sidebars, and
-	search fields
+Stratum uses an app-owned design system built on tonal, elevation-driven
+surfaces rather than translucent "glass" materials. The app remains plain
+React, CSS Modules, and CSS custom properties; no framework design library is
+introduced, and no token is named after a specific vendor's design language —
+token names describe what a value *is* (a surface tier, an elevation, a
+shape, a state layer), not where the idea came from.
 
 ## Design direction
 
-- Separate content from controls: map content fills the view, controls float as
-	a functional layer above it.
-- Use glass sparingly: apply translucent materials to navigation and controls,
-	not to dense content regions.
-- Treat motion as behaviour, not decoration: interruptible, velocity-aware,
-	and reversible interactions for any drag or sheet transition.
+- Separate content from controls: map content fills the view, controls float
+	as a functional layer above it.
+- Surfaces are opaque and tonal: floating chrome (panels, sheets, menus,
+	chips) is a flat, elevated colour — a small tint of the accent colour
+	mixed into the base surface — differentiated by shadow and tone, never by
+	blur or transparency.
+- Elevation communicates hierarchy: higher-priority or more transient
+	surfaces (a bottom sheet mid-drag, a dropdown menu) sit at a heavier
+	elevation tier than resting chrome.
 - Keep hierarchy obvious: one accent for emphasis, semantic text contrast,
 	and progressive disclosure instead of always-visible complexity.
-- Preserve map-first communication: interface chrome must support evidence and
-	place-reading, never dominate it.
+- Preserve map-first communication: interface chrome must support evidence
+	and place-reading, never dominate it. Floating controls, rounded pill
+	search fields, and a bottom-sheet-style info panel take cues from
+	consumer map products' conventions for this — content fills the frame,
+	controls float, and a drag handle exposes more detail on demand.
 
 ## Token architecture
 
@@ -32,24 +34,51 @@ Core token source of truth remains `packages/web/src/index.css`.
 
 - Typeface tokens: `--font-display`, `--font-body`, `--font-mono`
 - Spacing tokens: `--space-1` to `--space-4`
-- Radius tokens: `--radius-sm`, `--radius-md`, `--radius-lg`
+- Shape (corner radius) tokens: `--shape-small`, `--shape-medium`,
+	`--shape-large`, `--shape-full` (999px, for pills and circular controls)
 - Control sizing: `--control-height`, `--control-height-compact`
 
-### Material tokens
+### Elevation tokens
 
-Adopt semantic material tiers rather than ad hoc per-component blur/shadow.
+A three-tier shadow scale stands in for physical elevation. Each tier has
+separate light/dark values (heavier, higher-contrast shadows in dark mode).
 
-- `--material-nav-bg`, `--material-nav-border`, `--material-nav-blur`
-- `--material-panel-bg`, `--material-panel-border`, `--material-panel-blur`
-- `--material-chip-bg`, `--material-chip-border`, `--material-chip-blur`
-- `--material-overlay-scrim`
+- `--elevation-1`: resting compact chrome (scale control, map labels)
+- `--elevation-2`: raised controls and popups (zoom control, leaflet popups)
+- `--elevation-3`: floating panels, sheets, and menus (the info panel,
+	settings menu, legend, dragging bottom sheet)
 
-Rules:
+### Surface tokens
 
-- Heavier material tier for larger surfaces (panel, sheet, search container).
-- Lighter tier for compact controls (icon buttons, segmented controls).
-- No stacking of two light translucent materials directly on each other.
-- Provide dark, light, and high-contrast variants for each semantic material.
+Replacing per-component blur/gradient "glass" values with two reusable tonal
+surface tiers, both derived from `--color-panel` and `--color-primary` so
+they adapt automatically across light, dark, and `data-theme` overrides
+without separate per-theme declarations:
+
+- `--color-surface-container`: compact controls — buttons, search inputs,
+	suggestion chips
+- `--color-surface-container-high`: larger floating surfaces — the info
+	panel, bottom sheet, settings menu, legend, popups
+
+Borders on these surfaces use the existing `--color-outline` token (a
+hairline tint of `--color-line`), strengthened to `--color-paper` under
+`prefers-contrast: more`.
+
+### State layer tokens
+
+Hover, pressed, and selected states use flat opacity-tint tokens instead of
+each component picking its own translucency percentage:
+
+- `--state-hover`: 8% `--color-on-surface` tint
+- `--state-pressed`: 12% `--color-on-surface` tint
+- `--state-selected`: 12% `--color-primary` tint
+
+Apply these directly as a `background` on elements whose resting background
+is `transparent` and that sit on a known opaque parent (list rows, tabs,
+menu options). For an element whose own resting background is already an
+opaque tonal surface (e.g. `ControlButton`), blend the tint into that same
+surface with `color-mix()` instead, so hover never introduces transparency
+against the map.
 
 ### Colour tokens
 
@@ -59,86 +88,57 @@ Keep existing semantic colour naming and extend where needed.
 - Accent/status: `--color-ochre`, `--color-redearth`
 - Secondary text: `--color-muted`
 - Surface states: `--color-surface`, `--color-surface-hover`
+- Semantic roles: `--color-primary`, `--color-on-primary`,
+	`--color-on-surface`, `--color-on-surface-variant`, `--color-outline`
 
 Rules:
 
 - One accent colour is used for primary emphasis only.
-- Secondary labels remain monochrome or near-monochrome on glass surfaces.
+- Secondary labels remain monochrome or near-monochrome.
 - Any new colour token requires light and dark values plus a high-contrast
 	strategy.
 
 ### Motion tokens
 
-Duration-only transitions are allowed for static state changes. Gesture-driven
-transitions require spring semantics.
+Duration-only transitions cover this app's static state changes (colour,
+shadow, height). There is no gesture/spring system — the one gesture-driven
+interaction (the mobile bottom-sheet drag) tracks pointer position directly
+and projects a velocity-based snap target on release, rather than delegating
+to a token-driven spring.
 
 - `--motion-duration-short`, `--motion-duration-medium`
-- Spring defaults (implementation-level constants):
-	- Resting UI transitions: damping 1.0, response 0.3 to 0.4
-	- Momentum release: damping ~0.8, response 0.3 to 0.4
-
-## Interaction system
-
-### Direct manipulation
-
-- Update sheet/panel/dragged objects continuously during pointer movement.
-- Respect grab offset where the user starts touching, do not re-centre.
-- Keep pointer capture active during drag interactions.
-
-### Interruptibility
-
-- Any active animation affecting draggable or sheet surfaces must be
-	interruptible by immediate user input.
-- New transitions start from the current presented value, not stale target
-	state.
-- Reversing direction should preserve blended velocity where possible.
-
-### Momentum and boundaries
-
-- Use projected momentum to choose snap target on release for drag sheets.
-- Use progressive resistance near hard boundaries rather than abrupt stops.
-
-## Typography system
-
-- Keep the two-family system already in use (display/body and mono) unless a
-	dedicated migration to SF-like metrics is approved.
-- Apply size-relative tracking:
-	- Large display styles use mild negative tracking.
-	- Body text remains near zero tracking.
-	- Dense metadata can use slight positive tracking where legibility improves.
-- Use semantic type roles rather than one-off sizes:
-	- Display
-	- Heading
-	- Body
-	- Supporting
-	- Data/mono
 
 ## Accessibility policy
 
 - Minimum 44px touch targets for all interactive controls.
 - Keyboard operation and visible focus remain mandatory for all controls.
-- Honour reduced motion and reduced transparency preferences:
-	- Reduced motion: cross-fade or static transitions for large surface movement.
-	- Reduced transparency: increase opacity and remove blur where required.
+- Honour reduced motion: `prefers-reduced-motion` collapses animation/transition
+	durations globally.
+- Because surfaces are opaque tonal colours rather than translucent
+	materials, there is no `prefers-reduced-transparency` handling to
+	maintain — there is no transparency on structural chrome to reduce.
 - Preserve or improve current Lighthouse accessibility score.
 
 ## Component primitives
 
 Preferred primitives and ownership:
 
-- `ControlButton`: material surface behaviour, press feedback, focus treatment
+- `ControlButton`: surface/state-layer behaviour, press feedback, focus
+	treatment
 - `SegmentedControl`: mutually exclusive option groups
 - `IconButton`: icon-specific semantics and sizing, built on `ControlButton`
 - `LocationSearchControl`: search affordance and input hierarchy
 
-If a new control replicates these behaviours, extend a primitive before adding
-new standalone CSS.
+If a new control replicates these behaviours, extend a primitive before
+adding new standalone CSS.
 
 ## Implementation guardrails
 
 - No second parallel design system.
-- No unscoped one-off blur values in component CSS.
-- No fixed-duration keyframe animations for gesture-controlled transitions.
+- No backdrop-filter/blur on structural chrome — elevation and tonal surface
+	colour carry that job instead.
+- No token or class name references a specific vendor's design language by
+	name; describe the value, not its inspiration.
 - Avoid visual novelty that competes with evidence layers.
 
 ## Success criteria
@@ -146,5 +146,5 @@ new standalone CSS.
 - Chrome feels cohesive as one floating control layer over the map.
 - Mobile sheet drag and snap feel physically continuous and interruptible.
 - Typography hierarchy is clearer at all sizes without visual noise.
-- Reduced-motion and reduced-transparency modes remain fully usable.
+- Reduced-motion mode remains fully usable.
 - Existing unit and e2e behaviour is preserved or improved.

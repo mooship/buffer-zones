@@ -14,45 +14,15 @@
   --color-surface: #f8faff;
   --color-surface-hover: #edf3ff;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --shape-small: 8px;
+  --shape-medium: 12px;
+  --shape-large: 20px;
+  --shape-full: 999px;
 
-  --shape-small: var(--radius-sm);
-  --shape-medium: var(--radius-md);
-  --shape-large: var(--radius-lg);
-
-  --shadow-sm: 0 1px 2px rgb(20 33 62 / 10%), 0 3px 8px rgb(16 31 65 / 8%);
-  --shadow-md: 0 8px 22px rgb(20 36 72 / 16%), 0 2px 8px rgb(16 31 65 / 10%);
-  --shadow-lg: 0 18px 44px rgb(20 38 75 / 22%), 0 6px 20px rgb(14 28 62 / 16%);
-
-  --elevation-raised: var(--shadow-md);
-  --elevation-overlay: var(--shadow-lg);
-
-  --glass-panel-bg: linear-gradient(
-    158deg,
-    color-mix(in srgb, var(--color-panel) 82%, #ffffff) 0%,
-    color-mix(in srgb, var(--color-panel) 64%, transparent) 44%,
-    color-mix(in srgb, var(--color-panel) 50%, transparent) 100%
-  );
-  --glass-panel-border: color-mix(in srgb, #f5f8ff 64%, var(--color-line));
-  --glass-panel-blur: 26px;
-  --glass-chip-bg: linear-gradient(
-    165deg,
-    color-mix(in srgb, var(--color-panel) 70%, #ffffff) 0%,
-    color-mix(in srgb, var(--color-panel) 46%, transparent) 100%
-  );
-  --glass-chip-border: color-mix(in srgb, #f3f7ff 48%, var(--color-line));
-  --glass-chip-blur: 18px;
-  --glass-overlay-scrim: rgb(10 20 40 / 16%);
-  --glass-specular-top: color-mix(in srgb, #ffffff 76%, transparent);
-  --glass-specular-bottom: color-mix(in srgb, #90a8d4 18%, transparent);
-  --glass-sheen: linear-gradient(
-    180deg,
-    color-mix(in srgb, #ffffff 24%, transparent) 0%,
-    color-mix(in srgb, #ffffff 0%, transparent) 40%,
-    color-mix(in srgb, #89a0ce 16%, transparent) 100%
-  );
+  --elevation-1: 0 1px 2px rgb(20 33 62 / 10%), 0 3px 8px rgb(16 31 65 / 8%);
+  --elevation-2: 0 8px 22px rgb(20 36 72 / 16%), 0 2px 8px rgb(16 31 65 / 10%);
+  --elevation-3:
+    0 18px 44px rgb(20 38 75 / 22%), 0 6px 20px rgb(14 28 62 / 16%);
 
   --color-primary: var(--color-ochre);
   --color-on-primary: var(--color-ink);
@@ -64,8 +34,29 @@
     var(--color-line) 35%,
     transparent
   );
-  --color-surface-container-low: var(--color-surface);
-  --color-state-hover: var(--color-surface-hover);
+
+  /* Tonal surfaces: a small tint of the accent colour mixed into the base
+   * panel colour, standing in for elevation instead of translucency/blur.
+   * Derived from --color-panel/--color-primary, which are redeclared per
+   * theme below, so these don't need separate light/dark values. */
+  --color-surface-container: color-mix(
+    in srgb,
+    var(--color-panel) 95%,
+    var(--color-primary) 5%
+  );
+  --color-surface-container-high: color-mix(
+    in srgb,
+    var(--color-panel) 88%,
+    var(--color-primary) 12%
+  );
+
+  /* State layers: a flat opacity overlay tinting whatever surface it's
+   * applied to, rather than each component picking its own ad hoc hover
+   * percentage. Also theme-adaptive via --color-on-surface/--color-primary. */
+  --state-hover: color-mix(in srgb, var(--color-on-surface) 8%, transparent);
+  --state-pressed: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+  --state-selected: color-mix(in srgb, var(--color-primary) 12%, transparent);
+
   --color-map-label-surface: color-mix(
     in srgb,
     var(--color-panel) 92%,
@@ -112,34 +103,9 @@
     --color-surface: #1f2a3a;
     --color-surface-hover: #2b384c;
 
-    --shadow-sm: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
-    --shadow-md: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
-    --shadow-lg: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
-
-    --glass-panel-bg: linear-gradient(
-      160deg,
-      color-mix(in srgb, #32415e 58%, transparent) 0%,
-      color-mix(in srgb, #2f3e59 44%, transparent) 54%,
-      color-mix(in srgb, #293750 34%, transparent) 100%
-    );
-    --glass-panel-border: color-mix(in srgb, #d8e4ff 28%, #4f607e);
-    --glass-panel-blur: 28px;
-    --glass-chip-bg: linear-gradient(
-      165deg,
-      color-mix(in srgb, #33405b 56%, transparent) 0%,
-      color-mix(in srgb, #2d3a54 36%, transparent) 100%
-    );
-    --glass-chip-border: color-mix(in srgb, #d6e4ff 22%, #4b5a74);
-    --glass-chip-blur: 18px;
-    --glass-overlay-scrim: rgb(0 4 12 / 34%);
-    --glass-specular-top: color-mix(in srgb, #e7efff 24%, transparent);
-    --glass-specular-bottom: color-mix(in srgb, #87a2d4 26%, transparent);
-    --glass-sheen: linear-gradient(
-      180deg,
-      color-mix(in srgb, #e4ecff 18%, transparent) 0%,
-      color-mix(in srgb, #e4ecff 0%, transparent) 40%,
-      color-mix(in srgb, #86a2d7 20%, transparent) 100%
-    );
+    --elevation-1: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
+    --elevation-2: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
+    --elevation-3: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
     color-scheme: dark;
   }
@@ -157,34 +123,9 @@
   --color-surface: #1f2a3a;
   --color-surface-hover: #2b384c;
 
-  --shadow-sm: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
-  --shadow-md: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
-  --shadow-lg: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
-
-  --glass-panel-bg: linear-gradient(
-    160deg,
-    color-mix(in srgb, #32415e 58%, transparent) 0%,
-    color-mix(in srgb, #2f3e59 44%, transparent) 54%,
-    color-mix(in srgb, #293750 34%, transparent) 100%
-  );
-  --glass-panel-border: color-mix(in srgb, #d8e4ff 28%, #4f607e);
-  --glass-panel-blur: 28px;
-  --glass-chip-bg: linear-gradient(
-    165deg,
-    color-mix(in srgb, #33405b 56%, transparent) 0%,
-    color-mix(in srgb, #2d3a54 36%, transparent) 100%
-  );
-  --glass-chip-border: color-mix(in srgb, #d6e4ff 22%, #4b5a74);
-  --glass-chip-blur: 18px;
-  --glass-overlay-scrim: rgb(0 4 12 / 34%);
-  --glass-specular-top: color-mix(in srgb, #e7efff 24%, transparent);
-  --glass-specular-bottom: color-mix(in srgb, #87a2d4 26%, transparent);
-  --glass-sheen: linear-gradient(
-    180deg,
-    color-mix(in srgb, #e4ecff 18%, transparent) 0%,
-    color-mix(in srgb, #e4ecff 0%, transparent) 40%,
-    color-mix(in srgb, #86a2d7 20%, transparent) 100%
-  );
+  --elevation-1: 0 2px 4px rgb(0 0 0 / 42%), 0 4px 10px rgb(0 0 0 / 30%);
+  --elevation-2: 0 10px 26px rgb(2 10 25 / 52%), 0 4px 12px rgb(0 0 0 / 34%);
+  --elevation-3: 0 24px 56px rgb(2 8 20 / 62%), 0 8px 24px rgb(0 0 0 / 42%);
 
   color-scheme: dark;
 }
@@ -220,11 +161,11 @@ body {
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-  background: var(--color-panel);
+  background: var(--color-surface-container-high);
   color: var(--color-paper);
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--shape-medium);
+  box-shadow: var(--elevation-2);
 }
 
 .leaflet-popup-content {
@@ -238,19 +179,19 @@ body {
 .leaflet-control-scale-line {
   border: 1px solid var(--color-line);
   padding: 2px 8px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--shape-small);
   background: color-mix(in srgb, var(--color-panel) 85%, transparent);
   color: var(--color-paper);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--elevation-1);
 }
 
 .leaflet-control-zoom {
   /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets these properties directly */
-  border-radius: var(--radius-sm) !important;
+  border-radius: var(--shape-small) !important;
   /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets these properties directly */
-  box-shadow: var(--shadow-md) !important;
+  box-shadow: var(--elevation-2) !important;
   overflow: hidden;
   /* biome-ignore lint/complexity/noImportantStyles: overrides Leaflet's own bundled control stylesheet, which loads after this file and sets these properties directly */
   border: none !important;
@@ -318,17 +259,8 @@ body {
   }
 }
 
-:root[data-reduced-transparency="true"] {
-  --glass-panel-bg: var(--color-panel);
-  --glass-chip-bg: var(--color-surface);
-  --glass-panel-blur: 0px;
-  --glass-chip-blur: 0px;
-  --glass-sheen: none;
-}
-
 @media (prefers-contrast: more) {
   :root {
-    --glass-panel-border: var(--color-paper);
-    --glass-chip-border: var(--color-paper);
+    --color-outline: var(--color-paper);
   }
 }
