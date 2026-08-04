@@ -6,7 +6,7 @@ The domain used throughout is illustrative: **public amenities** — how far eac
 
 ## 1. Define a `DomainConfig`
 
-A domain is just data: a `DomainConfig` — `{ layers, layerGroups }` — built from the `Layer`/`LayerGroup`/`LayerStyleConfig` types in `@stratum/core`. Nothing here is web- or Leaflet-specific.
+A domain is just data: a `DomainConfig` — `{ layers, layerGroups, story? }` — built from the `Layer`/`LayerGroup`/`LayerStyleConfig`/`DomainStory` types in `@stratum/core`. Nothing here is web- or Leaflet-specific.
 
 Mirror the file layout `@stratum/app` uses for `gauteng-spatial-legacy`: a `layers.ts`, a `layerGroups.ts`, and an `index.ts` that assembles them into one exported constant.
 
@@ -76,7 +76,7 @@ export { PUBLIC_AMENITIES_LAYER_GROUPS } from "./layerGroups";
 export { PUBLIC_AMENITIES_LAYERS } from "./layers";
 ```
 
-`DomainConfig` only requires `layers` and `layerGroups` — you can add extra fields (`@stratum/app`'s `GAUTENG_SPATIAL_LEGACY_DOMAIN` adds an `id` and a `story` for its own "why this map exists" copy) as long as those two are present; `createRegistry` and `useDomain()` only read `layers`/`layerGroups`.
+`DomainConfig` only requires `layers` and `layerGroups`. `story` (`{ title, body }`) is optional narrative "why this map exists" copy — omit it if your domain has nothing to say there, and `getStory()` (both `createRegistry(domain).getStory()` and `useDomain().getStory()`) returns `undefined`. `@stratum/web` reads it through `useDomain()`/`getStory()` and shows a Story tab alongside layer toggles only when it's present, so a domain without one gets the same single-view panel as before — the SDK doesn't require every domain to have a story. You can still add extra fields beyond what `DomainConfig` itself requires (`@stratum/app`'s `GAUTENG_SPATIAL_LEGACY_DOMAIN` also carries an `id`); `createRegistry` and `useDomain()` simply ignore anything past `layers`/`layerGroups`/`story`.
 
 A `Layer`'s `style.kind` — `"choropleth"`, `"line"`, or `"point"` — drives both its Leaflet rendering (via `createLayerConfig`, see below) and its `Legend` entry, so pick it to match the geometry your GeoJSON actually contains. `line`/`point` styles also accept an optional `colorClassification` for data-driven per-feature colour instead of one flat colour — used by `gauteng-spatial-legacy`'s bus-rapid-transit layer to colour each operator's route differently. See [`packages/core/README.md`](../packages/core/README.md) for the full type reference.
 
