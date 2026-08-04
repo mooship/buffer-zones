@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getLayer, getLayerGroups, getLayers } from "./registry";
+import { getLayer, getLayerGroups, getLayers, getStory } from "./registry";
 
 describe("registry", () => {
   it("returns the 6 gauteng-spatial-legacy layers", () => {
@@ -35,5 +35,12 @@ describe("registry", () => {
       "access-to-opportunity",
       "transit-networks",
     ]);
+  });
+
+  it("returns the domain's story copy", () => {
+    expect(getStory()).toEqual({
+      title: "Why this map exists",
+      body: expect.any(String),
+    });
   });
 });

@@ -3,9 +3,8 @@ import { GAUTENG_SPATIAL_LEGACY_LAYERS } from "./layers";
 
 /**
  * Stratum's reference domain: apartheid-era spatial planning legacy across
- * Gauteng's metros. A `DomainConfig` (`layers`/`layerGroups`) plus an `id`
- * and `story` — extra fields beyond what `DomainConfig` itself requires,
- * used by `@stratum/web` for its "why this map exists" copy.
+ * Gauteng's metros. A `DomainConfig` (`layers`/`layerGroups`/`story`) plus
+ * an `id` — the only field beyond what `DomainConfig` itself requires.
  */
 export const GAUTENG_SPATIAL_LEGACY_DOMAIN = {
   id: "gauteng-spatial-legacy",

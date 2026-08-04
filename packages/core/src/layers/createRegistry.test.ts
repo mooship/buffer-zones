@@ -44,6 +44,22 @@ describe("createRegistry", () => {
     expect(getLayers().map((l) => l.id)).toEqual(["a", "b"]);
   });
 
+  it("getStory returns undefined when the domain has no story", () => {
+    const { getStory } = createRegistry(domain);
+    expect(getStory()).toBeUndefined();
+  });
+
+  it("getStory returns the domain's story when present", () => {
+    const { getStory } = createRegistry({
+      ...domain,
+      story: { title: "Why this map exists", body: "Some context." },
+    });
+    expect(getStory()).toEqual({
+      title: "Why this map exists",
+      body: "Some context.",
+    });
+  });
+
   it("getLayer returns the matching layer by id", () => {
     const { getLayer } = createRegistry(domain);
     expect(getLayer("a")?.label).toBe("Layer A");

@@ -1,0 +1,21 @@
+.story {
+  display: grid;
+  gap: 0.625rem;
+  padding: 0 0.625rem;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.body {
+  margin: 0;
+  color: var(--color-paper);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}

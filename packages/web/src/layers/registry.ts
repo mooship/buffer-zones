@@ -1,5 +1,5 @@
 import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
-import type { Layer, LayerGroup } from "@stratum/core";
+import type { DomainStory, Layer, LayerGroup } from "@stratum/core";
 import { createRegistry } from "@stratum/core";
 
 const registry = createRegistry(GAUTENG_SPATIAL_LEGACY_DOMAIN);
@@ -17,4 +17,9 @@ export function getLayer(id: string): Layer | undefined {
 /** Returns every layer group in the `gauteng-spatial-legacy` domain. */
 export function getLayerGroups(): readonly LayerGroup[] {
   return registry.getLayerGroups();
+}
+
+/** Returns the `gauteng-spatial-legacy` domain's story copy, or `undefined` if it has none. */
+export function getStory(): DomainStory | undefined {
+  return registry.getStory();
 }
