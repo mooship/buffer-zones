@@ -19,13 +19,48 @@
   background: var(--color-surface-container-high);
   box-shadow: var(--elevation-3);
   overflow-y: auto;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  transform: translateY(var(--sheet-drag-offset, 0px));
+  transition: transform 180ms ease;
   animation: mobileLegendIn 170ms ease;
+}
+
+.sheet[data-dragging="true"] {
+  transition: none;
+}
+
+.dragHandleButton {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 28px;
+  padding: 0;
+  margin-bottom: var(--space-2);
+  border: 0;
+  border-radius: var(--shape-small);
+  background: transparent;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.dragHandleButton:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
+.dragHandle {
+  display: block;
+  width: 2.5rem;
+  height: 0.25rem;
+  border-radius: var(--shape-full);
+  background: var(--color-line);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sheet {
     animation: none;
+    transition: none;
   }
 }
 

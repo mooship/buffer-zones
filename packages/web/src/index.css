@@ -143,6 +143,10 @@ body,
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* The app is a single fixed-height view with no page-level scroll, so a
+   * touch drag anywhere should never trigger the browser's own
+   * pull-to-refresh/rubber-band bounce chrome around it. */
+  overscroll-behavior: none;
 }
 
 button,

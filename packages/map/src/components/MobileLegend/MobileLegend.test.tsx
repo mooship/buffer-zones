@@ -203,6 +203,78 @@ describe("MobileLegend", () => {
     expect(screen.getByTestId("mobile-legend-content")).toBeInTheDocument();
   });
 
+  it("closes when the drag handle is swiped down past the threshold", () => {
+    render(
+      withDomain(
+        <MobileLegend
+          visibleLayerIds={["areas"]}
+          suppressed={false}
+          panelOpen={false}
+          panelExpanded={false}
+        />,
+      ),
+    );
+
+    fireEvent.click(screen.getByTestId("mobile-legend-trigger"));
+    const dragHandle = screen.getByTestId("mobile-legend-drag-handle");
+
+    fireEvent.pointerDown(dragHandle, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 100,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 150,
+    });
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 150,
+    });
+
+    expect(
+      screen.queryByTestId("mobile-legend-content"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("stays open when the drag handle moves less than the dismiss threshold", () => {
+    render(
+      withDomain(
+        <MobileLegend
+          visibleLayerIds={["areas"]}
+          suppressed={false}
+          panelOpen={false}
+          panelExpanded={false}
+        />,
+      ),
+    );
+
+    fireEvent.click(screen.getByTestId("mobile-legend-trigger"));
+    const dragHandle = screen.getByTestId("mobile-legend-drag-handle");
+
+    fireEvent.pointerDown(dragHandle, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 100,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 110,
+    });
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 110,
+    });
+
+    expect(screen.getByTestId("mobile-legend-content")).toBeInTheDocument();
+  });
+
   it("reflects panelOpen and panelExpanded via data attributes", () => {
     const { container } = render(
       withDomain(
