@@ -1,6 +1,8 @@
 import { BookOpen, X } from "lucide-react";
+import type { CSSProperties } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDismissableOverlay } from "../../hooks/useDismissableOverlay";
+import { useSwipeToDismiss } from "../../hooks/useSwipeToDismiss";
 import { IconButton } from "../IconButton/IconButton";
 import { Legend } from "../Legend/Legend";
 import styles from "./MobileLegend.module.css";
@@ -45,9 +47,18 @@ export function MobileLegend({
     initialFocusRef: titleRef,
   });
 
+  const { dragOffsetPx, dragging, onPointerDown } = useSwipeToDismiss({
+    enabled: open,
+    onDismiss: close,
+  });
+
   if (suppressed) {
     return null;
   }
+
+  const dragStyle = {
+    "--sheet-drag-offset": `${dragOffsetPx}px`,
+  } as CSSProperties;
 
   return (
     <div
@@ -75,7 +86,19 @@ export function MobileLegend({
           aria-label="Map legend"
           data-testid="mobile-legend-content"
           data-e2e="mobile-legend-content"
+          data-dragging={dragging ? "true" : "false"}
+          style={dragStyle}
         >
+          <button
+            type="button"
+            className={styles.dragHandleButton}
+            data-testid="mobile-legend-drag-handle"
+            aria-label="Close map legend"
+            onPointerDown={onPointerDown}
+            onClick={close}
+          >
+            <span className={styles.dragHandle} aria-hidden="true" />
+          </button>
           <h2 className={styles.title} ref={titleRef} tabIndex={-1}>
             Map legend
           </h2>

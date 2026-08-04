@@ -141,6 +141,7 @@
    * gives those effects room so they don't get cut off at the edges. */
   padding-inline: 0.3125rem;
   overflow-y: auto;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-color: var(--color-line) transparent;
   scrollbar-width: thin;
@@ -346,6 +347,7 @@
     border-radius: var(--shape-small);
     background: transparent;
     cursor: pointer;
+    touch-action: none;
   }
 
   .sheetHandleButton[data-dragging="true"] .sheetHandle {
@@ -367,8 +369,8 @@
 
   .sheetHandle {
     display: block;
-    width: 2.5rem;
-    height: 0.25rem;
+    width: var(--drag-handle-width);
+    height: var(--drag-handle-height);
     margin: 0 auto;
     border-radius: var(--shape-full);
     background: var(--color-line);
