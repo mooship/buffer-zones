@@ -161,6 +161,26 @@ describe("createPlainTextTransform", () => {
 
     await expect(readAllText(stream)).resolves.toBe("chunked");
   });
+
+  it("extracts content from OpenAI-style choices[].delta.content frames", async () => {
+    const stream = sseStream([
+      'data: {"choices":[{"delta":{"content":"Hel"}}]}\n\n',
+      'data: {"choices":[{"delta":{"content":"lo!"}}]}\n\n',
+      "data: [DONE]\n\n",
+    ]).pipeThrough(createPlainTextTransform());
+
+    await expect(readAllText(stream)).resolves.toBe("Hello!");
+  });
+
+  it("ignores reasoning/reasoning_content deltas emitted by reasoning models", async () => {
+    const stream = sseStream([
+      'data: {"choices":[{"delta":{"reasoning":"thinking...","reasoning_content":"thinking..."}}]}\n\n',
+      'data: {"choices":[{"delta":{"content":"the answer"}}]}\n\n',
+      "data: [DONE]\n\n",
+    ]).pipeThrough(createPlainTextTransform());
+
+    await expect(readAllText(stream)).resolves.toBe("the answer");
+  });
 });
 
 describe("streamAiReply", () => {

@@ -11,7 +11,7 @@ export const ASK_AI_MODEL = "@cf/zai-org/glm-4.7-flash";
 export const MAX_HISTORY_MESSAGES = 8;
 
 /** Maximum tokens the model may generate per reply, keeping Workers AI's free daily Neuron allowance from being exhausted by a handful of long replies. */
-export const MAX_OUTPUT_TOKENS = 400;
+export const MAX_OUTPUT_TOKENS = 600;
 
 /** `Retry-After` value (seconds) sent with a 429 response. Matches the rate limiter's window (see `wrangler.jsonc`'s `ASK_AI_RATE_LIMITER`). */
 export const RATE_LIMIT_RETRY_AFTER_SECONDS = 60;
@@ -92,15 +92,24 @@ export function getRateLimitKey(request: Request): string {
 const SSE_DATA_PREFIX = "data: ";
 const SSE_DONE_MARKER = "[DONE]";
 
-/** One chunk of a Workers AI streaming text-generation response. */
+/**
+ * One chunk of a Workers AI streaming text-generation response. `response`
+ * is the legacy plain-text-model shape; `choices[].delta.content` is the
+ * OpenAI-compatible shape used by chat-completion models like
+ * `@cf/zai-org/glm-4.7-flash`, which also stream a `delta.reasoning` /
+ * `delta.reasoning_content` field for their internal "thinking" tokens —
+ * deliberately not surfaced to the user.
+ */
 interface WorkersAiStreamChunk {
   response?: string;
+  choices?: Array<{ delta?: { content?: string } }>;
 }
 
 /**
- * Transforms a Workers AI streaming response — Server-Sent Events framing
- * `data: {"response": "..."}` per token, terminated by `data: [DONE]` — into
- * a plain UTF-8 text stream of just the generated content.
+ * Transforms a Workers AI streaming response — Server-Sent Events framing,
+ * either `data: {"response": "..."}` or `data: {"choices":[{"delta":{"content":"..."}}]}`
+ * per token, terminated by `data: [DONE]` — into a plain UTF-8 text stream of
+ * just the generated reply content.
  * @remarks Keeps `@stratum/react`'s `useAskAi` hook vendor-agnostic: it only
  * ever sees plain text chunks, never Workers AI's SSE/JSON framing.
  * Malformed frames are skipped rather than failing the whole stream, since a
@@ -128,8 +137,9 @@ export function createPlainTextTransform(): TransformStream<
     }
     try {
       const parsed: WorkersAiStreamChunk = JSON.parse(data);
-      if (parsed.response) {
-        controller.enqueue(encoder.encode(parsed.response));
+      const content = parsed.choices?.[0]?.delta?.content ?? parsed.response;
+      if (content) {
+        controller.enqueue(encoder.encode(content));
       }
     } catch {
       // Skip malformed SSE frames; the rest of the stream still delivers.
@@ -167,6 +177,7 @@ export async function streamAiReply(
     stream: true,
     max_tokens: MAX_OUTPUT_TOKENS,
     temperature: 0.3,
+    reasoning_effort: "low",
   });
   return aiStream.pipeThrough(createPlainTextTransform());
 }

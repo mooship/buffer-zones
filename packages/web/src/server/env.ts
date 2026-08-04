@@ -10,6 +10,7 @@ export interface WorkersAiRunOptions {
   stream: true;
   max_tokens: number;
   temperature: number;
+  reasoning_effort: "low" | "medium" | "high";
 }
 
 /**
