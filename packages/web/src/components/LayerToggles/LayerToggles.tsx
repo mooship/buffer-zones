@@ -11,9 +11,10 @@ interface LayerTogglesProps {
 
 /**
  * Renders every layer group from the domain registry as a checkbox list,
- * grouped under its title/description. An unavailable layer's checkbox is
- * disabled with a "Not yet available" badge; a failed-to-load visible layer
- * shows a "Failed to load" badge instead.
+ * grouped under its title/description. Each layer shows its own
+ * `description`, when it has one, beneath its label. An unavailable layer's
+ * checkbox is disabled with a "Not yet available" badge; a failed-to-load
+ * visible layer shows a "Failed to load" badge instead.
  */
 export function LayerToggles({
   visibleLayerIds,
@@ -29,6 +30,8 @@ export function LayerToggles({
       return null;
     }
     const layerTestId = `layer-toggle-${layer.id}`;
+    const labelId = `${layerTestId}-label`;
+    const descriptionId = `${layerTestId}-description`;
     const failed = failedLayerIds.includes(layer.id);
     return (
       <li key={layer.id}>
@@ -46,8 +49,22 @@ export function LayerToggles({
             checked={visibleLayerIds.includes(layer.id)}
             disabled={!layer.available}
             onChange={() => onToggle(layer.id)}
+            aria-labelledby={labelId}
+            aria-describedby={layer.description ? descriptionId : undefined}
           />
-          <span className={styles.label}>{layer.label}</span>
+          <span className={styles.label} id={labelId}>
+            {layer.label}
+          </span>
+          {layer.description ? (
+            <span
+              className={styles.description}
+              id={descriptionId}
+              data-testid={descriptionId}
+              data-e2e={descriptionId}
+            >
+              {layer.description}
+            </span>
+          ) : null}
           {layer.available ? null : (
             <span className={styles.badge}>Not yet available</span>
           )}

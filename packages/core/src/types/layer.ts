@@ -187,8 +187,20 @@ export interface LayerGroup {
   layerIds: string[];
 }
 
+/**
+ * Narrative "why this map exists" copy for a domain, surfaced by consumers
+ * as a Story view alongside layer controls.
+ * @remarks Optional: a domain with nothing to say here simply omits `story`
+ *   from its `DomainConfig`, and callers should treat that as "no story view".
+ */
+export interface DomainStory {
+  title: string;
+  body: string;
+}
+
 /** Minimal domain configuration consumed by `createRegistry`. */
 export interface DomainConfig {
   layers: readonly Layer[];
   layerGroups: readonly LayerGroup[];
+  story?: DomainStory;
 }

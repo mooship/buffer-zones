@@ -174,6 +174,45 @@ describe("App", () => {
     );
   });
 
+  it("shows a Story tab that renders the domain's story copy", async () => {
+    render(<App />);
+
+    const tablist = await screen.findByTestId("panel-tablist");
+    const layersTab = screen.getByTestId("panel-tab-layers");
+    const storyTab = screen.getByTestId("panel-tab-story");
+    expect(tablist).toBeInTheDocument();
+    expect(layersTab).toHaveAttribute("aria-selected", "true");
+    expect(storyTab).toHaveAttribute("aria-selected", "false");
+
+    fireEvent.click(storyTab);
+
+    expect(storyTab).toHaveAttribute("aria-selected", "true");
+    expect(
+      screen.getByRole("heading", { name: "Why this map exists" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("checkbox", { name: "Modelled car time" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("moves tab focus with arrow keys and activates the focused tab", async () => {
+    render(<App />);
+
+    const layersTab = await screen.findByTestId("panel-tab-layers");
+    const storyTab = screen.getByTestId("panel-tab-story");
+    layersTab.focus();
+
+    fireEvent.keyDown(layersTab, { key: "ArrowRight" });
+
+    expect(storyTab).toHaveFocus();
+    expect(storyTab).toHaveAttribute("aria-selected", "true");
+
+    fireEvent.keyDown(storyTab, { key: "ArrowLeft" });
+
+    expect(layersTab).toHaveFocus();
+    expect(layersTab).toHaveAttribute("aria-selected", "true");
+  });
+
   it("collapses and restores the controls panel", async () => {
     render(<App />);
 

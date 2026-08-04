@@ -116,6 +116,14 @@
   min-width: 0;
 }
 
+.description {
+  flex-basis: 100%;
+  margin-left: 2.875rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+}
+
 .badge {
   flex-shrink: 0;
   margin-left: 2.875rem;

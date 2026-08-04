@@ -14,9 +14,22 @@ describe("useMapUiStore", () => {
       visibleLayerIds: ["townships"],
       basemap: "street",
       panelOpen: false,
+      panelView: "layers",
       titleExpanded: false,
       selectedFeatureId: null,
     });
+  });
+
+  it("sets the panel view", () => {
+    act(() => {
+      useMapUiStore.getState().setPanelView("story");
+    });
+    expect(useMapUiStore.getState().panelView).toBe("story");
+
+    act(() => {
+      useMapUiStore.getState().setPanelView("layers");
+    });
+    expect(useMapUiStore.getState().panelView).toBe("layers");
   });
 
   it("toggles layer visibility", () => {
