@@ -12,7 +12,7 @@ import { TOWNSHIP_AREA_DEFINITIONS } from "../../constants/townships";
  * prompt on Cloudflare's free Workers AI tier. An LLM grounded on this
  * summary can describe the dataset's shape and methodology, but must be
  * told (see the system prompt this feeds into) that it can't look up a
- * specific place's numbers — that's what the map and the Places panel are for.
+ * specific place's numbers — that's what exploring the map itself is for.
  * @example
  * buildGautengDatasetSummary();
  * // "The gauteng-spatial-legacy dataset covers 9 Gauteng metros, ..."
