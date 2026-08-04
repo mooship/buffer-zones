@@ -6,6 +6,7 @@ import {
   assertCompleteNetworkCoverage,
   assertMetroSetup,
   cleanupStagingDirectories,
+  findJobCenterCountMismatch,
   formatDuration,
   mergeNetworkCoverage,
   promoteStagedOutput,
@@ -61,31 +62,25 @@ describe("assertCompleteNetworkCoverage", () => {
   });
 });
 
+describe("findJobCenterCountMismatch", () => {
+  it("returns null when the counts match", () => {
+    expect(findJobCenterCountMismatch("tshwane", 2, 2)).toBeNull();
+  });
+
+  it("describes the mismatch when the counts differ", () => {
+    expect(findJobCenterCountMismatch("tshwane", 2, 1)).toBe(
+      "Job center count mismatch for tshwane: expected 2, got 1",
+    );
+  });
+});
+
 describe("assertMetroSetup", () => {
-  it("does not throw when every metro's job-centre count matches", () => {
-    expect(() =>
-      assertMetroSetup(
-        [
-          { id: "tshwane", jobCenterCount: 2 },
-          { id: "johannesburg", jobCenterCount: 3 },
-        ],
-        (id) => (id === "tshwane" ? 2 : 3),
-      ),
-    ).not.toThrow();
-  });
-
-  it("throws when a metro's job-centre count doesn't match", () => {
-    expect(() =>
-      assertMetroSetup([{ id: "tshwane", jobCenterCount: 2 }], () => 1),
-    ).toThrow("Job center count mismatch for tshwane: expected 2, got 1");
-  });
-
   it("does not throw against the real METROS/getJobCentersForMetro data", () => {
     expect(() => assertMetroSetup()).not.toThrow();
   });
 });
 
-describe("promoteStagedOutput", () => {
+describe("promoteStagedOutput and cleanupStagingDirectories", () => {
   let dir: string;
 
   beforeEach(async () => {
@@ -96,80 +91,74 @@ describe("promoteStagedOutput", () => {
     await rm(dir, { recursive: true, force: true });
   });
 
-  it("moves the staged directory to the publish path when nothing is published yet", async () => {
-    const stagedDir = resolve(dir, "staged");
-    const publishDir = resolve(dir, "published");
-    await mkdir(stagedDir);
-    await writeFile(resolve(stagedDir, "marker.txt"), "staged");
+  describe("promoteStagedOutput", () => {
+    it("moves the staged directory to the publish path when nothing is published yet", async () => {
+      const stagedDir = resolve(dir, "staged");
+      const publishDir = resolve(dir, "published");
+      await mkdir(stagedDir);
+      await writeFile(resolve(stagedDir, "marker.txt"), "staged");
 
-    await promoteStagedOutput(stagedDir, publishDir);
+      await promoteStagedOutput(stagedDir, publishDir);
 
-    expect(await readFile(resolve(publishDir, "marker.txt"), "utf8")).toBe(
-      "staged",
-    );
+      expect(await readFile(resolve(publishDir, "marker.txt"), "utf8")).toBe(
+        "staged",
+      );
+    });
+
+    it("replaces an existing published directory with the staged one", async () => {
+      const stagedDir = resolve(dir, "staged");
+      const publishDir = resolve(dir, "published");
+      await mkdir(stagedDir);
+      await writeFile(resolve(stagedDir, "marker.txt"), "new");
+      await mkdir(publishDir);
+      await writeFile(resolve(publishDir, "marker.txt"), "old");
+
+      await promoteStagedOutput(stagedDir, publishDir);
+
+      expect(await readFile(resolve(publishDir, "marker.txt"), "utf8")).toBe(
+        "new",
+      );
+      await expect(
+        readFile(resolve(`${publishDir}.backup`, "marker.txt"), "utf8"),
+      ).rejects.toThrow();
+    });
+
+    it("rolls back to the previous published directory if the rename fails", async () => {
+      const stagedDir = resolve(dir, "does-not-exist");
+      const publishDir = resolve(dir, "published");
+      await mkdir(publishDir);
+      await writeFile(resolve(publishDir, "marker.txt"), "old");
+
+      await expect(
+        promoteStagedOutput(stagedDir, publishDir),
+      ).rejects.toThrow();
+
+      expect(await readFile(resolve(publishDir, "marker.txt"), "utf8")).toBe(
+        "old",
+      );
+    });
   });
 
-  it("replaces an existing published directory with the staged one", async () => {
-    const stagedDir = resolve(dir, "staged");
-    const publishDir = resolve(dir, "published");
-    await mkdir(stagedDir);
-    await writeFile(resolve(stagedDir, "marker.txt"), "new");
-    await mkdir(publishDir);
-    await writeFile(resolve(publishDir, "marker.txt"), "old");
+  describe("cleanupStagingDirectories", () => {
+    it("removes only staging directories for the given region", async () => {
+      await mkdir(resolve(dir, "gauteng.__staging__123"));
+      await mkdir(resolve(dir, "gauteng.__staging__456"));
+      await mkdir(resolve(dir, "western-cape.__staging__789"));
+      await mkdir(resolve(dir, "gauteng"));
 
-    await promoteStagedOutput(stagedDir, publishDir);
+      await cleanupStagingDirectories(dir, "gauteng");
 
-    expect(await readFile(resolve(publishDir, "marker.txt"), "utf8")).toBe(
-      "new",
-    );
-    await expect(
-      readFile(resolve(`${publishDir}.backup`, "marker.txt"), "utf8"),
-    ).rejects.toThrow();
-  });
+      const { readdir } = await import("node:fs/promises");
+      const remaining = await readdir(dir);
+      expect(remaining.sort()).toEqual(
+        ["gauteng", "western-cape.__staging__789"].sort(),
+      );
+    });
 
-  it("rolls back to the previous published directory if the rename fails", async () => {
-    const stagedDir = resolve(dir, "does-not-exist");
-    const publishDir = resolve(dir, "published");
-    await mkdir(publishDir);
-    await writeFile(resolve(publishDir, "marker.txt"), "old");
-
-    await expect(promoteStagedOutput(stagedDir, publishDir)).rejects.toThrow();
-
-    expect(await readFile(resolve(publishDir, "marker.txt"), "utf8")).toBe(
-      "old",
-    );
-  });
-});
-
-describe("cleanupStagingDirectories", () => {
-  let dir: string;
-
-  beforeEach(async () => {
-    dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-run-"));
-  });
-
-  afterEach(async () => {
-    await rm(dir, { recursive: true, force: true });
-  });
-
-  it("removes only staging directories for the given region", async () => {
-    await mkdir(resolve(dir, "gauteng.__staging__123"));
-    await mkdir(resolve(dir, "gauteng.__staging__456"));
-    await mkdir(resolve(dir, "western-cape.__staging__789"));
-    await mkdir(resolve(dir, "gauteng"));
-
-    await cleanupStagingDirectories(dir, "gauteng");
-
-    const { readdir } = await import("node:fs/promises");
-    const remaining = await readdir(dir);
-    expect(remaining.sort()).toEqual(
-      ["gauteng", "western-cape.__staging__789"].sort(),
-    );
-  });
-
-  it("does nothing when the root directory doesn't exist", async () => {
-    await expect(
-      cleanupStagingDirectories(resolve(dir, "missing"), "gauteng"),
-    ).resolves.toBeUndefined();
+    it("does nothing when the root directory doesn't exist", async () => {
+      await expect(
+        cleanupStagingDirectories(resolve(dir, "missing"), "gauteng"),
+      ).resolves.toBeUndefined();
+    });
   });
 });

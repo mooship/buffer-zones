@@ -272,12 +272,8 @@ function SelectedFeatureHighlight<TProperties extends Record<string, unknown>>({
   renderFeaturePopup,
 }: SelectedFeatureHighlightProps<TProperties>) {
   const map = useMap();
-  const previousSelectedElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    previousSelectedElement.current?.removeAttribute("aria-current");
-    previousSelectedElement.current = null;
-
     if (!selectedFeatureId) {
       return;
     }
@@ -303,17 +299,9 @@ function SelectedFeatureHighlight<TProperties extends Record<string, unknown>>({
     featureLayer.openPopup?.();
 
     const element = featureLayer.getElement?.();
-    if (element) {
-      element.setAttribute("aria-current", "true");
-      previousSelectedElement.current = element;
-    }
+    element?.setAttribute("aria-current", "true");
+    return () => element?.removeAttribute("aria-current");
   }, [map, selectedFeatureId, layerById, renderFeaturePopup]);
-
-  useEffect(
-    () => () =>
-      previousSelectedElement.current?.removeAttribute("aria-current"),
-    [],
-  );
 
   return null;
 }
@@ -507,7 +495,7 @@ function MapViewComponent<
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
   const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
-  const choroplethRenderer = useMemo(() => svg({ pane: AREA_PANE }), []);
+  const selectableFeatureRenderer = useMemo(() => svg({ pane: AREA_PANE }), []);
   const visibleLayers = useMemo(
     () =>
       getLayers().filter(
@@ -714,6 +702,7 @@ function MapViewComponent<
             return null;
           }
           const isChoropleth = layer.geometryKind === "choropleth";
+          const isSelectable = Boolean(layer.interaction?.selectable);
           const data = isChoropleth ? areaData : overlayData[layer.id];
 
           if (!data || (isChoropleth && areas.length === 0)) {
@@ -732,17 +721,17 @@ function MapViewComponent<
               style={config.styleFn}
               // The map defaults to the canvas renderer (`preferCanvas` on
               // `MapContainer`) since most overlay geometry doesn't need
-              // per-feature DOM nodes, but the choropleth layer does:
+              // per-feature DOM nodes, but a selectable layer does:
               // bindSelectableFeatureInteractions calls `getElement()` to
               // attach `tabindex`/keyboard handlers, which canvas-rendered
               // paths never have.
-              renderer={isChoropleth ? choroplethRenderer : undefined}
+              renderer={isSelectable ? selectableFeatureRenderer : undefined}
               pathOptions={{
                 ...config.pathOptions,
                 pane: isChoropleth ? AREA_PANE : TRANSIT_PANE,
               }}
               onEachFeature={
-                isChoropleth
+                isSelectable
                   ? (feature: Feature, featureLayer: Layer) =>
                       bindSelectableFeatureInteractions(
                         feature,

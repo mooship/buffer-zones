@@ -46,22 +46,36 @@ export function assertCompleteNetworkCoverage(
 }
 
 /**
+ * Compares a metro's declared job-centre count against its actual
+ * configured count.
+ * @returns A description of the mismatch, or `null` if they match.
+ */
+export function findJobCenterCountMismatch(
+  metroId: MetroId,
+  expectedCount: number,
+  actualCount: number,
+): string | null {
+  if (actualCount === expectedCount) {
+    return null;
+  }
+  return `Job center count mismatch for ${metroId}: expected ${expectedCount}, got ${actualCount}`;
+}
+
+/**
  * Checks that each metro's declared `jobCenterCount` matches its actual
  * configured job centres, catching a `constants/metros.ts` edit that wasn't
  * kept in sync with `constants/jobCenters.ts`.
  * @throws On the first mismatch found.
  */
-export function assertMetroSetup(
-  metros: readonly { id: MetroId; jobCenterCount: number }[] = METROS,
-  jobCenterCountForMetro: (id: MetroId) => number = (id) =>
-    getJobCentersForMetro(id).length,
-): void {
-  for (const metro of metros) {
-    const count = jobCenterCountForMetro(metro.id);
-    if (count !== metro.jobCenterCount) {
-      throw new Error(
-        `Job center count mismatch for ${metro.id}: expected ${metro.jobCenterCount}, got ${count}`,
-      );
+export function assertMetroSetup(): void {
+  for (const metro of METROS) {
+    const mismatch = findJobCenterCountMismatch(
+      metro.id,
+      metro.jobCenterCount,
+      getJobCentersForMetro(metro.id).length,
+    );
+    if (mismatch) {
+      throw new Error(mismatch);
     }
   }
 }

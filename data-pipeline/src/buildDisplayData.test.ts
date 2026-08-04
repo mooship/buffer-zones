@@ -69,17 +69,17 @@ const transitLine: FeatureCollection = {
   ],
 };
 
+let dir: string;
+
+beforeEach(async () => {
+  dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-display-"));
+});
+
+afterEach(async () => {
+  await rm(dir, { recursive: true, force: true });
+});
+
 describe("rebuildTownshipDisplay", () => {
-  let dir: string;
-
-  beforeEach(async () => {
-    dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-display-"));
-  });
-
-  afterEach(async () => {
-    await rm(dir, { recursive: true, force: true });
-  });
-
   it("rebuilds both display files from the plain .v1.geojson fallback and returns true", async () => {
     await writeFile(
       resolve(dir, "townships.v1.geojson"),
@@ -126,16 +126,6 @@ describe("rebuildTownshipDisplay", () => {
 });
 
 describe("rebuildTransitDisplay", () => {
-  let dir: string;
-
-  beforeEach(async () => {
-    dir = await mkdtemp(resolve(tmpdir(), "buffer-zones-display-"));
-  });
-
-  afterEach(async () => {
-    await rm(dir, { recursive: true, force: true });
-  });
-
   it("rebuilds a display file from the plain .v1.geojson fallback", async () => {
     await writeFile(
       resolve(dir, "gautrain.v1.geojson"),
