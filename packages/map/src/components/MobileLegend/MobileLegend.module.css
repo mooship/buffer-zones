@@ -21,6 +21,8 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  scrollbar-color: var(--color-line) transparent;
+  scrollbar-width: thin;
   transform: translateY(var(--sheet-drag-offset, 0px));
   transition: transform 180ms ease;
   animation: mobileLegendIn 170ms ease;
@@ -28,6 +30,21 @@
 
 .sheet[data-dragging="true"] {
   transition: none;
+}
+
+.sheet::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sheet::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sheet::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--color-muted);
+  background-clip: padding-box;
 }
 
 .dragHandleButton {

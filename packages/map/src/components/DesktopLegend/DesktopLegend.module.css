@@ -12,6 +12,23 @@
   box-shadow: var(--elevation-3);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-color: var(--color-line) transparent;
+  scrollbar-width: thin;
+}
+
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.container::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--color-muted);
+  background-clip: padding-box;
 }
 
 .title {
