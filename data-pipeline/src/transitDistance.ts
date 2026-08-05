@@ -1,5 +1,5 @@
 import type { TransitLayerFeatureCollection } from "@stratum/app";
-import * as turf from "@turf/turf";
+import { nearestFeatureDistance } from "@stratum/core";
 import type { LineString, Point } from "geojson";
 import type { LatLon } from "./adapters/boundaries";
 
@@ -23,30 +23,8 @@ export function computeNearestTransitKm(
       (geometry): geometry is Point | LineString =>
         geometry.type === "Point" || geometry.type === "LineString",
     );
-  if (geometries.length === 0) {
-    return centroids.map(() => null);
-  }
 
-  return centroids.map((centroid) => {
-    const point = turf.point([centroid.lon, centroid.lat]);
-    let nearestKm = Number.POSITIVE_INFINITY;
-    for (const geometry of geometries) {
-      const distance =
-        geometry.type === "Point"
-          ? turf.distance(point, turf.point(geometry.coordinates), {
-              units: "kilometers",
-            })
-          : turf.pointToLineDistance(
-              point,
-              turf.lineString(geometry.coordinates),
-              {
-                units: "kilometers",
-              },
-            );
-      if (distance < nearestKm) {
-        nearestKm = distance;
-      }
-    }
-    return nearestKm;
-  });
+  return centroids.map((centroid) =>
+    nearestFeatureDistance([centroid.lon, centroid.lat], geometries),
+  );
 }

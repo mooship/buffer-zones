@@ -47,10 +47,41 @@ const MapView = lazy(async () => {
   return { default: MapView };
 });
 
-const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
+/** A Leaflet-style `[[south, west], [north, east]]` bounding rectangle. */
+type LatLngBoundsTuple = [[number, number], [number, number]];
+
+const GAUTENG_BOUNDS: LatLngBoundsTuple = [
   [-27.15, 27.1],
   [-25.3, 28.75],
 ];
+
+/**
+ * Mainland South Africa's approximate extent, used only to sanity-check
+ * location search results (see `isWithinSearchCoverage`) — not the map's
+ * initial viewport, which stays framed on Gauteng via `GAUTENG_BOUNDS` since
+ * that's the only region with actual layer data today.
+ */
+const SEARCH_COVERAGE_BOUNDS: LatLngBoundsTuple = [
+  [-34.84, 16.45],
+  [-22.13, 32.95],
+];
+
+/**
+ * Whether `location` falls within `SEARCH_COVERAGE_BOUNDS`.
+ * @remarks Nominatim searches the whole world, so a query can resolve to a
+ *   place far outside South Africa entirely; flying the map there would just
+ *   show an empty basemap with no explanation. The mapped data itself is
+ *   Gauteng-only, but the basemap and search cover the whole country.
+ */
+function isWithinSearchCoverage(location: LocationSearchResult): boolean {
+  const [[south, west], [north, east]] = SEARCH_COVERAGE_BOUNDS;
+  return (
+    location.latitude >= south &&
+    location.latitude <= north &&
+    location.longitude >= west &&
+    location.longitude <= east
+  );
+}
 
 const STORY = getStory();
 const PANEL_VIEWS: readonly PanelView[] = STORY
@@ -165,6 +196,9 @@ export function App() {
   const [mobileSheetClosing, setMobileSheetClosing] = useState(false);
   const [focusLocationTarget, setFocusLocationTarget] =
     useState<FocusLocationTarget | null>(null);
+  const [outOfCoverageLocationLabel, setOutOfCoverageLocationLabel] = useState<
+    string | null
+  >(null);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
@@ -524,10 +558,24 @@ export function App() {
           <LocationSearchControl
             placeholder="Search town, suburb or station"
             onLocationSelect={(location) => {
+              if (!isWithinSearchCoverage(location)) {
+                setOutOfCoverageLocationLabel(location.label);
+                return;
+              }
+              setOutOfCoverageLocationLabel(null);
               setSelectedFeatureId(null);
               setFocusLocationTarget({ token: Date.now(), location });
             }}
           />
+          {outOfCoverageLocationLabel ? (
+            <output
+              className={styles.outOfCoverage}
+              data-testid="location-out-of-coverage"
+              data-e2e="location-out-of-coverage"
+            >
+              {`${outOfCoverageLocationLabel} is outside South Africa.`}
+            </output>
+          ) : null}
         </div>
 
         <ControlButton

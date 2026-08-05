@@ -20,7 +20,7 @@ describe("LocationSearchControl", () => {
     searchMocks.fetchLocationSearchResults.mockReset();
   });
 
-  it("shows typeahead results and applies a selected location", async () => {
+  it("shows typeahead results, applies a selected location, and doesn't re-search after selecting it", async () => {
     const onLocationSelect = vi.fn();
     searchMocks.fetchLocationSearchResults.mockResolvedValue([
       {
@@ -60,6 +60,18 @@ describe("LocationSearchControl", () => {
         longitude: 27.854,
       }),
     );
+    expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledTimes(1);
+
+    // The debounced search effect fires on any query change, including the
+    // one handleResultSelect makes (setQuery(result.label)); wait past its
+    // delay to prove that change doesn't re-trigger a search and reopen the
+    // dropdown with the just-picked result.
+    await new Promise((resolve) => setTimeout(resolve, 350));
+
+    expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledTimes(1);
+    expect(
+      screen.queryByRole("option", { name: /soweto, johannesburg/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("supports keyboard selection from typeahead results", async () => {
