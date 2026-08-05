@@ -530,6 +530,24 @@ describe("MapView", () => {
     expect(mapMocks.featureLayers[0]?.openPopup).toHaveBeenCalledTimes(1);
   });
 
+  it("does nothing when selectedFeatureId doesn't match any registered feature layer", () => {
+    render(
+      withDomain(
+        <MapView
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
+          selectedFeatureId="does-not-exist"
+          renderFeaturePopup={testRenderFeaturePopup}
+        />,
+      ),
+    );
+
+    expect(popupMocks.renderToStaticMarkup).not.toHaveBeenCalled();
+    expect(mapMocks.fitBounds).not.toHaveBeenCalled();
+    expect(mapMocks.featureLayers[0]?.openPopup).not.toHaveBeenCalled();
+  });
+
   it("marks the selected feature's element with aria-current, moving it when selection changes", () => {
     const twoAreas = [
       {

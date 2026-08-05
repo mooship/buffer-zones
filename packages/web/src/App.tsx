@@ -451,6 +451,8 @@ export function App() {
     />
   );
 
+  const panelToggleLabel = panelOpen ? "Close" : "Explore";
+
   return (
     <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
       <div
@@ -464,9 +466,9 @@ export function App() {
           Skip to map information
         </a>
 
-        <h1 className={styles.visuallyHidden}>
-          Stratum: Gauteng spatial legacy map
-        </h1>
+        <header className={styles.visuallyHidden}>
+          <h1>Stratum: Gauteng spatial legacy map</h1>
+        </header>
 
         <main id="map-information" tabIndex={-1}>
           {hydrated ? (
@@ -536,11 +538,12 @@ export function App() {
           data-e2e="panel-toggle"
           aria-expanded={panelOpen}
           aria-controls="map-controls"
+          label={panelToggleLabel}
           onClick={handlePanelToggle}
         >
           {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
-          <span className={styles.panelTriggerLabel}>
-            {panelOpen ? "Close" : "Explore"}
+          <span className={styles.panelTriggerLabel} aria-hidden="true">
+            {panelToggleLabel}
           </span>
         </ControlButton>
 

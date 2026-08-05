@@ -25,6 +25,17 @@ export default defineConfig(({ mode }) => {
     build: {
       assetsInlineLimit: 0,
       cssCodeSplit: true,
+      /**
+       * `maplibre-gl` (the vector-basemap renderer `VectorBasemapLayer`
+       * dynamically imports) is ~270KB gzipped on its own and dwarfs Vite's
+       * default 500kB warning threshold no matter how it's split. It's
+       * already isolated into its own async chunk — never part of the
+       * initial bundle, and never fetched at all unless a caller registers a
+       * vector-kind basemap (this app doesn't) — so raise the limit past its
+       * known size rather than let an expected, already-lazy chunk mask
+       * warnings about future eagerly-loaded bloat.
+       */
+      chunkSizeWarningLimit: 1100,
       rolldownOptions: {
         output: {
           entryFileNames: "assets/js/[name]-[hash].js",
@@ -59,6 +70,10 @@ export default defineConfig(({ mode }) => {
               {
                 name: "ui-vendor",
                 test: /node_modules\/(lucide-react|zustand|usehooks-ts|zod)\//,
+              },
+              {
+                name: "maplibre-vendor",
+                test: /node_modules\/(maplibre-gl|@maplibre\/maplibre-gl-leaflet)\//,
               },
             ],
           },

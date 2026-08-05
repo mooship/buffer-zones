@@ -35,6 +35,7 @@ describe("LocationSearchControl", () => {
 
     const input = screen.getByTestId("location-search-input");
     expect(input).toHaveAttribute("role", "combobox");
+    expect(input).toHaveAttribute("aria-haspopup", "listbox");
     expect(input).toHaveAttribute("aria-controls", "location-search-results");
 
     fireEvent.change(input, {

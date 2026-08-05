@@ -113,11 +113,24 @@ describe("App", () => {
     expect(
       screen.getByRole("link", { name: /skip to map information/i }),
     ).toHaveAttribute("href", "#map-information");
-    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
+    const heading = screen.getByRole("heading", { level: 1 });
+    expect(heading).toBeInTheDocument();
+    expect(screen.getByRole("banner")).toContainElement(heading);
     expect(screen.getByRole("main")).toHaveAttribute("id", "map-information");
     await waitFor(() =>
       expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
     );
+  });
+
+  it("keeps an explicit accessible name on the panel toggle regardless of its visible label's CSS visibility", async () => {
+    render(<App />);
+
+    const trigger = screen.getByTestId("panel-toggle");
+    expect(trigger).toHaveAttribute("aria-label", "Close");
+
+    fireEvent.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-label", "Explore");
   });
 
   it("does not render the top-left introduction card", async () => {
@@ -217,6 +230,26 @@ describe("App", () => {
     expect(layersTab).toHaveFocus();
     expect(layersTab).toHaveAttribute("aria-selected", "true");
   });
+
+  it.each([
+    ["End", "panel-tab-story"],
+    ["Home", "panel-tab-layers"],
+    ["a", "panel-tab-layers"],
+  ] as const)(
+    "pressing %s from the layers tab moves focus to %s",
+    async (key, expectedTabTestId) => {
+      render(<App />);
+
+      const layersTab = await screen.findByTestId("panel-tab-layers");
+      layersTab.focus();
+
+      fireEvent.keyDown(layersTab, { key });
+
+      const expectedTab = screen.getByTestId(expectedTabTestId);
+      expect(expectedTab).toHaveFocus();
+      expect(expectedTab).toHaveAttribute("aria-selected", "true");
+    },
+  );
 
   it("collapses and restores the controls panel", async () => {
     render(<App />);

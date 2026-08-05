@@ -1,7 +1,15 @@
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import * as jobCenters from "./constants/jobCenters";
 import {
   assertCompleteNetworkCoverage,
   assertMetroSetup,
@@ -75,8 +83,18 @@ describe("findJobCenterCountMismatch", () => {
 });
 
 describe("assertMetroSetup", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("does not throw against the real METROS/getJobCentersForMetro data", () => {
     expect(() => assertMetroSetup()).not.toThrow();
+  });
+
+  it("throws when a metro's configured job centres don't match its declared count", () => {
+    vi.spyOn(jobCenters, "getJobCentersForMetro").mockReturnValue([]);
+
+    expect(() => assertMetroSetup()).toThrow(/Job center count mismatch/);
   });
 });
 
@@ -136,6 +154,17 @@ describe("promoteStagedOutput and cleanupStagingDirectories", () => {
       expect(await readFile(resolve(publishDir, "marker.txt"), "utf8")).toBe(
         "old",
       );
+    });
+
+    it("does not attempt to restore a backup when nothing was published before a failed promote", async () => {
+      const stagedDir = resolve(dir, "does-not-exist");
+      const publishDir = resolve(dir, "published");
+
+      await expect(
+        promoteStagedOutput(stagedDir, publishDir),
+      ).rejects.toThrow();
+
+      await expect(access(publishDir)).rejects.toThrow();
     });
   });
 
