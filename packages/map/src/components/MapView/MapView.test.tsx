@@ -462,33 +462,6 @@ describe("MapView", () => {
     expect(onFeatureSelect).toHaveBeenCalledTimes(2);
   });
 
-  it("opens feature popup via keyboard when the feature is focused", () => {
-    const onFeatureSelect = vi.fn();
-
-    render(
-      withDomain(
-        <MapView
-          {...DEFAULT_MAP_VIEW_PROPS}
-          areas={areas}
-          visibleLayerIds={["areas"]}
-          onFeatureSelect={onFeatureSelect}
-          renderFeaturePopup={testRenderFeaturePopup}
-        />,
-      ),
-    );
-
-    const firstLayer = mapMocks.featureLayers[0];
-    expect(firstLayer).toBeDefined();
-
-    firstLayer?.__element.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
-    );
-
-    expect(firstLayer?.bindPopup).toHaveBeenCalledTimes(1);
-    expect(firstLayer?.openPopup).toHaveBeenCalledTimes(1);
-    expect(onFeatureSelect).toHaveBeenCalledWith("A");
-  });
-
   it("removes area-layer reference when a feature layer is removed", () => {
     const { rerender } = render(
       withDomain(
@@ -582,7 +555,7 @@ describe("MapView", () => {
     expect(mapMocks.featureLayers[0]?.openPopup).not.toHaveBeenCalled();
   });
 
-  it("marks the selected feature's element with aria-current, moving it when selection changes", () => {
+  it("fits bounds and opens the selected feature's popup, and announces the selection for assistive technology, moving it when selection changes", () => {
     const twoAreas = [
       {
         type: "Feature",
@@ -608,12 +581,9 @@ describe("MapView", () => {
       ),
     );
 
-    expect(
-      mapMocks.featureLayers[0]?.__element.getAttribute("aria-current"),
-    ).toBe("true");
-    expect(
-      mapMocks.featureLayers[1]?.__element.getAttribute("aria-current"),
-    ).toBeNull();
+    expect(mapMocks.fitBounds).toHaveBeenCalledTimes(1);
+    expect(mapMocks.featureLayers[0]?.openPopup).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/mamelodi selected/i)).toBeInTheDocument();
 
     rerender(
       withDomain(
@@ -627,12 +597,10 @@ describe("MapView", () => {
       ),
     );
 
-    expect(
-      mapMocks.featureLayers[0]?.__element.getAttribute("aria-current"),
-    ).toBeNull();
-    expect(
-      mapMocks.featureLayers[1]?.__element.getAttribute("aria-current"),
-    ).toBe("true");
+    expect(mapMocks.fitBounds).toHaveBeenCalledTimes(2);
+    expect(mapMocks.featureLayers[1]?.openPopup).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/soweto selected/i)).toBeInTheDocument();
+    expect(screen.queryByText(/mamelodi selected/i)).not.toBeInTheDocument();
   });
 
   it("renders no GeoJSON layers when visibleLayerIds is empty", () => {
@@ -1048,50 +1016,6 @@ describe("MapView", () => {
     vi.advanceTimersByTime(220);
 
     expect(popupMocks.renderToStaticMarkup).not.toHaveBeenCalled();
-    expect(onFeatureSelect).not.toHaveBeenCalled();
-  });
-
-  it("does not throw when the underlying Leaflet element is missing on add", () => {
-    mapMocks.nextFeatureLayerElement = null;
-
-    render(
-      withDomain(
-        <MapView
-          {...DEFAULT_MAP_VIEW_PROPS}
-          areas={areas}
-          visibleLayerIds={["areas"]}
-        />,
-      ),
-    );
-
-    const firstLayer = mapMocks.featureLayers[0];
-    expect(() => firstLayer?.__handlers.remove?.()).not.toThrow();
-  });
-
-  it("ignores keydown events other than Enter and Space on a focused feature", () => {
-    const onFeatureSelect = vi.fn();
-
-    render(
-      withDomain(
-        <MapView
-          {...DEFAULT_MAP_VIEW_PROPS}
-          areas={areas}
-          visibleLayerIds={["areas"]}
-          onFeatureSelect={onFeatureSelect}
-          renderFeaturePopup={testRenderFeaturePopup}
-        />,
-      ),
-    );
-
-    const firstLayer = mapMocks.featureLayers[0];
-    expect(firstLayer).toBeDefined();
-
-    firstLayer?.__element.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "Tab", bubbles: true }),
-    );
-
-    expect(firstLayer?.bindPopup).not.toHaveBeenCalled();
-    expect(firstLayer?.openPopup).not.toHaveBeenCalled();
     expect(onFeatureSelect).not.toHaveBeenCalled();
   });
 
@@ -1517,12 +1441,16 @@ describe("MapView", () => {
       </DomainProvider>,
     );
 
+    fireEvent.change(screen.getByTestId("selectable-feature-search-input"), {
+      target: { value: "Fallback" },
+    });
+
     expect(
-      mapMocks.featureLayers[0]?.__element.getAttribute("aria-label"),
-    ).toBe("View Fallback Name");
+      screen.getByRole("option", { name: "Fallback Name" }),
+    ).toBeInTheDocument();
   });
 
-  it("falls back to properties.name, or an empty label, when the configured labelField isn't a string", () => {
+  it("falls back to properties.name when the configured labelField isn't a string", () => {
     const domain: DomainConfig = {
       layers: [
         {
@@ -1567,12 +1495,17 @@ describe("MapView", () => {
       </DomainProvider>,
     );
 
+    fireEvent.change(screen.getByTestId("selectable-feature-search-input"), {
+      target: { value: "Mamelodi" },
+    });
+
     expect(
-      mapMocks.featureLayers[0]?.__element.getAttribute("aria-label"),
-    ).toBe("View Mamelodi");
-    expect(
-      mapMocks.featureLayers[1]?.__element.getAttribute("aria-label"),
-    ).toBe("View ");
+      screen.getByRole("option", { name: "Mamelodi" }),
+    ).toBeInTheDocument();
+    // Feature "B" has neither a string commuteMinutes nor a name, so it
+    // resolves to an empty label -- unreachable through the search UI (there's
+    // nothing to type that would match ""), unlike the old per-feature
+    // aria-label, which still rendered as "View " for it.
   });
 
   it("defaults a click's click-count to 1 when the event has no originalEvent detail", () => {
@@ -1623,11 +1556,6 @@ describe("MapView", () => {
     );
 
     const firstLayer = mapMocks.featureLayers[0];
-
-    firstLayer?.__element.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
-    );
-    expect(onFeatureSelect).not.toHaveBeenCalled();
 
     firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
     vi.advanceTimersByTime(220);

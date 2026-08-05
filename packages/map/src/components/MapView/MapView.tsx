@@ -7,9 +7,6 @@ import {
   type LatLngBounds,
   type Layer,
   type LeafletMouseEvent,
-  type Path,
-  type Renderer,
-  svg,
 } from "leaflet";
 import {
   type ComponentType,
@@ -50,17 +47,16 @@ import {
 import { VectorBasemapLayer } from "./VectorBasemapLayer";
 
 /**
- * `@types/leaflet`'s `GeoJSONOptions` omits `smoothFactor` and `renderer`,
- * even though react-leaflet forwards both straight through to Leaflet's
- * `GeoJSON` constructor for every Polyline/Polygon layer it creates (`{
- * data, ...options }` in `createPathComponent`'s `createGeoJSON`, unlike
- * `pathOptions`, which is only applied post-construction via `setStyle` and
- * so can't select a renderer). Widen the prop type locally rather than
- * dropping the (real, behaviour-affecting) `smoothFactor={0}`/`renderer`
- * usage below.
+ * `@types/leaflet`'s `GeoJSONOptions` omits `smoothFactor`, even though
+ * react-leaflet forwards it straight through to Leaflet's `GeoJSON`
+ * constructor for every Polyline/Polygon layer it creates (`{ data,
+ * ...options }` in `createPathComponent`'s `createGeoJSON`, unlike
+ * `pathOptions`, which is only applied post-construction via `setStyle`).
+ * Widen the prop type locally rather than dropping the (real,
+ * behaviour-affecting) `smoothFactor={0}` usage below.
  */
 const GeoJSON = LeafletGeoJSON as ComponentType<
-  GeoJSONProps & { smoothFactor?: number; renderer?: Renderer }
+  GeoJSONProps & { smoothFactor?: number }
 >;
 
 interface MapViewProps<
@@ -111,7 +107,6 @@ type SelectableFeatureLayer = Layer & {
   getPopup?: () => unknown;
   openPopup?: () => void;
   getBounds?: () => LatLngBounds;
-  getElement?: () => HTMLElement | null;
 };
 
 function getViewportWidth(): number {
@@ -191,48 +186,12 @@ function bindSelectableFeatureInteractions<
   if (!properties) {
     return;
   }
-  const labelField = domainLayer.interaction.labelField ?? "name";
-  const label = resolveFeatureLabel(
-    properties as unknown as Record<string, unknown>,
-    labelField,
-  );
   const featureId = properties.id;
 
   if (typeof featureId === "string") {
     layerById.set(featureId, leafletLayer as SelectableFeatureLayer);
   }
   let pendingClickTimeout: ReturnType<typeof setTimeout> | null = null;
-  let removeKeyboardHandler: (() => void) | null = null;
-
-  leafletLayer.on("add", () => {
-    const element = (leafletLayer as Path).getElement?.();
-    if (!element) {
-      return;
-    }
-    element.setAttribute("tabindex", "0");
-    element.setAttribute("role", "button");
-    element.setAttribute("aria-label", `View ${label}`);
-
-    const keydownHandler: EventListener = (event) => {
-      const keyboardEvent = event as KeyboardEvent;
-      if (keyboardEvent.key !== "Enter" && keyboardEvent.key !== " ") {
-        return;
-      }
-      keyboardEvent.preventDefault();
-      const featureLayer = leafletLayer as SelectableFeatureLayer;
-      bindSelectedFeaturePopup(featureLayer, properties, renderFeaturePopup);
-      featureLayer.openPopup?.();
-      if (typeof featureId === "string") {
-        onSelect?.(featureId);
-      }
-    };
-
-    element.addEventListener("keydown", keydownHandler);
-    removeKeyboardHandler = () => {
-      element.removeEventListener("keydown", keydownHandler);
-      removeKeyboardHandler = null;
-    };
-  });
 
   leafletLayer.on("click", (event: LeafletMouseEvent) => {
     if (pendingClickTimeout !== null) {
@@ -267,9 +226,6 @@ function bindSelectableFeatureInteractions<
     if (pendingClickTimeout !== null) {
       clearTimeout(pendingClickTimeout);
       pendingClickTimeout = null;
-    }
-    if (removeKeyboardHandler) {
-      removeKeyboardHandler();
     }
     if (typeof featureId === "string") {
       layerById.delete(featureId);
@@ -316,10 +272,6 @@ function SelectedFeatureHighlight<TProperties extends Record<string, unknown>>({
       });
     }
     featureLayer.openPopup?.();
-
-    const element = featureLayer.getElement?.();
-    element?.setAttribute("aria-current", "true");
-    return () => element?.removeAttribute("aria-current");
   }, [map, selectedFeatureId, layerById, renderFeaturePopup]);
 
   return null;
@@ -514,7 +466,6 @@ function MapViewComponent<
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
   const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
-  const selectableFeatureRenderer = useMemo(() => svg({ pane: AREA_PANE }), []);
   const visibleLayers = useMemo(
     () =>
       getLayers().filter(
@@ -778,13 +729,6 @@ function MapViewComponent<
               // no boundary-fidelity reason to disable it here.
               smoothFactor={1}
               style={config.styleFn}
-              // The map defaults to the canvas renderer (`preferCanvas` on
-              // `MapContainer`) since most overlay geometry doesn't need
-              // per-feature DOM nodes, but a selectable layer does:
-              // bindSelectableFeatureInteractions calls `getElement()` to
-              // attach `tabindex`/keyboard handlers, which canvas-rendered
-              // paths never have.
-              renderer={isSelectable ? selectableFeatureRenderer : undefined}
               pathOptions={{
                 ...config.pathOptions,
                 pane: isChoropleth ? AREA_PANE : TRANSIT_PANE,
