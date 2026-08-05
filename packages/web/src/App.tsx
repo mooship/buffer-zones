@@ -53,13 +53,25 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
 ];
 
 /**
- * Whether `location` falls within `GAUTENG_BOUNDS`.
- * @remarks Nominatim searches the whole world, so a query can resolve to a
- *   place far outside the data this app actually maps; flying the map there
- *   would just show an empty basemap with no explanation.
+ * Mainland South Africa's approximate extent, used only to sanity-check
+ * location search results (see `isWithinSearchCoverage`) — not the map's
+ * initial viewport, which stays framed on Gauteng via `GAUTENG_BOUNDS` since
+ * that's the only region with actual layer data today.
  */
-function isWithinGautengBounds(location: LocationSearchResult): boolean {
-  const [[south, west], [north, east]] = GAUTENG_BOUNDS;
+const SEARCH_COVERAGE_BOUNDS: [[number, number], [number, number]] = [
+  [-34.84, 16.45],
+  [-22.13, 32.95],
+];
+
+/**
+ * Whether `location` falls within `SEARCH_COVERAGE_BOUNDS`.
+ * @remarks Nominatim searches the whole world, so a query can resolve to a
+ *   place far outside South Africa entirely; flying the map there would just
+ *   show an empty basemap with no explanation. The mapped data itself is
+ *   Gauteng-only, but the basemap and search cover the whole country.
+ */
+function isWithinSearchCoverage(location: LocationSearchResult): boolean {
+  const [[south, west], [north, east]] = SEARCH_COVERAGE_BOUNDS;
   return (
     location.latitude >= south &&
     location.latitude <= north &&
@@ -543,7 +555,7 @@ export function App() {
           <LocationSearchControl
             placeholder="Search town, suburb or station"
             onLocationSelect={(location) => {
-              if (!isWithinGautengBounds(location)) {
+              if (!isWithinSearchCoverage(location)) {
                 setOutOfCoverageLocationLabel(location.label);
                 return;
               }
@@ -558,7 +570,7 @@ export function App() {
               data-testid="location-out-of-coverage"
               data-e2e="location-out-of-coverage"
             >
-              {`${outOfCoverageLocationLabel} is outside the mapped Gauteng area.`}
+              {`${outOfCoverageLocationLabel} is outside South Africa.`}
             </output>
           ) : null}
         </div>

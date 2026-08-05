@@ -45,6 +45,7 @@ export function LocationSearchControl({
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const { next, abort } = useAbortController();
   const inputRef = useRef<HTMLInputElement>(null);
+  const justSelectedRef = useRef(false);
   const searchFailed = searchError === SEARCH_UNAVAILABLE_MESSAGE;
 
   async function runSearch(trimmedQuery: string) {
@@ -75,6 +76,14 @@ export function LocationSearchControl({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: provider intentionally omitted -- it's a public prop with no stability guarantee, so including it could re-fire this effect on every render for callers that don't memoize it
   useEffect(() => {
+    if (justSelectedRef.current) {
+      // handleResultSelect sets query to the picked result's own label,
+      // which would otherwise re-trigger this same debounced search and
+      // reopen the dropdown with the just-picked result a moment later.
+      justSelectedRef.current = false;
+      return;
+    }
+
     const trimmedQuery = query.trim();
     if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
       setResults([]);
@@ -142,6 +151,7 @@ export function LocationSearchControl({
   }
 
   function handleResultSelect(result: LocationSearchResult) {
+    justSelectedRef.current = true;
     onLocationSelect(result);
     setQuery(result.label);
     setResults([]);

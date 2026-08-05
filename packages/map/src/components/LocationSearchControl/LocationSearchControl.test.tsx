@@ -62,6 +62,39 @@ describe("LocationSearchControl", () => {
     );
   });
 
+  it("does not re-search and reopen the dropdown after a result is selected", async () => {
+    const onLocationSelect = vi.fn();
+    searchMocks.fetchLocationSearchResults.mockResolvedValue([
+      {
+        id: "123",
+        label: "Soweto, Johannesburg, Gauteng, South Africa",
+        latitude: -26.267,
+        longitude: 27.854,
+      },
+    ]);
+
+    render(<LocationSearchControl onLocationSelect={onLocationSelect} />);
+
+    const input = screen.getByTestId("location-search-input");
+    fireEvent.change(input, { target: { value: "Soweto" } });
+    const resultButton = await screen.findByRole("option", {
+      name: /soweto, johannesburg/i,
+    });
+    fireEvent.click(resultButton);
+
+    expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledTimes(1);
+
+    // The debounced search effect fires on any query change, including the
+    // one handleResultSelect makes (setQuery(result.label)); wait past its
+    // delay to prove that change doesn't re-trigger a search.
+    await new Promise((resolve) => setTimeout(resolve, 350));
+
+    expect(searchMocks.fetchLocationSearchResults).toHaveBeenCalledTimes(1);
+    expect(
+      screen.queryByRole("option", { name: /soweto, johannesburg/i }),
+    ).not.toBeInTheDocument();
+  });
+
   it("supports keyboard selection from typeahead results", async () => {
     const onLocationSelect = vi.fn();
     searchMocks.fetchLocationSearchResults.mockResolvedValue([
