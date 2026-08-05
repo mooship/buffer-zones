@@ -47,7 +47,10 @@ const MapView = lazy(async () => {
   return { default: MapView };
 });
 
-const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
+/** A Leaflet-style `[[south, west], [north, east]]` bounding rectangle. */
+type LatLngBoundsTuple = [[number, number], [number, number]];
+
+const GAUTENG_BOUNDS: LatLngBoundsTuple = [
   [-27.15, 27.1],
   [-25.3, 28.75],
 ];
@@ -58,7 +61,7 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
  * initial viewport, which stays framed on Gauteng via `GAUTENG_BOUNDS` since
  * that's the only region with actual layer data today.
  */
-const SEARCH_COVERAGE_BOUNDS: [[number, number], [number, number]] = [
+const SEARCH_COVERAGE_BOUNDS: LatLngBoundsTuple = [
   [-34.84, 16.45],
   [-22.13, 32.95],
 ];
