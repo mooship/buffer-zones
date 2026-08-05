@@ -86,12 +86,8 @@ describe("useSwipeToDismiss", () => {
   });
 
   it("coalesces pointermoves within the same animation frame into a single scheduled update", () => {
-    const pendingFrames: FrameRequestCallback[] = [];
-    let nextFrameId = 1;
-    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
-      pendingFrames.push(callback);
-      return nextFrameId++;
-    });
+    const rafSpy = vi.fn().mockReturnValue(1);
+    vi.stubGlobal("requestAnimationFrame", rafSpy);
 
     render(<TestHandle />);
     const handle = screen.getByTestId("handle");
@@ -115,10 +111,10 @@ describe("useSwipeToDismiss", () => {
 
     // Both moves land before the frame flushes, so the second must coalesce
     // into the same pending frame rather than scheduling a new one.
-    expect(pendingFrames).toHaveLength(1);
+    expect(rafSpy).toHaveBeenCalledTimes(1);
 
     act(() => {
-      pendingFrames[0]?.(0);
+      rafSpy.mock.calls[0]?.[0]?.(0);
     });
 
     expect(handle).toHaveTextContent("drag offset: 30");
