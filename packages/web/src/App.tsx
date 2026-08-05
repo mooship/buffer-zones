@@ -451,6 +451,8 @@ export function App() {
     />
   );
 
+  const panelToggleLabel = panelOpen ? "Close" : "Explore";
+
   return (
     <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
       <div
@@ -536,12 +538,12 @@ export function App() {
           data-e2e="panel-toggle"
           aria-expanded={panelOpen}
           aria-controls="map-controls"
-          label={panelOpen ? "Close" : "Explore"}
+          label={panelToggleLabel}
           onClick={handlePanelToggle}
         >
           {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
           <span className={styles.panelTriggerLabel} aria-hidden="true">
-            {panelOpen ? "Close" : "Explore"}
+            {panelToggleLabel}
           </span>
         </ControlButton>
 
