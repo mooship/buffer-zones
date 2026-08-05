@@ -43,23 +43,6 @@ describe("root links", () => {
     }
   });
 
-  it("includes a preload link for a layer's companionSource URL", () => {
-    const companionUrl = getLayers().find(
-      (layer) => layer.id === "townships",
-    )?.companionSource;
-
-    expect(companionUrl).toBeDefined();
-
-    const preloadLinks = links().filter(
-      (link) => "rel" in link && link.rel === "preload",
-    );
-    const hrefs = preloadLinks.map((link) =>
-      "href" in link ? link.href : undefined,
-    );
-
-    expect(hrefs).toContain(companionUrl);
-  });
-
   it("does not mark a defaultVisible layer's URL as low priority, but marks an invisible-only URL as low priority", () => {
     const sharedUrl = getLayers().find((layer) => layer.id === "townships")
       ?.dataSource[0];

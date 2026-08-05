@@ -30,14 +30,17 @@ const THEME_BOOTSTRAP_SCRIPT = `(() => {
 })();`;
 
 /**
- * Builds `<link rel=preload>` entries for every configured layer's GeoJSON
- * data source plus `companionSource` (e.g. a choropleth's area-boundary
- * file, fetched alongside it but not itself a `dataSource` entry),
- * deduplicated by URL (a URL shared by multiple layers preloads once).
- * Sources for a default-visible layer preload at normal priority;
- * everything else preloads at `fetchPriority: "low"`.
+ * `<link rel=preload>` entries for every configured layer's GeoJSON data
+ * source plus `companionSource` (e.g. a choropleth's area-boundary file,
+ * fetched alongside it but not itself a `dataSource` entry), deduplicated by
+ * URL (a URL shared by multiple layers preloads once). Sources for a
+ * default-visible layer preload at normal priority; everything else preloads
+ * at `fetchPriority: "low"`.
+ * @remarks Computed once at module scope, like `STORY`/`PANEL_VIEWS` in
+ *   `App.tsx` — `getLayers()` is a static in-memory array for the process
+ *   lifetime, so there's nothing request-specific to recompute inside `links`.
  */
-function getGeoJsonPreloadLinks() {
+const GEOJSON_PRELOAD_LINKS = (() => {
   const defaultVisibleByUrl = new Map<string, boolean>();
   for (const layer of getLayers()) {
     const sources = layer.companionSource
@@ -56,7 +59,7 @@ function getGeoJsonPreloadLinks() {
     crossOrigin: "anonymous" as const,
     ...(defaultVisible ? {} : { fetchPriority: "low" as const }),
   }));
-}
+})();
 
 /** React Router route module export: page `<title>`/`<meta>` tags. */
 export const meta: MetaFunction = () => {
@@ -76,8 +79,8 @@ export const meta: MetaFunction = () => {
 
 /**
  * React Router route module export: `<link>` tags — self-hosted font/style
- * stylesheets, favicons, basemap-provider preconnects, and this layer's
- * GeoJSON preload links from `getGeoJsonPreloadLinks`.
+ * stylesheets, favicons, basemap-provider preconnects, and
+ * `GEOJSON_PRELOAD_LINKS`.
  */
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: interStylesHref },
@@ -101,7 +104,7 @@ export const links: LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
   { rel: "preconnect", href: "https://tile.openstreetmap.org" },
   { rel: "preconnect", href: "https://basemaps.cartocdn.com" },
-  ...getGeoJsonPreloadLinks(),
+  ...GEOJSON_PRELOAD_LINKS,
 ];
 
 /**
