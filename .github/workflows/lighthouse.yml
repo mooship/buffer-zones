@@ -1,0 +1,59 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build --workspace @stratum/web
+
+      - name: Start preview server
+        run: |
+          npm run preview:e2e --workspace @stratum/web -- --port 4173 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:4173/ > /dev/null; then
+              echo "Preview server is up"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Preview server did not start in time" >&2
+          exit 1
+
+      # Scores run against real, un-mocked basemap tile requests (unlike the
+      # Playwright e2e suite, which mocks them) since Lighthouse is meant to
+      # reflect what a real visitor experiences. `performance` is asserted at
+      # 0.95 rather than the app's 100 target to absorb that real third-party
+      # network variance without making this check flaky; the other
+      # categories don't depend on network timing and stay at 1 (100).
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./packages/web/lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

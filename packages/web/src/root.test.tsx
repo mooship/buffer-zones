@@ -19,9 +19,13 @@ vi.mock("react-router", async (importOriginal) => {
 const { default: Root, Layout, links, meta } = await import("./root");
 
 describe("root links", () => {
-  it("includes exactly one preload link per unique dataSource URL", () => {
+  it("includes exactly one preload link per unique dataSource/companionSource URL", () => {
     const uniqueUrls = new Set(
-      getLayers().flatMap((layer) => layer.dataSource),
+      getLayers().flatMap((layer) =>
+        layer.companionSource
+          ? [...layer.dataSource, layer.companionSource]
+          : layer.dataSource,
+      ),
     );
 
     const preloadLinks = links().filter(
@@ -37,6 +41,23 @@ describe("root links", () => {
     for (const url of uniqueUrls) {
       expect(hrefs).toContain(url);
     }
+  });
+
+  it("includes a preload link for a layer's companionSource URL", () => {
+    const companionUrl = getLayers().find(
+      (layer) => layer.id === "townships",
+    )?.companionSource;
+
+    expect(companionUrl).toBeDefined();
+
+    const preloadLinks = links().filter(
+      (link) => "rel" in link && link.rel === "preload",
+    );
+    const hrefs = preloadLinks.map((link) =>
+      "href" in link ? link.href : undefined,
+    );
+
+    expect(hrefs).toContain(companionUrl);
   });
 
   it("does not mark a defaultVisible layer's URL as low priority, but marks an invisible-only URL as low priority", () => {
@@ -93,7 +114,8 @@ describe("root Layout", () => {
 
     expect(markup).toContain('<html lang="en">');
     expect(markup).toContain("app content");
-    expect(markup).toContain('src="/theme-bootstrap.js"');
+    expect(markup).not.toContain('src="/theme-bootstrap.js"');
+    expect(markup).toContain('localStorage.getItem("buffer-zones-theme")');
     expect(markup).toContain('media="(prefers-color-scheme: light)"');
     expect(markup).toContain('media="(prefers-color-scheme: dark)"');
   });

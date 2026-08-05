@@ -10,19 +10,40 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { THEME_STORAGE_KEY } from "./constants/themeConfig";
 import appStylesHref from "./index.css?url";
 import { getLayers } from "./layers/registry";
 
 /**
+ * Pre-hydration theme-bootstrap script: reads the stored theme preference
+ * and sets `data-theme` before first paint, avoiding a flash of the wrong
+ * theme. Inlined (rather than an external `/theme-bootstrap.js` file) so it
+ * runs without an extra render-blocking network request; the exact source
+ * below is hashed into `_headers`' `Content-Security-Policy` `script-src` —
+ * changing this string requires recomputing that hash (see `_headers`).
+ */
+const THEME_BOOTSTRAP_SCRIPT = `(() => {
+  const stored = localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
+  if (stored === "light" || stored === "dark") {
+    document.documentElement.dataset.theme = stored;
+  }
+})();`;
+
+/**
  * Builds `<link rel=preload>` entries for every configured layer's GeoJSON
- * data source, deduplicated by URL (a URL shared by multiple layers preloads
- * once). Sources for a default-visible layer preload at normal priority;
+ * data source plus `companionSource` (e.g. a choropleth's area-boundary
+ * file, fetched alongside it but not itself a `dataSource` entry),
+ * deduplicated by URL (a URL shared by multiple layers preloads once).
+ * Sources for a default-visible layer preload at normal priority;
  * everything else preloads at `fetchPriority: "low"`.
  */
 function getGeoJsonPreloadLinks() {
   const defaultVisibleByUrl = new Map<string, boolean>();
   for (const layer of getLayers()) {
-    for (const source of layer.dataSource) {
+    const sources = layer.companionSource
+      ? [...layer.dataSource, layer.companionSource]
+      : layer.dataSource;
+    for (const source of sources) {
       const isDefaultVisible = defaultVisibleByUrl.get(source) ?? false;
       defaultVisibleByUrl.set(source, isDefaultVisible || layer.defaultVisible);
     }
@@ -86,7 +107,7 @@ export const links: LinksFunction = () => [
 /**
  * React Router route module export: the document shell (`<html>`/`<head>`/`<body>`)
  * wrapping every route. Sets the pre-hydration `theme-color` meta tags and
- * loads `/theme-bootstrap.js` to apply the stored theme before paint.
+ * inlines `THEME_BOOTSTRAP_SCRIPT` to apply the stored theme before paint.
  */
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -103,7 +124,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           content="#15110b"
           media="(prefers-color-scheme: dark)"
         />
-        <script src="/theme-bootstrap.js" />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: static, module-scope literal — see THEME_BOOTSTRAP_SCRIPT
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
         <Meta />
         <Links />
       </head>

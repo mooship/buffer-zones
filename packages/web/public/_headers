@@ -3,15 +3,9 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=(), interest-cohort=()
   Cross-Origin-Opener-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://ajax.cloudflare.com; style-src 'self'; img-src 'self' data: https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com; font-src 'self'; connect-src 'self' https://cloudflareinsights.com https://static.cloudflareinsights.com https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-HG8PUaCswII51AFFCizfjxISB0x6tOe/Gqljp1vzDRw=' https://static.cloudflareinsights.com https://ajax.cloudflare.com; style-src 'self'; img-src 'self' data: https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com; font-src 'self'; connect-src 'self' https://cloudflareinsights.com https://static.cloudflareinsights.com https://tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
 
 /index.html
-  Cache-Control: no-cache
-
-/sw.js
-  Cache-Control: no-cache
-
-/workbox-*.js
   Cache-Control: no-cache
 
 /site.webmanifest
