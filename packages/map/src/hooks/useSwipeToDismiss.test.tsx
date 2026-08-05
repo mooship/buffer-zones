@@ -109,8 +109,6 @@ describe("useSwipeToDismiss", () => {
       clientY: 130,
     });
 
-    // Both moves land before the frame flushes, so the second must coalesce
-    // into the same pending frame rather than scheduling a new one.
     expect(rafSpy).toHaveBeenCalledTimes(1);
 
     act(() => {
