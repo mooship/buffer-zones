@@ -39,20 +39,36 @@ vi.mock("@stratum/map", async (importOriginal) => {
         longitude: number;
       }) => void;
     }) => (
-      <button
-        type="button"
-        data-testid="fake-location-result"
-        onClick={() =>
-          onLocationSelect({
-            id: "mamelodi",
-            label: "Mamelodi, Tshwane",
-            latitude: -25.7,
-            longitude: 28.35,
-          })
-        }
-      >
-        Select Mamelodi
-      </button>
+      <>
+        <button
+          type="button"
+          data-testid="fake-location-result"
+          onClick={() =>
+            onLocationSelect({
+              id: "mamelodi",
+              label: "Mamelodi, Tshwane",
+              latitude: -25.7,
+              longitude: 28.35,
+            })
+          }
+        >
+          Select Mamelodi
+        </button>
+        <button
+          type="button"
+          data-testid="fake-out-of-coverage-result"
+          onClick={() =>
+            onLocationSelect({
+              id: "cape-town",
+              label: "Cape Town",
+              latitude: -33.9249,
+              longitude: 18.4241,
+            })
+          }
+        >
+          Select Cape Town
+        </button>
+      </>
     ),
   };
 });
@@ -146,6 +162,25 @@ describe("App map/location callback wiring", () => {
       expect(mapViewMocks.latestProps?.focusLocationTarget).toMatchObject({
         location: { label: "Mamelodi, Tshwane" },
       }),
+    );
+  });
+
+  it("shows a coverage message instead of moving the map for a result outside Gauteng", async () => {
+    render(<App />);
+
+    await waitFor(() => expect(mapViewMocks.latestProps).toBeDefined());
+    const focusTargetBeforeSelect =
+      mapViewMocks.latestProps?.focusLocationTarget;
+
+    fireEvent.click(screen.getByTestId("fake-out-of-coverage-result"));
+
+    await waitFor(() =>
+      expect(screen.getByTestId("location-out-of-coverage")).toHaveTextContent(
+        "Cape Town",
+      ),
+    );
+    expect(mapViewMocks.latestProps?.focusLocationTarget).toBe(
+      focusTargetBeforeSelect,
     );
   });
 });

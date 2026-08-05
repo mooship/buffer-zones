@@ -1,4 +1,6 @@
 import type { MetroId } from "@stratum/app";
+import { unionBoundingBoxes } from "@stratum/core";
+import type { BBox } from "geojson";
 
 /**
  * Each metro's bounding box, as `"south,west,north,east"`.
@@ -31,21 +33,19 @@ export function getMetroBbox(metroId: MetroId): string {
 // shared networks once, whole, rather than as metro-clipped fragments — and
 // scoped to that region so a build never pulls another region's network into
 // its own output.
-interface Bbox {
-  south: number;
-  west: number;
-  north: number;
-  east: number;
-}
-
-function parseBbox(box: string): Bbox {
-  const parts = box.split(",").map(Number);
-  /* v8 ignore next 3 -- unreachable: only ever called with hardcoded, valid METRO_BBOX entries */
-  if (parts.length !== 4 || parts.some((value) => Number.isNaN(value))) {
-    throw new Error(`Invalid bbox string: ${box}`);
-  }
-  const [south, west, north, east] = parts as [number, number, number, number];
-  return { south, west, north, east };
+/**
+ * Parses an Overpass-style `"south,west,north,east"` bbox string into the
+ * `[minLng, minLat, maxLng, maxLat]` shape `@stratum/core`'s spatial
+ * utilities expect.
+ */
+function parseBbox(box: string): BBox {
+  const [south, west, north, east] = box.split(",").map(Number) as [
+    number,
+    number,
+    number,
+    number,
+  ];
+  return [west, south, east, north];
 }
 
 /**
@@ -59,10 +59,8 @@ export function getSharedTransitBbox(metroIds: readonly MetroId[]): string {
   if (metroIds.length === 0) {
     throw new Error("At least one metro is required to build a shared bbox");
   }
-  const boxes = metroIds.map((metroId) => parseBbox(METRO_BBOX[metroId]));
-  const south = Math.min(...boxes.map((box) => box.south));
-  const west = Math.min(...boxes.map((box) => box.west));
-  const north = Math.max(...boxes.map((box) => box.north));
-  const east = Math.max(...boxes.map((box) => box.east));
+  const [west, south, east, north] = unionBoundingBoxes(
+    metroIds.map((metroId) => parseBbox(METRO_BBOX[metroId])),
+  );
   return `${south},${west},${north},${east}`;
 }

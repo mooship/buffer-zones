@@ -4,4 +4,8 @@ export * from "./data/mergeFeatureCollections";
 export * from "./layers/classification";
 export * from "./layers/createLayerConfig";
 export * from "./layers/createRegistry";
+export * from "./spatial/boundingBox";
+export * from "./spatial/isPointInPolygon";
+export * from "./spatial/nearestFeatureDistance";
+export * from "./spatial/reproject";
 export * from "./types/layer";

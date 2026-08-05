@@ -6,6 +6,7 @@ import {
 import {
   type DomainStory as DomainStoryContent,
   fetchFeatureCollection,
+  isPointInPolygon,
   mergeFeatureCollections,
 } from "@stratum/core";
 import {
@@ -19,7 +20,7 @@ import {
 } from "@stratum/map";
 import { setThemePreference, useThemePreference } from "@stratum/react";
 import clsx from "clsx";
-import type { Feature } from "geojson";
+import type { Feature, Polygon } from "geojson";
 import { Layers, X } from "lucide-react";
 import {
   type AnimationEvent,
@@ -51,6 +52,34 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
   [-27.15, 27.1],
   [-25.3, 28.75],
 ];
+
+const [[GAUTENG_SOUTH, GAUTENG_WEST], [GAUTENG_NORTH, GAUTENG_EAST]] =
+  GAUTENG_BOUNDS;
+const GAUTENG_BOUNDS_POLYGON: Polygon = {
+  type: "Polygon",
+  coordinates: [
+    [
+      [GAUTENG_WEST, GAUTENG_SOUTH],
+      [GAUTENG_EAST, GAUTENG_SOUTH],
+      [GAUTENG_EAST, GAUTENG_NORTH],
+      [GAUTENG_WEST, GAUTENG_NORTH],
+      [GAUTENG_WEST, GAUTENG_SOUTH],
+    ],
+  ],
+};
+
+/**
+ * Whether `location` falls within `GAUTENG_BOUNDS`.
+ * @remarks Nominatim searches the whole world, so a query can resolve to a
+ *   place far outside the data this app actually maps; flying the map there
+ *   would just show an empty basemap with no explanation.
+ */
+function isWithinGautengBounds(location: LocationSearchResult): boolean {
+  return isPointInPolygon(
+    [location.longitude, location.latitude],
+    GAUTENG_BOUNDS_POLYGON,
+  );
+}
 
 const STORY = getStory();
 const PANEL_VIEWS: readonly PanelView[] = STORY
@@ -165,6 +194,9 @@ export function App() {
   const [mobileSheetClosing, setMobileSheetClosing] = useState(false);
   const [focusLocationTarget, setFocusLocationTarget] =
     useState<FocusLocationTarget | null>(null);
+  const [outOfCoverageLocationLabel, setOutOfCoverageLocationLabel] = useState<
+    string | null
+  >(null);
   const visibleLayerIds = useMapUiStore((state) => state.visibleLayerIds);
   const basemap = useMapUiStore((state) => state.basemap);
   const panelOpen = useMapUiStore((state) => state.panelOpen);
@@ -524,10 +556,24 @@ export function App() {
           <LocationSearchControl
             placeholder="Search town, suburb or station"
             onLocationSelect={(location) => {
+              if (!isWithinGautengBounds(location)) {
+                setOutOfCoverageLocationLabel(location.label);
+                return;
+              }
+              setOutOfCoverageLocationLabel(null);
               setSelectedFeatureId(null);
               setFocusLocationTarget({ token: Date.now(), location });
             }}
           />
+          {outOfCoverageLocationLabel ? (
+            <output
+              className={styles.outOfCoverage}
+              data-testid="location-out-of-coverage"
+              data-e2e="location-out-of-coverage"
+            >
+              {`${outOfCoverageLocationLabel} is outside the mapped Gauteng area.`}
+            </output>
+          ) : null}
         </div>
 
         <ControlButton
