@@ -292,67 +292,6 @@ describe("convertShapefileToGeoJSON", () => {
       SP_NAME: "Odinburg Gardens",
     });
   });
-
-  it("reprojects feature geometry when a sourceCrs is given", async () => {
-    const zip = new AdmZip();
-    zip.addFile("Subplace/SP_SA_2011.shp", Buffer.from("shp bytes"));
-    zip.addFile("Subplace/SP_SA_2011.dbf", Buffer.from("dbf bytes"));
-    shapefileReadMock.mockResolvedValue({
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {
-            SP_CODE: 799016009,
-            SP_NAME: "Odinburg Gardens",
-            MN_CODE: 799,
-          },
-          geometry: { type: "Point", coordinates: [1000000, 1000000] },
-        },
-      ],
-    });
-
-    const result = await convertShapefileToGeoJSON(
-      zip.toBuffer(),
-      [799],
-      "EPSG:3857",
-    );
-
-    const geometry = result.features[0]?.geometry;
-    if (geometry?.type !== "Point") {
-      throw new Error("Expected a Point geometry");
-    }
-    const [lon, lat] = geometry.coordinates;
-    expect(lon).toBeCloseTo(8.983152841195215, 6);
-    expect(lat).toBeCloseTo(8.946573850543412, 6);
-  });
-
-  it("leaves feature geometry untouched when no sourceCrs is given", async () => {
-    const zip = new AdmZip();
-    zip.addFile("Subplace/SP_SA_2011.shp", Buffer.from("shp bytes"));
-    zip.addFile("Subplace/SP_SA_2011.dbf", Buffer.from("dbf bytes"));
-    shapefileReadMock.mockResolvedValue({
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {
-            SP_CODE: 799016009,
-            SP_NAME: "Odinburg Gardens",
-            MN_CODE: 799,
-          },
-          geometry: { type: "Point", coordinates: [28.2, -25.7] },
-        },
-      ],
-    });
-
-    const result = await convertShapefileToGeoJSON(zip.toBuffer(), [799]);
-
-    expect(result.features[0]?.geometry).toEqual({
-      type: "Point",
-      coordinates: [28.2, -25.7],
-    });
-  });
 });
 
 describe("fetchMetroBoundaries", () => {

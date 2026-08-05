@@ -9,6 +9,11 @@ import {
 const HARTEBEESTHOEK94_LO29 =
   "+proj=tmerc +axis=wsu +lat_0=0 +lon_0=29 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs";
 
+const SOURCE_COORD: [number, number] = [1000000, 1000000];
+const REPROJECTED_COORD: [number, number] = [
+  8.983152841195215, 8.946573850543412,
+];
+
 describe("reprojectPosition", () => {
   it("reprojects a Web Mercator (EPSG:3857) origin to WGS84 (0, 0)", () => {
     expect(reprojectPosition([0, 0], "EPSG:3857")).toEqual([0, 0]);
@@ -30,128 +35,65 @@ describe("reprojectPosition", () => {
 });
 
 describe("reprojectGeometry", () => {
-  it("reprojects a Point", () => {
-    const geometry: Geometry = { type: "Point", coordinates: [0, 0] };
-    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual({
-      type: "Point",
-      coordinates: [0, 0],
-    });
+  it.each<[string, Geometry, Geometry]>([
+    [
+      "Point",
+      { type: "Point", coordinates: SOURCE_COORD },
+      { type: "Point", coordinates: REPROJECTED_COORD },
+    ],
+    [
+      "MultiPoint",
+      { type: "MultiPoint", coordinates: [SOURCE_COORD, SOURCE_COORD] },
+      {
+        type: "MultiPoint",
+        coordinates: [REPROJECTED_COORD, REPROJECTED_COORD],
+      },
+    ],
+    [
+      "LineString",
+      { type: "LineString", coordinates: [SOURCE_COORD, SOURCE_COORD] },
+      {
+        type: "LineString",
+        coordinates: [REPROJECTED_COORD, REPROJECTED_COORD],
+      },
+    ],
+    [
+      "MultiLineString",
+      { type: "MultiLineString", coordinates: [[SOURCE_COORD]] },
+      { type: "MultiLineString", coordinates: [[REPROJECTED_COORD]] },
+    ],
+    [
+      "Polygon",
+      { type: "Polygon", coordinates: [[SOURCE_COORD, SOURCE_COORD]] },
+      {
+        type: "Polygon",
+        coordinates: [[REPROJECTED_COORD, REPROJECTED_COORD]],
+      },
+    ],
+    [
+      "MultiPolygon",
+      { type: "MultiPolygon", coordinates: [[[SOURCE_COORD]]] },
+      { type: "MultiPolygon", coordinates: [[[REPROJECTED_COORD]]] },
+    ],
+    [
+      "GeometryCollection",
+      {
+        type: "GeometryCollection",
+        geometries: [{ type: "Point", coordinates: SOURCE_COORD }],
+      },
+      {
+        type: "GeometryCollection",
+        geometries: [{ type: "Point", coordinates: REPROJECTED_COORD }],
+      },
+    ],
+  ])("reprojects every position in a %s", (_name, geometry, expected) => {
+    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual(expected);
   });
 
-  it("reprojects every position in a MultiPoint", () => {
-    const geometry: Geometry = {
-      type: "MultiPoint",
-      coordinates: [
-        [0, 0],
-        [0, 0],
-      ],
-    };
-    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual({
-      type: "MultiPoint",
-      coordinates: [
-        [0, 0],
-        [0, 0],
-      ],
-    });
-  });
-
-  it("reprojects every position in a LineString", () => {
-    const geometry: Geometry = {
-      type: "LineString",
-      coordinates: [
-        [0, 0],
-        [0, 0],
-      ],
-    };
-    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual({
-      type: "LineString",
-      coordinates: [
-        [0, 0],
-        [0, 0],
-      ],
-    });
-  });
-
-  it("reprojects every position in a MultiLineString", () => {
-    const geometry: Geometry = {
-      type: "MultiLineString",
-      coordinates: [
-        [
-          [0, 0],
-          [0, 0],
-        ],
-      ],
-    };
-    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual({
-      type: "MultiLineString",
-      coordinates: [
-        [
-          [0, 0],
-          [0, 0],
-        ],
-      ],
-    });
-  });
-
-  it("reprojects every ring position in a Polygon", () => {
-    const geometry: Geometry = {
-      type: "Polygon",
-      coordinates: [
-        [
-          [0, 0],
-          [0, 0],
-          [0, 0],
-        ],
-      ],
-    };
-    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual({
-      type: "Polygon",
-      coordinates: [
-        [
-          [0, 0],
-          [0, 0],
-          [0, 0],
-        ],
-      ],
-    });
-  });
-
-  it("reprojects every ring position in a MultiPolygon", () => {
-    const geometry: Geometry = {
-      type: "MultiPolygon",
-      coordinates: [
-        [
-          [
-            [0, 0],
-            [0, 0],
-            [0, 0],
-          ],
-        ],
-      ],
-    };
-    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual({
-      type: "MultiPolygon",
-      coordinates: [
-        [
-          [
-            [0, 0],
-            [0, 0],
-            [0, 0],
-          ],
-        ],
-      ],
-    });
-  });
-
-  it("recursively reprojects every geometry in a GeometryCollection", () => {
-    const geometry: Geometry = {
-      type: "GeometryCollection",
-      geometries: [{ type: "Point", coordinates: [0, 0] }],
-    };
-    expect(reprojectGeometry(geometry, "EPSG:3857")).toEqual({
-      type: "GeometryCollection",
-      geometries: [{ type: "Point", coordinates: [0, 0] }],
-    });
+  it("does not mutate the input geometry", () => {
+    const geometry: Geometry = { type: "Point", coordinates: SOURCE_COORD };
+    reprojectGeometry(geometry, "EPSG:3857");
+    expect(geometry).toEqual({ type: "Point", coordinates: SOURCE_COORD });
   });
 });
 
@@ -163,7 +105,7 @@ describe("reprojectFeatureCollection", () => {
         {
           type: "Feature",
           properties: { id: 1 },
-          geometry: { type: "Point", coordinates: [0, 0] },
+          geometry: { type: "Point", coordinates: SOURCE_COORD },
         },
       ],
     };
@@ -174,20 +116,9 @@ describe("reprojectFeatureCollection", () => {
         {
           type: "Feature",
           properties: { id: 1 },
-          geometry: { type: "Point", coordinates: [0, 0] },
+          geometry: { type: "Point", coordinates: REPROJECTED_COORD },
         },
       ],
     });
-  });
-
-  it("passes null geometries through unchanged", () => {
-    const collection: FeatureCollection<Geometry | null> = {
-      type: "FeatureCollection",
-      features: [{ type: "Feature", properties: null, geometry: null }],
-    };
-
-    expect(reprojectFeatureCollection(collection, "EPSG:3857")).toEqual(
-      collection,
-    );
   });
 });

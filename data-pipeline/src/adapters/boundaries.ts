@@ -1,5 +1,4 @@
 import { getMetroDefinition, type MetroId } from "@stratum/app";
-import { reprojectFeatureCollection } from "@stratum/core";
 import * as turf from "@turf/turf";
 import AdmZip from "adm-zip";
 import type {
@@ -114,16 +113,10 @@ export function filterFeaturesByMunicipality(
  * metro's sub-places only. I/O-bound (zip extraction + shapefile parsing);
  * the filtering logic itself lives in the pure, separately-tested
  * `filterFeaturesByMunicipality`.
- * @param sourceCrs - A proj4-compatible definition string for the
- *   shapefile's coordinate reference system, if it isn't already WGS84 (see
- *   `HARTEBEESTHOEK94_LO29` for a common South African example). Omit when
- *   the source is already WGS84 lon/lat, which is the case for today's
- *   Census 2011 sub-place source.
  */
 export async function convertShapefileToGeoJSON(
   zipBuffer: Buffer,
   municipalityCodes: readonly number[],
-  sourceCrs?: string,
 ): Promise<FeatureCollection> {
   const zip = new AdmZip(zipBuffer);
   const shpEntry = zip.getEntry(SHP_ENTRY_NAME);
@@ -143,19 +136,16 @@ export async function convertShapefileToGeoJSON(
     dbfBuffer,
   );
 
-  const filtered = filterFeaturesByMunicipality(collection, municipalityCodes);
-  return sourceCrs ? reprojectFeatureCollection(filtered, sourceCrs) : filtered;
+  return filterFeaturesByMunicipality(collection, municipalityCodes);
 }
 
 /**
  * Fetches the national sub-place boundary shapefile zip and returns just
  * `metroId`'s sub-place features, via `convertShapefileToGeoJSON`.
- * @param sourceCrs - Forwarded to `convertShapefileToGeoJSON`; see its docs.
  * @throws If the network fetch fails.
  */
 export async function fetchMetroBoundaries(
   metroId: MetroId,
-  sourceCrs?: string,
 ): Promise<FeatureCollection> {
   const response = await fetch(BOUNDARY_SOURCE_URL);
   if (!response.ok) {
@@ -165,6 +155,5 @@ export async function fetchMetroBoundaries(
   return convertShapefileToGeoJSON(
     zipBuffer,
     getMetroDefinition(metroId).municipalityCodes,
-    sourceCrs,
   );
 }

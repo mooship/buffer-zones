@@ -1,11 +1,27 @@
+import * as turf from "@turf/turf";
 import type { Feature, FeatureCollection, Geometry, Position } from "geojson";
-import proj4 from "proj4";
+import proj4, { type Converter } from "proj4";
 
 /**
  * GeoJSON's mandated coordinate reference system (RFC 7946 §4) — the target
  * every `reproject*` function converts into.
  */
 const WGS84 = "WGS84";
+
+/**
+ * Applies an already-built proj4 `converter` to a single position.
+ * @remarks Shared by `reprojectPosition` (which builds its own converter,
+ *   for one-off use) and `reprojectGeometry` (which builds one converter
+ *   and reuses it across every coordinate, rather than re-parsing
+ *   `sourceCrs` on every position).
+ */
+function applyConverter(converter: Converter, position: Position): Position {
+  const [lon, lat] = converter.forward([position[0], position[1]] as [
+    number,
+    number,
+  ]);
+  return position.length > 2 ? [lon, lat, position[2] as number] : [lon, lat];
+}
 
 /**
  * Reprojects a single position from `sourceCrs` into WGS84.
@@ -20,80 +36,47 @@ export function reprojectPosition(
   position: Position,
   sourceCrs: string,
 ): Position {
-  const [lon, lat] = proj4(sourceCrs, WGS84).forward([
-    position[0],
-    position[1],
-  ] as [number, number]);
-  return position.length > 2 ? [lon, lat, position[2] as number] : [lon, lat];
+  return applyConverter(proj4(sourceCrs, WGS84), position);
 }
 
 /**
  * Recursively reprojects every position in `geometry` from `sourceCrs` into WGS84.
  * @param geometry - Any GeoJSON geometry, including a nested `GeometryCollection`.
  * @param sourceCrs - A proj4-compatible definition string.
+ * @remarks Walks coordinates via Turf's `coordEach`, so every geometry type
+ *   it supports (including `GeometryCollection`) is handled without a
+ *   hand-written recursive case per type. Builds one converter for the whole
+ *   geometry rather than re-parsing `sourceCrs` per coordinate.
  */
 export function reprojectGeometry(
   geometry: Geometry,
   sourceCrs: string,
 ): Geometry {
-  switch (geometry.type) {
-    case "Point":
-      return {
-        ...geometry,
-        coordinates: reprojectPosition(geometry.coordinates, sourceCrs),
-      };
-    case "MultiPoint":
-    case "LineString":
-      return {
-        ...geometry,
-        coordinates: geometry.coordinates.map((position) =>
-          reprojectPosition(position, sourceCrs),
-        ),
-      };
-    case "MultiLineString":
-    case "Polygon":
-      return {
-        ...geometry,
-        coordinates: geometry.coordinates.map((line) =>
-          line.map((position) => reprojectPosition(position, sourceCrs)),
-        ),
-      };
-    case "MultiPolygon":
-      return {
-        ...geometry,
-        coordinates: geometry.coordinates.map((polygon) =>
-          polygon.map((ring) =>
-            ring.map((position) => reprojectPosition(position, sourceCrs)),
-          ),
-        ),
-      };
-    case "GeometryCollection":
-      return {
-        ...geometry,
-        geometries: geometry.geometries.map((member) =>
-          reprojectGeometry(member, sourceCrs),
-        ),
-      };
-  }
+  const converter = proj4(sourceCrs, WGS84);
+  const reprojected = turf.clone(geometry);
+  turf.coordEach(reprojected, (coord) => {
+    const [lon, lat] = applyConverter(converter, coord) as [number, number];
+    coord[0] = lon;
+    coord[1] = lat;
+  });
+  return reprojected;
 }
 
 /**
  * Reprojects every feature's geometry in `collection` from `sourceCrs` into WGS84.
  * @param collection - The collection to reproject.
  * @param sourceCrs - A proj4-compatible definition string.
- * @remarks Features with a `null` geometry are passed through unchanged.
  */
-export function reprojectFeatureCollection<
-  G extends Geometry | null = Geometry,
->(collection: FeatureCollection<G>, sourceCrs: string): FeatureCollection<G> {
+export function reprojectFeatureCollection(
+  collection: FeatureCollection,
+  sourceCrs: string,
+): FeatureCollection {
   return {
     ...collection,
     features: collection.features.map(
-      (feature): Feature<G> => ({
+      (feature): Feature => ({
         ...feature,
-        geometry: (feature.geometry
-          ? reprojectGeometry(feature.geometry, sourceCrs)
-          : null) as G,
+        geometry: reprojectGeometry(feature.geometry, sourceCrs),
       }),
     ),
   };

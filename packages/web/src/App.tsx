@@ -6,7 +6,6 @@ import {
 import {
   type DomainStory as DomainStoryContent,
   fetchFeatureCollection,
-  isPointInPolygon,
   mergeFeatureCollections,
 } from "@stratum/core";
 import {
@@ -20,7 +19,7 @@ import {
 } from "@stratum/map";
 import { setThemePreference, useThemePreference } from "@stratum/react";
 import clsx from "clsx";
-import type { Feature, Polygon } from "geojson";
+import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
 import {
   type AnimationEvent,
@@ -53,21 +52,6 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
   [-25.3, 28.75],
 ];
 
-const [[GAUTENG_SOUTH, GAUTENG_WEST], [GAUTENG_NORTH, GAUTENG_EAST]] =
-  GAUTENG_BOUNDS;
-const GAUTENG_BOUNDS_POLYGON: Polygon = {
-  type: "Polygon",
-  coordinates: [
-    [
-      [GAUTENG_WEST, GAUTENG_SOUTH],
-      [GAUTENG_EAST, GAUTENG_SOUTH],
-      [GAUTENG_EAST, GAUTENG_NORTH],
-      [GAUTENG_WEST, GAUTENG_NORTH],
-      [GAUTENG_WEST, GAUTENG_SOUTH],
-    ],
-  ],
-};
-
 /**
  * Whether `location` falls within `GAUTENG_BOUNDS`.
  * @remarks Nominatim searches the whole world, so a query can resolve to a
@@ -75,9 +59,12 @@ const GAUTENG_BOUNDS_POLYGON: Polygon = {
  *   would just show an empty basemap with no explanation.
  */
 function isWithinGautengBounds(location: LocationSearchResult): boolean {
-  return isPointInPolygon(
-    [location.longitude, location.latitude],
-    GAUTENG_BOUNDS_POLYGON,
+  const [[south, west], [north, east]] = GAUTENG_BOUNDS;
+  return (
+    location.latitude >= south &&
+    location.latitude <= north &&
+    location.longitude >= west &&
+    location.longitude <= east
   );
 }
 
