@@ -30,34 +30,41 @@ const THEME_BOOTSTRAP_SCRIPT = `(() => {
 })();`;
 
 /**
- * `<link rel=preload>` entries for every configured layer's GeoJSON data
- * source plus `companionSource` (e.g. a choropleth's area-boundary file,
- * fetched alongside it but not itself a `dataSource` entry), deduplicated by
- * URL (a URL shared by multiple layers preloads once). Sources for a
- * default-visible layer preload at normal priority; everything else preloads
- * at `fetchPriority: "low"`.
- * @remarks Computed once at module scope, like `STORY`/`PANEL_VIEWS` in
+ * `<link rel=preload>` entries for every `defaultVisible` layer's GeoJSON
+ * data source plus `companionSource` (e.g. a choropleth's area-boundary
+ * file, fetched alongside it but not itself a `dataSource` entry),
+ * deduplicated by URL (a URL shared by multiple layers preloads once).
+ * @remarks A non-default-visible layer's data isn't preloaded at all —
+ *   `preload` signals "needed for this render," which isn't true for a
+ *   layer nobody has toggled on yet, and eagerly downloading it still costs
+ *   real bandwidth that competes with what the initial render actually
+ *   needs (confirmed via Lighthouse: preloading every layer regardless of
+ *   visibility was pulling ~900KB of hidden-layer GeoJSON on every load,
+ *   directly delaying LCP under throttled mobile network conditions). A
+ *   toggled-on layer is fetched on demand by `useLayerData` instead.
+ *   Computed once at module scope, like `STORY`/`PANEL_VIEWS` in
  *   `App.tsx` — `getLayers()` is a static in-memory array for the process
  *   lifetime, so there's nothing request-specific to recompute inside `links`.
  */
 const GEOJSON_PRELOAD_LINKS = (() => {
-  const defaultVisibleByUrl = new Map<string, boolean>();
+  const urls = new Set<string>();
   for (const layer of getLayers()) {
-    const sources = layer.companionSource
-      ? [...layer.dataSource, layer.companionSource]
-      : layer.dataSource;
-    for (const source of sources) {
-      const isDefaultVisible = defaultVisibleByUrl.get(source) ?? false;
-      defaultVisibleByUrl.set(source, isDefaultVisible || layer.defaultVisible);
+    if (!layer.defaultVisible) {
+      continue;
+    }
+    for (const source of layer.dataSource) {
+      urls.add(source);
+    }
+    if (layer.companionSource) {
+      urls.add(layer.companionSource);
     }
   }
 
-  return Array.from(defaultVisibleByUrl, ([href, defaultVisible]) => ({
+  return Array.from(urls, (href) => ({
     rel: "preload" as const,
     href,
     as: "fetch" as const,
     crossOrigin: "anonymous" as const,
-    ...(defaultVisible ? {} : { fetchPriority: "low" as const }),
   }));
 })();
 

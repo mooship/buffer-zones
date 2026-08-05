@@ -19,13 +19,15 @@ vi.mock("react-router", async (importOriginal) => {
 const { default: Root, Layout, links, meta } = await import("./root");
 
 describe("root links", () => {
-  it("includes exactly one preload link per unique dataSource/companionSource URL", () => {
+  it("includes exactly one preload link per unique default-visible dataSource/companionSource URL", () => {
     const uniqueUrls = new Set(
-      getLayers().flatMap((layer) =>
-        layer.companionSource
-          ? [...layer.dataSource, layer.companionSource]
-          : layer.dataSource,
-      ),
+      getLayers()
+        .filter((layer) => layer.defaultVisible)
+        .flatMap((layer) =>
+          layer.companionSource
+            ? [...layer.dataSource, layer.companionSource]
+            : layer.dataSource,
+        ),
     );
 
     const preloadLinks = links().filter(
@@ -43,32 +45,29 @@ describe("root links", () => {
     }
   });
 
-  it("does not mark a defaultVisible layer's URL as low priority, but marks an invisible-only URL as low priority", () => {
+  it("preloads a defaultVisible layer's URL at normal priority, but does not preload a non-default-visible-only URL at all", () => {
     const sharedUrl = getLayers().find((layer) => layer.id === "townships")
       ?.dataSource[0];
-    const invisibleOnlyUrl = getLayers().find(
-      (layer) => layer.id === "rapid-rail",
-    )?.dataSource[0];
+    const hiddenOnlyUrl = getLayers().find((layer) => layer.id === "rapid-rail")
+      ?.dataSource[0];
 
     expect(sharedUrl).toBeDefined();
-    expect(invisibleOnlyUrl).toBeDefined();
+    expect(hiddenOnlyUrl).toBeDefined();
 
     const preloadLinks = links().filter(
       (link) => "rel" in link && link.rel === "preload",
+    );
+    const hrefs = preloadLinks.map((link) =>
+      "href" in link ? link.href : undefined,
     );
 
     const sharedLink = preloadLinks.find(
       (link) => "href" in link && link.href === sharedUrl,
     );
-    const invisibleOnlyLink = preloadLinks.find(
-      (link) => "href" in link && link.href === invisibleOnlyUrl,
-    );
-
     expect(sharedLink).toBeDefined();
     expect(sharedLink).not.toHaveProperty("fetchPriority");
 
-    expect(invisibleOnlyLink).toBeDefined();
-    expect(invisibleOnlyLink).toHaveProperty("fetchPriority", "low");
+    expect(hrefs).not.toContain(hiddenOnlyUrl);
   });
 });
 
