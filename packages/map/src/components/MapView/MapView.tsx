@@ -164,9 +164,11 @@ function bindSelectableFeatureInteractions<
   onSelect?: (featureId: string) => void,
   renderFeaturePopup?: (properties: TProperties) => ReactNode,
 ) {
+  /* v8 ignore start -- unreachable: this function's only call site already gates on `isSelectable` before passing it as `onEachFeature`, but the runtime check (and the type narrowing it gives `domainLayer.interaction` below) stays as this function's own contract in case a second call site is ever added without that gate */
   if (!domainLayer.interaction?.selectable) {
     return;
   }
+  /* v8 ignore stop */
   const properties = feature.properties as TProperties | null;
   if (!properties) {
     return;

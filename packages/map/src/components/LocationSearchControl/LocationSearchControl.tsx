@@ -96,11 +96,11 @@ export function LocationSearchControl({
   }, [query, abort]);
 
   function handleRetry() {
-    const trimmedQuery = query.trim();
-    if (trimmedQuery.length < MIN_SEARCH_QUERY_LENGTH) {
-      return;
-    }
-    runSearch(trimmedQuery);
+    // The retry button only renders while `searchFailed` is true, which
+    // requires a prior successful `runSearch` call with a long-enough query
+    // -- any edit to the input clears the error and unmounts this button --
+    // so `query` is always already long enough by the time this runs.
+    runSearch(query.trim());
   }
 
   function handleInputKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {

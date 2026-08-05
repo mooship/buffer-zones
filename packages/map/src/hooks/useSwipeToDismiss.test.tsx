@@ -1,6 +1,12 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { useState } from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { useSwipeToDismiss } from "./useSwipeToDismiss";
 
 function TestHandle({ enabled = true }: { enabled?: boolean }) {
@@ -69,6 +75,55 @@ describe("useSwipeToDismiss", () => {
 
     expect(handle).toHaveAttribute("data-dragging", "true");
     await waitFor(() => expect(handle).toHaveTextContent("drag offset: 30"));
+
+    // Release the pointer so this test doesn't leak its window-level
+    // pointermove/pointerup listeners into later tests reusing pointerId 1.
+    fireEvent.pointerUp(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 130,
+    });
+  });
+
+  it("coalesces pointermoves within the same animation frame into a single scheduled update", () => {
+    const pendingFrames: FrameRequestCallback[] = [];
+    let nextFrameId = 1;
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+      pendingFrames.push(callback);
+      return nextFrameId++;
+    });
+
+    render(<TestHandle />);
+    const handle = screen.getByTestId("handle");
+
+    fireEvent.pointerDown(handle, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 100,
+      button: 0,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 120,
+    });
+    fireEvent.pointerMove(window, {
+      pointerType: "touch",
+      pointerId: 1,
+      clientY: 130,
+    });
+
+    // Both moves land before the frame flushes, so the second must coalesce
+    // into the same pending frame rather than scheduling a new one.
+    expect(pendingFrames).toHaveLength(1);
+
+    act(() => {
+      pendingFrames[0]?.(0);
+    });
+
+    expect(handle).toHaveTextContent("drag offset: 30");
+
+    vi.unstubAllGlobals();
   });
 
   it("calls onDismiss when released past the threshold", () => {
@@ -120,6 +175,17 @@ describe("useSwipeToDismiss", () => {
 
     expect(screen.getByTestId("dismissed")).toHaveTextContent("false");
     expect(handle).toHaveAttribute("data-dragging", "false");
+  });
+
+  it("does not call releasePointerCapture when the browser already released capture", () => {
+    render(<TestHandle />);
+    const handle = screen.getByTestId("handle");
+    vi.spyOn(handle, "hasPointerCapture").mockReturnValue(false);
+    const releaseSpy = vi.spyOn(handle, "releasePointerCapture");
+
+    dragHandle(handle, { downY: 100, moveY: 150, upY: 150 });
+
+    expect(releaseSpy).not.toHaveBeenCalled();
   });
 
   it("ignores pointer events from a different pointer id", () => {

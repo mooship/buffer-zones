@@ -231,6 +231,29 @@ describe("App", () => {
     expect(layersTab).toHaveAttribute("aria-selected", "true");
   });
 
+  it("moves tab focus to the first/last tab with Home and End, and ignores other keys", async () => {
+    render(<App />);
+
+    const layersTab = await screen.findByTestId("panel-tab-layers");
+    const storyTab = screen.getByTestId("panel-tab-story");
+    layersTab.focus();
+
+    fireEvent.keyDown(layersTab, { key: "End" });
+
+    expect(storyTab).toHaveFocus();
+    expect(storyTab).toHaveAttribute("aria-selected", "true");
+
+    fireEvent.keyDown(storyTab, { key: "Home" });
+
+    expect(layersTab).toHaveFocus();
+    expect(layersTab).toHaveAttribute("aria-selected", "true");
+
+    fireEvent.keyDown(layersTab, { key: "a" });
+
+    expect(layersTab).toHaveFocus();
+    expect(layersTab).toHaveAttribute("aria-selected", "true");
+  });
+
   it("collapses and restores the controls panel", async () => {
     render(<App />);
 
