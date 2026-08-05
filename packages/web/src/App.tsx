@@ -464,9 +464,9 @@ export function App() {
           Skip to map information
         </a>
 
-        <h1 className={styles.visuallyHidden}>
-          Stratum: Gauteng spatial legacy map
-        </h1>
+        <header className={styles.visuallyHidden}>
+          <h1>Stratum: Gauteng spatial legacy map</h1>
+        </header>
 
         <main id="map-information" tabIndex={-1}>
           {hydrated ? (
@@ -536,10 +536,11 @@ export function App() {
           data-e2e="panel-toggle"
           aria-expanded={panelOpen}
           aria-controls="map-controls"
+          label={panelOpen ? "Close" : "Explore"}
           onClick={handlePanelToggle}
         >
           {panelOpen ? <X aria-hidden="true" /> : <Layers aria-hidden="true" />}
-          <span className={styles.panelTriggerLabel}>
+          <span className={styles.panelTriggerLabel} aria-hidden="true">
             {panelOpen ? "Close" : "Explore"}
           </span>
         </ControlButton>

@@ -184,6 +184,7 @@ export function LocationSearchControl({
           type="search"
           role="combobox"
           aria-autocomplete="list"
+          aria-haspopup="listbox"
           aria-expanded={hasResults}
           aria-controls="location-search-results"
           aria-activedescendant={
