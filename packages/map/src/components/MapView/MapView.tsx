@@ -43,6 +43,10 @@ import type { LocationSearchResult } from "../../data/locationSearch";
 import { useLayerData } from "../../hooks/useLayerData";
 import { ClickToLocatePopup } from "./ClickToLocatePopup";
 import styles from "./MapView.module.css";
+import {
+  SelectableFeatureSearch,
+  type SelectableFeatureSearchEntry,
+} from "./SelectableFeatureSearch";
 import { VectorBasemapLayer } from "./VectorBasemapLayer";
 
 /**
@@ -154,6 +158,20 @@ function bindSelectedFeaturePopup<TProperties extends Record<string, unknown>>(
   }
 }
 
+/**
+ * Resolves a feature's accessible/searchable label from `labelField`
+ * (defaulting to `properties.name` when the field is missing or non-string).
+ */
+function resolveFeatureLabel(
+  properties: Record<string, unknown>,
+  labelField: string,
+): string {
+  const labelValue = properties[labelField];
+  return typeof labelValue === "string"
+    ? labelValue
+    : String(properties.name ?? "");
+}
+
 function bindSelectableFeatureInteractions<
   TProperties extends Record<string, unknown>,
 >(
@@ -174,11 +192,10 @@ function bindSelectableFeatureInteractions<
     return;
   }
   const labelField = domainLayer.interaction.labelField ?? "name";
-  const labelValue = (properties as unknown as Record<string, unknown>)[
-    labelField
-  ];
-  const label =
-    typeof labelValue === "string" ? labelValue : String(properties.name ?? "");
+  const label = resolveFeatureLabel(
+    properties as unknown as Record<string, unknown>,
+    labelField,
+  );
   const featureId = properties.id;
 
   if (typeof featureId === "string") {
@@ -582,6 +599,39 @@ function MapViewComponent<
     }),
     [areas],
   );
+  const selectableSearchEntries = useMemo<
+    SelectableFeatureSearchEntry[]
+  >(() => {
+    const entries: SelectableFeatureSearchEntry[] = [];
+    for (const layer of visibleLayers) {
+      if (!layer.interaction?.selectable) {
+        continue;
+      }
+      const isChoropleth = layer.geometryKind === "choropleth";
+      const data = isChoropleth ? areaData : overlayData[layer.id];
+      if (!data) {
+        continue;
+      }
+      const labelField = layer.interaction.labelField ?? "name";
+      for (const feature of data.features) {
+        const properties = feature.properties as Record<string, unknown> | null;
+        const featureId = properties?.id;
+        if (!properties || typeof featureId !== "string") {
+          continue;
+        }
+        entries.push({
+          id: featureId,
+          label: resolveFeatureLabel(properties, labelField),
+        });
+      }
+    }
+    // Only mutually-exclusive selectable layers (see the domain's
+    // `selectionMode: "exclusive"` layer group) are expected to be visible
+    // at once, so entries shouldn't collide across layers in practice; a
+    // future domain violating that assumption would just show duplicate
+    // rows for the same id, not break selection.
+    return entries;
+  }, [visibleLayers, areaData, overlayData]);
   const layerConfigById = useMemo(
     () =>
       new Map(
@@ -630,6 +680,13 @@ function MapViewComponent<
       data-e2e="map-view"
       aria-label={ariaLabel}
     >
+      {selectableSearchEntries.length > 0 ? (
+        <SelectableFeatureSearch
+          features={selectableSearchEntries}
+          selectedFeatureId={selectedFeatureId}
+          onSelect={onFeatureSelect}
+        />
+      ) : null}
       <MapContainer
         bounds={bounds}
         boundsOptions={boundsOptions}

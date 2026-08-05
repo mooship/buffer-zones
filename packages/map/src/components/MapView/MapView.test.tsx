@@ -318,6 +318,40 @@ describe("MapView", () => {
     );
   });
 
+  it("wires the selectable-feature search to the visible selectable layer's features and onFeatureSelect", () => {
+    const onFeatureSelect = vi.fn();
+
+    render(
+      withDomain(
+        <MapView
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
+          onFeatureSelect={onFeatureSelect}
+        />,
+      ),
+    );
+
+    fireEvent.change(screen.getByTestId("selectable-feature-search-input"), {
+      target: { value: "Mamelodi" },
+    });
+    fireEvent.click(screen.getByRole("option", { name: "Mamelodi" }));
+
+    expect(onFeatureSelect).toHaveBeenCalledWith("A");
+  });
+
+  it("does not render the selectable-feature search when no visible layer is selectable", () => {
+    render(
+      withDomain(
+        <MapView {...DEFAULT_MAP_VIEW_PROPS} areas={[]} visibleLayerIds={[]} />,
+      ),
+    );
+
+    expect(
+      screen.queryByTestId("selectable-feature-search"),
+    ).not.toBeInTheDocument();
+  });
+
   it("calls renderFeaturePopup with feature properties when a feature is clicked", () => {
     vi.useFakeTimers();
     const renderFeaturePopup = vi.fn().mockReturnValue(<div>Custom popup</div>);
