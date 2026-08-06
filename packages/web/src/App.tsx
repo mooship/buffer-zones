@@ -40,6 +40,7 @@ import { LayerToggles } from "./components/LayerToggles/LayerToggles";
 import { TownshipPopup } from "./components/TownshipPopup/TownshipPopup";
 import { buildRegionDataUrls } from "./data/regionDataUrls";
 import { createTownshipDataRepository } from "./data/TownshipDataRepository";
+import { useMapModelContextTools } from "./hooks/useMapModelContextTools";
 import { getStory } from "./layers/registry";
 import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
 
@@ -189,6 +190,11 @@ function PanelViewContent({
  *   `animationend`, so the CSS duration in App.module.css stays the single
  *   source of truth — except under `prefers-reduced-motion`/desktop, where
  *   no animation plays and `closePanel` calls `finishClose` immediately.
+ *   `useMapModelContextTools` registers this app's layer/search/basemap/theme/
+ *   story capabilities as WebMCP tools; `handleLocationSelect` is shared
+ *   between `LocationSearchControl`'s `onLocationSelect` and that hook's
+ *   `search-map-location` tool, so a human picking a result and an agent
+ *   calling the tool fly the map the same way.
  */
 export function App() {
   const [hydrated, setHydrated] = useState(false);
@@ -317,6 +323,26 @@ export function App() {
   }
 
   const handleMapReady = useCallback(() => setMapReady(true), []);
+
+  function handleLocationSelect(location: LocationSearchResult): string {
+    if (!isWithinSearchCoverage(location)) {
+      setOutOfCoverageLocationLabel(location.label);
+      return `${location.label} is outside South Africa.`;
+    }
+    setOutOfCoverageLocationLabel(null);
+    setSelectedFeatureId(null);
+    setFocusLocationTarget({ token: Date.now(), location });
+    return `Flew to ${location.label}.`;
+  }
+
+  useMapModelContextTools({
+    onLocationSelect: handleLocationSelect,
+    story: STORY,
+    onShowStory: () => {
+      setPanelView("story");
+      setPanelOpen(true);
+    },
+  });
 
   function finishClose() {
     setMobileSheetClosing(false);
@@ -572,15 +598,7 @@ export function App() {
         <div className={clsx(styles.locationSearchControl, styles.surface)}>
           <LocationSearchControl
             placeholder="Search town, suburb or station"
-            onLocationSelect={(location) => {
-              if (!isWithinSearchCoverage(location)) {
-                setOutOfCoverageLocationLabel(location.label);
-                return;
-              }
-              setOutOfCoverageLocationLabel(null);
-              setSelectedFeatureId(null);
-              setFocusLocationTarget({ token: Date.now(), location });
-            }}
+            onLocationSelect={handleLocationSelect}
           />
           {outOfCoverageLocationLabel ? (
             <output
