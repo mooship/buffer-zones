@@ -1,4 +1,9 @@
-import { expect, GEOCODER_RESULT, test } from "./fixtures";
+import {
+  expect,
+  GEOCODER_RESULT,
+  GEOCODER_SEARCH_PATTERN,
+  test,
+} from "./fixtures";
 import { E2E } from "./selectors";
 
 /** Outside `SEARCH_COVERAGE_BOUNDS` (mainland South Africa), see `App.tsx`. */
@@ -68,7 +73,7 @@ test.describe("location search", () => {
   test("reports no matches for a query the geocoder can't resolve", async ({
     page,
   }) => {
-    await page.route(/nominatim\.openstreetmap\.org\/search/, (route) =>
+    await page.route(GEOCODER_SEARCH_PATTERN, (route) =>
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -90,7 +95,7 @@ test.describe("location search", () => {
     page,
   }) => {
     let requestCount = 0;
-    await page.route(/nominatim\.openstreetmap\.org\/search/, (route) => {
+    await page.route(GEOCODER_SEARCH_PATTERN, (route) => {
       requestCount += 1;
       if (requestCount === 1) {
         return route.fulfill({ status: 500, body: "Internal Server Error" });
@@ -124,7 +129,7 @@ test.describe("location search", () => {
   test("shows an out-of-coverage message for a result outside South Africa, and clears it on a valid pick", async ({
     page,
   }) => {
-    await page.route(/nominatim\.openstreetmap\.org\/search/, (route) => {
+    await page.route(GEOCODER_SEARCH_PATTERN, (route) => {
       const url = new URL(route.request().url());
       const query = (url.searchParams.get("q") ?? "").toLowerCase();
       const result = query.includes("london") ? LONDON_RESULT : GEOCODER_RESULT;
@@ -151,7 +156,6 @@ test.describe("location search", () => {
       `${LONDON_RESULT.display_name} is outside South Africa.`,
     );
 
-    await input.fill("");
     await input.fill("soweto");
     const sowetoResult = page
       .getByTestId(E2E.locationSearchResults)

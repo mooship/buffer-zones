@@ -1,5 +1,6 @@
 import { expect, test } from "./fixtures";
 import { E2E } from "./selectors";
+import { mockFailOnceThenSucceed } from "./ui";
 
 const MAP_GEOMETRY_SELECTOR =
   ".leaflet-overlay-pane canvas, .leaflet-container path.leaflet-interactive";
@@ -8,14 +9,10 @@ test.describe("data load error and retry", () => {
   test("shows an error when township data fails to load, and recovers on retry", async ({
     page,
   }) => {
-    let requestCount = 0;
-    await page.route("**/data/**/townships.display.v1.geojson*", (route) => {
-      requestCount += 1;
-      if (requestCount === 1) {
-        return route.fulfill({ status: 500, body: "Internal Server Error" });
-      }
-      return route.continue();
-    });
+    const requestState = await mockFailOnceThenSucceed(
+      page,
+      "**/data/**/townships.display.v1.geojson*",
+    );
 
     await page.goto("/");
 
@@ -26,6 +23,6 @@ test.describe("data load error and retry", () => {
 
     await expect(alert).not.toBeVisible();
     await expect(page.locator(MAP_GEOMETRY_SELECTOR).first()).toBeVisible();
-    expect(requestCount).toBe(2);
+    expect(requestState.requestCount).toBe(2);
   });
 });

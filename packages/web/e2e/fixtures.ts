@@ -11,7 +11,8 @@ const TRANSPARENT_PNG = Buffer.from(
 const TILE_HOST_PATTERN =
   /tile\.openstreetmap\.org|basemaps\.cartocdn\.com|server\.arcgisonline\.com/;
 
-const GEOCODER_SEARCH_PATTERN = /nominatim\.openstreetmap\.org\/search/;
+/** Matches a Nominatim place-search request, for tests that override the default geocoder stub below. */
+export const GEOCODER_SEARCH_PATTERN = /nominatim\.openstreetmap\.org\/search/;
 
 /**
  * The single place hit that every location search in the suite resolves to,

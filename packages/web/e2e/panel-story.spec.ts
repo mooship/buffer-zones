@@ -9,8 +9,8 @@ test.describe("panel story tab", () => {
     await page.goto("/");
     await ensurePanelOpen(page);
 
-    const layersTab = page.getByTestId("panel-tab-layers");
-    const storyTab = page.getByTestId("panel-tab-story");
+    const layersTab = page.getByTestId(E2E.panelTab.layers);
+    const storyTab = page.getByTestId(E2E.panelTab.story);
 
     await expect(layersTab).toHaveAttribute("aria-selected", "true");
     await expect(storyTab).toHaveAttribute("aria-selected", "false");
@@ -32,8 +32,8 @@ test.describe("panel story tab", () => {
     await page.goto("/");
     await ensurePanelOpen(page);
 
-    const layersTab = page.getByTestId("panel-tab-layers");
-    const storyTab = page.getByTestId("panel-tab-story");
+    const layersTab = page.getByTestId(E2E.panelTab.layers);
+    const storyTab = page.getByTestId(E2E.panelTab.story);
 
     await layersTab.focus();
     await page.keyboard.press("ArrowRight");
