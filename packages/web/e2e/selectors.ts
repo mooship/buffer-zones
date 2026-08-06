@@ -14,6 +14,7 @@ export const E2E = {
   mapView: "map-view",
   locationSearchInput: "location-search-input",
   locationSearchResults: "location-search-results",
+  locationSearchRetry: "location-search-retry",
   locationOutOfCoverage: "location-out-of-coverage",
   selectableFeatureSearch: "selectable-feature-search",
   selectableFeatureSearchInput: "selectable-feature-search-input",
@@ -30,8 +31,14 @@ export const E2E = {
   },
   layerToggle: {
     townships: "layer-toggle-townships",
+    townshipsDescription: "layer-toggle-townships-description",
     nearestTransit: "layer-toggle-nearest-transit",
     rapidRail: "layer-toggle-rapid-rail",
+    rapidRailError: "layer-toggle-rapid-rail-error",
+  },
+  panelTab: {
+    layers: "panel-tab-layers",
+    story: "panel-tab-story",
   },
   townshipPopup: "township-popup",
 } as const;
