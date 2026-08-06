@@ -10,32 +10,60 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { THEME_STORAGE_KEY } from "./constants/themeConfig";
 import appStylesHref from "./index.css?url";
 import { getLayers } from "./layers/registry";
 
 /**
- * Builds `<link rel=preload>` entries for every configured layer's GeoJSON
- * data source, deduplicated by URL (a URL shared by multiple layers preloads
- * once). Sources for a default-visible layer preload at normal priority;
- * everything else preloads at `fetchPriority: "low"`.
+ * Pre-hydration theme-bootstrap script: reads the stored theme preference
+ * and sets `data-theme` before first paint, avoiding a flash of the wrong
+ * theme. Inlined (rather than an external `/theme-bootstrap.js` file) so it
+ * runs without an extra render-blocking network request; the exact source
+ * below is hashed into `_headers`' `Content-Security-Policy` `script-src` —
+ * changing this string requires recomputing that hash (see `_headers`).
  */
-function getGeoJsonPreloadLinks() {
-  const defaultVisibleByUrl = new Map<string, boolean>();
-  for (const layer of getLayers()) {
-    for (const source of layer.dataSource) {
-      const isDefaultVisible = defaultVisibleByUrl.get(source) ?? false;
-      defaultVisibleByUrl.set(source, isDefaultVisible || layer.defaultVisible);
-    }
+const THEME_BOOTSTRAP_SCRIPT = `(() => {
+  const stored = localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
+  if (stored === "light" || stored === "dark") {
+    document.documentElement.dataset.theme = stored;
   }
+})();`;
 
-  return Array.from(defaultVisibleByUrl, ([href, defaultVisible]) => ({
+/**
+ * `<link rel=preload>` entries for every `defaultVisible` layer's GeoJSON
+ * data source plus `companionSource` (e.g. a choropleth's area-boundary
+ * file, fetched alongside it but not itself a `dataSource` entry),
+ * deduplicated by URL (a URL shared by multiple layers preloads once).
+ * @remarks A non-default-visible layer's data isn't preloaded at all —
+ *   `preload` signals "needed for this render," which isn't true for a
+ *   layer nobody has toggled on yet, and eagerly downloading it still costs
+ *   real bandwidth that competes with what the initial render actually
+ *   needs (confirmed via Lighthouse: preloading every layer regardless of
+ *   visibility was pulling ~900KB of hidden-layer GeoJSON on every load,
+ *   directly delaying LCP under throttled mobile network conditions). A
+ *   toggled-on layer is fetched on demand by `useLayerData` instead.
+ *   Computed once at module scope, like `STORY`/`PANEL_VIEWS` in
+ *   `App.tsx` — `getLayers()` is a static in-memory array for the process
+ *   lifetime, so there's nothing request-specific to recompute inside `links`.
+ */
+const GEOJSON_PRELOAD_LINKS = (() => {
+  const urls = new Set(
+    getLayers()
+      .filter((layer) => layer.defaultVisible)
+      .flatMap((layer) =>
+        layer.companionSource
+          ? [...layer.dataSource, layer.companionSource]
+          : layer.dataSource,
+      ),
+  );
+
+  return Array.from(urls, (href) => ({
     rel: "preload" as const,
     href,
     as: "fetch" as const,
     crossOrigin: "anonymous" as const,
-    ...(defaultVisible ? {} : { fetchPriority: "low" as const }),
   }));
-}
+})();
 
 /** React Router route module export: page `<title>`/`<meta>` tags. */
 export const meta: MetaFunction = () => {
@@ -55,8 +83,8 @@ export const meta: MetaFunction = () => {
 
 /**
  * React Router route module export: `<link>` tags — self-hosted font/style
- * stylesheets, favicons, basemap-provider preconnects, and this layer's
- * GeoJSON preload links from `getGeoJsonPreloadLinks`.
+ * stylesheets, favicons, basemap-provider preconnects, and
+ * `GEOJSON_PRELOAD_LINKS`.
  */
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: interStylesHref },
@@ -80,13 +108,13 @@ export const links: LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
   { rel: "preconnect", href: "https://tile.openstreetmap.org" },
   { rel: "preconnect", href: "https://basemaps.cartocdn.com" },
-  ...getGeoJsonPreloadLinks(),
+  ...GEOJSON_PRELOAD_LINKS,
 ];
 
 /**
  * React Router route module export: the document shell (`<html>`/`<head>`/`<body>`)
  * wrapping every route. Sets the pre-hydration `theme-color` meta tags and
- * loads `/theme-bootstrap.js` to apply the stored theme before paint.
+ * inlines `THEME_BOOTSTRAP_SCRIPT` to apply the stored theme before paint.
  */
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -103,7 +131,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           content="#15110b"
           media="(prefers-color-scheme: dark)"
         />
-        <script src="/theme-bootstrap.js" />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: static, module-scope literal — see THEME_BOOTSTRAP_SCRIPT
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
         <Meta />
         <Links />
       </head>

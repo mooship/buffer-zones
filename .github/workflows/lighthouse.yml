@@ -1,0 +1,61 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build --workspace @stratum/web
+
+      # lighthouserc.json's startServerCommand/startServerReadyPattern start
+      # and wait for the preview server itself (lhci autorun), so there's no
+      # separate boot step here. Scores run against real, un-mocked basemap
+      # tile requests (unlike the Playwright e2e suite, which mocks them)
+      # since Lighthouse is meant to reflect what a real visitor experiences.
+      # `performance` is asserted at 0.95 rather than the app's 100 target to
+      # absorb that real third-party network variance without making this
+      # check flaky; the other categories don't depend on network timing and
+      # stay at 1 (100).
+      - name: Run Lighthouse CI
+        id: lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./packages/web/lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      # The action's own job log only prints assertions that fail or warn --
+      # a fully-passing category shows nothing at all. Print every category
+      # score and a few key performance audits regardless of pass/fail, both
+      # to the log and to the run's job summary, so scores are visible
+      # without downloading the report artifact. Runs even if the assert
+      # step above failed (an error-level assertion), since the scores are
+      # exactly what's needed to diagnose that failure.
+      - name: Print Lighthouse report
+        if: always()
+        run: node packages/web/scripts/print-lighthouse-summary.mjs "${{ steps.lighthouse.outputs.resultsPath }}"
