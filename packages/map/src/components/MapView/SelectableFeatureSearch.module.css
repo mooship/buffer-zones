@@ -1,8 +1,17 @@
+/*
+ * `.revealWrapper` is hidden by a transform, which moves what's painted but
+ * not the layout box this element is sized from -- so the section kept a
+ * full-size, invisible, top-of-the-stack hit target over the map's top-left
+ * corner, swallowing every click and tap aimed at whatever a caller renders
+ * there (in the reference app, the location search field). Pointer events are
+ * handed back to `.revealWrapper` alone, which is off-screen until focused.
+ */
 .root {
   position: absolute;
   inset-block-start: 0.5rem;
   inset-inline-start: 0.5rem;
   z-index: 2000;
+  pointer-events: none;
 }
 
 .visuallyHidden {
@@ -32,6 +41,7 @@
   background: var(--color-paper);
   box-shadow: var(--elevation-3);
   transform: translateY(-160%);
+  pointer-events: auto;
 }
 
 .revealWrapper:focus-within {
