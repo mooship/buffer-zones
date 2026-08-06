@@ -24,15 +24,6 @@ export function getMetroBbox(metroId: MetroId): string {
   return METRO_BBOX[metroId];
 }
 
-// Gautrain, Gautrain Bus and PRASA are real region-wide networks that run
-// through more than one metro (e.g. Gautrain rail crosses Tshwane,
-// Ekurhuleni's OR Tambo, and Johannesburg). Fetching them per metro bbox
-// clips the line at that metro's boundary, so it looks severed when viewed
-// from the other metro even though the real network is continuous. A union of
-// the bboxes of the metros in the region being built is used to fetch those
-// shared networks once, whole, rather than as metro-clipped fragments — and
-// scoped to that region so a build never pulls another region's network into
-// its own output.
 /**
  * Parses an Overpass-style `"south,west,north,east"` bbox string into the
  * `[minLng, minLat, maxLng, maxLat]` shape `@stratum/core`'s spatial
@@ -52,7 +43,10 @@ function parseBbox(box: string): BBox {
  * Returns the union bounding box of every given metro, as `"south,west,north,east"`.
  * @remarks Used to fetch a region-wide transit network (e.g. Gautrain, which
  *   crosses several metros) once as a whole, rather than as metro-clipped
- *   fragments that would look severed at each metro's boundary.
+ *   fragments that would look severed at each metro's boundary. Callers
+ *   should pass only the metros of the region being built, not every
+ *   registered metro, so a build never pulls another region's network into
+ *   its own output.
  * @throws If `metroIds` is empty.
  */
 export function getSharedTransitBbox(metroIds: readonly MetroId[]): string {

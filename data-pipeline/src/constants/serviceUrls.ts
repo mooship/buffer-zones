@@ -7,9 +7,8 @@ export function getOsrmBaseUrl(): string {
   return process.env.OSRM_BASE_URL ?? "https://router.project-osrm.org";
 }
 
-// overpass-api.de alone rate-limits/times out under sustained use, so these
-// mirrors are tried in turn on failure. OVERPASS_URL overrides to one URL,
-// and OVERPASS_URLS can provide a comma-separated priority list.
+// overpass-api.de alone rate-limits/times out under sustained use, so it's
+// listed last -- the other two mirrors are tried first on failure.
 const PUBLIC_OVERPASS_MIRRORS: readonly string[] = [
   "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
   "https://overpass.private.coffee/api/interpreter",
