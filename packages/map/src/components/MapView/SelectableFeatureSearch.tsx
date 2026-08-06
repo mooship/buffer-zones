@@ -18,8 +18,16 @@ interface SelectableFeatureSearchProps {
   selectedFeatureId: string | null;
   /** Called with a feature's id when it's chosen via click, Enter, or Space. */
   onSelect?: (featureId: string) => void;
+  /**
+   * Accessible label, visible label text, and input placeholder, all sharing
+   * one string. Defaults to a domain-agnostic phrasing since this component
+   * lives in `@stratum/map` and has no knowledge of what a caller's
+   * selectable features represent (townships, stations, or anything else).
+   */
+  label?: string;
 }
 
+const DEFAULT_LABEL = "Search by name";
 const MIN_QUERY_LENGTH = 2;
 const MAX_SEARCH_RESULTS = 8;
 
@@ -45,9 +53,22 @@ export function SelectableFeatureSearch({
   features,
   selectedFeatureId,
   onSelect,
+  label = DEFAULT_LABEL,
 }: SelectableFeatureSearchProps) {
   const [query, setQuery] = useState("");
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
+
+  // Precomputed once per `features` identity change (not per keystroke):
+  // a lowercased label for filtering, plus an id -> label map for O(1)
+  // selected-feature lookup instead of scanning the full array every render.
+  const { searchableFeatures, labelById } = useMemo(() => {
+    const labelById = new Map<string, string>();
+    const searchableFeatures = features.map((feature) => {
+      labelById.set(feature.id, feature.label);
+      return { ...feature, lowerLabel: feature.label.toLowerCase() };
+    });
+    return { searchableFeatures, labelById };
+  }, [features]);
 
   const trimmedQuery = query.trim();
   const matches = useMemo(() => {
@@ -55,10 +76,10 @@ export function SelectableFeatureSearch({
       return [];
     }
     const lowerQuery = trimmedQuery.toLowerCase();
-    return features.filter((feature) =>
-      feature.label.toLowerCase().includes(lowerQuery),
+    return searchableFeatures.filter((feature) =>
+      feature.lowerLabel.includes(lowerQuery),
     );
-  }, [features, trimmedQuery]);
+  }, [searchableFeatures, trimmedQuery]);
   const results = matches.slice(0, MAX_SEARCH_RESULTS);
   const truncatedCount = matches.length - results.length;
   const hasResults = results.length > 0;
@@ -66,13 +87,18 @@ export function SelectableFeatureSearch({
     activeResultIndex >= 0 && activeResultIndex < results.length
       ? results[activeResultIndex]
       : null;
-  const selectedLabel =
-    features.find((feature) => feature.id === selectedFeatureId)?.label ?? null;
+  const selectedLabel = selectedFeatureId
+    ? (labelById.get(selectedFeatureId) ?? null)
+    : null;
+
+  function resetQuery() {
+    setQuery("");
+    setActiveResultIndex(-1);
+  }
 
   function selectFeature(featureId: string) {
     onSelect?.(featureId);
-    setQuery("");
-    setActiveResultIndex(-1);
+    resetQuery();
   }
 
   function handleKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
@@ -108,15 +134,14 @@ export function SelectableFeatureSearch({
     }
 
     if (event.key === "Escape") {
-      setQuery("");
-      setActiveResultIndex(-1);
+      resetQuery();
     }
   }
 
   return (
     <section
       className={styles.root}
-      aria-label="Search areas by name"
+      aria-label={label}
       data-testid="selectable-feature-search"
       data-e2e="selectable-feature-search"
     >
@@ -125,7 +150,7 @@ export function SelectableFeatureSearch({
       </output>
       <div className={styles.revealWrapper}>
         <label className={styles.label} htmlFor="map-feature-search">
-          Search areas by name
+          {label}
         </label>
         <input
           id="map-feature-search"
@@ -145,7 +170,7 @@ export function SelectableFeatureSearch({
           }
           autoComplete="off"
           spellCheck={false}
-          placeholder="Search areas by name"
+          placeholder={label}
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);

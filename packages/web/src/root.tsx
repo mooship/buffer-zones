@@ -47,18 +47,15 @@ const THEME_BOOTSTRAP_SCRIPT = `(() => {
  *   lifetime, so there's nothing request-specific to recompute inside `links`.
  */
 const GEOJSON_PRELOAD_LINKS = (() => {
-  const urls = new Set<string>();
-  for (const layer of getLayers()) {
-    if (!layer.defaultVisible) {
-      continue;
-    }
-    for (const source of layer.dataSource) {
-      urls.add(source);
-    }
-    if (layer.companionSource) {
-      urls.add(layer.companionSource);
-    }
-  }
+  const urls = new Set(
+    getLayers()
+      .filter((layer) => layer.defaultVisible)
+      .flatMap((layer) =>
+        layer.companionSource
+          ? [...layer.dataSource, layer.companionSource]
+          : layer.dataSource,
+      ),
+  );
 
   return Array.from(urls, (href) => ({
     rel: "preload" as const,

@@ -1,6 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { SelectableFeatureSearch } from "./SelectableFeatureSearch";
+import {
+  SelectableFeatureSearch,
+  type SelectableFeatureSearchEntry,
+} from "./SelectableFeatureSearch";
 
 const FEATURES = [
   { id: "a", label: "Alexandra" },
@@ -9,15 +12,26 @@ const FEATURES = [
   { id: "d", label: "Mamelodi" },
 ];
 
+function renderSearch(
+  overrides: {
+    features?: SelectableFeatureSearchEntry[];
+    selectedFeatureId?: string | null;
+  } = {},
+) {
+  const onSelect = vi.fn();
+  const utils = render(
+    <SelectableFeatureSearch
+      features={overrides.features ?? FEATURES}
+      selectedFeatureId={overrides.selectedFeatureId ?? null}
+      onSelect={onSelect}
+    />,
+  );
+  return { onSelect, ...utils };
+}
+
 describe("SelectableFeatureSearch", () => {
   it("exposes a combobox with no results below the minimum query length", () => {
-    render(
-      <SelectableFeatureSearch
-        features={FEATURES}
-        selectedFeatureId={null}
-        onSelect={vi.fn()}
-      />,
-    );
+    renderSearch();
 
     const input = screen.getByRole("combobox");
     expect(input).toHaveAttribute("aria-expanded", "false");
@@ -27,13 +41,7 @@ describe("SelectableFeatureSearch", () => {
   });
 
   it("filters case-insensitively and shows matching results", () => {
-    render(
-      <SelectableFeatureSearch
-        features={FEATURES}
-        selectedFeatureId={null}
-        onSelect={vi.fn()}
-      />,
-    );
+    renderSearch();
 
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "ALE" },
@@ -51,13 +59,7 @@ describe("SelectableFeatureSearch", () => {
       label: `Township ${index}`,
     }));
 
-    render(
-      <SelectableFeatureSearch
-        features={manyFeatures}
-        selectedFeatureId={null}
-        onSelect={vi.fn()}
-      />,
-    );
+    renderSearch({ features: manyFeatures });
 
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "Township" },
@@ -68,14 +70,7 @@ describe("SelectableFeatureSearch", () => {
   });
 
   it("moves aria-activedescendant with ArrowDown/ArrowUp and selects the active option on Enter", () => {
-    const onSelect = vi.fn();
-    render(
-      <SelectableFeatureSearch
-        features={FEATURES}
-        selectedFeatureId={null}
-        onSelect={onSelect}
-      />,
-    );
+    const { onSelect } = renderSearch();
 
     const input = screen.getByRole("combobox");
     fireEvent.change(input, { target: { value: "le" } });
@@ -98,14 +93,7 @@ describe("SelectableFeatureSearch", () => {
   });
 
   it("selects a feature on option click", () => {
-    const onSelect = vi.fn();
-    render(
-      <SelectableFeatureSearch
-        features={FEATURES}
-        selectedFeatureId={null}
-        onSelect={onSelect}
-      />,
-    );
+    const { onSelect } = renderSearch();
 
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "Mamelodi" },
@@ -116,13 +104,7 @@ describe("SelectableFeatureSearch", () => {
   });
 
   it("clears the query on Escape", () => {
-    render(
-      <SelectableFeatureSearch
-        features={FEATURES}
-        selectedFeatureId={null}
-        onSelect={vi.fn()}
-      />,
-    );
+    renderSearch();
 
     const input = screen.getByRole("combobox");
     fireEvent.change(input, { target: { value: "ale" } });
@@ -135,13 +117,7 @@ describe("SelectableFeatureSearch", () => {
   });
 
   it("announces the selected feature's label via a live region, independent of the current query", () => {
-    const { rerender } = render(
-      <SelectableFeatureSearch
-        features={FEATURES}
-        selectedFeatureId={null}
-        onSelect={vi.fn()}
-      />,
-    );
+    const { rerender } = renderSearch();
 
     expect(screen.getByRole("status", { hidden: true })).toHaveTextContent("");
 
@@ -159,13 +135,7 @@ describe("SelectableFeatureSearch", () => {
   });
 
   it("does not throw when selectedFeatureId doesn't match any known feature", () => {
-    render(
-      <SelectableFeatureSearch
-        features={FEATURES}
-        selectedFeatureId="unknown"
-        onSelect={vi.fn()}
-      />,
-    );
+    renderSearch({ selectedFeatureId: "unknown" });
 
     expect(screen.getByRole("status", { hidden: true })).toHaveTextContent("");
   });

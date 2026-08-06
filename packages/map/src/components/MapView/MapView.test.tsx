@@ -20,7 +20,6 @@ const mapMocks = vi.hoisted(() => ({
     getPopup: ReturnType<typeof vi.fn>;
     openPopup: ReturnType<typeof vi.fn>;
     getBounds: ReturnType<typeof vi.fn>;
-    getElement: ReturnType<typeof vi.fn>;
     on: (eventName: string, handler: (...args: unknown[]) => void) => void;
     __handlers: Record<string, (...args: unknown[]) => void>;
   }>,
@@ -33,7 +32,6 @@ const mapMocks = vi.hoisted(() => ({
       pointToLayer?: (feature: any, latlng: any) => unknown;
     }
   >,
-  nextFeatureLayerElement: undefined as HTMLElement | null | undefined,
   zoom: 9,
   vectorBasemapOnError: null as ((error: unknown) => void) | null,
 }));
@@ -50,15 +48,8 @@ vi.mock("react-dom/server", () => ({
   renderToStaticMarkup: popupMocks.renderToStaticMarkup,
 }));
 
-function createMockLayer(
-  feature: { properties?: { id?: string } | null },
-  options: { element?: HTMLElement | null } = {},
-) {
+function createMockLayer(feature: { properties?: { id?: string } | null }) {
   const handlers: Record<string, (...args: unknown[]) => void> = {};
-  const element =
-    options.element === undefined
-      ? document.createElement("path")
-      : options.element;
   let popupContent: string | null = null;
   const layer = {
     feature,
@@ -69,13 +60,11 @@ function createMockLayer(
     getPopup: vi.fn(() => popupContent),
     openPopup: vi.fn(),
     bindTooltip: vi.fn(),
-    getElement: vi.fn(() => element),
     getBounds: vi.fn(() => ({ north: -25, south: -26, east: 28, west: 27 })),
     on: (eventName: string, handler: (...args: unknown[]) => void) => {
       handlers[eventName] = handler;
     },
     __handlers: handlers,
-    __element: element,
   };
   return layer;
 }
@@ -134,19 +123,12 @@ vi.mock("react-leaflet", () => ({
     }
 
     useEffect(() => {
-      const layers = data.features.map((feature) => {
-        const element = mapMocks.nextFeatureLayerElement;
-        mapMocks.nextFeatureLayerElement = undefined;
-        return element === undefined
-          ? createMockLayer(feature)
-          : createMockLayer(feature, { element });
-      });
+      const layers = data.features.map((feature) => createMockLayer(feature));
       mapMocks.featureLayers = layers;
       for (const [index, feature] of data.features.entries()) {
         const layer = layers[index];
         if (layer) {
           onEachFeature?.(feature, layer);
-          layer.__handlers.add?.();
         }
       }
       if (ref && typeof ref === "object") {
@@ -295,7 +277,6 @@ describe("MapView", () => {
     mapMocks.mapClickHandler = null;
     mapMocks.featureLayers = [];
     mapMocks.geoJsonProps = {};
-    mapMocks.nextFeatureLayerElement = undefined;
     mapMocks.zoom = 9;
     mapMocks.vectorBasemapOnError = null;
     popupMocks.renderToStaticMarkup.mockClear();
