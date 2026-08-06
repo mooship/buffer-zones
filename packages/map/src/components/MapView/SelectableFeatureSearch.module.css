@@ -42,7 +42,7 @@
   margin: 0;
   color: var(--color-muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--font-size-md);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -64,14 +64,14 @@
 
 .input:focus-visible,
 .resultButton:focus-visible {
-  outline: 2px solid var(--color-ink);
+  outline: var(--focus-ring-width) solid var(--color-ink);
   outline-offset: 2px;
 }
 
 .status {
   margin: 0;
   color: var(--color-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-md);
 }
 
 .results {

@@ -29,7 +29,7 @@
   background: transparent;
   color: var(--color-on-surface);
   font-family: var(--font-body);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-base);
   font-weight: 500;
   cursor: pointer;
   transition:
@@ -58,6 +58,6 @@
 }
 
 .option:focus-visible {
-  outline: 2px solid var(--color-paper);
+  outline: var(--focus-ring-width) solid var(--color-paper);
   outline-offset: -2px;
 }
