@@ -42,8 +42,20 @@ jobs:
       # check flaky; the other categories don't depend on network timing and
       # stay at 1 (100).
       - name: Run Lighthouse CI
+        id: lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: ./packages/web/lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
+
+      # The action's own job log only prints assertions that fail or warn --
+      # a fully-passing category shows nothing at all. Print every category
+      # score and a few key performance audits regardless of pass/fail, both
+      # to the log and to the run's job summary, so scores are visible
+      # without downloading the report artifact. Runs even if the assert
+      # step above failed (an error-level assertion), since the scores are
+      # exactly what's needed to diagnose that failure.
+      - name: Print Lighthouse report
+        if: always()
+        run: node packages/web/scripts/print-lighthouse-summary.mjs "${{ steps.lighthouse.outputs.resultsPath }}"
