@@ -81,10 +81,14 @@ export function SelectableFeatureSearch({
     activeResultIndex >= 0 && activeResultIndex < results.length
       ? results[activeResultIndex]
       : null;
-  const selectedLabel = selectedFeatureId
-    ? (features.find((feature) => feature.id === selectedFeatureId)?.label ??
-      null)
-    : null;
+  const selectedLabel = useMemo(
+    () =>
+      selectedFeatureId
+        ? (features.find((feature) => feature.id === selectedFeatureId)
+            ?.label ?? null)
+        : null,
+    [features, selectedFeatureId],
+  );
 
   function resetQuery() {
     setQuery("");

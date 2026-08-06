@@ -156,35 +156,20 @@ function getBoundsOptions(desktop: boolean) {
     : { padding: [24, 24] as [number, number] };
 }
 
-let popupMarkupRendererPromise: Promise<(node: ReactNode) => string> | null =
-  null;
-
-/**
- * Loads `react-dom/server`'s `renderToStaticMarkup`, caching the import
- * promise so concurrent callers share one load.
- * @remarks Imported dynamically rather than at module scope purely for
- *   payload: React's server renderer is ~70KB compressed and, statically
- *   imported, it lands in the same eagerly-fetched vendor chunk as
- *   `react`/`react-dom` — bytes every visitor pays for on the critical path
- *   to the map's first paint, to render markup that only exists once
- *   somebody clicks a feature. As its own chunk it is fetched on that first
- *   click instead.
- */
-function loadPopupMarkupRenderer(): Promise<(node: ReactNode) => string> {
-  if (!popupMarkupRendererPromise) {
-    popupMarkupRendererPromise = import("react-dom/server").then(
-      (module) => module.renderToStaticMarkup,
-    );
-  }
-  return popupMarkupRendererPromise;
-}
-
 /**
  * Binds `renderFeaturePopup`'s markup to `featureLayer`, unless it already
  * has a popup bound.
  * @returns A promise that settles once the popup is bound (or immediately,
  *   when there is nothing to bind), so callers can open the popup after it
- *   exists — see {@link loadPopupMarkupRenderer} for why binding is async.
+ *   exists.
+ * @remarks Imports `react-dom/server` dynamically, purely for payload:
+ *   React's server renderer is ~70KB compressed and, statically imported, it
+ *   lands in the same eagerly-fetched vendor chunk as `react`/`react-dom` —
+ *   bytes every visitor pays for on the critical path to the map's first
+ *   paint, to render markup that only exists once somebody clicks a
+ *   feature. As its own chunk it is fetched on that first click instead; the
+ *   module loader's own cache (not a hand-rolled one here) makes every
+ *   subsequent call resolve without re-fetching it.
  */
 async function bindSelectedFeaturePopup<
   TProperties extends Record<string, unknown>,
@@ -199,7 +184,7 @@ async function bindSelectedFeaturePopup<
   if (!renderFeaturePopup) {
     return;
   }
-  const renderToStaticMarkup = await loadPopupMarkupRenderer();
+  const { renderToStaticMarkup } = await import("react-dom/server");
   featureLayer.bindPopup?.(
     renderToStaticMarkup(renderFeaturePopup(properties)),
   );
@@ -356,14 +341,27 @@ function MapReadyNotifier({ onReady }: { onReady?: () => void }) {
     if (!onReady) {
       return;
     }
+    let cancelled = false;
     let frame: number | null = null;
     map.whenReady(() => {
+      // `whenReady`'s callback has no cancellation of its own — if the map
+      // isn't loaded yet, Leaflet just holds onto it via a `load` listener
+      // until that event fires, however long after this effect's own
+      // cleanup that turns out to be. `cancelled` is what stops a late
+      // firing from scheduling a frame (or calling `onReady`) for a
+      // component that already unmounted.
+      if (cancelled) {
+        return;
+      }
       frame = requestAnimationFrame(() => {
         frame = null;
-        onReady();
+        if (!cancelled) {
+          onReady();
+        }
       });
     });
     return () => {
+      cancelled = true;
       if (frame !== null) {
         cancelAnimationFrame(frame);
       }
