@@ -13,6 +13,8 @@ export const E2E = {
   settingsMenuContent: "settings-menu-content",
   mapView: "map-view",
   locationSearchInput: "location-search-input",
+  locationSearchResults: "location-search-results",
+  locationOutOfCoverage: "location-out-of-coverage",
   selectableFeatureSearch: "selectable-feature-search",
   selectableFeatureSearchInput: "selectable-feature-search-input",
   selectableFeatureSearchResults: "selectable-feature-search-results",

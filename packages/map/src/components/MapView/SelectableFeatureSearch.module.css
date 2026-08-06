@@ -1,8 +1,15 @@
+/*
+ * `.revealWrapper` hides itself with a transform, which moves what's painted
+ * but not the layout box this section is sized from -- so it kept an invisible,
+ * top-of-the-stack hit target over the map's corner, swallowing clicks meant
+ * for whatever the caller renders there.
+ */
 .root {
   position: absolute;
   inset-block-start: 0.5rem;
   inset-inline-start: 0.5rem;
   z-index: 2000;
+  pointer-events: none;
 }
 
 .visuallyHidden {
@@ -32,6 +39,7 @@
   background: var(--color-paper);
   box-shadow: var(--elevation-3);
   transform: translateY(-160%);
+  pointer-events: auto;
 }
 
 .revealWrapper:focus-within {
