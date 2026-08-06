@@ -28,7 +28,7 @@
 @media (max-width: 768px) {
   :global(.leaflet-control-attribution) {
     max-width: 52vw;
-    font-size: 12px;
+    font-size: var(--font-size-md);
   }
 }
 
@@ -40,7 +40,7 @@
   box-shadow: var(--elevation-1);
   color: var(--color-map-label-text);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--font-size-md);
   font-weight: 700;
   letter-spacing: 0;
   pointer-events: none;
@@ -61,7 +61,7 @@
 .areaLabelSecondary {
   display: none;
   background: var(--color-map-label-surface-secondary);
-  font-size: 12px;
+  font-size: var(--font-size-md);
   font-weight: 600;
   opacity: 0.94;
 }

@@ -42,7 +42,7 @@
 
 .sheet::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--shape-full);
   background: var(--color-muted);
   background-clip: padding-box;
 }
@@ -62,7 +62,7 @@
 }
 
 .dragHandleButton:focus-visible {
-  outline: 2px solid var(--color-paper);
+  outline: var(--focus-ring-width) solid var(--color-paper);
   outline-offset: 2px;
 }
 
@@ -85,7 +85,7 @@
   margin: 0 0 var(--space-3);
   color: var(--color-paper);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }

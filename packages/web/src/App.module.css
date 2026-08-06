@@ -18,7 +18,7 @@
   background: var(--color-ink);
   color: var(--color-muted);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-sm);
   text-transform: uppercase;
   animation: mapLoadingPulse 1.6s ease-in-out infinite;
 }
@@ -70,7 +70,7 @@
 }
 
 .dataError button:focus-visible {
-  outline: 2px solid var(--color-paper);
+  outline: var(--focus-ring-width) solid var(--color-paper);
   outline-offset: 2px;
 }
 
@@ -158,7 +158,7 @@
 
 .panelViewport::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--shape-full);
   background: var(--color-muted);
   background-clip: padding-box;
 }
@@ -187,7 +187,7 @@
   background: transparent;
   color: var(--color-muted);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-sm);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
@@ -207,7 +207,7 @@
 }
 
 .panelTab:focus-visible {
-  outline: 2px solid var(--color-paper);
+  outline: var(--focus-ring-width) solid var(--color-paper);
   outline-offset: -2px;
 }
 
@@ -220,7 +220,7 @@
 .sectionTitle {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--font-size-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-muted);
@@ -261,7 +261,7 @@
   display: block;
   margin: 0.5rem 0 0;
   color: var(--color-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-md);
 }
 
 @media (max-width: 768px) {
@@ -370,7 +370,7 @@
   }
 
   .sheetHandleButton:focus-visible {
-    outline: 2px solid var(--color-paper);
+    outline: var(--focus-ring-width) solid var(--color-paper);
     outline-offset: 2px;
   }
 

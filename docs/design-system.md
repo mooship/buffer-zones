@@ -33,10 +33,22 @@ Core token source of truth remains `packages/web/src/index.css`.
 ### Foundation tokens
 
 - Typeface tokens: `--font-display`, `--font-body`, `--font-mono`
+- Type scale tokens: `--font-size-2xs` (9px) through `--font-size-lg`
+	(16.8px, popup heading emphasis) — a compact scale for dense map chrome,
+	not long-form reading typography. Every component font-size references
+	one of these; there are no one-off `rem`/`px` font-size values.
 - Spacing tokens: `--space-1` to `--space-4`
 - Shape (corner radius) tokens: `--shape-small`, `--shape-medium`,
-	`--shape-large`, `--shape-full` (999px, for pills and circular controls)
+	`--shape-large`, `--shape-full` (999px, for pills, circular controls, and
+	scrollbar thumbs)
 - Control sizing: `--control-height`, `--control-height-compact`
+- Focus ring: `--focus-ring-width` (2px) is the single source of truth for
+	ring thickness; colour and offset stay per-component since they depend on
+	the surface a control sits on and whether its ring is inset or outset. The
+	two `.leaflet-control-zoom`/`.leaflet-container` rings in `index.css` are
+	a documented exception at 3px, since those controls sit directly on
+	unpredictable map tile colour rather than a themed surface and need extra
+	contrast margin.
 
 ### Elevation tokens
 
