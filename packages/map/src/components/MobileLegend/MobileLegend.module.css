@@ -24,7 +24,7 @@
   scrollbar-color: var(--color-line) transparent;
   scrollbar-width: thin;
   transform: translateY(var(--sheet-drag-offset, 0px));
-  transition: transform 180ms ease;
+  transition: transform var(--motion-duration-medium) ease;
   animation: mobileLegendIn 170ms ease;
 }
 

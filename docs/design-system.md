@@ -35,11 +35,14 @@ Core token source of truth remains `packages/web/src/index.css`.
 - Typeface tokens: `--font-display`, `--font-body`, `--font-mono`
 - Type scale tokens: `--font-size-xs` (10px) through `--font-size-lg`
 	(16.8px, popup heading emphasis) — a compact scale for dense map chrome,
-	not long-form reading typography. Every component font-size references
-	one of these; there are no one-off `rem`/`px` font-size values. The
-	smallest tier stops at 10px deliberately — anything conveying real
-	status information (e.g. a layer's "Not yet available" badge) uses
-	`--font-size-sm` (11px) or larger, never smaller, for legibility.
+	not long-form reading typography. Every component's text font-size
+	references one of these rather than a one-off `rem`/`px` value; the one
+	exception is `.leaflet-control-zoom a`'s `1.375rem` glyph size in
+	`index.css`, which sizes a single +/- icon character rather than UI copy
+	and isn't part of the text scale. The smallest tier stops at 10px
+	deliberately — anything conveying real status information (e.g. a
+	layer's "Not yet available" badge) uses `--font-size-sm` (11px) or
+	larger, never smaller, for legibility.
 - Spacing tokens: `--space-1` to `--space-4`
 - Shape (corner radius) tokens: `--shape-small`, `--shape-medium`,
 	`--shape-large`, `--shape-full` (999px, for pills, circular controls, and
