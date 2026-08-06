@@ -82,7 +82,6 @@
   /* Compact UI-chrome type scale. This app has no long-form reading
    * typography, only dense map controls/labels, so the scale stays small
    * and stops at --font-size-lg (popup heading emphasis). */
-  --font-size-2xs: 0.5625rem;
   --font-size-xs: 0.625rem;
   --font-size-sm: 0.6875rem;
   --font-size-md: 0.75rem;

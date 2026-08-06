@@ -128,7 +128,7 @@
   flex-shrink: 0;
   margin-left: 2.875rem;
   font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-sm);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;

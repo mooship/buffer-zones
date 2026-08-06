@@ -33,10 +33,13 @@ Core token source of truth remains `packages/web/src/index.css`.
 ### Foundation tokens
 
 - Typeface tokens: `--font-display`, `--font-body`, `--font-mono`
-- Type scale tokens: `--font-size-2xs` (9px) through `--font-size-lg`
+- Type scale tokens: `--font-size-xs` (10px) through `--font-size-lg`
 	(16.8px, popup heading emphasis) — a compact scale for dense map chrome,
 	not long-form reading typography. Every component font-size references
-	one of these; there are no one-off `rem`/`px` font-size values.
+	one of these; there are no one-off `rem`/`px` font-size values. The
+	smallest tier stops at 10px deliberately — anything conveying real
+	status information (e.g. a layer's "Not yet available" badge) uses
+	`--font-size-sm` (11px) or larger, never smaller, for legibility.
 - Spacing tokens: `--space-1` to `--space-4`
 - Shape (corner radius) tokens: `--shape-small`, `--shape-medium`,
 	`--shape-large`, `--shape-full` (999px, for pills, circular controls, and
