@@ -18,7 +18,7 @@ test.describe("map feature keyboard accessibility", () => {
     await expect(searchInput).toHaveCSS("outline-style", "solid");
   });
 
-  test("searching by name and choosing a result opens that feature's popup", async ({
+  test("searching by name and choosing a result opens that feature's popup, by keyboard or pointer", async ({
     page,
   }) => {
     await page.goto("/");
@@ -31,5 +31,19 @@ test.describe("map feature keyboard accessibility", () => {
     await page.keyboard.press("Enter");
 
     await expect(page.getByTestId(E2E.townshipPopup)).toBeVisible();
+
+    // Choosing by pointer is a separate path from the keys above, and the one
+    // that breaks if the reveal wrapper ever stops opting back into the
+    // pointer events its container gives up (SelectableFeatureSearch.module.css).
+    await searchInput.fill("Mabopane");
+    await page
+      .getByTestId(E2E.selectableFeatureSearchResults)
+      .getByRole("option")
+      .first()
+      .click();
+
+    await expect(
+      page.getByTestId(E2E.selectableFeatureSearch).getByRole("status"),
+    ).toHaveText(/Mabopane.*selected/i);
   });
 });
