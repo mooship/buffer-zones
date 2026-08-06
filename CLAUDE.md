@@ -10,12 +10,12 @@ Stratum is a reusable SDK for building public-interest geospatial layer platform
 
 ```bash
 npm install
-npm run test        # vitest across the npm workspaces under packages/*, plus data-pipeline (see vitest.config.ts projects)
-npm run test:coverage # vitest run --coverage, same scope
-npm run typecheck   # tsc --noEmit for @stratum/core, @stratum/app, @stratum/map, @stratum/react + web build + data-pipeline typecheck
-npm run build       # build all workspaces
-npm run lint         # biome check .
-npm run format       # biome format --write .
+npm run test           # vitest across the npm workspaces under packages/*, plus data-pipeline (see vitest.config.ts projects)
+npm run test:coverage  # vitest run --coverage, same scope
+npm run typecheck      # tsc --noEmit for @stratum/core, @stratum/app, @stratum/map, @stratum/react + web build + data-pipeline typecheck
+npm run build          # build all workspaces
+npm run lint           # biome check .
+npm run format         # biome format --write .
 npm run dev --workspace @stratum/web
 ```
 
@@ -62,9 +62,16 @@ Pre-commit (lefthook) runs biome (auto-fix staged files) and the full vitest sui
 
 ## Conventions
 
-- **TDD.** Write the failing test before implementation code, for both bug fixes and new features.
+- **TDD.** Write the failing test before implementation code, for both bug fixes and new features — the test is part of the change, not a follow-up, and a change without one is incomplete.
+- **SOLID.**
+  - *Single responsibility*: one module, one reason to change — mirror the `packages/*` split (domain model vs. rendering vs. hooks vs. domain data vs. app shell) at the file level too; a file doing two unrelated things is a signal to split it.
+  - *Open/closed — the load-bearing one here*: this is an SDK, so new domains, regions, and transit sources are meant to be added by writing config, never by branching on an id inside shared code. `DomainConfig` (`packages/core`), `RegionPipelineConfig`/`PipelineSource` (`data-pipeline`), and the `REGIONS`/`METROS` registries (`packages/app`) are the pattern; if adding something new means editing an `if (domainId === ...)` inside `@stratum/core`/`map`/`react`, that's the wrong extension point.
+  - *Liskov substitution*: anything implementing `Layer`/`LayerGroup` must work everywhere the generic contract is consumed, with no special-casing by id inside `@stratum/map`/`@stratum/core`.
+  - *Interface segregation*: keep hook/component props narrow and domain-agnostic (e.g. `MapView`'s `bounds`/`renderFeaturePopup`) rather than a catch-all options object a caller only partly needs.
+  - *Dependency inversion*: `@stratum/core`/`map`/`react` depend only on the abstractions they themselves define (`DomainConfig`, `Layer`), never on `packages/app`'s or `packages/web`'s concrete Gauteng data — that boundary is what makes this an SDK rather than an app with extracted folders.
+- **DRY.** Shared logic belongs in `packages/core`/`map`/`react`, not duplicated per-app; a value hand-typed in more than one place (a font size, a colour, a duration) is a missing token, not a coincidence.
+- **KISS / YAGNI.** Prefer the simplest design that satisfies current requirements; don't build UI, abstractions, or config surface for a second domain/region/consumer that doesn't exist yet — extensibility here comes from the config shapes above being open to it, not from pre-building the thing that would use them.
 - **JSDoc on every exported function, const, type, interface, class, and component** (TSDoc-compatible: `@param`, `@returns`, `@remarks`, `@example`) — across every package, not just the SDK ones (`@stratum/core`/`map`/`react`). Document the *why*/non-obvious behaviour, not just a restatement of the name; skip fields that are already self-evident from their name and type.
-- **SOLID, DRY, KISS, YAGNI.** Prefer the simplest design that satisfies current requirements; don't build for hypothetical future needs.
 - **No code comments** unless they capture a genuinely non-obvious *why* (a constraint, a workaround, an invariant) — never restate what the code already says.
 - **Expanded `if` statements with braces**, never single-line/braceless conditionals. Biome's `useBlockStatements: error` rule enforces this — don't disable it.
 - **Accessibility is a priority**, not an afterthought — semantic HTML, keyboard navigation, focus states, and contrast should be considered in every UI change, in step with the Lighthouse-100 bar above.
