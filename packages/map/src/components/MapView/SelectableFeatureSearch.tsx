@@ -58,28 +58,22 @@ export function SelectableFeatureSearch({
   const [query, setQuery] = useState("");
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
 
-  // Precomputed once per `features` identity change (not per keystroke):
-  // a lowercased label for filtering, plus an id -> label map for O(1)
-  // selected-feature lookup instead of scanning the full array every render.
-  const { searchableFeatures, labelById } = useMemo(() => {
-    const labelById = new Map<string, string>();
-    const searchableFeatures = features.map((feature) => {
-      labelById.set(feature.id, feature.label);
-      return { ...feature, lowerLabel: feature.label.toLowerCase() };
-    });
-    return { searchableFeatures, labelById };
-  }, [features]);
-
   const trimmedQuery = query.trim();
+  // Scanned on demand rather than indexed up front. `features` can run to
+  // thousands of entries and arrives while the map is still becoming
+  // interactive, so building a lowercased copy and an id -> label map at
+  // that moment spends main-thread time on an index nobody has asked for
+  // yet; a linear scan per keystroke over a few thousand short strings is
+  // imperceptible by comparison, and only happens once somebody types.
   const matches = useMemo(() => {
     if (trimmedQuery.length < MIN_QUERY_LENGTH) {
       return [];
     }
     const lowerQuery = trimmedQuery.toLowerCase();
-    return searchableFeatures.filter((feature) =>
-      feature.lowerLabel.includes(lowerQuery),
+    return features.filter((feature) =>
+      feature.label.toLowerCase().includes(lowerQuery),
     );
-  }, [searchableFeatures, trimmedQuery]);
+  }, [features, trimmedQuery]);
   const results = matches.slice(0, MAX_SEARCH_RESULTS);
   const truncatedCount = matches.length - results.length;
   const hasResults = results.length > 0;
@@ -88,7 +82,8 @@ export function SelectableFeatureSearch({
       ? results[activeResultIndex]
       : null;
   const selectedLabel = selectedFeatureId
-    ? (labelById.get(selectedFeatureId) ?? null)
+    ? (features.find((feature) => feature.id === selectedFeatureId)?.label ??
+      null)
     : null;
 
   function resetQuery() {

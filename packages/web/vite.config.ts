@@ -59,9 +59,19 @@ export default defineConfig(({ mode }) => {
           },
           codeSplitting: {
             groups: [
+              /**
+               * `react-dom`'s server renderer is deliberately *not* matched
+               * here, so it isn't pulled into the vendor chunk every visitor
+               * downloads before the map can paint. `MapView` imports it
+               * dynamically (to render a feature popup's markup on first
+               * click); leaving it ungrouped lets that stay a genuinely
+               * async chunk, whereas naming a group for it makes React
+               * Router emit a `modulepreload` for the chunk and fetch it up
+               * front anyway.
+               */
               {
                 name: "react-vendor",
-                test: /node_modules\/(react|react-dom|scheduler)\//,
+                test: /node_modules\/(?:(?:react|scheduler)\/|react-dom\/(?!server|cjs\/react-dom-server))/,
               },
               {
                 name: "map-vendor",

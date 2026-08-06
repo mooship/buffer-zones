@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-01T06:18:10.205Z",
+  "generatedAt": "2026-08-06T04:58:31.068Z",
   "metroIds": [
     "tshwane",
     "johannesburg",
@@ -16,38 +16,38 @@
     {
       "fileName": "townships.display.v1.geojson",
       "featureCount": 2567,
-      "sha256": "87da5065a1ac7c56a7261f052c91129ff7f7426f2827fcd3e3d342f8b0aa56fd",
-      "bytes": 2867864
+      "sha256": "ce837af8fa3ad998b0890d4eaf503dc10be81b80b7bd15aaf74e29a77957a91e",
+      "bytes": 2081537
     },
     {
       "fileName": "township-areas.display.v1.geojson",
       "featureCount": 123,
-      "sha256": "192869d8622cd5b9f1297d6deee32cf7446bfb7a3979918675c255372c23bb4b",
-      "bytes": 234456
+      "sha256": "5eacea2cfb1a2b5e2d5a37f64d66216d3569c8d9284d8b963ae441909ce038c7",
+      "bytes": 156764
     },
     {
       "fileName": "rapid-rail.display.v1.geojson",
       "featureCount": 293,
-      "sha256": "e37f95963fed969f36bfd396ead4013acc15659f0885971b93d15cf3250d485c",
-      "bytes": 97302
+      "sha256": "99aaeb12e26f1a4f747216612bfd4549c1c8430cfcbdb74ba4942ce1a47589c6",
+      "bytes": 92395
     },
     {
       "fileName": "commuter-rail.display.v1.geojson",
       "featureCount": 1136,
-      "sha256": "06727ab1cf41f812c7412b7d989dc0c6b5617d8e05bd5c763cd27e0073705a48",
-      "bytes": 528743
+      "sha256": "75fc9f98d4f12edec0ce2665a5d9bed57f8edbdda137346cc1c3ba1d4f80168c",
+      "bytes": 496035
     },
     {
       "fileName": "bus-rapid-transit.display.v1.geojson",
       "featureCount": 862,
-      "sha256": "9876360bf79bb4a934afd9ebbf43aee3d87b07687ced133cb111906aec9fd765",
-      "bytes": 437139
+      "sha256": "00619307bccf1a1534e3e49444004573869bb17f8abeab4836b08ae787a7555d",
+      "bytes": 412042
     },
     {
       "fileName": "bus.display.v1.geojson",
       "featureCount": 3661,
-      "sha256": "180778446c10985a3a6e31c90fe1b2703798ef8e15c0033afea7f57c1bf83c2c",
-      "bytes": 1017841
+      "sha256": "36bd35baaed921f59da7692321afe7e7e60d303f96830b0ed568aaa0bd5eea24",
+      "bytes": 984184
     }
   ],
   "networkCoverage": {

@@ -28,6 +28,7 @@ import {
   lazy,
   type PointerEvent,
   Suspense,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -168,7 +169,14 @@ function PanelViewContent({
  * choropleth data, wraps the render tree in a `DomainProvider` for
  * `gauteng-spatial-legacy`, and renders the map alongside the desktop/mobile
  * info panel and its settings menu.
- * @remarks The info panel shows layer toggles, plus a Story tab reading its
+ * @remarks That township fetch deliberately waits for `MapView`'s `onReady`
+ *   (tracked as `mapReady`) rather than starting at mount. Downloading,
+ *   validating and handing Leaflet ~2,500 polygons is seconds of
+ *   main-thread work on a mid-range phone, and none of it can be drawn
+ *   before the map exists — started at mount it simply ran in front of the
+ *   map's own first paint and delayed it by all of that. The retry path
+ *   (`loadAttempt`) still works unchanged, since the map stays ready.
+ *   The info panel shows layer toggles, plus a Story tab reading its
  *   copy from the domain's `story` (via `getStory()`) whenever the active
  *   domain defines one — a domain that omits `story` gets no tab UI at all,
  *   matching today's single-view panel. `PANEL_VIEWS`/`STORY` are computed
@@ -184,6 +192,7 @@ function PanelViewContent({
  */
 export function App() {
   const [hydrated, setHydrated] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
   const [townships, setTownships] = useState<TownshipFeature[]>([]);
   const [townshipAreas, setTownshipAreas] = useState<Feature[]>([]);
   const [dataError, setDataError] = useState(false);
@@ -230,6 +239,9 @@ export function App() {
   }, [setPanelOpen]);
 
   useEffect(() => {
+    if (!mapReady) {
+      return;
+    }
     let cancelled = false;
     setDataError(false);
     setTownships([]);
@@ -264,7 +276,7 @@ export function App() {
     return () => {
       cancelled = true;
     };
-  }, [loadAttempt]);
+  }, [loadAttempt, mapReady]);
 
   useEffect(() => {
     if (!panelOpen) {
@@ -303,6 +315,8 @@ export function App() {
       sheetDragFrameRef.current = null;
     });
   }
+
+  const handleMapReady = useCallback(() => setMapReady(true), []);
 
   function finishClose() {
     setMobileSheetClosing(false);
@@ -522,6 +536,7 @@ export function App() {
                 focusLocationTarget={focusLocationTarget}
                 onFeatureSelect={setSelectedFeatureId}
                 onLayerDataError={setFailedLayerIds}
+                onReady={handleMapReady}
                 onBasemapError={() => setBasemap("street")}
                 locateOnClick
                 renderFeaturePopup={(properties) => (
