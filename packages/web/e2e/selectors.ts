@@ -14,6 +14,7 @@ export const E2E = {
   mapView: "map-view",
   locationSearchInput: "location-search-input",
   locationSearchResults: "location-search-results",
+  locationSearchRetry: "location-search-retry",
   locationOutOfCoverage: "location-out-of-coverage",
   selectableFeatureSearch: "selectable-feature-search",
   selectableFeatureSearchInput: "selectable-feature-search-input",

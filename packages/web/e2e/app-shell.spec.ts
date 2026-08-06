@@ -39,6 +39,24 @@ test.describe("app shell", () => {
     ).toEqual([]);
   });
 
+  test("the skip link is the first stop on Tab and moves focus into the map region", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const skipLink = page.getByRole("link", {
+      name: /skip to map information/i,
+    });
+    const main = page.getByRole("main");
+
+    await page.keyboard.press("Tab");
+    await expect(skipLink).toBeFocused();
+
+    await page.keyboard.press("Enter");
+
+    await expect(main).toBeFocused();
+  });
+
   test("shows layer controls in the panel and keeps legend toggle available", async ({
     page,
   }) => {

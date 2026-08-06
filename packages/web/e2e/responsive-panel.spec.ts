@@ -132,10 +132,6 @@ test.describe("responsive panel", () => {
     await expect(handle).toHaveAttribute("aria-pressed", "true");
 
     await dragHandleBy(240);
-    if ((await panel.getAttribute("data-panel-size")) !== "medium") {
-      await dragHandleBy(320);
-    }
-
     await expect(panel).toHaveAttribute("data-panel-size", "medium");
     await expect(handle).toHaveAttribute("aria-pressed", "false");
   });
