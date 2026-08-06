@@ -26,8 +26,8 @@ describe("createDisplayTransit", () => {
     expect(result.features[0]?.geometry).toEqual({
       type: "LineString",
       coordinates: [
-        [28.188123, -25.746123],
-        [28.277512, -25.782512],
+        [28.18812, -25.74612],
+        [28.27751, -25.78251],
       ],
     });
   });
@@ -51,7 +51,7 @@ describe("createDisplayTransit", () => {
 
     expect(result.features[0]?.geometry).toEqual({
       type: "Point",
-      coordinates: [28.188123, -25.746123],
+      coordinates: [28.18812, -25.74612],
     });
   });
 

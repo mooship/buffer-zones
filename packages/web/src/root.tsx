@@ -1,6 +1,6 @@
-import interStylesHref from "@fontsource-variable/inter/index.css?url";
-import martianMonoStylesHref from "@fontsource-variable/martian-mono/index.css?url";
-import leafletStylesHref from "leaflet/dist/leaflet.css?url";
+import "@fontsource-variable/inter/index.css";
+import "@fontsource-variable/martian-mono/index.css";
+import "leaflet/dist/leaflet.css";
 import {
   Links,
   type LinksFunction,
@@ -11,8 +11,7 @@ import {
   ScrollRestoration,
 } from "react-router";
 import { THEME_STORAGE_KEY } from "./constants/themeConfig";
-import appStylesHref from "./index.css?url";
-import { getLayers } from "./layers/registry";
+import "./index.css";
 
 /**
  * Pre-hydration theme-bootstrap script: reads the stored theme preference
@@ -28,42 +27,6 @@ const THEME_BOOTSTRAP_SCRIPT = `(() => {
     document.documentElement.dataset.theme = stored;
   }
 })();`;
-
-/**
- * `<link rel=preload>` entries for every `defaultVisible` layer's GeoJSON
- * data source plus `companionSource` (e.g. a choropleth's area-boundary
- * file, fetched alongside it but not itself a `dataSource` entry),
- * deduplicated by URL (a URL shared by multiple layers preloads once).
- * @remarks A non-default-visible layer's data isn't preloaded at all —
- *   `preload` signals "needed for this render," which isn't true for a
- *   layer nobody has toggled on yet, and eagerly downloading it still costs
- *   real bandwidth that competes with what the initial render actually
- *   needs (confirmed via Lighthouse: preloading every layer regardless of
- *   visibility was pulling ~900KB of hidden-layer GeoJSON on every load,
- *   directly delaying LCP under throttled mobile network conditions). A
- *   toggled-on layer is fetched on demand by `useLayerData` instead.
- *   Computed once at module scope, like `STORY`/`PANEL_VIEWS` in
- *   `App.tsx` — `getLayers()` is a static in-memory array for the process
- *   lifetime, so there's nothing request-specific to recompute inside `links`.
- */
-const GEOJSON_PRELOAD_LINKS = (() => {
-  const urls = new Set(
-    getLayers()
-      .filter((layer) => layer.defaultVisible)
-      .flatMap((layer) =>
-        layer.companionSource
-          ? [...layer.dataSource, layer.companionSource]
-          : layer.dataSource,
-      ),
-  );
-
-  return Array.from(urls, (href) => ({
-    rel: "preload" as const,
-    href,
-    as: "fetch" as const,
-    crossOrigin: "anonymous" as const,
-  }));
-})();
 
 /** React Router route module export: page `<title>`/`<meta>` tags. */
 export const meta: MetaFunction = () => {
@@ -83,14 +46,19 @@ export const meta: MetaFunction = () => {
 
 /**
  * React Router route module export: `<link>` tags — self-hosted font/style
- * stylesheets, favicons, basemap-provider preconnects, and
- * `GEOJSON_PRELOAD_LINKS`.
+ * stylesheets, favicons, and basemap-provider preconnects.
+ * @remarks Deliberately preloads no layer GeoJSON, not even a
+ *   `defaultVisible` layer's. Nothing can consume that data until the map
+ *   bundle has downloaded, hydrated, and mounted Leaflet, so a `preload`
+ *   only puts hundreds of kilobytes of it on the wire *alongside* the very
+ *   scripts and stylesheets that gate the map's first paint — measured via
+ *   Lighthouse, preloading the default choropleth (~600KB compressed) cost
+ *   ~0.9s of LCP and ~1.7s of Speed Index under throttled mobile
+ *   conditions, because it starved the render-critical requests of
+ *   bandwidth. `App`/`useLayerData` request it after hydration instead,
+ *   where it competes with nothing.
  */
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: interStylesHref },
-  { rel: "stylesheet", href: martianMonoStylesHref },
-  { rel: "stylesheet", href: leafletStylesHref },
-  { rel: "stylesheet", href: appStylesHref },
   { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
   {
     rel: "icon",
@@ -108,7 +76,6 @@ export const links: LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
   { rel: "preconnect", href: "https://tile.openstreetmap.org" },
   { rel: "preconnect", href: "https://basemaps.cartocdn.com" },
-  ...GEOJSON_PRELOAD_LINKS,
 ];
 
 /**

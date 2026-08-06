@@ -26,10 +26,13 @@ export interface MetroDefinition {
   center: { lat: number; lon: number };
   /** A reasonable map zoom level for viewing this metro alone. */
   zoom: number;
-  // Must match `getJobCentersForMetro(id).length` in
-  // data-pipeline/src/constants/jobCenters.ts — kept here too since the web
-  // app's copy (see EvidenceSummary) needs the count but can't import from
-  // the Node-only data-pipeline package.
+  /**
+   * Hand-maintained mirror of `getJobCentersForMetro(id).length` in
+   * `data-pipeline/src/constants/jobCenters.ts`. `data-pipeline`'s
+   * `assertMetroSetup` cross-checks the two on every pipeline run and throws
+   * on drift, so an edit to one that isn't kept in sync with the other fails
+   * loudly rather than silently under/over-counting a metro's job centres.
+   */
   jobCenterCount: number;
 }
 

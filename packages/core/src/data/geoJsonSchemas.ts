@@ -1,29 +1,109 @@
-import type { FeatureCollection } from "geojson";
+import type { FeatureCollection, Position } from "geojson";
 import * as z from "zod/mini";
 
-const positionSchema = z.array(z.number()).check(z.minLength(2));
-const lineStringCoordinatesSchema = z
-  .array(positionSchema)
-  .check(z.minLength(2));
-const linearRingSchema = z.array(positionSchema).check(
-  z.minLength(4),
-  z.refine(
-    (positions) => {
-      const first = positions[0];
-      const last = positions.at(-1);
-      return (
-        first !== undefined &&
-        last !== undefined &&
-        first.length === last.length &&
-        first.every((coordinate, index) => coordinate === last[index])
-      );
-    },
-    { message: "Polygon rings must be closed" },
-  ),
+/**
+ * Whether `value` is a GeoJSON position: an array of at least two numbers.
+ * @remarks Hand-written rather than expressed as `z.array(z.number())` — see
+ *   the note on {@link positionSchema} for why the coordinate interior of a
+ *   geometry is validated by plain predicates instead of nested Zod schemas.
+ */
+function isPosition(value: unknown): value is Position {
+  if (!Array.isArray(value) || value.length < 2) {
+    return false;
+  }
+  for (const coordinate of value) {
+    if (typeof coordinate !== "number") {
+      return false;
+    }
+  }
+  return true;
+}
+
+/** Whether `value` is an array of at least `minimumLength` valid positions. */
+function isPositionArray(value: unknown, minimumLength: number): boolean {
+  if (!Array.isArray(value) || value.length < minimumLength) {
+    return false;
+  }
+  for (const position of value) {
+    if (!isPosition(position)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/** Whether a linear ring's first and last positions are identical. */
+function isClosedRing(value: Position[]): boolean {
+  const first = value[0];
+  const last = value.at(-1);
+  return (
+    first !== undefined &&
+    last !== undefined &&
+    first.length === last.length &&
+    first.every((coordinate, index) => coordinate === last[index])
+  );
+}
+
+/** Whether `value` is a Polygon's coordinates: at least one closed linear ring. */
+function isPolygonCoordinates(value: unknown): value is Position[][] {
+  if (!Array.isArray(value) || value.length < 1) {
+    return false;
+  }
+  for (const ring of value) {
+    if (!isPositionArray(ring, 4)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Zod schema for a GeoJSON position.
+ * @remarks Validated by a plain predicate wrapped in `z.custom` rather than
+ *   `z.array(z.number())`. The check is identical, but Zod's per-element
+ *   machinery (a schema node, a result object and an issue path per
+ *   coordinate) is not free at GeoJSON's scale: the reference app's default
+ *   choropleth alone carries ~100,000 positions, where the nested-schema
+ *   form cost ~500ms of blocking main-thread time on a mid-range mobile CPU
+ *   for what is ultimately a pair of `typeof` checks. Every geometry schema
+ *   below therefore hands its coordinate interior to one of these
+ *   predicates and keeps Zod for the parts whose structure actually varies.
+ */
+const positionSchema = z.custom<Position>(isPosition, {
+  message: "Invalid GeoJSON position",
+});
+const lineStringCoordinatesSchema = z.custom<Position[]>(
+  (value) => isPositionArray(value, 2),
+  { message: "Invalid GeoJSON position array" },
+);
+const multiLineStringCoordinatesSchema = z.custom<Position[][]>(
+  (value) =>
+    Array.isArray(value) && value.every((line) => isPositionArray(line, 2)),
+  { message: "Invalid GeoJSON position array" },
 );
 const polygonCoordinatesSchema = z
-  .array(linearRingSchema)
-  .check(z.minLength(1));
+  .custom<Position[][]>(isPolygonCoordinates, {
+    message: "Invalid GeoJSON polygon coordinates",
+  })
+  .check(
+    z.refine((rings) => rings.every(isClosedRing), {
+      message: "Polygon rings must be closed",
+    }),
+  );
+const multiPolygonCoordinatesSchema = z
+  .custom<Position[][][]>(
+    (value) =>
+      Array.isArray(value) &&
+      value.length >= 1 &&
+      value.every(isPolygonCoordinates),
+    { message: "Invalid GeoJSON polygon coordinates" },
+  )
+  .check(
+    z.refine(
+      (polygons) => polygons.every((rings) => rings.every(isClosedRing)),
+      { message: "Polygon rings must be closed" },
+    ),
+  );
 
 /**
  * Zod schema for a GeoJSON `Polygon` geometry.
@@ -42,7 +122,7 @@ export const polygonGeometrySchema = z.looseObject({
  */
 export const multiPolygonGeometrySchema = z.looseObject({
   type: z.literal("MultiPolygon"),
-  coordinates: z.array(polygonCoordinatesSchema).check(z.minLength(1)),
+  coordinates: multiPolygonCoordinatesSchema,
 });
 
 /**
@@ -62,7 +142,7 @@ const geometrySchema: z.ZodMiniType<unknown> = z.union([
   }),
   z.looseObject({
     type: z.literal("MultiLineString"),
-    coordinates: z.array(lineStringCoordinatesSchema),
+    coordinates: multiLineStringCoordinatesSchema,
   }),
   polygonGeometrySchema,
   multiPolygonGeometrySchema,

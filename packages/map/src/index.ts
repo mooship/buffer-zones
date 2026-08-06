@@ -32,6 +32,7 @@ export {
   getRegisteredBasemapIds,
   registerBasemap,
   resetBasemapRegistry,
+  resolveTileScaleToken,
 } from "./constants/basemaps";
 export { AREA_OUTLINE } from "./constants/mapStyles";
 export type { DomainRegistry } from "./context/DomainContext";

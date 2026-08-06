@@ -18,7 +18,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import {
   type GeoJSONProps,
   GeoJSON as LeafletGeoJSON,
@@ -33,6 +32,7 @@ import {
   type Basemap,
   getBasemapDefinition,
   getBasemapTileSources,
+  resolveTileScaleToken,
 } from "../../constants/basemaps";
 import { AREA_OUTLINE } from "../../constants/mapStyles";
 import { useDomain } from "../../context/DomainContext";
@@ -88,11 +88,29 @@ interface MapViewProps<
    * shows the result in a popup. Defaults to `false`.
    */
   locateOnClick?: boolean;
+  /**
+   * Called once, after Leaflet has initialised the map and the browser has
+   * painted it.
+   * @remarks Exists so a caller can hold its own bulk feature data back
+   *   until the map itself is on screen. Fetching, parsing and handing
+   *   Leaflet a large `areas` collection is seconds of main-thread work on a
+   *   mid-range phone; started at mount it lands in the same frame as the
+   *   map's own first paint and pushes Largest Contentful Paint out by all
+   *   of it, for content the map cannot draw until the basemap exists
+   *   anyway.
+   */
+  onReady?: () => void;
 }
 
 const AREA_PANE = "areas";
 const AREA_OUTLINE_PANE = "area-outlines";
 const TRANSIT_PANE = "transit";
+/** Constant, so react-leaflet doesn't re-apply it to every outline layer on each render. */
+const AREA_OUTLINE_PATH_OPTIONS = {
+  pane: AREA_OUTLINE_PANE,
+  fillOpacity: 0,
+  interactive: false,
+} as const;
 const MOBILE_BREAKPOINT_PX = 768;
 const AREA_CLICK_DELAY_MS = 220;
 const PRIMARY_LABEL_REVEAL_ZOOM = 10;
@@ -138,19 +156,38 @@ function getBoundsOptions(desktop: boolean) {
     : { padding: [24, 24] as [number, number] };
 }
 
-function bindSelectedFeaturePopup<TProperties extends Record<string, unknown>>(
+/**
+ * Binds `renderFeaturePopup`'s markup to `featureLayer`, unless it already
+ * has a popup bound.
+ * @returns A promise that settles once the popup is bound (or immediately,
+ *   when there is nothing to bind), so callers can open the popup after it
+ *   exists.
+ * @remarks Imports `react-dom/server` dynamically, purely for payload:
+ *   React's server renderer is ~70KB compressed and, statically imported, it
+ *   lands in the same eagerly-fetched vendor chunk as `react`/`react-dom` —
+ *   bytes every visitor pays for on the critical path to the map's first
+ *   paint, to render markup that only exists once somebody clicks a
+ *   feature. As its own chunk it is fetched on that first click instead; the
+ *   module loader's own cache (not a hand-rolled one here) makes every
+ *   subsequent call resolve without re-fetching it.
+ */
+async function bindSelectedFeaturePopup<
+  TProperties extends Record<string, unknown>,
+>(
   featureLayer: SelectableFeatureLayer,
   properties: TProperties,
   renderFeaturePopup?: (properties: TProperties) => ReactNode,
-) {
+): Promise<void> {
   if (featureLayer.getPopup?.()) {
     return;
   }
-  if (renderFeaturePopup) {
-    featureLayer.bindPopup?.(
-      renderToStaticMarkup(renderFeaturePopup(properties)),
-    );
+  if (!renderFeaturePopup) {
+    return;
   }
+  const { renderToStaticMarkup } = await import("react-dom/server");
+  featureLayer.bindPopup?.(
+    renderToStaticMarkup(renderFeaturePopup(properties)),
+  );
 }
 
 /**
@@ -207,8 +244,11 @@ function bindSelectableFeatureInteractions<
     pendingClickTimeout = setTimeout(() => {
       pendingClickTimeout = null;
       const featureLayer = leafletLayer as SelectableFeatureLayer;
-      bindSelectedFeaturePopup(featureLayer, properties, renderFeaturePopup);
-      featureLayer.openPopup?.();
+      void bindSelectedFeaturePopup(
+        featureLayer,
+        properties,
+        renderFeaturePopup,
+      ).then(() => featureLayer.openPopup?.());
       if (typeof featureId === "string") {
         onSelect?.(featureId);
       }
@@ -260,9 +300,6 @@ function SelectedFeatureHighlight<TProperties extends Record<string, unknown>>({
       | TProperties
       | null
       | undefined;
-    if (properties) {
-      bindSelectedFeaturePopup(featureLayer, properties, renderFeaturePopup);
-    }
     const bounds = featureLayer.getBounds?.();
     if (bounds) {
       map.fitBounds(bounds, {
@@ -271,8 +308,65 @@ function SelectedFeatureHighlight<TProperties extends Record<string, unknown>>({
         padding: [40, 40],
       });
     }
-    featureLayer.openPopup?.();
+    let cancelled = false;
+    const binding = properties
+      ? bindSelectedFeaturePopup(featureLayer, properties, renderFeaturePopup)
+      : Promise.resolve();
+    void binding.then(() => {
+      if (!cancelled) {
+        featureLayer.openPopup?.();
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [map, selectedFeatureId, layerById, renderFeaturePopup]);
+
+  return null;
+}
+
+/**
+ * Fires `onReady` once, after Leaflet has initialised the map and the
+ * browser has had a frame to paint it.
+ * @remarks The `requestAnimationFrame` is the load-bearing part: Leaflet's
+ *   `whenReady` resolves as soon as the map has a view, which is still
+ *   before the frame containing it reaches the screen. Deferring by a frame
+ *   means whatever the caller starts in response cannot contend with that
+ *   first paint.
+ */
+function MapReadyNotifier({ onReady }: { onReady?: () => void }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!onReady) {
+      return;
+    }
+    let cancelled = false;
+    let frame: number | null = null;
+    map.whenReady(() => {
+      // `whenReady`'s callback has no cancellation of its own — if the map
+      // isn't loaded yet, Leaflet just holds onto it via a `load` listener
+      // until that event fires, however long after this effect's own
+      // cleanup that turns out to be. `cancelled` is what stops a late
+      // firing from scheduling a frame (or calling `onReady`) for a
+      // component that already unmounted.
+      if (cancelled) {
+        return;
+      }
+      frame = requestAnimationFrame(() => {
+        frame = null;
+        if (!cancelled) {
+          onReady();
+        }
+      });
+    });
+    return () => {
+      cancelled = true;
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
+    };
+  }, [map, onReady]);
 
   return null;
 }
@@ -463,6 +557,7 @@ function MapViewComponent<
   onLayerDataError,
   onBasemapError,
   locateOnClick = false,
+  onReady,
 }: MapViewProps<TProperties>) {
   const { getLayers } = useDomain();
   const selectableLayerById = useRef(new Map<string, SelectableFeatureLayer>());
@@ -590,6 +685,33 @@ function MapViewComponent<
       ),
     [visibleLayers],
   );
+  /**
+   * Each visible layer's `pathOptions`, with its pane folded in, memoised by
+   * layer id.
+   * @remarks react-leaflet re-applies `pathOptions` with `setStyle` whenever
+   *   the object's *identity* changes, and a `setStyle` on a `GeoJSON` layer
+   *   walks every feature layer it holds. Built inline in the render below,
+   *   a fresh object every render meant every unrelated re-render — a zoom
+   *   tick, a theme change, data arriving for a different layer — restyled
+   *   all several thousand choropleth polygons.
+   */
+  const layerPathOptionsById = useMemo(
+    () =>
+      new Map(
+        visibleLayers.map((layer) => {
+          const config = layerConfigById.get(layer.id);
+          return [
+            layer.id,
+            {
+              ...config?.pathOptions,
+              pane:
+                layer.geometryKind === "choropleth" ? AREA_PANE : TRANSIT_PANE,
+            },
+          ] as const;
+        }),
+      ),
+    [layerConfigById, visibleLayers],
+  );
   const transitPointToLayerById = useMemo(
     () =>
       new Map(
@@ -651,7 +773,7 @@ function MapViewComponent<
         {isRasterBasemap && tileSource ? (
           <TileLayer
             key={`${tileSourceMode}-${tileSource.url}`}
-            url={tileSource.url}
+            url={resolveTileScaleToken(tileSource.url, useRetinaTiles)}
             attribution={tileSource.attribution}
             className={useDarkTiles ? styles.darkTile : undefined}
             detectRetina={useRetinaTiles}
@@ -673,11 +795,7 @@ function MapViewComponent<
           <GeoJSON
             data={areaBoundaryData}
             smoothFactor={0}
-            pathOptions={{
-              pane: AREA_OUTLINE_PANE,
-              fillOpacity: 0,
-              interactive: false,
-            }}
+            pathOptions={AREA_OUTLINE_PATH_OPTIONS}
             style={(feature: Feature | undefined) => ({
               ...AREA_OUTLINE,
               color: resolvedDark ? "#5b6476" : AREA_OUTLINE.color,
@@ -729,10 +847,7 @@ function MapViewComponent<
               // no boundary-fidelity reason to disable it here.
               smoothFactor={1}
               style={config.styleFn}
-              pathOptions={{
-                ...config.pathOptions,
-                pane: isChoropleth ? AREA_PANE : TRANSIT_PANE,
-              }}
+              pathOptions={layerPathOptionsById.get(layer.id)}
               onEachFeature={
                 isSelectable
                   ? (feature: Feature, featureLayer: Layer) =>
@@ -759,6 +874,7 @@ function MapViewComponent<
         />
         <FocusLocationTarget focusLocationTarget={focusLocationTarget} />
         <AreaLabelVisibility />
+        <MapReadyNotifier onReady={onReady} />
         <ResponsiveMapBounds bounds={bounds} />
         <ZoomStateWatcher onZoomChange={setMapZoom} />
         {locateOnClick ? <ClickToLocatePopup /> : null}

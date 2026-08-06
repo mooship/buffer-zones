@@ -25,6 +25,9 @@ vi.mock("react-leaflet", () => ({
     invalidateSize: vi.fn(),
     getContainer: () => document.createElement("div"),
     getZoom: () => 9,
+    whenReady: (callback: () => void) => {
+      callback();
+    },
     on: vi.fn(),
     off: vi.fn(),
   }),
@@ -704,6 +707,10 @@ describe("App", () => {
         .mockImplementation(() => {});
 
       const { unmount } = render(<App />);
+      // The fetch only starts once the map reports itself ready, so wait for
+      // it to be in flight before unmounting — otherwise this asserts
+      // nothing about a settling request.
+      await waitFor(() => expect(dataMocks.getTownships).toHaveBeenCalled());
       unmount();
       if (mode === "resolve") {
         resolveTownships?.([]);

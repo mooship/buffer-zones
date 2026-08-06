@@ -7,6 +7,10 @@ const dataMocks = vi.hoisted(() => ({
   fetchAreas: vi.fn(),
 }));
 
+const mapReadyMocks = vi.hoisted(() => ({
+  pendingReadyCallbacks: [] as Array<() => void>,
+}));
+
 vi.mock("react-leaflet", () => ({
   MapContainer: ({ children }: { children: ReactNode }) => (
     <div>{children}</div>
@@ -26,7 +30,7 @@ vi.mock("react-leaflet", () => ({
     getContainer: () => document.createElement("div"),
     getZoom: () => 9,
     whenReady: (callback: () => void) => {
-      callback();
+      mapReadyMocks.pendingReadyCallbacks.push(callback);
     },
     on: vi.fn(),
     off: vi.fn(),
@@ -49,20 +53,13 @@ vi.mock("./data/TownshipDataRepository", () => ({
   }),
 }));
 
-vi.mock("./layers/registry", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./layers/registry")>();
-  return {
-    ...actual,
-    getStory: () => undefined,
-  };
-});
-
 import { App } from "./App";
 import { useMapUiStore } from "./stores/useMapUiStore";
 
-describe("App with a domain that has no story", () => {
+describe("App choropleth data loading", () => {
   beforeEach(() => {
     useMapUiStore.getState().reset();
+    mapReadyMocks.pendingReadyCallbacks = [];
     dataMocks.getTownships.mockReset().mockResolvedValue([
       {
         type: "Feature",
@@ -73,7 +70,6 @@ describe("App with a domain that has no story", () => {
           nearestJobCenter: "Pretoria CBD",
           distanceKm: null,
           nearestTransitKm: null,
-          nearestAReYengStopKm: null,
         },
         geometry: null,
       },
@@ -84,16 +80,26 @@ describe("App with a domain that has no story", () => {
     });
   });
 
-  it("renders layer toggles directly, with no tab UI", async () => {
+  it("holds the township request back until the map reports it is ready", async () => {
     render(<App />);
 
-    await waitFor(() =>
-      expect(screen.getByTestId("geojson-layer")).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expect(mapReadyMocks.pendingReadyCallbacks.length).toBeGreaterThan(0);
+    });
 
-    expect(screen.queryByTestId("panel-tablist")).not.toBeInTheDocument();
-    expect(
-      await screen.findByRole("checkbox", { name: "Modelled car time" }),
-    ).toBeInTheDocument();
+    expect(dataMocks.getTownships).not.toHaveBeenCalled();
+    expect(dataMocks.fetchAreas).not.toHaveBeenCalled();
+
+    for (const callback of mapReadyMocks.pendingReadyCallbacks) {
+      callback();
+    }
+
+    await waitFor(() => {
+      expect(dataMocks.getTownships).toHaveBeenCalled();
+    });
+    expect(dataMocks.fetchAreas).toHaveBeenCalled();
+    await waitFor(() =>
+      expect(screen.getAllByTestId("geojson-layer").length).toBeGreaterThan(0),
+    );
   });
 });

@@ -6,6 +6,7 @@ import {
   type RasterBasemapDefinition,
   registerBasemap,
   resetBasemapRegistry,
+  resolveTileScaleToken,
   type VectorBasemapDefinition,
 } from "./basemaps";
 
@@ -146,5 +147,33 @@ describe("getBasemapTileSources", () => {
       url: "https://example.com/dark/{z}/{x}/{y}.png",
       attribution: "Example",
     });
+  });
+});
+
+describe("resolveTileScaleToken", () => {
+  it("substitutes every {r} placeholder with @2x when retina tiles are wanted", () => {
+    expect(
+      resolveTileScaleToken(
+        "https://{s}.example.com/{z}/{x}/{y}{r}.png?fallback={r}",
+        true,
+      ),
+    ).toBe("https://{s}.example.com/{z}/{x}/{y}@2x.png?fallback=@2x");
+  });
+
+  it("strips every {r} placeholder when retina tiles are not wanted", () => {
+    expect(
+      resolveTileScaleToken(
+        "https://{s}.example.com/{z}/{x}/{y}{r}.png",
+        false,
+      ),
+    ).toBe("https://{s}.example.com/{z}/{x}/{y}.png");
+  });
+
+  it("leaves a URL without the placeholder untouched", () => {
+    const url =
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+
+    expect(resolveTileScaleToken(url, true)).toBe(url);
+    expect(resolveTileScaleToken(url, false)).toBe(url);
   });
 });

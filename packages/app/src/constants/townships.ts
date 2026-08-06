@@ -1083,6 +1083,45 @@ function bestMatch(
   return matches[0];
 }
 
+const areaDefinitionCache = new Map<
+  string,
+  TownshipAreaDefinition | undefined
+>();
+
+function resolveTownshipAreaDefinition(
+  name: string,
+  censusId?: string,
+): TownshipAreaDefinition | undefined {
+  const availableAreas: TownshipAreaDefinition[] = [];
+  const prefixMatches: TownshipAreaDefinition[] = [];
+  const nameMatches: TownshipAreaDefinition[] = [];
+
+  for (const area of TOWNSHIP_AREA_DEFINITIONS) {
+    if (area.excludedSubPlaceNames?.includes(name)) {
+      continue;
+    }
+    availableAreas.push(area);
+    if (area.subPlaceNamePrefixes?.some((prefix) => name.startsWith(prefix))) {
+      prefixMatches.push(area);
+    } else if (name.startsWith(area.name)) {
+      // Only consulted when no area matched by prefix, so an area that did
+      // match one never needs to appear in both lists.
+      nameMatches.push(area);
+    }
+  }
+
+  if (prefixMatches.length > 0) {
+    return bestMatch(prefixMatches, censusId);
+  }
+  if (nameMatches.length > 0) {
+    return bestMatch(nameMatches, censusId);
+  }
+  if (censusId) {
+    return findByCensusCode(availableAreas, censusId);
+  }
+  return undefined;
+}
+
 /**
  * Finds the township area a census sub-place belongs to, by matching its
  * name (and, to disambiguate multiple matches, its census id) against every
@@ -1091,34 +1130,25 @@ function bestMatch(
  * @param censusId - The sub-place's census code, used to disambiguate when
  *   more than one area's name/prefix matches.
  * @returns The matching area, or `undefined` if none matches.
+ * @remarks Results are memoised. The answer depends only on module-level
+ *   constants, and map rendering asks it the same question repeatedly — once
+ *   per sub-place feature per style pass, thousands of features at a time —
+ *   so recomputing three scans of every area definition each time is pure
+ *   main-thread cost while the map is drawing. The cache is bounded in
+ *   practice by the number of distinct sub-place names in the published
+ *   data.
  */
 export function getTownshipAreaDefinition(
   name: string,
   censusId?: string,
 ): TownshipAreaDefinition | undefined {
-  const availableAreas = TOWNSHIP_AREA_DEFINITIONS.filter(
-    (area) => !area.excludedSubPlaceNames?.includes(name),
-  );
-
-  const prefixMatches = availableAreas.filter((area) =>
-    area.subPlaceNamePrefixes?.some((prefix) => name.startsWith(prefix)),
-  );
-  if (prefixMatches.length > 0) {
-    return bestMatch(prefixMatches, censusId);
+  const cacheKey = `${name} ${censusId ?? ""}`;
+  if (areaDefinitionCache.has(cacheKey)) {
+    return areaDefinitionCache.get(cacheKey);
   }
-
-  const nameMatches = availableAreas.filter((area) =>
-    name.startsWith(area.name),
-  );
-  if (nameMatches.length > 0) {
-    return bestMatch(nameMatches, censusId);
-  }
-
-  if (censusId) {
-    return findByCensusCode(availableAreas, censusId);
-  }
-
-  return undefined;
+  const definition = resolveTownshipAreaDefinition(name, censusId);
+  areaDefinitionCache.set(cacheKey, definition);
+  return definition;
 }
 
 /** Like `getTownshipAreaDefinition`, but returns just the matched area's display name. */

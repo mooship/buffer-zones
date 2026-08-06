@@ -158,6 +158,9 @@ vi.mock("react-leaflet", () => ({
     invalidateSize: mapMocks.invalidateSize,
     getContainer: () => document.createElement("div"),
     getZoom: () => mapMocks.zoom,
+    whenReady: (callback: () => void) => {
+      callback();
+    },
     on: vi.fn(),
     off: vi.fn(),
   }),
@@ -333,7 +336,7 @@ describe("MapView", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("calls renderFeaturePopup with feature properties when a feature is clicked", () => {
+  it("calls renderFeaturePopup with feature properties when a feature is clicked", async () => {
     vi.useFakeTimers();
     const renderFeaturePopup = vi.fn().mockReturnValue(<div>Custom popup</div>);
     const onFeatureSelect = vi.fn();
@@ -353,11 +356,46 @@ describe("MapView", () => {
     const firstLayer = mapMocks.featureLayers[0];
     expect(firstLayer).toBeDefined();
     firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
-    vi.advanceTimersByTime(220);
+    await vi.advanceTimersByTimeAsync(220);
 
     expect(renderFeaturePopup).toHaveBeenCalledWith(
       expect.objectContaining({ id: "A", name: "Mamelodi" }),
     );
+  });
+
+  it("notifies onReady once the map is ready and a frame has been painted", async () => {
+    const onReady = vi.fn();
+
+    render(
+      withDomain(
+        <MapView
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={[]}
+          visibleLayerIds={[]}
+          onReady={onReady}
+        />,
+      ),
+    );
+
+    expect(onReady).not.toHaveBeenCalled();
+
+    await waitFor(() => {
+      expect(onReady).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("renders without an onReady callback", () => {
+    expect(() =>
+      render(
+        withDomain(
+          <MapView
+            {...DEFAULT_MAP_VIEW_PROPS}
+            areas={[]}
+            visibleLayerIds={[]}
+          />,
+        ),
+      ),
+    ).not.toThrow();
   });
 
   it("renders a tile layer and one GeoJSON layer per visible registry entry", () => {
@@ -409,9 +447,33 @@ describe("MapView", () => {
       "data-retina",
       "true",
     );
+    expect(screen.getByTestId("tile-layer")).toHaveTextContent("@2x");
   });
 
-  it("binds feature popup markup lazily on first click", () => {
+  it("requests standard-resolution tiles on a high-DPI mobile screen, where retina tiles are turned off", () => {
+    vi.stubGlobal("innerWidth", 390);
+    Object.defineProperty(window, "devicePixelRatio", {
+      configurable: true,
+      value: 3,
+    });
+
+    render(
+      withDomain(
+        <MapView
+          {...DEFAULT_MAP_VIEW_PROPS}
+          areas={areas}
+          visibleLayerIds={["areas"]}
+        />,
+      ),
+    );
+
+    const tileLayer = screen.getByTestId("tile-layer");
+    expect(tileLayer).toHaveAttribute("data-retina", "false");
+    expect(tileLayer).not.toHaveTextContent("@2x");
+    expect(tileLayer).not.toHaveTextContent("{r}");
+  });
+
+  it("binds feature popup markup lazily on first click", async () => {
     vi.useFakeTimers();
     const onFeatureSelect = vi.fn();
 
@@ -432,14 +494,16 @@ describe("MapView", () => {
     const firstLayer = mapMocks.featureLayers[0];
     expect(firstLayer).toBeDefined();
     firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
-    vi.advanceTimersByTime(220);
+    await vi.advanceTimersByTimeAsync(220);
 
     expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
+    expect(firstLayer?.openPopup).toHaveBeenCalledTimes(1);
     expect(onFeatureSelect).toHaveBeenCalledWith("A");
 
     firstLayer?.__handlers.click?.({ originalEvent: { detail: 1 } });
-    vi.advanceTimersByTime(220);
+    await vi.advanceTimersByTimeAsync(220);
     expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
+    expect(firstLayer?.openPopup).toHaveBeenCalledTimes(2);
     expect(onFeatureSelect).toHaveBeenCalledTimes(2);
   });
 
@@ -500,7 +564,7 @@ describe("MapView", () => {
     expect(firstLayer?.openPopup).not.toHaveBeenCalled();
   });
 
-  it("opens the selected feature popup without scanning every layer", () => {
+  it("opens the selected feature popup without scanning every layer", async () => {
     render(
       withDomain(
         <MapView
@@ -513,7 +577,9 @@ describe("MapView", () => {
       ),
     );
 
-    expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(popupMocks.renderToStaticMarkup).toHaveBeenCalledTimes(1);
+    });
     expect(mapMocks.fitBounds).toHaveBeenCalledTimes(1);
     expect(mapMocks.featureLayers[0]?.openPopup).toHaveBeenCalledTimes(1);
   });
@@ -536,7 +602,7 @@ describe("MapView", () => {
     expect(mapMocks.featureLayers[0]?.openPopup).not.toHaveBeenCalled();
   });
 
-  it("fits bounds and opens the selected feature's popup, and announces the selection for assistive technology, moving it when selection changes", () => {
+  it("fits bounds and opens the selected feature's popup, and announces the selection for assistive technology, moving it when selection changes", async () => {
     const twoAreas = [
       {
         type: "Feature",
@@ -562,8 +628,10 @@ describe("MapView", () => {
       ),
     );
 
+    await waitFor(() => {
+      expect(mapMocks.featureLayers[0]?.openPopup).toHaveBeenCalledTimes(1);
+    });
     expect(mapMocks.fitBounds).toHaveBeenCalledTimes(1);
-    expect(mapMocks.featureLayers[0]?.openPopup).toHaveBeenCalledTimes(1);
     expect(screen.getByText(/mamelodi selected/i)).toBeInTheDocument();
 
     rerender(
@@ -578,8 +646,10 @@ describe("MapView", () => {
       ),
     );
 
+    await waitFor(() => {
+      expect(mapMocks.featureLayers[1]?.openPopup).toHaveBeenCalledTimes(1);
+    });
     expect(mapMocks.fitBounds).toHaveBeenCalledTimes(2);
-    expect(mapMocks.featureLayers[1]?.openPopup).toHaveBeenCalledTimes(1);
     expect(screen.getByText(/soweto selected/i)).toBeInTheDocument();
     expect(screen.queryByText(/mamelodi selected/i)).not.toBeInTheDocument();
   });

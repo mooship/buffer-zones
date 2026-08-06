@@ -90,6 +90,44 @@ describe("createTownshipDataRepository", () => {
     expect(result[0]?.properties.nearestTransitKm).toBe(1.5);
   });
 
+  it("fills in a null nearestTransitKm when the source omits the field", async () => {
+    const geojson = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            id: "A",
+            name: "Mamelodi",
+            commuteMinutes: 20,
+            nearestJobCenter: "Pretoria CBD",
+            distanceKm: null,
+          },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [28, -25],
+                [28.1, -25],
+                [28.1, -25.1],
+                [28, -25],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: true, json: async () => geojson }),
+    );
+
+    const repo = createTownshipDataRepository("/data/townships.v1.geojson");
+    const result = await repo.getTownships();
+
+    expect(result[0]?.properties.nearestTransitKm).toBeNull();
+  });
+
   it("throws a descriptive error when the fetch fails", async () => {
     vi.stubGlobal(
       "fetch",

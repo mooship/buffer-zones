@@ -180,3 +180,18 @@ export function getBasemapTileSources(
     })),
   ];
 }
+
+/**
+ * Substitutes Leaflet's `{r}` tile-scale placeholder in `url` with `"@2x"`
+ * when `retina` is `true`, and with nothing when it isn't.
+ * @remarks Leaflet resolves `{r}` itself from `Browser.retina` — the
+ *   *device's* pixel ratio — completely independently of the `detectRetina`
+ *   option, so a caller that decides against retina tiles still gets `@2x`
+ *   URLs on any high-DPI screen. That is roughly two to three times the
+ *   bytes per tile, which is exactly the wrong trade on the small, likely
+ *   throttled mobile viewports where `detectRetina` is turned off. Resolving
+ *   the token up front makes the caller's decision the one that holds.
+ */
+export function resolveTileScaleToken(url: string, retina: boolean): string {
+  return url.replaceAll("{r}", retina ? "@2x" : "");
+}

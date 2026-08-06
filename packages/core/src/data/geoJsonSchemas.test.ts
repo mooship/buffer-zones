@@ -38,6 +38,110 @@ describe("featureCollectionSchema", () => {
     }
   });
 
+  it("rejects a polygon ring with fewer than four positions", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        polygonFeature([
+          [
+            [28, -25],
+            [28.1, -25],
+            [28, -25],
+          ],
+        ]),
+      ],
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a non-numeric coordinate nested inside a polygon ring", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        polygonFeature([
+          [
+            [28, -25],
+            ["28.1", -25] as unknown as number[],
+            [28.1, -25.1],
+            [28, -25],
+          ],
+        ]),
+      ],
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a polygon with no rings at all", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [polygonFeature([])],
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a MultiPolygon whose ring is not closed", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "MultiPolygon",
+            coordinates: [
+              [
+                [
+                  [28, -25],
+                  [28.1, -25],
+                  [28.1, -25.1],
+                  [28, -25.05],
+                ],
+              ],
+            ],
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a MultiLineString containing a single-position line", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "MultiLineString",
+            coordinates: [[[28, -25]]],
+          },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts positions carrying an elevation as a third coordinate", () => {
+    const result = featureCollectionSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: { type: "Point", coordinates: [28, -25, 1450] },
+        },
+      ],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
   it("accepts a MultiPolygon geometry", () => {
     const result = featureCollectionSchema.safeParse({
       type: "FeatureCollection",

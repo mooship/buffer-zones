@@ -2,10 +2,6 @@ import { truncate } from "@turf/turf";
 import type { FeatureCollection, Geometry } from "geojson";
 import { GEOJSON_COORDINATE_PRECISION } from "./constants/geoJson";
 
-// Unlike townships, transit lines have no shared-edge topology to preserve,
-// so plain coordinate truncation (same precision as displayTownships.ts) is
-// enough to shrink full-float64 Overpass output without visible quality loss.
-
 /**
  * Builds a coordinate-truncated copy of a transit `FeatureCollection` for
  * display.

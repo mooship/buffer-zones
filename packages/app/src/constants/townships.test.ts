@@ -134,6 +134,20 @@ describe("township groups", () => {
     expect(getTownshipGroup("Some Other Place")).toBeUndefined();
   });
 
+  it("keeps memoised lookups keyed on both name and census id", () => {
+    expect(getTownshipAreaDefinition("Stretford Ext 2", "760001001")).toBe(
+      getTownshipAreaDefinition("Stretford Ext 2", "760001001"),
+    );
+    expect(getTownshipAreaDefinition("Stretford", "798038001")).toMatchObject({
+      metroId: "johannesburg",
+    });
+    expect(
+      getTownshipAreaDefinition("Stretford Ext 2", "760001001"),
+    ).toMatchObject({ metroId: "emfuleni" });
+    expect(getTownshipAreaDefinition("Some Other Place")).toBeUndefined();
+    expect(getTownshipAreaDefinition("Some Other Place")).toBeUndefined();
+  });
+
   it("ignores an excluded sub-place name even when it starts with the area name", () => {
     expect(
       getTownshipAreaDefinition("Ekandustria", "799055007"),

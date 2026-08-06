@@ -129,7 +129,6 @@ describe("useThemePreference theme-color meta sync", () => {
 
   it("uses fallback colors when initTheme has not been called", async () => {
     const { setThemePreference } = await importFreshModule();
-    // No initTheme call — should use fallback
     setThemePreference("dark");
 
     const meta = document.querySelector(

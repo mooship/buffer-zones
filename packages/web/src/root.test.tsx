@@ -19,55 +19,38 @@ vi.mock("react-router", async (importOriginal) => {
 const { default: Root, Layout, links, meta } = await import("./root");
 
 describe("root links", () => {
-  it("includes exactly one preload link per unique default-visible dataSource/companionSource URL", () => {
-    const uniqueUrls = new Set(
-      getLayers()
-        .filter((layer) => layer.defaultVisible)
-        .flatMap((layer) =>
-          layer.companionSource
-            ? [...layer.dataSource, layer.companionSource]
-            : layer.dataSource,
-        ),
+  it("does not preload any layer GeoJSON, so it never competes with render-critical requests", () => {
+    const layerDataUrls = new Set(
+      getLayers().flatMap((layer) =>
+        layer.companionSource
+          ? [...layer.dataSource, layer.companionSource]
+          : layer.dataSource,
+      ),
     );
 
-    const preloadLinks = links().filter(
-      (link) => "rel" in link && link.rel === "preload",
-    );
+    expect(layerDataUrls.size).toBeGreaterThan(0);
 
-    expect(preloadLinks).toHaveLength(uniqueUrls.size);
-
-    const hrefs = preloadLinks.map((link) =>
-      "href" in link ? link.href : undefined,
-    );
-    expect(new Set(hrefs).size).toBe(hrefs.length);
-    for (const url of uniqueUrls) {
-      expect(hrefs).toContain(url);
+    const hrefs = links().map((link) => ("href" in link ? link.href : ""));
+    for (const url of layerDataUrls) {
+      expect(hrefs).not.toContain(url);
     }
+    expect(
+      links().filter((link) => "rel" in link && link.rel === "preload"),
+    ).toHaveLength(0);
   });
 
-  it("preloads a defaultVisible layer's URL at normal priority, but does not preload a non-default-visible-only URL at all", () => {
-    const sharedUrl = getLayers().find((layer) => layer.id === "townships")
-      ?.dataSource[0];
-    const hiddenOnlyUrl = getLayers().find((layer) => layer.id === "rapid-rail")
-      ?.dataSource[0];
+  it("still emits the icon, manifest and preconnect links", () => {
+    const rels = links().map((link) => ("rel" in link ? link.rel : ""));
 
-    expect(sharedUrl).toBeDefined();
-    expect(hiddenOnlyUrl).toBeDefined();
+    expect(rels).toContain("icon");
+    expect(rels).toContain("manifest");
+    expect(rels).toContain("preconnect");
+  });
 
-    const preloadLinks = links().filter(
-      (link) => "rel" in link && link.rel === "preload",
-    );
-    const hrefs = preloadLinks.map((link) =>
-      "href" in link ? link.href : undefined,
-    );
-
-    const sharedLink = preloadLinks.find(
-      (link) => "href" in link && link.href === sharedUrl,
-    );
-    expect(sharedLink).toBeDefined();
-    expect(sharedLink).not.toHaveProperty("fetchPriority");
-
-    expect(hrefs).not.toContain(hiddenOnlyUrl);
+  it("leaves stylesheets to the bundler's own route-module CSS links", () => {
+    expect(
+      links().filter((link) => "rel" in link && link.rel === "stylesheet"),
+    ).toHaveLength(0);
   });
 });
 
