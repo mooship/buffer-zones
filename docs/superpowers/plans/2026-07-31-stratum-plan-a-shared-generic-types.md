@@ -1,4 +1,4 @@
-# Stratum Plan A: Shared Generic Layer/LayerGroup Types Implementation Plan
+# Karta Plan A: Shared Generic Layer/LayerGroup Types Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -15,7 +15,7 @@
 - British English spelling/grammar in all user-facing copy strings (CLAUDE.md) — applies to every `label`/`description` string added here.
 - Biome `useBlockStatements: error` — always brace `if` statements (CLAUDE.md).
 - Every commit in this plan must leave `npm run test` and `npm run typecheck` green across the whole repo (lefthook runs the full vitest suite on every commit) — this plan is strictly additive to avoid breaking `packages/web`/`data-pipeline`, which still import the old `LayerId`/`LayerDefinition`/`LayerStyle` from `packages/shared/src/types/layer.ts` unchanged.
-- Design source of truth: `docs/superpowers/specs/2026-07-31-stratum-generic-layer-platform-design.md` (§3 Core abstractions). Note: this plan uses distinct names (`Layer`, `LayerGroup`, `ChoroplethLayerStyle`, etc.) instead of the spec's `LayerDefinition`/`LayerGroupDefinition` to avoid colliding with the still-live old types of the same name in `layer.ts` — Plan B renames/collapses these once the old types are deleted.
+- Design source of truth: `docs/superpowers/specs/2026-07-31-karta-generic-layer-platform-design.md` (§3 Core abstractions). Note: this plan uses distinct names (`Layer`, `LayerGroup`, `ChoroplethLayerStyle`, etc.) instead of the spec's `LayerDefinition`/`LayerGroupDefinition` to avoid colliding with the still-live old types of the same name in `layer.ts` — Plan B renames/collapses these once the old types are deleted.
 
 ---
 

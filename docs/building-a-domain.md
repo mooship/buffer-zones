@@ -1,18 +1,18 @@
 # Building a new domain
 
-`@stratum/core`, `@stratum/map`, and `@stratum/react` don't know anything about Gauteng, townships, or transit routes — that's all `@stratum/app`, the first domain built on the SDK. This guide walks through building a **second** domain from scratch, using only what the SDK packages export, so the pattern isn't something you have to reverse-engineer from the one example.
+`@karta/core`, `@karta/map`, and `@karta/react` don't know anything about Gauteng, townships, or transit routes — that's all `@karta/app`, the first domain built on the SDK. This guide walks through building a **second** domain from scratch, using only what the SDK packages export, so the pattern isn't something you have to reverse-engineer from the one example.
 
 The domain used throughout is illustrative: **public amenities** — how far each neighbourhood is from its nearest clinic, plus the bus routes serving the area. Swap in your own data and it works the same way.
 
 ## 1. Define a `DomainConfig`
 
-A domain is just data: a `DomainConfig` — `{ layers, layerGroups, story? }` — built from the `Layer`/`LayerGroup`/`LayerStyleConfig`/`DomainStory` types in `@stratum/core`. Nothing here is web- or Leaflet-specific.
+A domain is just data: a `DomainConfig` — `{ layers, layerGroups, story? }` — built from the `Layer`/`LayerGroup`/`LayerStyleConfig`/`DomainStory` types in `@karta/core`. Nothing here is web- or Leaflet-specific.
 
-Mirror the file layout `@stratum/app` uses for `gauteng-spatial-legacy`: a `layers.ts`, a `layerGroups.ts`, and an `index.ts` that assembles them into one exported constant.
+Mirror the file layout `@karta/app` uses for `gauteng-spatial-legacy`: a `layers.ts`, a `layerGroups.ts`, and an `index.ts` that assembles them into one exported constant.
 
 ```ts
 // domains/public-amenities/layers.ts
-import type { Layer } from "@stratum/core";
+import type { Layer } from "@karta/core";
 
 export const PUBLIC_AMENITIES_LAYERS: Layer[] = [
   {
@@ -50,7 +50,7 @@ export const PUBLIC_AMENITIES_LAYERS: Layer[] = [
 
 ```ts
 // domains/public-amenities/layerGroups.ts
-import type { LayerGroup } from "@stratum/core";
+import type { LayerGroup } from "@karta/core";
 
 export const PUBLIC_AMENITIES_LAYER_GROUPS: LayerGroup[] = [
   {
@@ -76,16 +76,16 @@ export { PUBLIC_AMENITIES_LAYER_GROUPS } from "./layerGroups";
 export { PUBLIC_AMENITIES_LAYERS } from "./layers";
 ```
 
-`DomainConfig` only requires `layers` and `layerGroups`. `story` (`{ title, body }`) is optional narrative "why this map exists" copy — omit it if your domain has nothing to say there, and `getStory()` (both `createRegistry(domain).getStory()` and `useDomain().getStory()`) returns `undefined`. `@stratum/web` reads it through `useDomain()`/`getStory()` and shows a Story tab alongside layer toggles only when it's present, so a domain without one gets the same single-view panel as before — the SDK doesn't require every domain to have a story. You can still add extra fields beyond what `DomainConfig` itself requires (`@stratum/app`'s `GAUTENG_SPATIAL_LEGACY_DOMAIN` also carries an `id`); `createRegistry` and `useDomain()` simply ignore anything past `layers`/`layerGroups`/`story`.
+`DomainConfig` only requires `layers` and `layerGroups`. `story` (`{ title, body }`) is optional narrative "why this map exists" copy — omit it if your domain has nothing to say there, and `getStory()` (both `createRegistry(domain).getStory()` and `useDomain().getStory()`) returns `undefined`. `@karta/web` reads it through `useDomain()`/`getStory()` and shows a Story tab alongside layer toggles only when it's present, so a domain without one gets the same single-view panel as before — the SDK doesn't require every domain to have a story. You can still add extra fields beyond what `DomainConfig` itself requires (`@karta/app`'s `GAUTENG_SPATIAL_LEGACY_DOMAIN` also carries an `id`); `createRegistry` and `useDomain()` simply ignore anything past `layers`/`layerGroups`/`story`.
 
 A `Layer`'s `style.kind` — `"choropleth"`, `"line"`, or `"point"` — drives both its Leaflet rendering (via `createLayerConfig`, see below) and its `Legend` entry, so pick it to match the geometry your GeoJSON actually contains. `line`/`point` styles also accept an optional `colorClassification` for data-driven per-feature colour instead of one flat colour — used by `gauteng-spatial-legacy`'s bus-rapid-transit layer to colour each operator's route differently. See [`packages/core/README.md`](../packages/core/README.md) for the full type reference.
 
 ## 2. Wire it up
 
-[`packages/core/README.md`](../packages/core/README.md) documents `createRegistry`/`createLayerConfig` in full; in short, `createRegistry(domain)` gives you `getLayers()`/`getLayer(id)`/`getLayerGroups()` — useful outside React (e.g. in the data pipeline) — and `@stratum/map`'s `DomainProvider`/`useDomain()` ([`packages/map/README.md`](../packages/map/README.md)) do the same thing via context, so components don't need the domain threaded through props. `createLayerConfig(layer)` converts a `Layer` into the Leaflet `pathOptions`/`styleFn` pair `MapView` and any custom rendering use.
+[`packages/core/README.md`](../packages/core/README.md) documents `createRegistry`/`createLayerConfig` in full; in short, `createRegistry(domain)` gives you `getLayers()`/`getLayer(id)`/`getLayerGroups()` — useful outside React (e.g. in the data pipeline) — and `@karta/map`'s `DomainProvider`/`useDomain()` ([`packages/map/README.md`](../packages/map/README.md)) do the same thing via context, so components don't need the domain threaded through props. `createLayerConfig(layer)` converts a `Layer` into the Leaflet `pathOptions`/`styleFn` pair `MapView` and any custom rendering use.
 
 ```ts
-import { createLayerConfig, createRegistry } from "@stratum/core";
+import { createLayerConfig, createRegistry } from "@karta/core";
 import { PUBLIC_AMENITIES_DOMAIN } from "./domains/public-amenities";
 
 const registry = createRegistry(PUBLIC_AMENITIES_DOMAIN);
@@ -95,14 +95,14 @@ const { styleFn } = createLayerConfig(layer);
 
 ## 3. Render it
 
-`MapView` and `Legend` (from `@stratum/map`) resolve their layers from the nearest `DomainProvider` — pass your domain once at the root, not to every component. `MapView` takes no baked-in bounds, accessible name, or popup component; all three are yours to supply.
+`MapView` and `Legend` (from `@karta/map`) resolve their layers from the nearest `DomainProvider` — pass your domain once at the root, not to every component. `MapView` takes no baked-in bounds, accessible name, or popup component; all three are yours to supply.
 
 ```tsx
-import { DomainProvider, Legend } from "@stratum/map";
+import { DomainProvider, Legend } from "@karta/map";
 import { PUBLIC_AMENITIES_DOMAIN } from "./domains/public-amenities";
 
 const MapView = lazy(async () => {
-  const { MapView } = await import("@stratum/map/MapView");
+  const { MapView } = await import("@karta/map/MapView");
   return { default: MapView };
 });
 
@@ -127,13 +127,13 @@ function App() {
 
 ## 4. Handle the data
 
-Host GeoJSON files matching each layer's `dataSource` URLs. `@stratum/core` gives you validation and merging (full reference in [`packages/core/README.md`](../packages/core/README.md)) so a malformed or multi-source dataset fails loudly instead of rendering garbage — in short:
+Host GeoJSON files matching each layer's `dataSource` URLs. `@karta/core` gives you validation and merging (full reference in [`packages/core/README.md`](../packages/core/README.md)) so a malformed or multi-source dataset fails loudly instead of rendering garbage — in short:
 
-- `fetchFeatureCollection(url, schema?, signal?)` fetches and validates against a Zod schema, defaulting to the generic `featureCollectionSchema`. Write your own schema (with `createFeatureCollectionParser`) if your properties need stricter validation than "some GeoJSON" — `@stratum/app`'s `townshipFeatureCollectionSchema` is an example of extending the generic schema with domain-specific required fields.
+- `fetchFeatureCollection(url, schema?, signal?)` fetches and validates against a Zod schema, defaulting to the generic `featureCollectionSchema`. Write your own schema (with `createFeatureCollectionParser`) if your properties need stricter validation than "some GeoJSON" — `@karta/app`'s `townshipFeatureCollectionSchema` is an example of extending the generic schema with domain-specific required fields.
 - `mergeFeatureCollections(collections)` concatenates several `FeatureCollection`s' features into one, for a layer backed by more than one source file.
 
 ```ts
-import { fetchFeatureCollection, mergeFeatureCollections } from "@stratum/core";
+import { fetchFeatureCollection, mergeFeatureCollections } from "@karta/core";
 
 const collections = await Promise.all(
   PUBLIC_AMENITIES_DOMAIN.layers
@@ -145,9 +145,9 @@ const neighbourhoods = mergeFeatureCollections(collections).features;
 
 ## 5. What you don't need to touch
 
-`@stratum/map` and `@stratum/react` are consumed as-is — no fork, no subclassing. The only things a new domain needs are:
+`@karta/map` and `@karta/react` are consumed as-is — no fork, no subclassing. The only things a new domain needs are:
 
 - A `DomainConfig` (this guide's subject).
-- Domain-specific popup/browser UI, passed in via `MapView`'s `renderFeaturePopup` prop — these read domain-specific properties (like `clinicDistanceKm` above) that don't exist on a generic `Layer`, so they stay in your app, not the SDK. See `@stratum/map`'s README, "what doesn't belong here."
+- Domain-specific popup/browser UI, passed in via `MapView`'s `renderFeaturePopup` prop — these read domain-specific properties (like `clinicDistanceKm` above) that don't exist on a generic `Layer`, so they stay in your app, not the SDK. See `@karta/map`'s README, "what doesn't belong here."
 
 That's it — the same `MapView`, `Legend`, `DomainProvider`, theme hooks, and basemap registry that render `gauteng-spatial-legacy` render any other domain built this way.

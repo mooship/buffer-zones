@@ -1,6 +1,6 @@
 import { readdir, rename, rm } from "node:fs/promises";
 import { resolve } from "node:path";
-import { METROS, type MetroId } from "@stratum/app";
+import { METROS, type MetroId } from "@karta/app";
 import { getJobCentersForMetro } from "./constants/jobCenters";
 import { pathExists } from "./fsUtils";
 import { REQUIRED_TRANSIT_NETWORKS } from "./outputManifest";

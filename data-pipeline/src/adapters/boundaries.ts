@@ -1,4 +1,4 @@
-import { getMetroDefinition, type MetroId } from "@stratum/app";
+import { getMetroDefinition, type MetroId } from "@karta/app";
 import * as turf from "@turf/turf";
 import AdmZip from "adm-zip";
 import type {

@@ -35,8 +35,8 @@ vi.mock("react-leaflet", () => ({
   Popup: () => null,
 }));
 
-vi.mock("@stratum/core", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@stratum/core")>();
+vi.mock("@karta/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@karta/core")>();
   return {
     ...actual,
     fetchFeatureCollection: dataMocks.fetchAreas,

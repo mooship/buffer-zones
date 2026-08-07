@@ -12,8 +12,8 @@ vi.mock("./outputManifest", () => ({
   validateOutputDirectory: outputManifestMocks.validateOutputDirectory,
 }));
 
-vi.mock("@stratum/app", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@stratum/app")>();
+vi.mock("@karta/app", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@karta/app")>();
   return {
     ...actual,
     REGIONS: [

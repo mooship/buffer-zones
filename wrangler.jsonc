@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "stratum",
+  "name": "karta",
   "compatibility_date": "2026-07-27",
   "main": "./packages/web/workers/app.ts",
   "workers_dev": true,
@@ -20,7 +20,7 @@
     }
   },
   "routes": [
-    { "pattern": "stratum.timothybrits.co.za", "custom_domain": true },
+    { "pattern": "karta.timothybrits.co.za", "custom_domain": true },
     { "pattern": "buffer-zones.timothybrits.co.za", "custom_domain": true }
   ]
 }

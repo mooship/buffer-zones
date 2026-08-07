@@ -1,4 +1,4 @@
-import type { Layer } from "@stratum/core";
+import type { Layer } from "@karta/core";
 import { useDomain } from "../../context/DomainContext";
 import styles from "./Legend.module.css";
 

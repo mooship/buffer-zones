@@ -1,6 +1,6 @@
-# Stratum Design System
+# Karta Design System
 
-Stratum uses an app-owned design system built on tonal, elevation-driven
+Karta uses an app-owned design system built on tonal, elevation-driven
 surfaces rather than translucent "glass" materials. The app remains plain
 React, CSS Modules, and CSS custom properties; no framework design library is
 introduced, and no token is named after a specific vendor's design language —

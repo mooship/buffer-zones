@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Extract domain-agnostic code from `packages/web` and `packages/shared` into three new publishable packages (`@stratum/core`, `@stratum/map`, `@stratum/react`), rename `packages/shared` to `packages/app`, and update all import paths — with identical runtime behaviour throughout.
+**Goal:** Extract domain-agnostic code from `packages/web` and `packages/shared` into three new publishable packages (`@karta/core`, `@karta/map`, `@karta/react`), rename `packages/shared` to `packages/app`, and update all import paths — with identical runtime behaviour throughout.
 
 **Architecture:** Re-export stubs keep `packages/web` building and passing tests throughout Tasks 1–4; Task 5 is the final clean-up. Each task ends with `npm run test` green and a git commit. New packages are discovered automatically by the root vitest `projects: ["packages/*"]` glob.
 
@@ -12,7 +12,7 @@
 
 - Do NOT change runtime behaviour — structural refactor only.
 - TDD: write the failing test before implementation code for every new function/component.
-- JSDoc on every exported function, type, interface, and component in `@stratum/core`, `@stratum/map`, `@stratum/react` only — TSDoc-compatible (`@param`, `@returns`, `@example`, `@remarks`).
+- JSDoc on every exported function, type, interface, and component in `@karta/core`, `@karta/map`, `@karta/react` only — TSDoc-compatible (`@param`, `@returns`, `@example`, `@remarks`).
 - Doc updates (CLAUDE.md, `.github/copilot-instructions.md`) are part of each task's definition of done.
 - No test deleted or assertion weakened to make a task pass — fix the code instead.
 - British English in all user-facing copy.
@@ -46,10 +46,10 @@
 - `packages/web/src/layers/createLayerConfig.ts` → re-export stub (test file deleted — moved to core)
 - `packages/web/src/data/fetchFeatureCollection.ts` → re-export stub (test file deleted — moved to core)
 - `packages/web/src/data/mergeFeatureCollections.ts` → re-export stub (test file deleted — moved to core)
-- `packages/web/src/data/geoJsonSchemas.ts` → keeps township schemas, re-exports generics from `@stratum/core`
+- `packages/web/src/data/geoJsonSchemas.ts` → keeps township schemas, re-exports generics from `@karta/core`
 - `packages/web/src/data/geoJsonSchemas.test.ts` → removes generic tests (moved to core)
-- `packages/web/src/layers/registry.ts` → uses `createRegistry` from `@stratum/core`
-- `packages/web/package.json` → add `@stratum/core` dep
+- `packages/web/src/layers/registry.ts` → uses `createRegistry` from `@karta/core`
+- `packages/web/package.json` → add `@karta/core` dep
 
 ### Created by Task 2
 - `packages/map/package.json`
@@ -99,7 +99,7 @@
 - `packages/web/src/components/SettingsMenu/SettingsMenu.tsx` → re-export stub
 - `packages/web/src/constants/basemaps.ts` → re-export stub
 - `packages/web/src/App.tsx` — wrap lazy MapView in DomainProvider, pass bounds + renderFeaturePopup
-- `packages/web/package.json` — add `@stratum/map` dep
+- `packages/web/package.json` — add `@karta/map` dep
 
 ### Created by Task 3
 - `packages/react/package.json`
@@ -117,25 +117,25 @@
 - `packages/web/src/hooks/useThemePreference.ts` → re-export stub (test file deleted — moved to react; does NOT re-export THEME_COLOR or THEME_STORAGE_KEY)
 - `packages/web/src/constants/themeConfig.ts` — new file with THEME_COLOR + THEME_STORAGE_KEY constants
 - `packages/web/src/entry.client.tsx` — call initTheme before hydrateRoot
-- `packages/web/package.json` — add `@stratum/react` dep
+- `packages/web/package.json` — add `@karta/react` dep
 
 ### Modified by Task 4
 - `packages/shared/` renamed to `packages/app/`
-- `packages/app/package.json` — name changed to `@stratum/app`
-- `packages/app/src/domains/gauteng-spatial-legacy/layers.ts` — import Layer from `@stratum/core` (not relative stub)
-- `packages/web/package.json` — remove `@stratum/shared`, add `@stratum/app`
-- `data-pipeline/package.json` — change `@stratum/shared` to `@stratum/app`
+- `packages/app/package.json` — name changed to `@karta/app`
+- `packages/app/src/domains/gauteng-spatial-legacy/layers.ts` — import Layer from `@karta/core` (not relative stub)
+- `packages/web/package.json` — remove `@karta/shared`, add `@karta/app`
+- `data-pipeline/package.json` — change `@karta/shared` to `@karta/app`
 
 ### Modified by Task 5
 - All files in `packages/web/src/` that import from relative stub paths → update to package imports
-- All web files importing `@stratum/shared` → `@stratum/app` (or `@stratum/core` for Layer types)
+- All web files importing `@karta/shared` → `@karta/app` (or `@karta/core` for Layer types)
 - Remove all re-export stubs
 - `packages/web/src/constants/layerStyles.ts` — remove `STATION_LAYER_IDS` (no longer needed)
 - Root `package.json` `typecheck` script updated to include new packages
 
 ---
 
-## Task 1: `@stratum/core`
+## Task 1: `@karta/core`
 
 **Files:**
 - Create: `packages/core/package.json`, `packages/core/tsconfig.json`, `packages/core/vitest.config.ts`
@@ -152,7 +152,7 @@
 
 ```json
 {
-  "name": "@stratum/core",
+  "name": "@karta/core",
   "version": "1.0.0",
   "description": "Domain-agnostic layer model and geodata utilities",
   "license": "AGPL-3.0-only",
@@ -188,7 +188,7 @@ import { defineProject } from "vitest/config";
 
 export default defineProject({
   test: {
-    name: "@stratum/core",
+    name: "@karta/core",
     environment: "node",
   },
 });
@@ -327,7 +327,7 @@ export interface Layer {
   /**
    * When `true`, this layer includes Point geometry (station/stop markers)
    * in addition to its primary geometry. Controls the dot icon in the
-   * `@stratum/map` Legend component.
+   * `@karta/map` Legend component.
    */
   hasPointGeometry?: boolean;
 }
@@ -455,7 +455,7 @@ Expected: PASS
 Create `packages/core/src/layers/createLayerConfig.test.ts` — same test content as the current `packages/web/src/layers/createLayerConfig.test.ts`, with these import changes:
 
 ```ts
-import type { Layer } from "@stratum/core";
+import type { Layer } from "@karta/core";
 import type { Feature } from "geojson";
 import { describe, expect, it } from "vitest";
 import { createLayerConfig } from "./createLayerConfig";
@@ -468,7 +468,7 @@ Expected: FAIL — cannot find module `./createLayerConfig`
 
 - [ ] **Step 9: Create `packages/core/src/layers/createLayerConfig.ts`**
 
-Copied from `packages/web/src/layers/createLayerConfig.ts` with two changes: remove the `CHOROPLETH_NO_DATA_COLOR` import and add a `noDataColor` parameter with default `"#8A93A5"`. Import `Layer` from `../types/layer` (not `@stratum/shared`).
+Copied from `packages/web/src/layers/createLayerConfig.ts` with two changes: remove the `CHOROPLETH_NO_DATA_COLOR` import and add a `noDataColor` parameter with default `"#8A93A5"`. Import `Layer` from `../types/layer` (not `@karta/shared`).
 
 ```ts
 import type { ColorBucket, Layer } from "../types/layer";
@@ -737,26 +737,26 @@ export type {
   LayerGroupSelectionMode,
   LayerGroup,
   DomainConfig,
-} from "@stratum/core";
+} from "@karta/core";
 ```
 
 **`packages/web/src/layers/createLayerConfig.ts`** — replace entire content with:
 ```ts
-export { createLayerConfig } from "@stratum/core";
-export type { LeafletLayerConfig } from "@stratum/core";
+export { createLayerConfig } from "@karta/core";
+export type { LeafletLayerConfig } from "@karta/core";
 ```
 
 **`packages/web/src/data/fetchFeatureCollection.ts`** — replace entire content with:
 ```ts
-export { fetchFeatureCollection } from "@stratum/core";
+export { fetchFeatureCollection } from "@karta/core";
 ```
 
 **`packages/web/src/data/mergeFeatureCollections.ts`** — replace entire content with:
 ```ts
-export { mergeFeatureCollections } from "@stratum/core";
+export { mergeFeatureCollections } from "@karta/core";
 ```
 
-**`packages/web/src/data/geoJsonSchemas.ts`** — keep the township-specific schemas, replace all generic exports with re-exports from `@stratum/core`:
+**`packages/web/src/data/geoJsonSchemas.ts`** — keep the township-specific schemas, replace all generic exports with re-exports from `@karta/core`:
 
 ```ts
 import type { FeatureCollection } from "geojson";
@@ -766,7 +766,7 @@ import {
   featureCollectionSchema,
   polygonGeometrySchema,
   multiPolygonGeometrySchema,
-} from "@stratum/core";
+} from "@karta/core";
 
 export {
   featureCollectionSchema,
@@ -774,7 +774,7 @@ export {
   polygonGeometrySchema,
   multiPolygonGeometrySchema,
 };
-export type { FeatureCollectionParser, FeatureCollectionSchema } from "@stratum/core";
+export type { FeatureCollectionParser, FeatureCollectionSchema } from "@karta/core";
 
 const townshipGeometrySchema = z.union([
   polygonGeometrySchema,
@@ -812,9 +812,9 @@ export const townshipFeatureCollectionSchema = z.looseObject({
 - [ ] **Step 14: Update `packages/web/src/layers/registry.ts`**
 
 ```ts
-import { createRegistry } from "@stratum/core";
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
-import type { Layer, LayerGroup } from "@stratum/core";
+import { createRegistry } from "@karta/core";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@karta/shared";
+import type { Layer, LayerGroup } from "@karta/core";
 
 const registry = createRegistry(GAUTENG_SPATIAL_LEGACY_DOMAIN);
 
@@ -831,11 +831,11 @@ export function getLayerGroups(): readonly LayerGroup[] {
 }
 ```
 
-- [ ] **Step 15: Add `@stratum/core` to `packages/web/package.json`**
+- [ ] **Step 15: Add `@karta/core` to `packages/web/package.json`**
 
 Add to `dependencies`:
 ```json
-"@stratum/core": "file:../core"
+"@karta/core": "file:../core"
 ```
 
 Run `npm install` from the repo root to create the workspace symlink.
@@ -845,23 +845,23 @@ Run `npm install` from the repo root to create the workspace symlink.
 ```bash
 npm run test
 ```
-Expected: all tests pass, including `@stratum/core`, `@stratum/shared`, and `@stratum/web`.
+Expected: all tests pass, including `@karta/core`, `@karta/shared`, and `@karta/web`.
 
 - [ ] **Step 17: Update CLAUDE.md and `.github/copilot-instructions.md`**
 
-In both files, update the architecture section to add `@stratum/core` as the first package in the package list, with description: "domain-agnostic layer model (`Layer`, `LayerGroup`, style types), Leaflet config factory (`createLayerConfig`), registry factory (`createRegistry`), geodata utils (`fetchFeatureCollection`, `mergeFeatureCollections`, `geoJsonSchemas`)". Update the `typecheck` script description to note `@stratum/core` is included.
+In both files, update the architecture section to add `@karta/core` as the first package in the package list, with description: "domain-agnostic layer model (`Layer`, `LayerGroup`, style types), Leaflet config factory (`createLayerConfig`), registry factory (`createRegistry`), geodata utils (`fetchFeatureCollection`, `mergeFeatureCollections`, `geoJsonSchemas`)". Update the `typecheck` script description to note `@karta/core` is included.
 
 - [ ] **Step 18: Commit**
 
 ```bash
 git add packages/core packages/shared/src/types/genericLayer.ts packages/web/src/layers/registry.ts packages/web/src/layers/createLayerConfig.ts packages/web/src/data/fetchFeatureCollection.ts packages/web/src/data/mergeFeatureCollections.ts packages/web/src/data/geoJsonSchemas.ts packages/web/src/data/geoJsonSchemas.test.ts packages/web/package.json CLAUDE.md .github/copilot-instructions.md
 git rm packages/web/src/layers/createLayerConfig.test.ts packages/web/src/data/fetchFeatureCollection.test.ts packages/web/src/data/mergeFeatureCollections.test.ts
-git commit -m "feat: extract @stratum/core with layer types, createRegistry, and geodata utils"
+git commit -m "feat: extract @karta/core with layer types, createRegistry, and geodata utils"
 ```
 
 ---
 
-## Task 2: `@stratum/map`
+## Task 2: `@karta/map`
 
 **Files:**
 - Create: all `packages/map/` files listed in the file structure section
@@ -870,16 +870,16 @@ git commit -m "feat: extract @stratum/core with layer types, createRegistry, and
 - Test: `packages/map/src/context/DomainContext.test.tsx`, `packages/map/src/components/MapView/MapView.test.tsx`, `packages/map/src/components/Legend/Legend.test.tsx`, existing component tests relocated
 
 **Interfaces:**
-- Consumes: `createRegistry`, `DomainConfig`, `Layer`, `LayerGroup` from `@stratum/core`
+- Consumes: `createRegistry`, `DomainConfig`, `Layer`, `LayerGroup` from `@karta/core`
 - Produces: `DomainProvider({ domain, children })`, `useDomain(): DomainRegistry`, `MapView({ bounds, visibleLayerIds, townships, townshipAreas?, basemap?, selectedFeatureId?, focusLocationTarget?, onFeatureSelect?, renderFeaturePopup? })`, `Legend({ mode?, visibleLayerIds?, compact? })`, `LocationSearchControl({ onLocationSelect, placeholder? })`
 
 - [ ] **Step 1: Create `packages/map/package.json`**
 
 ```json
 {
-  "name": "@stratum/map",
+  "name": "@karta/map",
   "version": "1.0.0",
-  "description": "Generic map rendering and UI components for Stratum",
+  "description": "Generic map rendering and UI components for Karta",
   "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
@@ -890,7 +890,7 @@ git commit -m "feat: extract @stratum/core with layer types, createRegistry, and
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stratum/core": "file:../core",
+    "@karta/core": "file:../core",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.27.0",
     "react": "^19.2.8",
@@ -931,7 +931,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   test: {
-    name: "@stratum/map",
+    name: "@karta/map",
     environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
     globals: true,
@@ -954,7 +954,7 @@ Create `packages/map/src/context/DomainContext.test.tsx`:
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DomainProvider, useDomain } from "./DomainContext";
-import type { DomainConfig } from "@stratum/core";
+import type { DomainConfig } from "@karta/core";
 
 const domain: DomainConfig = {
   layers: [
@@ -1001,7 +1001,7 @@ Expected: FAIL — cannot find module `./DomainContext`
 - [ ] **Step 6: Create `packages/map/src/context/DomainContext.tsx`**
 
 ```tsx
-import { createRegistry, type DomainConfig, type DomainRegistry } from "@stratum/core";
+import { createRegistry, type DomainConfig, type DomainRegistry } from "@karta/core";
 import { createContext, type ReactNode, useContext, useMemo } from "react";
 
 const DomainContext = createContext<DomainRegistry | null>(null);
@@ -1072,13 +1072,13 @@ Copy the following files verbatim from `packages/web/src/` to the corresponding 
 - `components/MapView/MapView.module.css`
 
 After copying, fix all relative imports in the map package files:
-- Imports from `"../../hooks/useThemePreference"` → `"@stratum/react"` (will be a forward reference until Task 3; for now import from the web hook path via a temporary relative resolution — actually, since `@stratum/react` doesn't exist yet, add `@stratum/react` as an external package reference in `packages/map/package.json` devDependencies pointing at `"file:../react"` and create a minimal `packages/react/src/index.ts` stub that re-exports the hook from web. Alternatively, leave the import as `"@stratum/react"` and it will fail to resolve until Task 3 installs the package — but this will break tests. The safest option: in Task 2, copy `usePrefersDarkMode` and `useThemePreference` inline into map temporarily, with a TODO comment, then Task 3 replaces them with the package import.
+- Imports from `"../../hooks/useThemePreference"` → `"@karta/react"` (will be a forward reference until Task 3; for now import from the web hook path via a temporary relative resolution — actually, since `@karta/react` doesn't exist yet, add `@karta/react` as an external package reference in `packages/map/package.json` devDependencies pointing at `"file:../react"` and create a minimal `packages/react/src/index.ts` stub that re-exports the hook from web. Alternatively, leave the import as `"@karta/react"` and it will fail to resolve until Task 3 installs the package — but this will break tests. The safest option: in Task 2, copy `usePrefersDarkMode` and `useThemePreference` inline into map temporarily, with a TODO comment, then Task 3 replaces them with the package import.
 
-Actually, simplest: create `packages/react` package structure in Task 3 which Task 2 depends on. Instead, structure map to import hooks from web via stub imports. Or better — just list `@stratum/react` as a devDep in map's package.json pointing to `file:../react`, and in Task 3 that file gets created. Task 2's tests don't test theme/dark-mode behavior so missing the react package won't break the map tests.
+Actually, simplest: create `packages/react` package structure in Task 3 which Task 2 depends on. Instead, structure map to import hooks from web via stub imports. Or better — just list `@karta/react` as a devDep in map's package.json pointing to `file:../react`, and in Task 3 that file gets created. Task 2's tests don't test theme/dark-mode behavior so missing the react package won't break the map tests.
 
-For simplicity in the plan: copy hooks inline for Task 2 with a `// TODO: replace with @stratum/react in Task 3` comment, then Task 3 removes the copies and adds the package dep.
+For simplicity in the plan: copy hooks inline for Task 2 with a `// TODO: replace with @karta/react in Task 3` comment, then Task 3 removes the copies and adds the package dep.
 
-Specifically, copy `usePrefersDarkMode.ts` into `packages/map/src/hooks/usePrefersDarkMode.ts` (as an interim copy), and in `MapView.tsx` import from `../hooks/usePrefersDarkMode` and `../hooks/useThemePreference`. Task 3 removes those copies and updates imports to `@stratum/react`.
+Specifically, copy `usePrefersDarkMode.ts` into `packages/map/src/hooks/usePrefersDarkMode.ts` (as an interim copy), and in `MapView.tsx` import from `../hooks/usePrefersDarkMode` and `../hooks/useThemePreference`. Task 3 removes those copies and updates imports to `@karta/react`.
 
 Fix imports for `DesktopLegend` and `MobileLegend` that import from `Legend`:
 - Change `"../Legend/Legend"` to the new map package path (same relative path still works since directory structure is identical).
@@ -1102,7 +1102,7 @@ Create `packages/map/src/components/Legend/Legend.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react";
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@karta/shared";
 import { describe, expect, it } from "vitest";
 import { DomainProvider } from "../../context/DomainContext";
 import { Legend } from "./Legend";
@@ -1161,7 +1161,7 @@ Expected: FAIL — cannot find module `./Legend`
 
 Copy `packages/web/src/components/Legend/Legend.tsx`, then:
 - Remove imports of `STATION_LAYER_IDS` and `getLayers`
-- Import `type Layer` from `@stratum/core`
+- Import `type Layer` from `@karta/core`
 - Import `useDomain` from `../../context/DomainContext`
 - Change `choroplethLegends` and `getTransitEntries` to accept `layers: readonly Layer[]` parameter
 - In the `Legend` component body, call `const { getLayers } = useDomain()` and `const layers = getLayers()`
@@ -1170,7 +1170,7 @@ Copy `packages/web/src/components/Legend/Legend.tsx`, then:
 - Keep `CHOROPLETH_NO_DATA_COLOR = "#8A93A5"` as a local constant (not imported from web)
 
 ```tsx
-import type { Layer } from "@stratum/core";
+import type { Layer } from "@karta/core";
 import { useDomain } from "../../context/DomainContext";
 import styles from "./Legend.module.css";
 
@@ -1300,7 +1300,7 @@ Expected: PASS
 - [ ] **Step 12: Write failing test for genericised `MapView`**
 
 Create `packages/map/src/components/MapView/MapView.test.tsx` — copy the full content of `packages/web/src/components/MapView/MapView.test.tsx`, then:
-- Add `import { DomainProvider } from "../../context/DomainContext";` and `import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";`
+- Add `import { DomainProvider } from "../../context/DomainContext";` and `import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@karta/shared";`
 - Change the import of `setThemePreference` to come from `"../hooks/useThemePreference"` (the interim map copy)
 - Wrap all `render(<MapView .../>)` calls in:
   ```tsx
@@ -1339,7 +1339,7 @@ Expected: FAIL — cannot find module `./MapView`
 
 Copy `packages/web/src/components/MapView/MapView.tsx`, then make these changes:
 
-1. Remove `import type { TownshipFeature, TownshipProperties } from "@stratum/shared"` — these are passed generically.
+1. Remove `import type { TownshipFeature, TownshipProperties } from "@karta/shared"` — these are passed generically.
 2. Add generic type parameter: `<TProperties extends Record<string, unknown> = Record<string, unknown>>`
 3. Replace `GAUTENG_BOUNDS` constant with `bounds: [[number, number], [number, number]]` in `MapViewProps`.
 4. Add `renderFeaturePopup?: (properties: TProperties) => ReactNode` to `MapViewProps`.
@@ -1365,7 +1365,7 @@ Copy `packages/web/src/components/MapView/MapView.tsx`, then make these changes:
 10. In `MapContainer`, replace `bounds={GAUTENG_BOUNDS}` with `bounds={bounds}`.
 11. In `ResponsiveMapBounds`, replace the hardcoded `GAUTENG_BOUNDS` reference with a `bounds` prop passed down from `MapViewComponent`.
 12. Fix all relative imports: hooks (from interim map copies), basemaps (from `../../constants/basemaps`), etc.
-13. In imports, change `import type { Layer as DomainLayer }` to `import type { Layer as DomainLayer } from "@stratum/core"`.
+13. In imports, change `import type { Layer as DomainLayer }` to `import type { Layer as DomainLayer } from "@karta/core"`.
 
 Run: `npx vitest run packages/map/src/components/MapView/MapView.test.tsx`
 Expected: PASS
@@ -1405,18 +1405,18 @@ For each moved component/constant, replace its web file with a re-export stub. E
 
 `packages/web/src/components/MapView/MapView.tsx`:
 ```ts
-export { MapView } from "@stratum/map";
+export { MapView } from "@karta/map";
 ```
 
 `packages/web/src/components/Legend/Legend.tsx`:
 ```ts
-export { Legend } from "@stratum/map";
+export { Legend } from "@karta/map";
 ```
 
 `packages/web/src/constants/basemaps.ts`:
 ```ts
-export { getBasemapTileSources } from "@stratum/map";
-export type { Basemap } from "@stratum/map";
+export { getBasemapTileSources } from "@karta/map";
+export type { Basemap } from "@karta/map";
 ```
 
 Repeat for DesktopLegend, MobileLegend, LocationSearchControl, IconButton, SegmentedControl, ControlButton, ThemeToggle, BasemapToggle, SettingsMenu.
@@ -1436,10 +1436,10 @@ Keep the map package tests as the authoritative source.
 
 The `MapView` is lazy-loaded in `App.tsx`. Since `MapView` now requires `bounds`, and uses `useDomain()` internally, wrap the lazy import section:
 
-1. Add `import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/shared";` (already present via `METROS`).
-2. Add `import { DomainProvider } from "./components/MapView/MapView"` — no, that's wrong. Import from `@stratum/map` directly (or via stub). Actually the stub `packages/web/src/components/MapView/MapView.tsx` only exports `MapView`. `DomainProvider` needs to be imported from `@stratum/map`.
+1. Add `import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@karta/shared";` (already present via `METROS`).
+2. Add `import { DomainProvider } from "./components/MapView/MapView"` — no, that's wrong. Import from `@karta/map` directly (or via stub). Actually the stub `packages/web/src/components/MapView/MapView.tsx` only exports `MapView`. `DomainProvider` needs to be imported from `@karta/map`.
 
-Add `import { DomainProvider } from "@stratum/map";` to `App.tsx`.
+Add `import { DomainProvider } from "@karta/map";` to `App.tsx`.
 
 3. Define `GAUTENG_BOUNDS` in `App.tsx`:
 ```ts
@@ -1452,7 +1452,7 @@ const GAUTENG_BOUNDS: [[number, number], [number, number]] = [
 4. Import `TownshipPopup` and `TownshipProperties` for the `renderFeaturePopup` callback:
 ```ts
 import { TownshipPopup } from "./components/TownshipPopup/TownshipPopup";
-import type { TownshipProperties } from "@stratum/shared";
+import type { TownshipProperties } from "@karta/shared";
 ```
 
 5. Wrap the `<Suspense>` block (that contains `<MapView>`) with `<DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>`.
@@ -1461,10 +1461,10 @@ import type { TownshipProperties } from "@stratum/shared";
 
 7. Update `LocationSearchControl` usage to pass `placeholder="Search town, suburb or station"`.
 
-- [ ] **Step 18: Add `@stratum/map` to `packages/web/package.json`**
+- [ ] **Step 18: Add `@karta/map` to `packages/web/package.json`**
 
 ```json
-"@stratum/map": "file:../map"
+"@karta/map": "file:../map"
 ```
 
 Run `npm install` from repo root.
@@ -1478,18 +1478,18 @@ Expected: all tests pass across all packages.
 
 - [ ] **Step 20: Update CLAUDE.md and `.github/copilot-instructions.md`**
 
-Add `@stratum/map` to the architecture section: "generic map rendering components (`MapView`, `Legend`, `DesktopLegend`, `MobileLegend`, `LocationSearchControl`, UI primitives), `DomainProvider` context, Leaflet-specific utilities". Document that `DomainProvider` must wrap any component tree that uses `useDomain()`.
+Add `@karta/map` to the architecture section: "generic map rendering components (`MapView`, `Legend`, `DesktopLegend`, `MobileLegend`, `LocationSearchControl`, UI primitives), `DomainProvider` context, Leaflet-specific utilities". Document that `DomainProvider` must wrap any component tree that uses `useDomain()`.
 
 - [ ] **Step 21: Commit**
 
 ```bash
 git add packages/map packages/shared/src/domains/gauteng-spatial-legacy/layers.ts packages/web/src/components packages/web/src/constants/basemaps.ts packages/web/src/App.tsx packages/web/package.json CLAUDE.md .github/copilot-instructions.md
-git commit -m "feat: extract @stratum/map with DomainProvider, genericised MapView and Legend"
+git commit -m "feat: extract @karta/map with DomainProvider, genericised MapView and Legend"
 ```
 
 ---
 
-## Task 3: `@stratum/react`
+## Task 3: `@karta/react`
 
 **Files:**
 - Create: `packages/react/package.json`, `packages/react/tsconfig.json`, `packages/react/vitest.config.ts`, `packages/react/vitest.setup.ts`, `packages/react/src/index.ts`, `packages/react/src/hooks/usePrefersDarkMode.ts`, `packages/react/src/hooks/useThemePreference.ts`, both test files
@@ -1505,9 +1505,9 @@ git commit -m "feat: extract @stratum/map with DomainProvider, genericised MapVi
 
 ```json
 {
-  "name": "@stratum/react",
+  "name": "@karta/react",
   "version": "1.0.0",
-  "description": "Generic React hooks for Stratum applications",
+  "description": "Generic React hooks for Karta applications",
   "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
@@ -1551,7 +1551,7 @@ import { defineProject } from "vitest/config";
 
 export default defineProject({
   test: {
-    name: "@stratum/react",
+    name: "@karta/react",
     environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
     globals: true,
@@ -1733,7 +1733,7 @@ export interface ThemeConfig {
 }
 
 const DEFAULT_CONFIG: ThemeConfig = {
-  storageKey: "stratum-theme",
+  storageKey: "karta-theme",
   colors: { light: "#ffffff", dark: "#000000" },
 };
 
@@ -1744,7 +1744,7 @@ let config: ThemeConfig = DEFAULT_CONFIG;
  * @param themeConfig - The storage key and colour values to use.
  * @remarks Call once at app bootstrap before any component renders.
  * @example
- * initTheme({ storageKey: "stratum-theme", colors: THEME_COLOR });
+ * initTheme({ storageKey: "karta-theme", colors: THEME_COLOR });
  */
 export function initTheme(themeConfig: ThemeConfig): void {
   config = themeConfig;
@@ -1870,14 +1870,14 @@ export const THEME_COLOR = {
   dark: "#23262c",
 } as const;
 
-export const THEME_STORAGE_KEY = "stratum-theme";
+export const THEME_STORAGE_KEY = "karta-theme";
 ```
 
 - [ ] **Step 11: Create re-export stubs in web for both hooks**
 
 `packages/web/src/hooks/usePrefersDarkMode.ts`:
 ```ts
-export { usePrefersDarkMode } from "@stratum/react";
+export { usePrefersDarkMode } from "@karta/react";
 ```
 
 `packages/web/src/hooks/useThemePreference.ts`:
@@ -1886,12 +1886,12 @@ export {
   useThemePreference,
   setThemePreference,
   initTheme,
-} from "@stratum/react";
-export type { ThemePreference } from "@stratum/react";
+} from "@karta/react";
+export type { ThemePreference } from "@karta/react";
 ```
 
-**Delete** `packages/web/src/hooks/usePrefersDarkMode.test.ts` — moved to `@stratum/react`.
-**Delete** `packages/web/src/hooks/useThemePreference.test.ts` — moved to `@stratum/react`.
+**Delete** `packages/web/src/hooks/usePrefersDarkMode.test.ts` — moved to `@karta/react`.
+**Delete** `packages/web/src/hooks/useThemePreference.test.ts` — moved to `@karta/react`.
 
 - [ ] **Step 12: Update `packages/web/src/entry.client.tsx` to call `initTheme`**
 
@@ -1907,23 +1907,23 @@ hydrateRoot(document, <HydratedRouter />);
 
 - [ ] **Step 13: Also update `packages/map/src/hooks/useThemePreference.ts` (the interim copy from Task 2)**
 
-Replace the interim map hook copy with a re-export stub pointing to `@stratum/react`:
+Replace the interim map hook copy with a re-export stub pointing to `@karta/react`:
 ```ts
-export { useThemePreference, setThemePreference, initTheme } from "@stratum/react";
-export type { ThemePreference } from "@stratum/react";
+export { useThemePreference, setThemePreference, initTheme } from "@karta/react";
+export type { ThemePreference } from "@karta/react";
 ```
 
-Add `@stratum/react` to `packages/map/package.json` dependencies:
+Add `@karta/react` to `packages/map/package.json` dependencies:
 ```json
-"@stratum/react": "file:../react"
+"@karta/react": "file:../react"
 ```
 
 Run `npm install` from repo root.
 
-- [ ] **Step 14: Add `@stratum/react` to `packages/web/package.json`**
+- [ ] **Step 14: Add `@karta/react` to `packages/web/package.json`**
 
 ```json
-"@stratum/react": "file:../react"
+"@karta/react": "file:../react"
 ```
 
 Run `npm install` from repo root.
@@ -1933,18 +1933,18 @@ Run `npm install` from repo root.
 ```bash
 npm run test
 ```
-Expected: PASS across all packages including `@stratum/react`.
+Expected: PASS across all packages including `@karta/react`.
 
 - [ ] **Step 16: Update CLAUDE.md and `.github/copilot-instructions.md`**
 
-Add `@stratum/react` to the architecture section: "generic React hooks — `usePrefersDarkMode` and `useThemePreference` with `initTheme` / `setThemePreference`". Note that `THEME_COLOR` and `THEME_STORAGE_KEY` are now app-specific constants in `packages/web/src/constants/themeConfig.ts`.
+Add `@karta/react` to the architecture section: "generic React hooks — `usePrefersDarkMode` and `useThemePreference` with `initTheme` / `setThemePreference`". Note that `THEME_COLOR` and `THEME_STORAGE_KEY` are now app-specific constants in `packages/web/src/constants/themeConfig.ts`.
 
 - [ ] **Step 17: Commit**
 
 ```bash
 git add packages/react packages/web/src/hooks/ packages/web/src/constants/themeConfig.ts packages/web/src/entry.client.tsx packages/map/src/hooks/ packages/map/package.json packages/web/package.json CLAUDE.md .github/copilot-instructions.md
 git rm packages/web/src/hooks/usePrefersDarkMode.test.ts packages/web/src/hooks/useThemePreference.test.ts
-git commit -m "feat: extract @stratum/react with usePrefersDarkMode and configurable useThemePreference"
+git commit -m "feat: extract @karta/react with usePrefersDarkMode and configurable useThemePreference"
 ```
 
 ---
@@ -1952,15 +1952,15 @@ git commit -m "feat: extract @stratum/react with usePrefersDarkMode and configur
 ## Task 4: Rename `packages/shared` → `packages/app`
 
 **Files:**
-- `packages/app/` — all content copied from `packages/shared/`, name updated to `@stratum/app`
+- `packages/app/` — all content copied from `packages/shared/`, name updated to `@karta/app`
 - `packages/shared/` — deleted
-- `packages/web/package.json` — swap `@stratum/shared` for `@stratum/app`
-- `data-pipeline/package.json` — swap `@stratum/shared` for `@stratum/app`
-- All `import from "@stratum/shared"` in `packages/web/src/` → `@stratum/app`
+- `packages/web/package.json` — swap `@karta/shared` for `@karta/app`
+- `data-pipeline/package.json` — swap `@karta/shared` for `@karta/app`
+- All `import from "@karta/shared"` in `packages/web/src/` → `@karta/app`
 
 **Interfaces:**
-- Consumes: `@stratum/core` (via re-export stub in genericLayer.ts, which already exists from Task 1)
-- Produces: same exports as before under the new name `@stratum/app`
+- Consumes: `@karta/core` (via re-export stub in genericLayer.ts, which already exists from Task 1)
+- Produces: same exports as before under the new name `@karta/app`
 
 - [ ] **Step 1: Copy `packages/shared/` to `packages/app/`**
 
@@ -1970,43 +1970,43 @@ cp -r packages/shared packages/app
 
 - [ ] **Step 2: Update `packages/app/package.json`**
 
-Change `"name": "@stratum/shared"` to `"name": "@stratum/app"`. No other changes needed — the re-export stubs and tests are identical.
+Change `"name": "@karta/shared"` to `"name": "@karta/app"`. No other changes needed — the re-export stubs and tests are identical.
 
 - [ ] **Step 3: Update `packages/app/src/domains/gauteng-spatial-legacy/layers.ts` import**
 
-The file currently imports `Layer` from `"../../types/genericLayer"` (relative). `../../types/genericLayer` is the stub that re-exports from `@stratum/core`. Change the import to read directly from `@stratum/core`:
+The file currently imports `Layer` from `"../../types/genericLayer"` (relative). `../../types/genericLayer` is the stub that re-exports from `@karta/core`. Change the import to read directly from `@karta/core`:
 
 ```ts
-import type { Layer } from "@stratum/core";
+import type { Layer } from "@karta/core";
 ```
 
 This removes the dependency on the stub file within the package.
 
 - [ ] **Step 4: Update `packages/web/package.json`**
 
-Remove: `"@stratum/shared": "file:../shared"`
-Add: `"@stratum/app": "file:../app"`
+Remove: `"@karta/shared": "file:../shared"`
+Add: `"@karta/app": "file:../app"`
 
-- [ ] **Step 5: Update all `@stratum/shared` imports in `packages/web/src/`**
+- [ ] **Step 5: Update all `@karta/shared` imports in `packages/web/src/`**
 
 Run a global find-and-replace in `packages/web/src/`:
-- `from "@stratum/shared"` → `from "@stratum/app"`
+- `from "@karta/shared"` → `from "@karta/app"`
 
-Files affected (based on current codebase): `App.tsx`, `layers/registry.ts`, `data/TownshipDataRepository.ts`, `data/regionDataUrls.ts`, `hooks/useLayerData.ts`, and any others that import from `@stratum/shared`.
+Files affected (based on current codebase): `App.tsx`, `layers/registry.ts`, `data/TownshipDataRepository.ts`, `data/regionDataUrls.ts`, `hooks/useLayerData.ts`, and any others that import from `@karta/shared`.
 
 Verify no remaining references:
 ```bash
-grep -r '"@stratum/shared"' packages/web/src/
+grep -r '"@karta/shared"' packages/web/src/
 ```
 Expected: no output.
 
 - [ ] **Step 6: Update `data-pipeline/package.json`**
 
-Change `"@stratum/shared": "file:../packages/shared"` to `"@stratum/app": "file:../packages/app"`.
+Change `"@karta/shared": "file:../packages/shared"` to `"@karta/app": "file:../packages/app"`.
 
-Update any `import from "@stratum/shared"` in `data-pipeline/src/` to `from "@stratum/app"`:
+Update any `import from "@karta/shared"` in `data-pipeline/src/` to `from "@karta/app"`:
 ```bash
-grep -r '"@stratum/shared"' data-pipeline/src/
+grep -r '"@karta/shared"' data-pipeline/src/
 ```
 Replace all occurrences.
 
@@ -2029,20 +2029,20 @@ This updates workspace symlinks to reflect the new `packages/app` directory.
 ```bash
 npm run test
 ```
-Expected: PASS across `@stratum/core`, `@stratum/app`, `@stratum/map`, `@stratum/react`, `@stratum/web`.
+Expected: PASS across `@karta/core`, `@karta/app`, `@karta/map`, `@karta/react`, `@karta/web`.
 
 - [ ] **Step 10: Update CLAUDE.md and `.github/copilot-instructions.md`**
 
-Replace all references to `packages/shared` / `@stratum/shared` with `packages/app` / `@stratum/app`. Update description: "`@stratum/app` — Gauteng-specific constants (metros, regions, townships, transit layer IDs), domain data (`GAUTENG_SPATIAL_LEGACY_DOMAIN`), and Gauteng-specific GeoJSON type definitions".
+Replace all references to `packages/shared` / `@karta/shared` with `packages/app` / `@karta/app`. Update description: "`@karta/app` — Gauteng-specific constants (metros, regions, townships, transit layer IDs), domain data (`GAUTENG_SPATIAL_LEGACY_DOMAIN`), and Gauteng-specific GeoJSON type definitions".
 
-Update the root `typecheck` script in CLAUDE.md to show `@stratum/app` instead of `@stratum/shared`.
+Update the root `typecheck` script in CLAUDE.md to show `@karta/app` instead of `@karta/shared`.
 
 - [ ] **Step 11: Commit**
 
 ```bash
 git add packages/app packages/web/package.json packages/web/src/ data-pipeline/ CLAUDE.md .github/copilot-instructions.md
 git rm -r packages/shared
-git commit -m "feat: rename @stratum/shared to @stratum/app"
+git commit -m "feat: rename @karta/shared to @karta/app"
 ```
 
 ---
@@ -2054,7 +2054,7 @@ git commit -m "feat: rename @stratum/shared to @stratum/app"
 - `packages/web/src/layers/registry.ts` — keep as-is (it delegates to core's `createRegistry`)
 - `packages/web/src/constants/layerStyles.ts` — remove `STATION_LAYER_IDS` (no longer used)
 - `packages/web/package.json` — remove any now-unused deps if applicable
-- Root `package.json` `typecheck` script — add `@stratum/core`, `@stratum/map`, `@stratum/react`, `@stratum/app`
+- Root `package.json` `typecheck` script — add `@karta/core`, `@karta/map`, `@karta/react`, `@karta/app`
 
 **Interfaces:**
 - Consumes: all four new packages
@@ -2066,35 +2066,35 @@ For each re-export stub created in Tasks 1–3, find all files in `packages/web/
 
 Work through each stub:
 
-**`packages/web/src/layers/createLayerConfig.ts`** (stub → `@stratum/core`):
+**`packages/web/src/layers/createLayerConfig.ts`** (stub → `@karta/core`):
 ```bash
 grep -r "from.*layers/createLayerConfig" packages/web/src/
 ```
-Update those imports to `import { createLayerConfig } from "@stratum/core"`.
+Update those imports to `import { createLayerConfig } from "@karta/core"`.
 Delete `packages/web/src/layers/createLayerConfig.ts`.
 
-**`packages/web/src/data/fetchFeatureCollection.ts`** (stub → `@stratum/core`):
+**`packages/web/src/data/fetchFeatureCollection.ts`** (stub → `@karta/core`):
 ```bash
 grep -r "from.*data/fetchFeatureCollection" packages/web/src/
 ```
-Update imports to `from "@stratum/core"`. Delete the stub.
+Update imports to `from "@karta/core"`. Delete the stub.
 
-**`packages/web/src/data/mergeFeatureCollections.ts`** (stub → `@stratum/core`):
-Update callers to `from "@stratum/core"`. Delete the stub.
+**`packages/web/src/data/mergeFeatureCollections.ts`** (stub → `@karta/core`):
+Update callers to `from "@karta/core"`. Delete the stub.
 
-**`packages/web/src/data/geoJsonSchemas.ts`** — keep this file (it still contains the township-specific schemas). Update any import of generic schemas from this file to use `@stratum/core` directly.
+**`packages/web/src/data/geoJsonSchemas.ts`** — keep this file (it still contains the township-specific schemas). Update any import of generic schemas from this file to use `@karta/core` directly.
 
-**Component stubs in `packages/web/src/components/`**: For each stub, find callers and update them to import from `@stratum/map`. Then delete the stub files. Exception: `MapView` is lazy-imported in `App.tsx` — update the dynamic import to use `@stratum/map`:
+**Component stubs in `packages/web/src/components/`**: For each stub, find callers and update them to import from `@karta/map`. Then delete the stub files. Exception: `MapView` is lazy-imported in `App.tsx` — update the dynamic import to use `@karta/map`:
 ```ts
 const MapView = lazy(async () => {
-  const { MapView } = await import("@stratum/map");
+  const { MapView } = await import("@karta/map");
   return { default: MapView };
 });
 ```
 
-**Hook stubs in `packages/web/src/hooks/`**: Find callers and update to `@stratum/react`. Delete stub files.
+**Hook stubs in `packages/web/src/hooks/`**: Find callers and update to `@karta/react`. Delete stub files.
 
-**`packages/web/src/constants/basemaps.ts`** (stub → `@stratum/map`): Update callers, delete stub.
+**`packages/web/src/constants/basemaps.ts`** (stub → `@karta/map`): Update callers, delete stub.
 
 - [ ] **Step 2: Remove `STATION_LAYER_IDS` from `packages/web/src/constants/layerStyles.ts`**
 
@@ -2107,7 +2107,7 @@ After removing `Legend.tsx` from web (it's now a stub pointing to map), `STATION
 - [ ] **Step 3: Update root `package.json` typecheck script**
 
 ```json
-"typecheck": "npm run typecheck --workspace @stratum/core && npm run typecheck --workspace @stratum/app && npm run typecheck --workspace @stratum/map && npm run typecheck --workspace @stratum/react && npm run build --workspace @stratum/web && npm run typecheck --prefix data-pipeline"
+"typecheck": "npm run typecheck --workspace @karta/core && npm run typecheck --workspace @karta/app && npm run typecheck --workspace @karta/map && npm run typecheck --workspace @karta/react && npm run build --workspace @karta/web && npm run typecheck --prefix data-pipeline"
 ```
 
 - [ ] **Step 4: Run full test suite**
@@ -2164,7 +2164,7 @@ Content: what belongs (`usePrefersDarkMode`, `useThemePreference`/`initTheme`/`s
 
 - [ ] **Step 4: Create `packages/app/README.md`**
 
-Content: what belongs (Gauteng metros, regions, townships, transit layer IDs, `GAUTENG_SPATIAL_LEGACY_DOMAIN`); what doesn't (generic types — those live in `@stratum/core`, map components, hooks).
+Content: what belongs (Gauteng metros, regions, townships, transit layer IDs, `GAUTENG_SPATIAL_LEGACY_DOMAIN`); what doesn't (generic types — those live in `@karta/core`, map components, hooks).
 
 - [ ] **Step 5: Update root `README.md`**
 
@@ -2177,7 +2177,7 @@ Update any project structure description to reflect the five packages.
 - [ ] **Step 7: Grep for stale references**
 
 ```bash
-grep -r "packages/shared\|@stratum/shared" . --include="*.md" --include="*.ts" --include="*.tsx" --include="*.json" --exclude-dir=node_modules
+grep -r "packages/shared\|@karta/shared" . --include="*.md" --include="*.ts" --include="*.tsx" --include="*.json" --exclude-dir=node_modules
 ```
 Expected: no output. Fix any remaining references.
 

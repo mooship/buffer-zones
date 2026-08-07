@@ -1,6 +1,6 @@
 // `MapView` is intentionally NOT re-exported here: it pulls in Leaflet and
 // react-leaflet, and consumers that code-split it behind `lazy()`/`import()`
-// need `@stratum/map/MapView` (see package.json `exports`) to keep that
+// need `@karta/map/MapView` (see package.json `exports`) to keep that
 // bundle boundary — re-exporting it from this barrel would make it
 // statically reachable from any import of this module, defeating the split.
 export { BasemapToggle } from "./components/BasemapToggle/BasemapToggle";

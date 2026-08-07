@@ -4,7 +4,7 @@ _Last updated: 2026-07-29_
 
 ## Scope
 
-Stratum is a static, client-side single-page application. There is no
+Karta is a static, client-side single-page application. There is no
 backend, no database, no accounts, no authentication, and no user-submitted
 data. The deployed surface is Cloudflare Workers serving pre-built static assets
 (HTML, JS, CSS, fonts, and GeoJSON files).
@@ -31,7 +31,7 @@ there.
 Please **do not** open a public issue for a suspected vulnerability.
 
 Report it privately through GitHub's private vulnerability reporting:
-[github.com/mooship/stratum/security/advisories/new](https://github.com/mooship/stratum/security/advisories/new).
+[github.com/mooship/karta/security/advisories/new](https://github.com/mooship/karta/security/advisories/new).
 
 Helpful reports include:
 

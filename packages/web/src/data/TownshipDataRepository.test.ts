@@ -1,4 +1,4 @@
-import { clearFeatureCollectionCache } from "@stratum/core";
+import { clearFeatureCollectionCache } from "@karta/core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createTownshipDataRepository } from "./TownshipDataRepository";
 

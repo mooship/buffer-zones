@@ -2,7 +2,7 @@
 
 _Last updated: 2026-07-28_
 
-Stratum is a static site with no backend, no accounts, no cookies, and no
+Karta is a static site with no backend, no accounts, no cookies, and no
 forms. No personal data is collected by the app itself.
 
 **Hosting logs:** Cloudflare, as host, may log standard request metadata (IP

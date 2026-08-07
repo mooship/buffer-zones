@@ -1,4 +1,4 @@
-import { METROS } from "@stratum/app";
+import { METROS } from "@karta/app";
 import { describe, expect, it } from "vitest";
 import { getJobCentersForMetro, JOB_CENTERS } from "./jobCenters";
 

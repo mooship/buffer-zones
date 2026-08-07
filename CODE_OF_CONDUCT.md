@@ -61,7 +61,7 @@ representative at an online or offline event.
 Instances of abusive, harassing, or otherwise unacceptable behaviour may be
 reported to the project maintainer by opening a private report at:
 
-- https://github.com/mooship/stratum/security/advisories/new
+- https://github.com/mooship/karta/security/advisories/new
 
 All complaints will be reviewed and investigated promptly and fairly.
 

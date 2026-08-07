@@ -1,4 +1,4 @@
-import type { TransitLayerFeatureCollection } from "@stratum/app";
+import type { TransitLayerFeatureCollection } from "@karta/app";
 import type { FeatureCollection } from "geojson";
 import { sleep } from "../asyncUtils";
 import { normalizeLineStringTransitFeatureCollection } from "./lineStringTransit";

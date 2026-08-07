@@ -1,4 +1,4 @@
-import type { DomainConfig } from "@stratum/core";
+import type { DomainConfig } from "@karta/core";
 import {
   act,
   fireEvent,
@@ -193,7 +193,7 @@ vi.mock("./VectorBasemapLayer", () => ({
   },
 }));
 
-import { setThemePreference } from "@stratum/react";
+import { setThemePreference } from "@karta/react";
 import {
   registerBasemap,
   resetBasemapRegistry,

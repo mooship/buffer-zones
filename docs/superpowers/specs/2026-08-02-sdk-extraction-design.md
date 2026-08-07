@@ -5,7 +5,7 @@
 
 ## Goal
 
-Extract the generic, domain-agnostic parts of the Stratum codebase into standalone, publishable packages so the mapping SDK can be reused independently. The current app (`packages/web`) becomes a showcase built on top of the SDK. Behaviour must be identical after the refactor — this is a structural change only.
+Extract the generic, domain-agnostic parts of the Karta codebase into standalone, publishable packages so the mapping SDK can be reused independently. The current app (`packages/web`) becomes a showcase built on top of the SDK. Behaviour must be identical after the refactor — this is a structural change only.
 
 ---
 
@@ -13,38 +13,38 @@ Extract the generic, domain-agnostic parts of the Stratum codebase into standalo
 
 ```
 packages/
-  core/     @stratum/core   — domain-agnostic layer model + geodata utils
-  map/      @stratum/map    — generic map rendering + UI primitives (React + Leaflet)
-  react/    @stratum/react  — generic React hooks
-  app/      @stratum/app    — Gauteng-specific constants/domain data (rename of shared)
-  web/      @stratum/web    — the app itself, consuming the four packages above
+  core/     @karta/core   — domain-agnostic layer model + geodata utils
+  map/      @karta/map    — generic map rendering + UI primitives (React + Leaflet)
+  react/    @karta/react  — generic React hooks
+  app/      @karta/app    — Gauteng-specific constants/domain data (rename of shared)
+  web/      @karta/web    — the app itself, consuming the four packages above
 ```
 
-`data-pipeline/` remains standalone and will import from `@stratum/app` instead of `@stratum/shared`.
+`data-pipeline/` remains standalone and will import from `@karta/app` instead of `@karta/shared`.
 
 ---
 
 ## Architecture and Data Flow
 
 ```
-data-pipeline  →  @stratum/app  →  @stratum/web
+data-pipeline  →  @karta/app  →  @karta/web
                        ↓
-              @stratum/core  ←  @stratum/map  ←  @stratum/react
+              @karta/core  ←  @karta/map  ←  @karta/react
 ```
 
 ### Dependency matrix
 
 | Package | Depends on |
 |---|---|
-| `@stratum/core` | nothing (pure TS, no React, no Leaflet) |
-| `@stratum/map` | `@stratum/core`, leaflet, react-leaflet |
-| `@stratum/react` | react only |
-| `@stratum/app` | `@stratum/core` |
-| `@stratum/web` | all four above |
+| `@karta/core` | nothing (pure TS, no React, no Leaflet) |
+| `@karta/map` | `@karta/core`, leaflet, react-leaflet |
+| `@karta/react` | react only |
+| `@karta/app` | `@karta/core` |
+| `@karta/web` | all four above |
 
 ---
 
-## Task 1 — `@stratum/core`
+## Task 1 — `@karta/core`
 
 **What moves here:**
 
@@ -57,7 +57,7 @@ data-pipeline  →  @stratum/app  →  @stratum/web
 | Generic schemas from `packages/web/src/data/geoJsonSchemas.ts` | `packages/core/src/data/geoJsonSchemas.ts` |
 
 **geoJsonSchemas.ts split:**  
-The generic half — `featureCollectionSchema`, `geometrySchema`, all intermediate geometry schemas, `FeatureCollectionSchema` interface, `FeatureCollectionParser` type, and `createFeatureCollectionParser` — moves to `@stratum/core`.  
+The generic half — `featureCollectionSchema`, `geometrySchema`, all intermediate geometry schemas, `FeatureCollectionSchema` interface, `FeatureCollectionParser` type, and `createFeatureCollectionParser` — moves to `@karta/core`.  
 The township-specific half — `townshipPropertiesSchema` and `townshipFeatureCollectionSchema` — stays in `packages/web/src/data/geoJsonSchemas.ts` alongside `TownshipDataRepository`, their only consumer.
 
 **Layer type addition:**  
@@ -67,7 +67,7 @@ Add `hasPointGeometry?: boolean` to the `Layer` interface. This replaces the har
 `packages/web/src/layers/registry.ts` currently returns `GAUTENG_SPATIAL_LEGACY_DOMAIN` directly. After Task 1 it is rewritten to be a pure factory:
 
 ```ts
-// @stratum/core
+// @karta/core
 export interface DomainConfig {
   layers: readonly Layer[];
   layerGroups: readonly LayerGroup[];
@@ -86,21 +86,21 @@ export function createRegistry(domain: DomainConfig) {
 `packages/web/src/layers/registry.ts` is updated to call `createRegistry(GAUTENG_SPATIAL_LEGACY_DOMAIN)` and re-export the same `getLayers` / `getLayer` / `getLayerGroups` signatures — existing call-sites in web are unaffected until Task 5.
 
 **Package setup:**
-- `packages/core/package.json` — name `@stratum/core`, private, no deps beyond `@types/geojson` as devDep, `@types/leaflet` as devDep (for `LeafletLayerConfig` types in `createLayerConfig`)
+- `packages/core/package.json` — name `@karta/core`, private, no deps beyond `@types/geojson` as devDep, `@types/leaflet` as devDep (for `LeafletLayerConfig` types in `createLayerConfig`)
 - `packages/core/tsconfig.json` extending `tsconfig.base.json`
 - `packages/core/vitest.config.ts` mirroring the shared package config
 
 **JSDoc requirement:** Every exported function, type, and interface gets JSDoc as part of this task (see [JSDoc strategy](#jsdoc-strategy)).
 
 **Tests (TDD):**  
-Existing tests from `createLayerConfig.test.ts`, `fetchFeatureCollection.test.ts`, `mergeFeatureCollections.test.ts`, `geoJsonSchemas.test.ts` move to core and are updated to import from `@stratum/core`. New tests cover `createRegistry` and the `hasPointGeometry` field behaviour.
+Existing tests from `createLayerConfig.test.ts`, `fetchFeatureCollection.test.ts`, `mergeFeatureCollections.test.ts`, `geoJsonSchemas.test.ts` move to core and are updated to import from `@karta/core`. New tests cover `createRegistry` and the `hasPointGeometry` field behaviour.
 
 **Doc updates (part of this task's definition of done):**  
-Update CLAUDE.md and `.github/copilot-instructions.md` to reflect the new `@stratum/core` package and the fact that generic types live there, not in `@stratum/shared`.
+Update CLAUDE.md and `.github/copilot-instructions.md` to reflect the new `@karta/core` package and the fact that generic types live there, not in `@karta/shared`.
 
 ---
 
-## Task 2 — `@stratum/map`
+## Task 2 — `@karta/map`
 
 **What moves here:**
 
@@ -126,7 +126,7 @@ Update CLAUDE.md and `.github/copilot-instructions.md` to reflect the new `@stra
 ### DomainProvider context
 
 ```ts
-// @stratum/map
+// @karta/map
 export interface DomainRegistry {
   getLayers(): readonly Layer[];
   getLayer(id: string): Layer | undefined;
@@ -183,7 +183,7 @@ Changes from the current `MapView.tsx`:
 - Hardcoded placeholder `"Search town, suburb or station"` → `placeholder?: string` prop, default `"Search for a place"`. `packages/web` passes its own placeholder.
 
 **Package setup:**
-- `packages/map/package.json` — name `@stratum/map`, deps: `@stratum/core`, `leaflet`, `react-leaflet`, `lucide-react`, `react`
+- `packages/map/package.json` — name `@karta/map`, deps: `@karta/core`, `leaflet`, `react-leaflet`, `lucide-react`, `react`
 - CSS modules and any component-specific assets are bundled with the package
 
 **JSDoc requirement:** All exported components, props interfaces, and the `DomainProvider` / `useDomain` / `createRegistry` API.
@@ -195,11 +195,11 @@ Existing component tests move to `packages/map/`. New tests:
 - `DomainProvider` / `useDomain`: throws outside provider, returns correct registry inside
 
 **Doc updates (part of this task's definition of done):**  
-Update CLAUDE.md and `.github/copilot-instructions.md` to describe `@stratum/map` and the `DomainProvider` pattern.
+Update CLAUDE.md and `.github/copilot-instructions.md` to describe `@karta/map` and the `DomainProvider` pattern.
 
 ---
 
-## Task 3 — `@stratum/react`
+## Task 3 — `@karta/react`
 
 **What moves here:**
 
@@ -217,7 +217,7 @@ The current implementation has two app-specific values baked in:
 These become configurable via a one-time init call:
 
 ```ts
-// @stratum/react
+// @karta/react
 export interface ThemeConfig {
   storageKey: string;
   colors: { light: string; dark: string };
@@ -228,12 +228,12 @@ export function useThemePreference(): ThemePreference
 export function setThemePreference(preference: ThemePreference): void
 ```
 
-`packages/web` calls `initTheme({ storageKey: 'stratum-theme', colors: THEME_COLOR })` once at app bootstrap (e.g. in `root.tsx` or `entry.client.tsx`), before any component mounts.
+`packages/web` calls `initTheme({ storageKey: 'karta-theme', colors: THEME_COLOR })` once at app bootstrap (e.g. in `root.tsx` or `entry.client.tsx`), before any component mounts.
 
-If `useThemePreference` is called before `initTheme`, it falls back to `{ storageKey: 'stratum-theme', colors: { light: '#ffffff', dark: '#000000' } }` with a console warning in development.
+If `useThemePreference` is called before `initTheme`, it falls back to `{ storageKey: 'karta-theme', colors: { light: '#ffffff', dark: '#000000' } }` with a console warning in development.
 
 **Package setup:**
-- `packages/react/package.json` — name `@stratum/react`, peerDep: `react`, dep: `usehooks-ts`
+- `packages/react/package.json` — name `@karta/react`, peerDep: `react`, dep: `usehooks-ts`
 - `packages/react/tsconfig.json` extending `tsconfig.base.json`
 
 **JSDoc requirement:** Both hooks and `initTheme` / `setThemePreference`.
@@ -243,11 +243,11 @@ Existing hook tests move to `packages/react/`. New tests:
 - `initTheme`: setting storageKey changes which localStorage key is read/written
 - `useThemePreference`: returns `"system"` before `initTheme` is called (fallback)
 
-**Doc updates:** CLAUDE.md updated to describe `@stratum/react`.
+**Doc updates:** CLAUDE.md updated to describe `@karta/react`.
 
 ---
 
-## Task 4 — `@stratum/app` (rename of `packages/shared`)
+## Task 4 — `@karta/app` (rename of `packages/shared`)
 
 **What stays / moves:**
 
@@ -266,13 +266,13 @@ In `domains/gauteng-spatial-legacy/layers.ts`, add `hasPointGeometry: true` to t
 
 **Package rename:**
 - Directory: `packages/shared/` → `packages/app/`
-- `package.json` name: `@stratum/shared` → `@stratum/app`
+- `package.json` name: `@karta/shared` → `@karta/app`
 - Root `package.json` workspaces list updated
-- `data-pipeline` `package.json` dependency updated from `@stratum/shared` to `@stratum/app`
+- `data-pipeline` `package.json` dependency updated from `@karta/shared` to `@karta/app`
 
-All existing `@stratum/shared` tests pass unchanged — the data hasn't changed.
+All existing `@karta/shared` tests pass unchanged — the data hasn't changed.
 
-**Doc updates:** All references to `packages/shared` and `@stratum/shared` in CLAUDE.md, `.github/copilot-instructions.md`, and `docs/` updated to `packages/app` / `@stratum/app`.
+**Doc updates:** All references to `packages/shared` and `@karta/shared` in CLAUDE.md, `.github/copilot-instructions.md`, and `docs/` updated to `packages/app` / `@karta/app`.
 
 ---
 
@@ -282,17 +282,17 @@ Update all import paths in `packages/web/src/` to pull from the new packages:
 
 | Old import | New import |
 |---|---|
-| `@stratum/shared` | `@stratum/app` (domain/Gauteng data) or `@stratum/core` (Layer types) |
-| `../../layers/createLayerConfig` | `@stratum/core` |
-| `../../data/fetchFeatureCollection` | `@stratum/core` |
-| `../../data/mergeFeatureCollections` | `@stratum/core` |
-| `../../data/geoJsonSchemas` (generic schemas) | `@stratum/core` |
-| `../../hooks/usePrefersDarkMode` | `@stratum/react` |
-| `../../hooks/useThemePreference` | `@stratum/react` |
-| `../../components/MapView/MapView` | `@stratum/map` |
-| `../../components/Legend/*` | `@stratum/map` |
-| `../../components/LocationSearchControl/*` | `@stratum/map` |
-| UI primitives (`IconButton`, etc.) | `@stratum/map` |
+| `@karta/shared` | `@karta/app` (domain/Gauteng data) or `@karta/core` (Layer types) |
+| `../../layers/createLayerConfig` | `@karta/core` |
+| `../../data/fetchFeatureCollection` | `@karta/core` |
+| `../../data/mergeFeatureCollections` | `@karta/core` |
+| `../../data/geoJsonSchemas` (generic schemas) | `@karta/core` |
+| `../../hooks/usePrefersDarkMode` | `@karta/react` |
+| `../../hooks/useThemePreference` | `@karta/react` |
+| `../../components/MapView/MapView` | `@karta/map` |
+| `../../components/Legend/*` | `@karta/map` |
+| `../../components/LocationSearchControl/*` | `@karta/map` |
+| UI primitives (`IconButton`, etc.) | `@karta/map` |
 
 **Wire-up changes:**
 
@@ -300,15 +300,15 @@ Update all import paths in `packages/web/src/` to pull from the new packages:
 - Pass `bounds={GAUTENG_BOUNDS}` to `MapView`
 - Pass `renderFeaturePopup={(props) => <TownshipPopup properties={props as TownshipProperties} />}` to `MapView`
 - Pass `placeholder="Search town, suburb or station"` to `LocationSearchControl`
-- Call `initTheme({ storageKey: 'stratum-theme', colors: THEME_COLOR })` at app bootstrap
+- Call `initTheme({ storageKey: 'karta-theme', colors: THEME_COLOR })` at app bootstrap
 
 **`packages/web` dependency update:**  
-`package.json` dependencies updated from `"@stratum/shared": "file:../shared"` to:
+`package.json` dependencies updated from `"@karta/shared": "file:../shared"` to:
 ```json
-"@stratum/core": "file:../core",
-"@stratum/map": "file:../map",
-"@stratum/react": "file:../react",
-"@stratum/app": "file:../app"
+"@karta/core": "file:../core",
+"@karta/map": "file:../map",
+"@karta/react": "file:../react",
+"@karta/app": "file:../app"
 ```
 
 **Success criteria:**
@@ -328,19 +328,19 @@ Update all import paths in `packages/web/src/` to pull from the new packages:
 - Root `README.md` — Documentation and Stack sections updated
 - `CONTRIBUTING.md` project structure section updated
 - `ATTRIBUTIONS.md` — only if new runtime deps added
-- Full repo grep for `packages/shared`, `@stratum/shared` in comments/docs — fix or flag
+- Full repo grep for `packages/shared`, `@karta/shared` in comments/docs — fix or flag
 
 ---
 
 ## Ambiguous Component — LayerToggles
 
-`LayerToggles.tsx` renders the layer/group toggle controls and calls `getLayers()` / `getLayerGroups()` from the registry. Once the `DomainProvider` context exists, it is a straightforward candidate for genericisation and extraction to `@stratum/map`. It is intentionally left in `packages/web` for this refactor. A follow-up task to move it is recommended once Tasks 1–5 are stable.
+`LayerToggles.tsx` renders the layer/group toggle controls and calls `getLayers()` / `getLayerGroups()` from the registry. Once the `DomainProvider` context exists, it is a straightforward candidate for genericisation and extraction to `@karta/map`. It is intentionally left in `packages/web` for this refactor. A follow-up task to move it is recommended once Tasks 1–5 are stable.
 
 ---
 
 ## JSDoc Strategy
 
-Applies to `@stratum/core`, `@stratum/map`, and `@stratum/react` only.
+Applies to `@karta/core`, `@karta/map`, and `@karta/react` only.
 
 **Functions:** `/** description */` + `@param` per parameter + `@returns`, including edge-case behaviour:
 - `createLayerConfig`: document that an unrecognised `style.kind` would be caught at the TypeScript type level (exhaustive switch), so no runtime fallback is needed
@@ -349,7 +349,7 @@ Applies to `@stratum/core`, `@stratum/map`, and `@stratum/react` only.
 
 **Types/interfaces:** Doc comment on the type, plus inline comments on non-obvious fields:
 - `Layer.companionSource`: what it is and when it's used
-- `Layer.hasPointGeometry`: that it controls legend dot rendering in `@stratum/map`
+- `Layer.hasPointGeometry`: that it controls legend dot rendering in `@karta/map`
 - `ChoroplethLayerStyle.resolveEmphasis`: why the parameter is typed as `null | undefined`
 
 **React components:** Doc comment on the component + JSDoc on each prop in its props interface, noting required vs optional and defaulting behaviour:

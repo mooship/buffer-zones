@@ -1,7 +1,7 @@
 import { createRequestHandler } from "react-router";
 
 const OLD_HOSTNAME = "buffer-zones.timothybrits.co.za";
-const NEW_HOSTNAME = "stratum.timothybrits.co.za";
+const NEW_HOSTNAME = "karta.timothybrits.co.za";
 
 const requestHandler = createRequestHandler(
   () => import("../build/server/index.js"),

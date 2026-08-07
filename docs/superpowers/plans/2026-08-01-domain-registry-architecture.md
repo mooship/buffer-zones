@@ -136,7 +136,7 @@ export * from "./constants/domains";
 Run: `npx vitest run packages/shared/src/constants/domains.test.ts`
 Expected: PASS (4 tests)
 
-Also run: `npm run typecheck --workspace @stratum/shared` — expect no errors (confirms `GAUTENG_SPATIAL_LEGACY_DOMAIN` satisfies `Domain`).
+Also run: `npm run typecheck --workspace @karta/shared` — expect no errors (confirms `GAUTENG_SPATIAL_LEGACY_DOMAIN` satisfies `Domain`).
 
 - [ ] **Step 5: Commit**
 
@@ -218,8 +218,8 @@ Expected: FAIL — `getLayers("gauteng-spatial-legacy")` type error / old signat
 
 ```ts
 // packages/web/src/layers/registry.ts
-import { getDomain } from "@stratum/shared";
-import type { Layer, LayerGroup } from "@stratum/shared";
+import { getDomain } from "@karta/shared";
+import type { Layer, LayerGroup } from "@karta/shared";
 
 export function getLayers(domainId: string): readonly Layer[] {
   return getDomain(domainId)?.layers ?? [];
@@ -570,7 +570,7 @@ git commit -m "feat(web): make map UI store domain-aware via initializeForDomain
 - Create: `packages/web/src/routes/home.test.tsx`
 
 **Interfaces:**
-- Consumes: `getDomain(domainId)`, `DEFAULT_DOMAIN_ID` from `@stratum/shared` (Task 1).
+- Consumes: `getDomain(domainId)`, `DEFAULT_DOMAIN_ID` from `@karta/shared` (Task 1).
 - Produces: route `/d/:domainId` rendering `<App domainId={params.domainId} />` (Task 7 gives `App` that prop); route `/` issuing a `redirect()` to `/d/${DEFAULT_DOMAIN_ID}`; both routes throw a 404 `Response` for an unknown `domainId` via `loader`.
 
 - [ ] **Step 1: Write the failing test**
@@ -631,7 +631,7 @@ export default [
 
 ```tsx
 // packages/web/src/routes/domain.tsx
-import { getDomain } from "@stratum/shared";
+import { getDomain } from "@karta/shared";
 import type { MetaFunction } from "react-router";
 import { App } from "../App";
 import type { Route } from "./+types/domain";
@@ -647,7 +647,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 export const meta: MetaFunction = ({ params }) => {
   const domain = getDomain(params.domainId ?? "");
   return [
-    { title: domain ? `Stratum — ${domain.story.title}` : "Stratum" },
+    { title: domain ? `Karta — ${domain.story.title}` : "Karta" },
     { name: "description", content: domain?.story.body ?? "" },
   ];
 };
@@ -659,7 +659,7 @@ export default function DomainRoute({ loaderData }: Route.ComponentProps) {
 
 ```ts
 // packages/web/src/routes/home.tsx
-import { DEFAULT_DOMAIN_ID } from "@stratum/shared";
+import { DEFAULT_DOMAIN_ID } from "@karta/shared";
 import { redirect } from "react-router";
 
 export function loader() {
@@ -676,7 +676,7 @@ export default function HomeRoute() {
 Run: `npx vitest run packages/web/src/routes/domain.test.tsx packages/web/src/routes/home.test.tsx`
 Expected: PASS
 
-Also run: `npm run typecheck --workspace @stratum/web` — the `Route` typegen types regenerate from `routes.ts`; if `+types/domain` isn't found, run `npm run dev --workspace @stratum/web -- --once` or the project's typegen script first (check `packages/web/package.json` for a `react-router typegen` script) before typechecking again.
+Also run: `npm run typecheck --workspace @karta/web` — the `Route` typegen types regenerate from `routes.ts`; if `+types/domain` isn't found, run `npm run dev --workspace @karta/web -- --once` or the project's typegen script first (check `packages/web/package.json` for a `react-router typegen` script) before typechecking again.
 
 - [ ] **Step 5: Commit**
 
@@ -736,7 +736,7 @@ Modify `packages/web/src/root.tsx`:
 ```tsx
 import interStylesHref from "@fontsource-variable/inter/index.css?url";
 import martianMonoStylesHref from "@fontsource-variable/martian-mono/index.css?url";
-import { DEFAULT_DOMAIN_ID } from "@stratum/shared";
+import { DEFAULT_DOMAIN_ID } from "@karta/shared";
 import leafletStylesHref from "leaflet/dist/leaflet.css?url";
 import {
   Links,
@@ -770,7 +770,7 @@ function getGeoJsonPreloadLinks() {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Stratum" },
+    { title: "Karta" },
     {
       name: "description",
       content: "A geospatial layer platform for public-interest data.",
@@ -861,7 +861,7 @@ git commit -m "feat(web): default-domain geojson preload, domain-agnostic fallba
 - Modify: `packages/web/src/App.test.tsx`
 
 **Interfaces:**
-- Consumes: `getDomain(domainId)` (`@stratum/shared`), `useLayerData(domainId, layerIds)` (Task 3, returns `{data, companionData}`), `useMapUiStore().initializeForDomain(domainId)` (Task 4).
+- Consumes: `getDomain(domainId)` (`@karta/shared`), `useLayerData(domainId, layerIds)` (Task 3, returns `{data, companionData}`), `useMapUiStore().initializeForDomain(domainId)` (Task 4).
 - Produces: `App({ domainId }: { domainId: string })` — **breaking change** from the current no-props `App()`. `HomeRoute`/`DomainRoute` (Task 5) are the only callers.
 
 **Note on scope:** this task removes the bespoke `useEffect`/`buildRegionDataUrls`/`createTownshipDataRepository` fetch path and the direct `GAUTENG_SPATIAL_LEGACY_DOMAIN` import. It does **not** generalize `TownshipBrowser`/`EvidenceSummary` into domain-agnostic components — that's the follow-up "FeatureBrowser generalization" plan. For this task, the "places" tab and the job-center evidence copy stay conditional on `domainId === "gauteng-spatial-legacy"`, a small and honest bridge, not a hidden hardcode: every other domain simply doesn't get a "places" tab or job-center count until the follow-up plan lands.
@@ -901,7 +901,7 @@ Modify `packages/web/src/App.tsx`:
 Replace the import block (lines 1–39 in the pre-task file) — drop `GAUTENG_SPATIAL_LEGACY_DOMAIN`, `METROS`, `TownshipFeature`, `buildRegionDataUrls`, `createTownshipDataRepository`, `fetchFeatureCollection`, `mergeFeatureCollections`:
 
 ```tsx
-import { getDomain } from "@stratum/shared";
+import { getDomain } from "@karta/shared";
 import clsx from "clsx";
 import { Layers, X } from "lucide-react";
 import {
@@ -1053,7 +1053,7 @@ Update the story panel section to use `domain` instead of the removed import:
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `npx vitest run packages/web/src/App.test.tsx`
-Expected: PASS. Then run `npm run typecheck --workspace @stratum/web` and `npm run test --workspace @stratum/web` to confirm nothing else broke.
+Expected: PASS. Then run `npm run typecheck --workspace @karta/web` and `npm run test --workspace @karta/web` to confirm nothing else broke.
 
 - [ ] **Step 5: Commit**
 
@@ -1073,7 +1073,7 @@ git commit -m "feat(web): App takes domainId prop, drops bespoke township fetch"
 - Modify: `packages/web/src/App.tsx` (render the switcher)
 
 **Interfaces:**
-- Consumes: `DOMAINS` (`@stratum/shared`, Task 1).
+- Consumes: `DOMAINS` (`@karta/shared`, Task 1).
 - Produces: `DomainSwitcher({ activeDomainId }: { activeDomainId: string })` — renders one `<Link>` per domain in `DOMAINS`.
 
 - [ ] **Step 1: Write the failing test**
@@ -1119,7 +1119,7 @@ Expected: FAIL — module doesn't exist.
 
 ```tsx
 // packages/web/src/components/DomainSwitcher/DomainSwitcher.tsx
-import { DOMAINS } from "@stratum/shared";
+import { DOMAINS } from "@karta/shared";
 import { Link } from "react-router";
 import styles from "./DomainSwitcher.module.css";
 

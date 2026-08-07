@@ -1,4 +1,4 @@
-import type { ThemePreference } from "@stratum/react";
+import type { ThemePreference } from "@karta/react";
 import { SegmentedControl } from "../SegmentedControl/SegmentedControl";
 
 interface ThemeToggleProps {

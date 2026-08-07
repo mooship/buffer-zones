@@ -1,11 +1,11 @@
-# `@stratum/map`
+# `@karta/map`
 
-Generic map rendering and UI components (React + Leaflet) for Stratum, built on `@stratum/core`. Has no dependency on `@stratum/app` or `@stratum/web` — components take a `DomainConfig`/`Layer` values via context or props instead of a hardcoded domain.
+Generic map rendering and UI components (React + Leaflet) for Karta, built on `@karta/core`. Has no dependency on `@karta/app` or `@karta/web` — components take a `DomainConfig`/`Layer` values via context or props instead of a hardcoded domain.
 
 ## What belongs here
 
-- **`DomainProvider({ domain, children })` / `useDomain(): DomainRegistry`** (`context/DomainContext.tsx`) — a React context wrapping `createRegistry` from `@stratum/core`. Any component that calls `useDomain()`, directly or transitively, must be rendered inside a `DomainProvider`; `useDomain()` throws otherwise.
-- **`MapView`** — the Leaflet map itself: tile basemap, choropleth and transit overlays resolved from the active `DomainProvider`, area-boundary-style outline labels, feature selection/keyboard interaction, and location-search fly-to behaviour. Takes a `bounds` prop (no baked-in region bounds), a required `ariaLabel` prop (no hardcoded accessible name), and a `renderFeaturePopup` callback (no hardcoded popup component), so it stays domain-agnostic. An optional `locateOnClick` prop (default `false`) reverse-geocodes a background map click and shows the result in a popup, via the new `ClickToLocatePopup` sub-component. Exported from a dedicated `@stratum/map/MapView` subpath — see below.
+- **`DomainProvider({ domain, children })` / `useDomain(): DomainRegistry`** (`context/DomainContext.tsx`) — a React context wrapping `createRegistry` from `@karta/core`. Any component that calls `useDomain()`, directly or transitively, must be rendered inside a `DomainProvider`; `useDomain()` throws otherwise.
+- **`MapView`** — the Leaflet map itself: tile basemap, choropleth and transit overlays resolved from the active `DomainProvider`, area-boundary-style outline labels, feature selection/keyboard interaction, and location-search fly-to behaviour. Takes a `bounds` prop (no baked-in region bounds), a required `ariaLabel` prop (no hardcoded accessible name), and a `renderFeaturePopup` callback (no hardcoded popup component), so it stays domain-agnostic. An optional `locateOnClick` prop (default `false`) reverse-geocodes a background map click and shows the result in a popup, via the new `ClickToLocatePopup` sub-component. Exported from a dedicated `@karta/map/MapView` subpath — see below.
 - **`Legend`, `DesktopLegend`, `MobileLegend`** — choropleth and transit layer legend entries, resolved from `useDomain()`.
 - **`LocationSearchControl`** — a debounced, keyboard-navigable place search box, with a configurable `placeholder` and an optional `provider` (a `GeocoderProvider`), defaulting to `nominatimGeocoderProvider` (OpenStreetMap Nominatim).
 - **UI primitives** — `IconButton`, `SegmentedControl`, `ControlButton`, `ThemeToggle`, `BasemapToggle`, `SettingsMenu`.
@@ -15,26 +15,26 @@ Generic map rendering and UI components (React + Leaflet) for Stratum, built on 
 
 - Domain-specific components like a township popup or township browser — those read domain-specific properties (`nearestJobCenter`, `commuteMinutes`, …) that don't exist on a generic `Layer`. Pass a `renderFeaturePopup` callback into `MapView` instead.
 - Domain-specific accessible copy — `MapView` takes a required `ariaLabel` prop rather than a baked-in accessible name, since what the map depicts is domain-specific.
-- Gauteng domain data (`GAUTENG_SPATIAL_LEGACY_DOMAIN`, metros, townships) — see `@stratum/app`.
+- Gauteng domain data (`GAUTENG_SPATIAL_LEGACY_DOMAIN`, metros, townships) — see `@karta/app`.
 
 ## `MapView` and code-splitting
 
-`MapView` is **not** re-exported from the package's main entry point (`@stratum/map`) — it pulls in `leaflet` and `react-leaflet`, and apps that lazy-load it to keep that out of their main bundle need a dedicated module boundary. Import it from the `@stratum/map/MapView` subpath:
+`MapView` is **not** re-exported from the package's main entry point (`@karta/map`) — it pulls in `leaflet` and `react-leaflet`, and apps that lazy-load it to keep that out of their main bundle need a dedicated module boundary. Import it from the `@karta/map/MapView` subpath:
 
 ```tsx
 const MapView = lazy(async () => {
-  const { MapView } = await import("@stratum/map/MapView");
+  const { MapView } = await import("@karta/map/MapView");
   return { default: MapView };
 });
 ```
 
-Importing `MapView` (even just its type) from the main `@stratum/map` barrel alongside other components makes it statically reachable from that barrel's whole module graph, which defeats the point of a dynamic `import()` — bundlers will fold it into the main chunk anyway.
+Importing `MapView` (even just its type) from the main `@karta/map` barrel alongside other components makes it statically reachable from that barrel's whole module graph, which defeats the point of a dynamic `import()` — bundlers will fold it into the main chunk anyway.
 
 ## Usage
 
 ```tsx
-import { DomainProvider, Legend, MapView } from "@stratum/map";
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
+import { DomainProvider, Legend, MapView } from "@karta/map";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@karta/app";
 
 <DomainProvider domain={GAUTENG_SPATIAL_LEGACY_DOMAIN}>
   <MapView

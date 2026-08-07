@@ -1,6 +1,6 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { REGIONS } from "@stratum/app";
+import { REGIONS } from "@karta/app";
 import { isDirectExecution } from "./cliEntry";
 import { pathExists } from "./fsUtils";
 import { validateOutputDirectory } from "./outputManifest";

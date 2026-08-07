@@ -15,7 +15,7 @@ export type TownshipAreaSelectionBasis =
  *   immediately; smaller `"primary"` areas reveal at a medium zoom, and
  *   `"secondary"` areas only at a closer zoom still — see
  *   `PRIMARY_LABEL_REVEAL_ZOOM`/`SECONDARY_LABEL_REVEAL_ZOOM` in
- *   `@stratum/map`'s `MapView`.
+ *   `@karta/map`'s `MapView`.
  */
 export type TownshipAreaLabelPriority = "primary" | "secondary";
 

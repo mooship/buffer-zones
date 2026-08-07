@@ -2,12 +2,12 @@ import {
   GAUTENG_SPATIAL_LEGACY_DOMAIN,
   type TownshipFeature,
   type TownshipProperties,
-} from "@stratum/app";
+} from "@karta/app";
 import {
   type DomainStory as DomainStoryContent,
   fetchFeatureCollection,
   mergeFeatureCollections,
-} from "@stratum/core";
+} from "@karta/core";
 import {
   ControlButton,
   DesktopLegend,
@@ -16,8 +16,8 @@ import {
   type LocationSearchResult,
   MobileLegend,
   SettingsMenu,
-} from "@stratum/map";
-import { setThemePreference, useThemePreference } from "@stratum/react";
+} from "@karta/map";
+import { setThemePreference, useThemePreference } from "@karta/react";
 import clsx from "clsx";
 import type { Feature } from "geojson";
 import { Layers, X } from "lucide-react";
@@ -45,7 +45,7 @@ import { getStory } from "./layers/registry";
 import { type PanelView, useMapUiStore } from "./stores/useMapUiStore";
 
 const MapView = lazy(async () => {
-  const { MapView } = await import("@stratum/map/MapView");
+  const { MapView } = await import("@karta/map/MapView");
   return { default: MapView };
 });
 
@@ -541,7 +541,7 @@ export function App() {
         </a>
 
         <header className={styles.visuallyHidden}>
-          <h1>Stratum: Gauteng spatial legacy map</h1>
+          <h1>Karta: Gauteng spatial legacy map</h1>
         </header>
 
         <main id="map-information" tabIndex={-1}>

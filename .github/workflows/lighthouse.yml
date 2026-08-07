@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build --workspace @stratum/web
+        run: npm run build --workspace @karta/web
 
       # lighthouserc.json's startServerCommand/startServerReadyPattern start
       # and wait for the preview server itself (lhci autorun), so there's no

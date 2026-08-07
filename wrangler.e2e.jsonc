@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "stratum",
+  "name": "karta",
   "compatibility_date": "2026-07-27",
   "main": "./packages/web/workers/app.ts",
   "workers_dev": true,

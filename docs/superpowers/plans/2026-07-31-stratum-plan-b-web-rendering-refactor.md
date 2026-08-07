@@ -1,4 +1,4 @@
-# Stratum Plan B: Web Rendering Refactor Implementation Plan
+# Karta Plan B: Web Rendering Refactor Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Plan A (`docs/superpowers/plans/2026-07-31-stratum-plan-a-shared-generic-types.md`) must be complete and merged before starting — this plan imports `GAUTENG_SPATIAL_LEGACY_DOMAIN`, `Layer`, `LayerGroup` from `@buffer-zones/shared`.
+- Plan A (`docs/superpowers/plans/2026-07-31-karta-plan-a-shared-generic-types.md`) must be complete and merged before starting — this plan imports `GAUTENG_SPATIAL_LEGACY_DOMAIN`, `Layer`, `LayerGroup` from `@buffer-zones/shared`.
 - TDD: write/update the failing test before implementation code (CLAUDE.md).
 - British English in all user-facing copy (CLAUDE.md).
 - Biome `useBlockStatements: error` — brace every `if` (CLAUDE.md).

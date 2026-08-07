@@ -3,7 +3,7 @@ import {
   TOWNSHIP_AREA_DEFINITIONS,
   type TownshipAreaLabelPriority,
   type TownshipAreaSelectionBasis,
-} from "@stratum/app";
+} from "@karta/app";
 import * as turf from "@turf/turf";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import type { NormalizedTownship } from "./adapters/boundaries";

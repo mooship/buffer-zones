@@ -1,4 +1,4 @@
-import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
+import type { TransitLayerFeatureCollection, TransitStop } from "@karta/app";
 import type { OverpassResponse } from "./gautrain";
 
 /**

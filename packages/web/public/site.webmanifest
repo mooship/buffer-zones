@@ -1,6 +1,6 @@
 {
-  "name": "Stratum",
-  "short_name": "Stratum",
+  "name": "Karta",
+  "short_name": "Karta",
   "description": "Visualising how apartheid-era spatial planning still shapes commute times and access to jobs in Tshwane and Johannesburg.",
   "start_url": "/",
   "scope": "/",

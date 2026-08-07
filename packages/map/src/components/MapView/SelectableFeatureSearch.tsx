@@ -21,7 +21,7 @@ interface SelectableFeatureSearchProps {
   /**
    * Accessible label, visible label text, and input placeholder, all sharing
    * one string. Defaults to a domain-agnostic phrasing since this component
-   * lives in `@stratum/map` and has no knowledge of what a caller's
+   * lives in `@karta/map` and has no knowledge of what a caller's
    * selectable features represent (townships, stations, or anything else).
    */
   label?: string;

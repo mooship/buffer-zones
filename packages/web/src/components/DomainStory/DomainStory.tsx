@@ -1,4 +1,4 @@
-import type { DomainStory as DomainStoryContent } from "@stratum/core";
+import type { DomainStory as DomainStoryContent } from "@karta/core";
 import styles from "./DomainStory.module.css";
 
 interface DomainStoryProps {

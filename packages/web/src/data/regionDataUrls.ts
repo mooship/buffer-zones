@@ -1,8 +1,8 @@
-import { REGIONS } from "@stratum/app";
+import { REGIONS } from "@karta/app";
 
 /**
  * Builds one `/data/<regionId>/<fileName>` URL per configured region, for a
- * layer's `dataSource` array. `@stratum/core`'s `fetchFeatureCollection` (via
+ * layer's `dataSource` array. `@karta/core`'s `fetchFeatureCollection` (via
  * `mergeFeatureCollections`) fetches every URL and merges the results into
  * one `FeatureCollection`.
  */

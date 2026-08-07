@@ -1,4 +1,4 @@
-import type { DomainConfig } from "@stratum/core";
+import type { DomainConfig } from "@karta/core";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DomainProvider } from "../../context/DomainContext";

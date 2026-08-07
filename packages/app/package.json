@@ -1,5 +1,5 @@
 {
-  "name": "@stratum/app",
+  "name": "@karta/app",
   "version": "1.0.0",
   "description": "Gauteng spatial legacy domain data, the SDK's reference implementation",
   "license": "AGPL-3.0-only",
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stratum/core": "file:../core"
+    "@karta/core": "file:../core"
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.14"

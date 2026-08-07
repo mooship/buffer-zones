@@ -1,10 +1,10 @@
-# Stratum Plan D: Rebrand Implementation Plan
+# Karta Plan D: Rebrand Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Rename the product from "Buffer Zones" to "Stratum" across package metadata, deploy config, and documentation, deploying at the interim domain `stratum.timothybrits.co.za` while keeping `buffer-zones.timothybrits.co.za` alive as a 301 redirect to the new domain.
+**Goal:** Rename the product from "Buffer Zones" to "Karta" across package metadata, deploy config, and documentation, deploying at the interim domain `karta.timothybrits.co.za` while keeping `buffer-zones.timothybrits.co.za` alive as a 301 redirect to the new domain.
 
-**Architecture:** `wrangler.jsonc` gets a second `routes` entry for the old domain, both pointing at the same worker; `packages/web/workers/app.ts` gains a hostname check that 301-redirects any request arriving on the old hostname to the new one, preserving path and query string. Package names (`buffer-zones` → `stratum`, `@buffer-zones/*` → `@stratum/*`) are renamed mechanically across `package.json` files and every import site. Documentation (`README.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`, etc.) is swept for the old name.
+**Architecture:** `wrangler.jsonc` gets a second `routes` entry for the old domain, both pointing at the same worker; `packages/web/workers/app.ts` gains a hostname check that 301-redirects any request arriving on the old hostname to the new one, preserving path and query string. Package names (`buffer-zones` → `karta`, `@buffer-zones/*` → `@karta/*`) are renamed mechanically across `package.json` files and every import site. Documentation (`README.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`, etc.) is swept for the old name.
 
 **Tech Stack:** Cloudflare Workers/`wrangler`, npm workspaces, Markdown docs.
 
@@ -46,13 +46,13 @@ describe("worker fetch handler", () => {
     const response = await workerModule.default.fetch(request);
     expect(response.status).toBe(301);
     expect(response.headers.get("location")).toBe(
-      "https://stratum.timothybrits.co.za/some/path?query=1",
+      "https://karta.timothybrits.co.za/some/path?query=1",
     );
   });
 
   it("passes requests on the new domain through to the request handler unchanged", async () => {
     const workerModule = await import("./app");
-    const request = new Request("https://stratum.timothybrits.co.za/");
+    const request = new Request("https://karta.timothybrits.co.za/");
     const response = await workerModule.default.fetch(request);
     expect(response.status).toBe(200);
   });
@@ -71,7 +71,7 @@ Expected: FAIL — current handler always calls `requestHandler`, never redirect
 import { createRequestHandler } from "react-router";
 
 const OLD_HOSTNAME = "buffer-zones.timothybrits.co.za";
-const NEW_HOSTNAME = "stratum.timothybrits.co.za";
+const NEW_HOSTNAME = "karta.timothybrits.co.za";
 
 const requestHandler = createRequestHandler(
   () => import("../build/server/index.js"),
@@ -100,7 +100,7 @@ Expected: PASS.
 ```jsonc
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "stratum",
+  "name": "karta",
   "compatibility_date": "2026-07-27",
   "main": "./packages/web/workers/app.ts",
   "workers_dev": true,
@@ -117,7 +117,7 @@ Expected: PASS.
     }
   },
   "routes": [
-    { "pattern": "stratum.timothybrits.co.za", "custom_domain": true },
+    { "pattern": "karta.timothybrits.co.za", "custom_domain": true },
     { "pattern": "buffer-zones.timothybrits.co.za", "custom_domain": true }
   ]
 }
@@ -132,7 +132,7 @@ Expected: PASS.
 
 ```bash
 git add wrangler.jsonc packages/web/workers/app.ts packages/web/workers/app.test.ts
-git commit -m "feat: redirect buffer-zones.timothybrits.co.za to stratum.timothybrits.co.za"
+git commit -m "feat: redirect buffer-zones.timothybrits.co.za to karta.timothybrits.co.za"
 ```
 
 ---
@@ -144,24 +144,24 @@ git commit -m "feat: redirect buffer-zones.timothybrits.co.za to stratum.timothy
 - Modify: every file matching `grep -rl "@buffer-zones/shared" --include="*.ts" --include="*.tsx" --exclude-dir=node_modules .` (43 files at plan-writing time)
 
 **Interfaces:**
-- Produces: root package `name: "stratum"`; `@buffer-zones/web` → `@stratum/web`; `@buffer-zones/shared` → `@stratum/shared`; `buffer-zones-data-pipeline` → `stratum-data-pipeline`. Every `import ... from "@buffer-zones/shared"` becomes `import ... from "@stratum/shared"`.
+- Produces: root package `name: "karta"`; `@buffer-zones/web` → `@karta/web`; `@buffer-zones/shared` → `@karta/shared`; `buffer-zones-data-pipeline` → `karta-data-pipeline`. Every `import ... from "@buffer-zones/shared"` becomes `import ... from "@karta/shared"`.
 
 This is a mechanical, whole-repo identifier rename — no behaviour changes. Verification is the full test/typecheck/build suite, not new unit tests.
 
 - [ ] **Step 1: Update the 4 `package.json` files**
 
-In `package.json` (root): `"name": "buffer-zones"` → `"name": "stratum"`; update the `"test:e2e"` and `"typecheck"` scripts' `--workspace @buffer-zones/web` references to `--workspace @stratum/web`.
+In `package.json` (root): `"name": "buffer-zones"` → `"name": "karta"`; update the `"test:e2e"` and `"typecheck"` scripts' `--workspace @buffer-zones/web` references to `--workspace @karta/web`.
 
-In `packages/web/package.json`: `"name": "@buffer-zones/web"` → `"name": "@stratum/web"`; `"description": "Buffer Zones web SPA map viewer"` → `"description": "Stratum web SPA map viewer"`; the dependency `"@buffer-zones/shared": "file:../shared"` → `"@stratum/shared": "file:../shared"`.
+In `packages/web/package.json`: `"name": "@buffer-zones/web"` → `"name": "@karta/web"`; `"description": "Buffer Zones web SPA map viewer"` → `"description": "Karta web SPA map viewer"`; the dependency `"@buffer-zones/shared": "file:../shared"` → `"@karta/shared": "file:../shared"`.
 
-In `packages/shared/package.json`: `"name": "@buffer-zones/shared"` → `"name": "@stratum/shared"`.
+In `packages/shared/package.json`: `"name": "@buffer-zones/shared"` → `"name": "@karta/shared"`.
 
-In `data-pipeline/package.json`: `"name": "buffer-zones-data-pipeline"` → `"name": "stratum-data-pipeline"`; the dependency `"@buffer-zones/shared": "file:../packages/shared"` → `"@stratum/shared": "file:../packages/shared"`.
+In `data-pipeline/package.json`: `"name": "buffer-zones-data-pipeline"` → `"name": "karta-data-pipeline"`; the dependency `"@buffer-zones/shared": "file:../packages/shared"` → `"@karta/shared": "file:../packages/shared"`.
 
 - [ ] **Step 2: Reinstall to refresh the workspace symlinks**
 
 Run: `npm install`
-Expected: succeeds, `node_modules/@stratum/shared` and `node_modules/@stratum/web` symlinks now exist; `node_modules/@buffer-zones/*` are gone.
+Expected: succeeds, `node_modules/@karta/shared` and `node_modules/@karta/web` symlinks now exist; `node_modules/@buffer-zones/*` are gone.
 
 - [ ] **Step 3: Rename every import site**
 
@@ -169,7 +169,7 @@ Run a scoped find-and-replace across source files only (never `node_modules`, ne
 
 ```bash
 grep -rl "@buffer-zones/shared" --include="*.ts" --include="*.tsx" --exclude-dir=node_modules . \
-  | xargs sed -i 's/@buffer-zones\/shared/@stratum\/shared/g'
+  | xargs sed -i 's/@buffer-zones\/shared/@karta\/shared/g'
 ```
 
 - [ ] **Step 4: Verify no stray references remain**
@@ -191,7 +191,7 @@ Expected: PASS.
 
 ```bash
 git add -A
-git commit -m "chore: rename npm packages from buffer-zones to stratum"
+git commit -m "chore: rename npm packages from buffer-zones to karta"
 ```
 
 ---
@@ -208,19 +208,19 @@ git commit -m "chore: rename npm packages from buffer-zones to stratum"
 
 - [ ] **Step 1: Update `README.md`**
 
-Replace the `# Buffer Zones` title with `# Stratum`, and the first paragraph's `**Buffer Zones** maps recognized township areas...` with copy that introduces Stratum as the general platform and names the current dataset as one domain running on it, e.g.:
+Replace the `# Buffer Zones` title with `# Karta`, and the first paragraph's `**Buffer Zones** maps recognized township areas...` with copy that introduces Karta as the general platform and names the current dataset as one domain running on it, e.g.:
 
 ```markdown
-# Stratum
+# Karta
 
-**Stratum** is a public-interest geospatial layer platform. Its first published domain, **Gauteng spatial legacy**, maps apartheid-era spatial planning legacy across South African metros: recognized township areas, formal transit routes, and modeled car time to selected job centers in a single combined view. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
+**Karta** is a public-interest geospatial layer platform. Its first published domain, **Gauteng spatial legacy**, maps apartheid-era spatial planning legacy across South African metros: recognized township areas, formal transit routes, and modeled car time to selected job centers in a single combined view. The car layer is a baseline spatial proxy, not an observed commute or a measure of public-transport access.
 ```
 
-Update the `npm run dev --workspace @buffer-zones/web` command under "Contributing" to `npm run dev --workspace @stratum/web`.
+Update the `npm run dev --workspace @buffer-zones/web` command under "Contributing" to `npm run dev --workspace @karta/web`.
 
 - [ ] **Step 2: Update `CLAUDE.md`**
 
-Update the "What this is" section's opening line to match the `README.md` reframing from Step 1 (platform name first, current domain named second). Update every `@buffer-zones/web`/`@buffer-zones/shared` command example to `@stratum/web`/`@stratum/shared`. Add one line to "Architecture" noting the `gauteng-spatial-legacy` domain package under `packages/shared/src/domains/` as the first example domain, per Plan A.
+Update the "What this is" section's opening line to match the `README.md` reframing from Step 1 (platform name first, current domain named second). Update every `@buffer-zones/web`/`@buffer-zones/shared` command example to `@karta/web`/`@karta/shared`. Add one line to "Architecture" noting the `gauteng-spatial-legacy` domain package under `packages/shared/src/domains/` as the first example domain, per Plan A.
 
 - [ ] **Step 3: Update `.github/copilot-instructions.md`**
 
@@ -235,7 +235,7 @@ Expected: no output (aside from any intentional historical mention you choose to
 
 ```bash
 git add README.md CLAUDE.md .github/copilot-instructions.md
-git commit -m "docs: rebrand root documentation to Stratum"
+git commit -m "docs: rebrand root documentation to Karta"
 ```
 
 ---
@@ -256,7 +256,7 @@ Run: `grep -rln "Buffer Zones\|buffer-zones" --include="*.md" --exclude-dir=node
 
 - [ ] **Step 2: Update each matched file**
 
-For each file found (expected: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `PRIVACY.md`, `ATTRIBUTIONS.md`, `docs/design-system.md`, the 9 `docs/data/*-area-classification.md` files, `data-pipeline/README.md`), open it and replace "Buffer Zones" with "Stratum" and any `buffer-zones` workspace-name references with `stratum`/`@stratum/*` as appropriate to that file's context — these are project-name mentions, not deep content, so a direct read-and-replace per file (not a blind sed, since some may have prose context worth a light copy tweak, e.g. "This project, Buffer Zones," reading awkwardly as "This project, Stratum," should become "This project" or "Stratum" depending on the sentence).
+For each file found (expected: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `PRIVACY.md`, `ATTRIBUTIONS.md`, `docs/design-system.md`, the 9 `docs/data/*-area-classification.md` files, `data-pipeline/README.md`), open it and replace "Buffer Zones" with "Karta" and any `buffer-zones` workspace-name references with `karta`/`@karta/*` as appropriate to that file's context — these are project-name mentions, not deep content, so a direct read-and-replace per file (not a blind sed, since some may have prose context worth a light copy tweak, e.g. "This project, Buffer Zones," reading awkwardly as "This project, Karta," should become "This project" or "Karta" depending on the sentence).
 
 - [ ] **Step 3: Verify no stray references remain**
 
@@ -267,7 +267,7 @@ Expected: no output (or only intentional historical mentions).
 
 ```bash
 git add CONTRIBUTING.md CODE_OF_CONDUCT.md SECURITY.md PRIVACY.md ATTRIBUTIONS.md docs/design-system.md docs/data data-pipeline/README.md
-git commit -m "docs: rebrand remaining documentation to Stratum"
+git commit -m "docs: rebrand remaining documentation to Karta"
 ```
 
 ---
@@ -288,22 +288,22 @@ Run: `grep -rn "Buffer Zones\|buffer-zones" packages/web/src packages/web/index.
 
 - [ ] **Step 2: Update the source-code link text**
 
-The story panel's "Source code: mooship/buffer-zones" link text becomes "Source code: mooship/stratum" **only once the GitHub repository itself has actually been renamed** (see this plan's final note) — until then, leave the link text and URL pointing at the real, still-named `mooship/buffer-zones` repository so the link isn't broken. Add a one-line code comment-free `// TODO`-free reminder is not appropriate per house style; instead, just leave this specific string unchanged for now and note it in the commit message as deferred.
+The story panel's "Source code: mooship/buffer-zones" link text becomes "Source code: mooship/karta" **only once the GitHub repository itself has actually been renamed** (see this plan's final note) — until then, leave the link text and URL pointing at the real, still-named `mooship/buffer-zones` repository so the link isn't broken. Add a one-line code comment-free `// TODO`-free reminder is not appropriate per house style; instead, just leave this specific string unchanged for now and note it in the commit message as deferred.
 
 - [ ] **Step 3: Update the page title/meta description and any other visible "Buffer Zones" copy**
 
-Replace with "Stratum" (and update the tagline if the meta description mentions "Buffer Zones" by name), keeping all other copy (data sources, licensing, evidence summary) unchanged.
+Replace with "Karta" (and update the tagline if the meta description mentions "Buffer Zones" by name), keeping all other copy (data sources, licensing, evidence summary) unchanged.
 
 - [ ] **Step 4: Run the full test and e2e suites**
 
 Run: `npm run test && npm run build && npm run test:e2e`
-Expected: PASS — if any e2e spec or unit test asserts on the literal string "Buffer Zones" (e.g. a page-title check), update that assertion to "Stratum" in the same commit.
+Expected: PASS — if any e2e spec or unit test asserts on the literal string "Buffer Zones" (e.g. a page-title check), update that assertion to "Karta" in the same commit.
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add packages/web/src packages/web/index.html
-git commit -m "feat(web): rebrand in-app copy to Stratum"
+git commit -m "feat(web): rebrand in-app copy to Karta"
 ```
 
 ---
@@ -312,4 +312,4 @@ git commit -m "feat(web): rebrand in-app copy to Stratum"
 
 - **Spec coverage:** §7 Rebrand (interim domain, name) → Task 1. Package/workspace renames implied by adopting the new name → Task 2. "All our docs, CLAUDE.md, the copilot mirror, README, wrangler, etc." (explicit user follow-up request) → Tasks 1, 3, 4, 5.
 - **Deliberately deferred, not forgotten:** the GitHub repository `mooship/buffer-zones` itself is a real, shared external resource (forks, stars, issue links, existing PRs all point at it) — renaming it is a GitHub Settings action with broad blast radius, not a code change. **This is a manual step for the user to perform (or explicitly authorize) outside this plan** — once done, revisit Task 5 Step 2's deferred link-text update.
-- **Registrar/DNS is also manual:** this plan configures the Cloudflare Worker/route side of `stratum.timothybrits.co.za` and the redirect; actually pointing DNS at Cloudflare for that hostname (if not already done) is an infrastructure action outside this codebase, left to the user.
+- **Registrar/DNS is also manual:** this plan configures the Cloudflare Worker/route side of `karta.timothybrits.co.za` and the redirect; actually pointing DNS at Cloudflare for that hostname (if not already done) is an infrastructure action outside this codebase, left to the user.

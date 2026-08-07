@@ -1,4 +1,4 @@
-import type { MetroDefinition } from "@stratum/app";
+import type { MetroDefinition } from "@karta/app";
 import type { FeatureCollection } from "geojson";
 
 /**

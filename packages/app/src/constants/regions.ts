@@ -4,7 +4,7 @@ export type RegionKind = "province" | "national" | "custom";
 /**
  * A geographic region the data pipeline produces one dataset for.
  * @remarks `id` drives the region's output directory
- *   (`packages/web/public/data/<id>/`) and the URLs `@stratum/web` fetches
+ *   (`packages/web/public/data/<id>/`) and the URLs `@karta/web` fetches
  *   data from.
  */
 export interface RegionDefinition {
@@ -16,7 +16,7 @@ export interface RegionDefinition {
 /**
  * The regions covered by this reference implementation.
  * @remarks Currently a single entry — `gauteng` — but the data pipeline and
- *   `@stratum/web` are written to loop over however many are configured here.
+ *   `@karta/web` are written to loop over however many are configured here.
  */
 export const REGIONS: readonly RegionDefinition[] = [
   { id: "gauteng", label: "Gauteng", kind: "province" },

@@ -1,4 +1,4 @@
-import type { Basemap } from "@stratum/map";
+import type { Basemap } from "@karta/map";
 import { create } from "zustand";
 import { getLayerGroups, getLayers } from "../layers/registry";
 

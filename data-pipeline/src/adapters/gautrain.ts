@@ -1,4 +1,4 @@
-import type { TransitLayerFeatureCollection } from "@stratum/app";
+import type { TransitLayerFeatureCollection } from "@karta/app";
 import { sleep } from "../asyncUtils";
 import { hashKey, readJsonCache, writeJsonCache } from "../cache";
 import { getOverpassUrls } from "../constants/serviceUrls";

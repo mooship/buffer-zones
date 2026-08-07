@@ -1,4 +1,4 @@
-import type { Layer, LineLayerStyle, PointLayerStyle } from "@stratum/core";
+import type { Layer, LineLayerStyle, PointLayerStyle } from "@karta/core";
 import type { Feature } from "geojson";
 import { describe, expect, it } from "vitest";
 import { createLayerConfig } from "./createLayerConfig";

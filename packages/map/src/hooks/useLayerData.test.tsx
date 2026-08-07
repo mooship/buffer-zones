@@ -1,4 +1,4 @@
-import { clearFeatureCollectionCache, type DomainConfig } from "@stratum/core";
+import { clearFeatureCollectionCache, type DomainConfig } from "@karta/core";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DomainProvider } from "../context/DomainContext";

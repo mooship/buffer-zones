@@ -1,4 +1,4 @@
-import type { TownshipProperties } from "@stratum/app";
+import type { TownshipProperties } from "@karta/app";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { TownshipPopup } from "./TownshipPopup";

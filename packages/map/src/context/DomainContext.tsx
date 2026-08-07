@@ -2,7 +2,7 @@ import {
   createRegistry,
   type DomainConfig,
   type DomainRegistry,
-} from "@stratum/core";
+} from "@karta/core";
 import { createContext, type ReactNode, useContext, useMemo } from "react";
 
 const DomainContext = createContext<DomainRegistry | null>(null);
@@ -39,4 +39,4 @@ export function useDomain(): DomainRegistry {
   return registry;
 }
 
-export type { DomainRegistry } from "@stratum/core";
+export type { DomainRegistry } from "@karta/core";

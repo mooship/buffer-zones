@@ -18,15 +18,15 @@ const mapViewMocks = vi.hoisted(() => ({
       },
 }));
 
-vi.mock("@stratum/map/MapView", () => ({
+vi.mock("@karta/map/MapView", () => ({
   MapView: (props: NonNullable<typeof mapViewMocks.latestProps>) => {
     mapViewMocks.latestProps = props;
     return <div data-testid="mock-map-view" />;
   },
 }));
 
-vi.mock("@stratum/map", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@stratum/map")>();
+vi.mock("@karta/map", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@karta/map")>();
   return {
     ...actual,
     LocationSearchControl: ({
@@ -87,8 +87,8 @@ vi.mock("@stratum/map", async (importOriginal) => {
   };
 });
 
-vi.mock("@stratum/core", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@stratum/core")>();
+vi.mock("@karta/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@karta/core")>();
   return {
     ...actual,
     fetchFeatureCollection: dataMocks.fetchAreas,

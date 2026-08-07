@@ -130,7 +130,7 @@ export interface LayerInteraction {
   labelField?: string;
   /**
    * Feature properties relevant to this layer's popup content, for a caller's
-   * own reference. Not read by `@stratum/core` or `@stratum/map` — popup
+   * own reference. Not read by `@karta/core` or `@karta/map` — popup
    * content is entirely up to the caller's `renderFeaturePopup`.
    */
   popupFields?: string[];
@@ -169,7 +169,7 @@ export interface Layer {
   /**
    * When `true`, this layer includes Point geometry (station/stop markers)
    * in addition to its primary geometry. Controls the dot icon in the
-   * `@stratum/map` Legend component.
+   * `@karta/map` Legend component.
    */
   hasPointGeometry?: boolean;
 }

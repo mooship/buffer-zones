@@ -1,5 +1,5 @@
-import type { TransitLayerFeatureCollection } from "@stratum/app";
-import { nearestFeatureDistance } from "@stratum/core";
+import type { TransitLayerFeatureCollection } from "@karta/app";
+import { nearestFeatureDistance } from "@karta/core";
 import type { LineString, Point } from "geojson";
 import type { LatLon } from "./adapters/boundaries";
 

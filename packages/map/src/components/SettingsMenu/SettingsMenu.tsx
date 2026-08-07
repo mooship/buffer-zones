@@ -1,4 +1,4 @@
-import type { ThemePreference } from "@stratum/react";
+import type { ThemePreference } from "@karta/react";
 import { Settings, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type Basemap, getBasemapDefinition } from "../../constants/basemaps";

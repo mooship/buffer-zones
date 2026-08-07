@@ -1,7 +1,4 @@
-import {
-  multiPolygonGeometrySchema,
-  polygonGeometrySchema,
-} from "@stratum/core";
+import { multiPolygonGeometrySchema, polygonGeometrySchema } from "@karta/core";
 import * as z from "zod/mini";
 
 const townshipGeometrySchema = z.union([
@@ -21,8 +18,8 @@ const townshipPropertiesSchema = z.looseObject({
 
 /**
  * Validates a township choropleth `FeatureCollection`, extending
- * `@stratum/core`'s generic `featureCollectionSchema` with the specific
- * properties `TownshipProperties` requires (see `@stratum/app`).
+ * `@karta/core`'s generic `featureCollectionSchema` with the specific
+ * properties `TownshipProperties` requires (see `@karta/app`).
  */
 export const townshipFeatureCollectionSchema = z.looseObject({
   type: z.literal("FeatureCollection"),

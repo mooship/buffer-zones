@@ -1,5 +1,5 @@
 {
-  "name": "@stratum/core",
+  "name": "@karta/core",
   "version": "1.0.0",
   "description": "Domain-agnostic layer model and geodata utilities",
   "license": "AGPL-3.0-only",

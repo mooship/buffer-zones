@@ -2,7 +2,7 @@ import { defineProject } from "vitest/config";
 
 export default defineProject({
   test: {
-    name: "@stratum/app",
+    name: "@karta/app",
     environment: "node",
   },
 });

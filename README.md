@@ -1,6 +1,6 @@
-# Stratum
+# Karta
 
-**Stratum** is a reusable SDK for building public-interest geospatial layer platforms — a domain-agnostic layer model, generic map rendering, and React hooks that any dataset can be wired into, with no accounts and no tracking beyond cookieless page views. `@stratum/core`, `@stratum/map`, and `@stratum/react` are the SDK itself; it doesn't encode any particular geography or story.
+**Karta** is a reusable SDK for building public-interest geospatial layer platforms — a domain-agnostic layer model, generic map rendering, and React hooks that any dataset can be wired into, with no accounts and no tracking beyond cookieless page views. `@karta/core`, `@karta/map`, and `@karta/react` are the SDK itself; it doesn't encode any particular geography or story.
 
 `packages/app` and `packages/web` are a reference implementation proving the SDK out end-to-end with one real, published domain: **Gauteng spatial legacy**, mapping apartheid-era spatial planning legacy across South African cities. That's just the first domain built on the SDK — a different one could map flood risk, public amenities, or anything else. See [`docs/domains/gauteng-spatial-legacy.md`](docs/domains/gauteng-spatial-legacy.md) for what it covers, why it exists, and how its per-metro area data is classified.
 
@@ -9,20 +9,20 @@
 - [`docs/building-a-domain.md`](docs/building-a-domain.md) — how to build a new domain on the SDK, from scratch, using a second illustrative example
 - [`docs/domains/gauteng-spatial-legacy.md`](docs/domains/gauteng-spatial-legacy.md) — the reference implementation's domain, scope, and per-metro area classification
 - [`data-pipeline/README.md`](data-pipeline/README.md) — how to (re-)run the data pipeline
-- [`packages/core/README.md`](packages/core/README.md) — `@stratum/core`, the domain-agnostic layer model and geodata utilities
-- [`packages/map/README.md`](packages/map/README.md) — `@stratum/map`, generic map rendering components and UI primitives
-- [`packages/react/README.md`](packages/react/README.md) — `@stratum/react`, generic React hooks (dark-mode detection, theme preference)
-- [`packages/app/README.md`](packages/app/README.md) — `@stratum/app`, the Gauteng-specific domain data and constants
+- [`packages/core/README.md`](packages/core/README.md) — `@karta/core`, the domain-agnostic layer model and geodata utilities
+- [`packages/map/README.md`](packages/map/README.md) — `@karta/map`, generic map rendering components and UI primitives
+- [`packages/react/README.md`](packages/react/README.md) — `@karta/react`, generic React hooks (dark-mode detection, theme preference)
+- [`packages/app/README.md`](packages/app/README.md) — `@karta/app`, the Gauteng-specific domain data and constants
 
 ## Stack
 
-React + TypeScript SSR app (React Router framework mode on Vite, `react-leaflet`, Zustand, Zod, CSS Modules) split into five npm workspace packages — `@stratum/core`, `@stratum/map`, `@stratum/react`, `@stratum/app`, and `@stratum/web` — plus a Node/TypeScript offline data pipeline (public OSRM for routing, Overpass API + open data portals for transit, no Docker/GDAL required), and Cloudflare Workers for edge rendering and asset delivery. No accounts and no tracking beyond cookieless page views.
+React + TypeScript SSR app (React Router framework mode on Vite, `react-leaflet`, Zustand, Zod, CSS Modules) split into five npm workspace packages — `@karta/core`, `@karta/map`, `@karta/react`, `@karta/app`, and `@karta/web` — plus a Node/TypeScript offline data pipeline (public OSRM for routing, Overpass API + open data portals for transit, no Docker/GDAL required), and Cloudflare Workers for edge rendering and asset delivery. No accounts and no tracking beyond cookieless page views.
 
 ## Contributing
 
 ```bash
 npm install
-npm run dev --workspace @stratum/web
+npm run dev --workspace @karta/web
 ```
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) covers the full setup, the project conventions, and how to propose data changes. [`SECURITY.md`](SECURITY.md) covers reporting a suspected vulnerability privately.

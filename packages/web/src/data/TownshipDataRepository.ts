@@ -1,5 +1,5 @@
-import type { TownshipFeature } from "@stratum/app";
-import { fetchFeatureCollection } from "@stratum/core";
+import type { TownshipFeature } from "@karta/app";
+import { fetchFeatureCollection } from "@karta/core";
 import { townshipFeatureCollectionSchema } from "./geoJsonSchemas";
 
 /** Fetches a region's validated township choropleth features. */

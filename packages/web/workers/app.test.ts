@@ -23,20 +23,20 @@ describe("worker fetch handler", () => {
     const response = await workerModule.default.fetch(request);
     expect(response.status).toBe(301);
     expect(response.headers.get("location")).toBe(
-      "https://stratum.timothybrits.co.za/some/path?query=1",
+      "https://karta.timothybrits.co.za/some/path?query=1",
     );
   });
 
   it("passes requests on the new domain through to the request handler unchanged", async () => {
     const workerModule = await import("./app");
-    const request = new Request("https://stratum.timothybrits.co.za/");
+    const request = new Request("https://karta.timothybrits.co.za/");
     const response = await workerModule.default.fetch(request);
     expect(response.status).toBe(200);
   });
 
   it("passes the request through to the request handler unmodified", async () => {
     const workerModule = await import("./app");
-    const request = new Request("https://stratum.timothybrits.co.za/");
+    const request = new Request("https://karta.timothybrits.co.za/");
 
     await workerModule.default.fetch(request);
 

@@ -1,5 +1,5 @@
-import { createLayerConfig, type Layer as DomainLayer } from "@stratum/core";
-import { usePrefersDarkMode, useThemePreference } from "@stratum/react";
+import { createLayerConfig, type Layer as DomainLayer } from "@karta/core";
+import { usePrefersDarkMode, useThemePreference } from "@karta/react";
 import type { Feature, FeatureCollection } from "geojson";
 import {
   circleMarker,

@@ -1,9 +1,9 @@
-import type { DomainConfig } from "@stratum/core";
+import type { DomainConfig } from "@karta/core";
 
 /**
- * A small, self-contained `DomainConfig` used only by `@stratum/map`'s own
+ * A small, self-contained `DomainConfig` used only by `@karta/map`'s own
  * tests, so this package's test suite doesn't depend on a concrete downstream
- * domain (`@stratum/app`) to verify its own generic rendering logic.
+ * domain (`@karta/app`) to verify its own generic rendering logic.
  */
 export const TEST_DOMAIN: DomainConfig = {
   layers: [

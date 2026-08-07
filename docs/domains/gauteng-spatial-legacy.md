@@ -1,6 +1,6 @@
 # Gauteng spatial legacy
 
-This is one domain built on the Stratum SDK — the reference implementation that proves the SDK out end-to-end with a real, published app. It is not what Stratum itself is about: a different domain built on the same SDK could map flood risk, public amenities, or anything else, and would carry none of this framing. See the root [`README.md`](../../README.md) for the SDK itself.
+This is one domain built on the Karta SDK — the reference implementation that proves the SDK out end-to-end with a real, published app. It is not what Karta itself is about: a different domain built on the same SDK could map flood risk, public amenities, or anything else, and would carry none of this framing. See the root [`README.md`](../../README.md) for the SDK itself.
 
 ## What it maps
 
@@ -30,6 +30,6 @@ How included township and settlement areas are selected and displayed, one doc p
 
 ## Related
 
-- [`packages/app/README.md`](../../packages/app/README.md) — `@stratum/app`, the domain data and constants this domain is built from
+- [`packages/app/README.md`](../../packages/app/README.md) — `@karta/app`, the domain data and constants this domain is built from
 - [`data-pipeline/README.md`](../../data-pipeline/README.md) — how to (re-)run the data pipeline that produces this domain's GeoJSON
 - [`docs/design-system.md`](../design-system.md) — the reference app's Material-informed local design system, tokens, and shared UI primitives

@@ -20,7 +20,7 @@ test.describe("app shell", () => {
 
     await page.goto("/");
 
-    await expect(page).toHaveTitle(/stratum/i);
+    await expect(page).toHaveTitle(/karta/i);
     await expect(
       page.getByRole("link", { name: /skip to map information/i }),
     ).toHaveAttribute("href", "#map-information");

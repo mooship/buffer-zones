@@ -1,6 +1,6 @@
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
-import type { DomainStory, Layer, LayerGroup } from "@stratum/core";
-import { createRegistry } from "@stratum/core";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@karta/app";
+import type { DomainStory, Layer, LayerGroup } from "@karta/core";
+import { createRegistry } from "@karta/core";
 
 const registry = createRegistry(GAUTENG_SPATIAL_LEGACY_DOMAIN);
 

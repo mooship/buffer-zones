@@ -1,11 +1,11 @@
-import type { DomainStory as DomainStoryContent } from "@stratum/core";
+import type { DomainStory as DomainStoryContent } from "@karta/core";
 import {
   fetchLocationSearchResults,
   getRegisteredBasemapIds,
   type LocationSearchResult,
-} from "@stratum/map";
-import type { ThemePreference } from "@stratum/react";
-import { setThemePreference, useModelContextTool } from "@stratum/react";
+} from "@karta/map";
+import type { ThemePreference } from "@karta/react";
+import { setThemePreference, useModelContextTool } from "@karta/react";
 import { getLayer, getLayers } from "../layers/registry";
 import { useMapUiStore } from "../stores/useMapUiStore";
 

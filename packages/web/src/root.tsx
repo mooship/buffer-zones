@@ -31,7 +31,7 @@ const THEME_BOOTSTRAP_SCRIPT = `(() => {
 /** React Router route module export: page `<title>`/`<meta>` tags. */
 export const meta: MetaFunction = () => {
   return [
-    { title: "Stratum" },
+    { title: "Karta" },
     {
       name: "description",
       content:

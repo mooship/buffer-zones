@@ -1,4 +1,4 @@
-import type { Layer, LayerGroup } from "@stratum/core";
+import type { Layer, LayerGroup } from "@karta/core";
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as registry from "../../layers/registry";

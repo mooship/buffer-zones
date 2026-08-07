@@ -5,7 +5,7 @@ Status: Working classification
 
 ## Purpose
 
-Stratum distinguishes between:
+Karta distinguishes between:
 
 - all 591 City of Tshwane Census 2011 sub-places used for citywide comparison; and
 - a current inclusion set of township and historically marginalised settlement areas highlighted with dissolved outlines.

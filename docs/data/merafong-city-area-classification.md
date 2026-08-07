@@ -5,7 +5,7 @@ Status: Working classification
 
 ## Purpose
 
-Stratum distinguishes between:
+Karta distinguishes between:
 
 - all Merafong City Census 2011 sub-places used for municipality-wide comparison; and
 - a current inclusion set of township and historically marginalised settlement areas highlighted with dissolved outlines.

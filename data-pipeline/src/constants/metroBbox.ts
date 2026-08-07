@@ -1,5 +1,5 @@
-import type { MetroId } from "@stratum/app";
-import { unionBoundingBoxes } from "@stratum/core";
+import type { MetroId } from "@karta/app";
+import { unionBoundingBoxes } from "@karta/core";
 import type { BBox } from "geojson";
 
 /**
@@ -26,7 +26,7 @@ export function getMetroBbox(metroId: MetroId): string {
 
 /**
  * Parses an Overpass-style `"south,west,north,east"` bbox string into the
- * `[minLng, minLat, maxLng, maxLat]` shape `@stratum/core`'s spatial
+ * `[minLng, minLat, maxLng, maxLat]` shape `@karta/core`'s spatial
  * utilities expect.
  */
 function parseBbox(box: string): BBox {

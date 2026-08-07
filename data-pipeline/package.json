@@ -1,5 +1,5 @@
 {
-  "name": "stratum-data-pipeline",
+  "name": "karta-data-pipeline",
   "version": "1.0.0",
   "description": "Offline GIS data pipeline for spatial boundaries, OSRM routing, and transit normalization",
   "license": "AGPL-3.0-only",
@@ -18,8 +18,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stratum/app": "file:../packages/app",
-    "@stratum/core": "file:../packages/core",
+    "@karta/app": "file:../packages/app",
+    "@karta/core": "file:../packages/core",
     "@turf/turf": "^7.1.0",
     "adm-zip": "^0.6.0",
     "shapefile": "^0.6.6",

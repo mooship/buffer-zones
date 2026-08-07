@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@stratum/app";
+import type { TownshipFeature } from "@karta/app";
 import type { NormalizedTownship } from "./adapters/boundaries";
 import type { NearestJobCenterResult } from "./osrmClient";
 

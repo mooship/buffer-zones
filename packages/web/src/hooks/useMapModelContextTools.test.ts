@@ -21,8 +21,8 @@ vi.mock("../layers/registry", () => ({
   getLayerGroups: registryMocks.getLayerGroups,
 }));
 
-vi.mock("@stratum/map", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@stratum/map")>();
+vi.mock("@karta/map", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@karta/map")>();
   return {
     ...actual,
     fetchLocationSearchResults: mapMocks.fetchLocationSearchResults,
@@ -30,8 +30,8 @@ vi.mock("@stratum/map", async (importOriginal) => {
   };
 });
 
-vi.mock("@stratum/react", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@stratum/react")>();
+vi.mock("@karta/react", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@karta/react")>();
   return {
     ...actual,
     setThemePreference: themeMocks.setThemePreference,

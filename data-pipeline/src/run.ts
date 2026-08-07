@@ -1,7 +1,7 @@
 import { rm } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { REGIONS, type TransitLayerFeatureCollection } from "@stratum/app";
+import { REGIONS, type TransitLayerFeatureCollection } from "@karta/app";
 import {
   fetchMetroBoundaries,
   normalizeBoundaries,

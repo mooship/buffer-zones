@@ -1,4 +1,4 @@
-import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
+import type { TransitLayerFeatureCollection, TransitStop } from "@karta/app";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { statMock, readFileMock } = vi.hoisted(() => ({

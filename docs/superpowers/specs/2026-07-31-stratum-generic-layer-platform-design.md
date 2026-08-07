@@ -1,7 +1,7 @@
-# Stratum: generalizing Buffer Zones into a generic geospatial layer platform
+# Karta: generalizing Buffer Zones into a generic geospatial layer platform
 
 **Status:** Approved design, pending implementation plan.
-**Rebrand:** Buffer Zones → **Stratum**. New site at `stratum.timothybrits.co.za` (interim; domain/registrar decision deferred).
+**Rebrand:** Buffer Zones → **Karta**. New site at `karta.timothybrits.co.za` (interim; domain/registrar decision deferred).
 
 ## 1. Motivation
 
@@ -152,9 +152,9 @@ export interface RegionPipelineConfig {
 
 ## 7. Rebrand
 
-**Chosen name: Stratum.** Reasoning: geological/social-layering metaphor honours the township-legacy origin (enforced spatial separation, read as literal strata) while reading, cold, as "a platform for layered geospatial data" — the ThinkGeo-style repositioning the product needs. Runner-up candidates considered: Palimpsest (more literary, harder to spell), Substrate (more infrastructure-coded), Contour, Groundwork (more literal/approachable, less distinctive).
+**Chosen name: Karta.** Reasoning: geological/social-layering metaphor honours the township-legacy origin (enforced spatial separation, read as literal strata) while reading, cold, as "a platform for layered geospatial data" — the ThinkGeo-style repositioning the product needs. Runner-up candidates considered: Palimpsest (more literary, harder to spell), Substrate (more infrastructure-coded), Contour, Groundwork (more literal/approachable, less distinctive).
 
-Interim domain: `stratum.timothybrits.co.za`. Final registrar/TLD decision deferred to a later, separate task — out of scope for this design.
+Interim domain: `karta.timothybrits.co.za`. Final registrar/TLD decision deferred to a later, separate task — out of scope for this design.
 
 ## 8. Future roadmap (not in this design's scope)
 
@@ -165,4 +165,4 @@ Candidate directions for "build your own ThinkGeo" beyond this refactor, to be b
 - Any second real domain/layer-group beyond the migrated Gauteng dataset (no concrete next use case was specified; the design targets general extensibility without over-fitting to a hypothetical).
 - True dynamic/runtime plugin loading (config-driven TS was chosen over a plugin runtime).
 - Byte-compatibility of pipeline output with the current `packages/web/public/data/gauteng/` files (confirmed free to change).
-- Final domain/registrar choice beyond the interim `stratum.timothybrits.co.za`.
+- Final domain/registrar choice beyond the interim `karta.timothybrits.co.za`.

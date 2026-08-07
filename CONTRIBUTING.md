@@ -1,6 +1,6 @@
-# Contributing to Stratum
+# Contributing to Karta
 
-Thanks for your interest. Stratum is a reusable SDK for public-interest
+Thanks for your interest. Karta is a reusable SDK for public-interest
 geospatial layer platforms; its reference implementation, Gauteng spatial
 legacy, maps the spatial legacy of apartheid-era planning across South
 African cities. Contributions are welcome — to the SDK itself, and to the
@@ -19,10 +19,10 @@ participating, you agree to uphold those standards.
 npm install
 npm run test        # Vitest across all workspaces
 npm run test:coverage # same scope, with a coverage report
-npm run typecheck   # tsc --noEmit for @stratum/core, @stratum/app, @stratum/map, @stratum/react + web build + data-pipeline typecheck
+npm run typecheck   # tsc --noEmit for @karta/core, @karta/app, @karta/map, @karta/react + web build + data-pipeline typecheck
 npm run lint        # biome check .
 npm run format      # biome format --write .
-npm run dev --workspace @stratum/web
+npm run dev --workspace @karta/web
 ```
 
 Run a single test file with `npx vitest run path/to/file.test.ts`.

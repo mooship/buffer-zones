@@ -1,4 +1,4 @@
-import { fetchFeatureCollection, mergeFeatureCollections } from "@stratum/core";
+import { fetchFeatureCollection, mergeFeatureCollections } from "@karta/core";
 import type { FeatureCollection } from "geojson";
 import { useEffect, useRef, useState } from "react";
 import { useDomain } from "../context/DomainContext";

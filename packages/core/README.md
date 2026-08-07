@@ -1,6 +1,6 @@
-# `@stratum/core`
+# `@karta/core`
 
-Domain-agnostic layer model and geodata utilities for Stratum. Has no dependency on `@stratum/app`, `@stratum/map`, `@stratum/react`, `@stratum/web`, or React — the first package extracted towards a reusable SDK for geospatial layer platforms beyond Stratum's own Gauteng domain.
+Domain-agnostic layer model and geodata utilities for Karta. Has no dependency on `@karta/app`, `@karta/map`, `@karta/react`, `@karta/web`, or React — the first package extracted towards a reusable SDK for geospatial layer platforms beyond Karta's own Gauteng domain.
 
 ## What belongs here
 
@@ -14,15 +14,15 @@ Every export is JSDoc-documented (TSDoc-compatible).
 
 ## What doesn't belong here
 
-- React or Leaflet runtime rendering code (see `@stratum/map`).
-- Anything specific to the Gauteng domain — job centres, township names, transit operator names, colour choices for a particular map (see `@stratum/app`).
-- Browser-only hooks like dark-mode/theme detection (see `@stratum/react`).
+- React or Leaflet runtime rendering code (see `@karta/map`).
+- Anything specific to the Gauteng domain — job centres, township names, transit operator names, colour choices for a particular map (see `@karta/app`).
+- Browser-only hooks like dark-mode/theme detection (see `@karta/react`).
 
 ## Usage
 
 ```ts
-import { createRegistry, createLayerConfig } from "@stratum/core";
-import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@stratum/app";
+import { createRegistry, createLayerConfig } from "@karta/core";
+import { GAUTENG_SPATIAL_LEGACY_DOMAIN } from "@karta/app";
 
 const registry = createRegistry(GAUTENG_SPATIAL_LEGACY_DOMAIN);
 const layer = registry.getLayer("townships");

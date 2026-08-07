@@ -1,4 +1,4 @@
-import type { MetroId } from "@stratum/app";
+import type { MetroId } from "@karta/app";
 
 /** A selected employment hub the pipeline computes drive-time to. */
 export interface JobCenter {

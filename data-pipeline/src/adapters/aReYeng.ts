@@ -1,4 +1,4 @@
-import type { TransitLayerFeatureCollection, TransitStop } from "@stratum/app";
+import type { TransitLayerFeatureCollection, TransitStop } from "@karta/app";
 import type { Feature, FeatureCollection } from "geojson";
 import { fetchOverpass, type OverpassResponse } from "./gautrain";
 import { normalizeLineStringTransitFeatureCollection } from "./lineStringTransit";

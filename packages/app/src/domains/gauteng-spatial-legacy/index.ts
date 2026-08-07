@@ -2,7 +2,7 @@ import { GAUTENG_SPATIAL_LEGACY_LAYER_GROUPS } from "./layerGroups";
 import { GAUTENG_SPATIAL_LEGACY_LAYERS } from "./layers";
 
 /**
- * Stratum's reference domain: apartheid-era spatial planning legacy across
+ * Karta's reference domain: apartheid-era spatial planning legacy across
  * Gauteng's metros. A `DomainConfig` (`layers`/`layerGroups`/`story`) plus
  * an `id` — the only field beyond what `DomainConfig` itself requires.
  */

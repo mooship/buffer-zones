@@ -12,7 +12,7 @@ export interface ThemeConfig {
 }
 
 const DEFAULT_CONFIG: ThemeConfig = {
-  storageKey: "stratum-theme",
+  storageKey: "karta-theme",
   colors: { light: "#ffffff", dark: "#000000" },
 };
 
@@ -28,7 +28,7 @@ let config: ThemeConfig = DEFAULT_CONFIG;
  *   already-subscribed components in case this runs after mount (e.g. HMR),
  *   so the store never holds a stale preference silently.
  * @example
- * initTheme({ storageKey: "stratum-theme", colors: THEME_COLOR });
+ * initTheme({ storageKey: "karta-theme", colors: THEME_COLOR });
  */
 export function initTheme(themeConfig: ThemeConfig): void {
   config = themeConfig;

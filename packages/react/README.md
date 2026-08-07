@@ -1,6 +1,6 @@
-# `@stratum/react`
+# `@karta/react`
 
-Generic React hooks for Stratum applications, with no map, Leaflet, or domain-data dependency.
+Generic React hooks for Karta applications, with no map, Leaflet, or domain-data dependency.
 
 ## What belongs here
 
@@ -11,7 +11,7 @@ Generic React hooks for Stratum applications, with no map, Leaflet, or domain-da
 
 ```tsx
 // entry.client.tsx, before hydrateRoot
-import { initTheme } from "@stratum/react";
+import { initTheme } from "@karta/react";
 
 initTheme({
   storageKey: "my-app-theme",
@@ -21,5 +21,5 @@ initTheme({
 
 ## What doesn't belong here
 
-- Leaflet, map rendering, or any `@stratum/map`/`@stratum/core` dependency.
+- Leaflet, map rendering, or any `@karta/map`/`@karta/core` dependency.
 - Domain data or app-specific configuration values (colours, storage keys) — pass those into `initTheme`, don't hardcode them.

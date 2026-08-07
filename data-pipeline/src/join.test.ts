@@ -1,4 +1,4 @@
-import type { TownshipFeature } from "@stratum/app";
+import type { TownshipFeature } from "@karta/app";
 import { describe, expect, it } from "vitest";
 import type { NormalizedTownship } from "./adapters/boundaries";
 import { joinTownshipData } from "./join";

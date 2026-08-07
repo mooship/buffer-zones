@@ -1,11 +1,11 @@
-# Stratum: multi-domain platform ("ThinkGeo Lite")
+# Karta: multi-domain platform ("ThinkGeo Lite")
 
 **Status:** Approved design, pending implementation plan.
-**Builds on:** `2026-07-31-stratum-generic-layer-platform-design.md` (generic `Layer`/`LayerGroup` model — implemented, see `git log` `a9c683e`..`912f1f5`). That design's Section 8 flagged "multiple simultaneous unrelated domains" as future roadmap and Section 9 explicitly scoped out a second domain. This is that next phase.
+**Builds on:** `2026-07-31-karta-generic-layer-platform-design.md` (generic `Layer`/`LayerGroup` model — implemented, see `git log` `a9c683e`..`912f1f5`). That design's Section 8 flagged "multiple simultaneous unrelated domains" as future roadmap and Section 9 explicitly scoped out a second domain. This is that next phase.
 
 ## 1. Motivation
 
-The employer evaluating Stratum for acquisition needs two things the current single-domain deployment can't yet demonstrate: (a) a codebase that reads as a platform to a buyer's engineers doing due diligence, not a one-off apartheid-data site with generic types bolted on; (b) a live second domain proving the architecture actually supports unrelated datasets, not just one dataset re-typed.
+The employer evaluating Karta for acquisition needs two things the current single-domain deployment can't yet demonstrate: (a) a codebase that reads as a platform to a buyer's engineers doing due diligence, not a one-off apartheid-data site with generic types bolted on; (b) a live second domain proving the architecture actually supports unrelated datasets, not just one dataset re-typed.
 
 ## 2. Current-state gaps (post generic-layer migration)
 

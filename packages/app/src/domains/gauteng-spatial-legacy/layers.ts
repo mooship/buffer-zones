@@ -1,4 +1,4 @@
-import type { Layer } from "@stratum/core";
+import type { Layer } from "@karta/core";
 import { getTownshipGroup } from "../../constants/townships";
 
 function dataUrl(fileName: string): string {

@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   test: {
-    name: "@stratum/map",
+    name: "@karta/map",
     environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
     globals: true,

@@ -1,4 +1,4 @@
-import type { TownshipProperties } from "@stratum/app";
+import type { TownshipProperties } from "@karta/app";
 import { formatCommuteTime } from "../../utils/formatCommuteTime";
 import styles from "./TownshipPopup.module.css";
 

@@ -58,7 +58,7 @@ describe("root meta", () => {
   it("sets the page title, description, and viewport", () => {
     const tags = meta({} as never);
 
-    expect(tags).toContainEqual({ title: "Stratum" });
+    expect(tags).toContainEqual({ title: "Karta" });
     expect(tags).toContainEqual(
       expect.objectContaining({ name: "description" }),
     );
