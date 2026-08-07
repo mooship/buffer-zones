@@ -4,6 +4,10 @@
   "compatibility_date": "2026-07-27",
   "main": "./packages/web/workers/app.ts",
   "workers_dev": true,
+  "cache": {
+    "enabled": true,
+    "cross_version_cache": true
+  },
   "placement": {
     "mode": "smart"
   },
